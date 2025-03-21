@@ -1,0 +1,82 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+}
+
+.logo-left img, .logo-right img {
+    height: 100px;
+}
+
+.menu-center {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.menu-center button {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 30px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.menu-center button:hover {
+    background-color: green;
+    color: white;
+    border-radius: 20px;
+}
+
+.background-image {
+    background-image: url('fondo1.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.content-box {
+    /*background-color: rgba(255, 255, 255, 0.8); Agrega un cuadro de color blanco*/ 
+    padding: 25px;
+    border-radius: 30px;
+}
+
+h1 {
+    color: whitesmoke;
+    font-size: 2.5em;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.subtitle, .city, .slogan {
+    font-family: 'Lato', sans-serif;
+    color: whitesmoke;
+    margin: 5px 0;
+}
+
+.subtitle {
+    font-size: 1.5em;
+}
+
+.city {
+    font-size: 1.5em;
+    font-family: 'Raleway', sans-serif;
+}
+
+.slogan {
+    font-size: 1em;
+}
