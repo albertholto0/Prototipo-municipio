@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Base Catastral</title>
+  <link rel="stylesheet" href="/Web_Cobros/styles.css">
+  <link rel="stylesheet" href="/CuentasContables/Styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo-left">
+      <img src="/Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
+    </div>
+    <!-- Placeholder para el menú -->
+    <div id="nav-placeholder"></div>
+    <div class="logo-right">
+      <img src="/Web_Cobros/logo_mex.png" alt="Logo México">
+    </div>
+  </header>
+
+  <!-- Contenido principal de la página Gestión de Base Catastral -->
+  <main class="main-container">
+    <h2 class="text-center">Gestión de Base Catastral</h2>
+
+    <!-- Sección de búsqueda -->
+    <div class="search-container">
+      <!-- Puedes ampliar los criterios de búsqueda; en este ejemplo se filtra en varios campos -->
+      <input type="text" id="searchInput" placeholder="Buscar por clave, contribuyente, uso o fecha">
+    </div>
+
+    <!-- Tabla principal para mostrar las bases catastrales -->
+    <table id="catastralTable">
+      <thead>
+        <tr>
+          <th>Clave Catastral</th>
+          <th>Propietario</th>
+          <th>Ubicación</th>
+          <th>Uso Suelo</th>
+          <th>Contribuyente</th>
+          <th>Fecha Avaluo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Se llenará dinámicamente -->
+      </tbody>
+    </table>
+
+    <!-- Formulario para agregar/editar Base Catastral (formulario en formato tabla) -->
+    <div class="form-container">
+      <!-- El título se actualiza dinámicamente -->
+      <h3 class="text-center" id="formTitle">Registrar Base Catastral</h3>
+      <form id="catastralForm">
+        <table class="form-table">
+          <!-- Primera fila: clave catastral, nombre propietario, y ubicación -->
+          <tr>
+            <td>
+              <label for="claveCatastral">Clave Catastral:</label>
+              <input type="text" id="claveCatastral" name="claveCatastral" placeholder="Ej. ABC123" required>
+            </td>
+            <td>
+              <label for="nombrePropietario">Nombre Propietario:</label>
+              <input type="text" id="nombrePropietario" name="nombrePropietario" placeholder="Ej. Juan Pérez" required>
+            </td>
+            <td>
+              <label for="ubicacion">Ubicación:</label>
+              <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
+            </td>
+          </tr>
+          <!-- Segunda fila: base catastral, valor terreno y valor construcción -->
+          <tr>
+            <td>
+              <label for="baseCatastral">Base Catastral:</label>
+              <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 500 m²" required>
+            </td>
+            <td>
+              <label for="valorTerreno">Valor Terreno:</label>
+              <input type="number" id="valorTerreno" name="valorTerreno" placeholder="Ej. 100000" required>
+            </td>
+            <td>
+              <label for="valorConstruccion">Valor Construcción:</label>
+              <input type="number" id="valorConstruccion" name="valorConstruccion" placeholder="Ej. 200000" required>
+            </td>
+          </tr>
+          <!-- Tercera fila: impuesto calculado y fecha de avaluo -->
+          <tr>
+            <td>
+              <label for="impuestoCalculado">Impuesto Calculado:</label>
+              <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 5000" required>
+            </td>
+            <td>
+              <label for="fechaAvaluo">Fecha Avaluo:</label>
+              <input type="date" id="fechaAvaluo" name="fechaAvaluo" required>
+            </td>
+            <td>
+              <label for="historialAvaluos">Historial Avaluos:</label>
+              <input type="text" id="historialAvaluos" name="historialAvaluos" placeholder="Ej. 2020,2021" required>
+            </td>
+          </tr>
+          <!-- Cuarta fila: Uso de suelo y contribuyente -->
+          <tr>
+            <td>
+              <label for="usoSuelo">Uso de Suelo:</label>
+              <select id="usoSuelo" name="usoSuelo" required>
+                <option value="">Selecciona un uso</option>
+                <option value="habitacional">Habitacional</option>
+                <option value="comercial">Comercial</option>
+                <option value="industrial">Industrial</option>
+                <option value="mixto">Mixto</option>
+                <option value="otro">Otro</option>
+              </select>
+            </td>
+            <td>
+              <label for="contribuyente">Contribuyente:</label>
+              <input type="text" id="contribuyente" name="contribuyente" placeholder="ID del Contribuyente" required>
+            </td>
+            <td>
+              <!-- Este campo puede quedar vacío si no deseas que ocupe toda la fila -->
+            </td>
+          </tr>
+          <!-- Quinta fila: Botones de acción -->
+          <tr>
+            <td colspan="3" class="text-center">
+              <button type="submit" id="btnAddOrUpdate">Agregar</button>
+              <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </main>
+
+  <!-- Pie de página (opcional) -->
+  <footer class="footer">
+    <p>© 2025 Ixtlán - Módulo 10: Gestión de Base Catastral</p>
+  </footer>
+
+  <!-- Script para cargar el nav -->
+  <script>
+    fetch('/Componentes/Nav.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('nav-placeholder').innerHTML = data;
+      })
+      .catch(error => console.error('Error al cargar el nav:', error));
+  </script>
+
+  <!-- Incluir el script al final para asegurar que el DOM esté cargado -->
+  <script src="Script.js"></script>
+</body>
+</html>

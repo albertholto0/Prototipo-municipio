@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cuentas Contables</title>
+    <link rel="stylesheet" href="/Web_Cobros/styles.css">
+    <link rel="stylesheet" href="Styles.css">
+    <script src="Script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo-left">
+            <img src="/Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
+        </div>
+        <!-- Placeholder para el menú -->
+        <div id="nav-placeholder"></div>
+        <div class="logo-right">
+            <img src="/Web_Cobros/logo_mex.png" alt="Logo México">
+        </div>
+    </header>
+
+    <!-- Contenido principal de la página Gestión de cuentas contables -->
+    <main class="main-container">
+        <h2 class="text-center">Gestión de Cuentas Contables</h2>
+
+        <!-- Sección de búsqueda -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar" />
+        </div>
+
+        <!-- Tabla para mostrar las cuentas contables -->
+        <table id="accountsTable">
+            <thead>
+                <tr>
+                    <th>Número de cuenta</th>
+                    <th>Descripción</th>
+                    <th>Sección</th>
+                    <th>Ejercicio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Se llenará dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Formulario para agregar/editar cuenta contable -->
+        <div class="form-container">
+            <!-- El título se actualizará según la acción -->
+            <h3 class="text-center" id="formTitle">Registrar Cuenta Contable</h3>
+            <form id="accountForm">
+                <div class="form-group">
+                    <label for="numeroCuenta">Número de cuenta:</label>
+                    <input type="text" id="numeroCuenta" name="numeroCuenta" placeholder="Ej. 1000-01" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <input type="text" id="descripcion" name="descripcion" placeholder="Ej. Caja General" required>
+                </div>
+                <div class="form-group">
+                    <label for="seccion">Sección:</label>
+                    <select id="seccion" name="seccion" required>
+                        <option value="">Selecciona una sección</option>
+                        <option value="1">Sección 1</option>
+                        <option value="2">Sección 2</option>
+                        <option value="3">Sección 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ejercicio">Ejercicio:</label>
+                    <select id="ejercicio" name="ejercicio" required>
+                        <option value="">Selecciona un ejercicio</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+                <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Pie de página (opcional) -->
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
+    </footer>
+
+    <!-- Script para cargar el nav -->
+    <script>
+        fetch('/Componentes/Nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar el nav:', error));
+    </script>
+</body>
+
+</html>
