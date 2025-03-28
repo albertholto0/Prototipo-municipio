@@ -24,7 +24,10 @@
 
     <!-- Contenido principal de la página Gestión de cuentas contables -->
     <main class="main-container">
-        <h2 class="text-center">Gestión de Cuentas Contables</h2>
+        <div class="title-section">
+            <h2>Gestión de Cuentas Contables</h2>
+            <hr class="title-line">
+        </div>
 
         <!-- Sección de búsqueda -->
         <div class="search-container">
@@ -46,9 +49,11 @@
                 <!-- Se llenará dinámicamente con JavaScript -->
             </tbody>
         </table>
-
+        <div class="pagination-container">
+            <div class="pagination"></div>
+        </div>
         <!-- Formulario para agregar/editar cuenta contable -->
-        <div class="form-container">
+        <div class="form-container" id="formContainer">
             <!-- El título se actualizará según la acción -->
             <h3 class="text-center" id="formTitle">Registrar Cuenta Contable</h3>
             <form id="accountForm">
