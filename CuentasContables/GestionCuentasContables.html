@@ -22,7 +22,7 @@
         <div id="nav-placeholder"></div>
     </header>
 
-    <!-- Contenido principal de la página Gestión de cuentas contables -->
+    <!-- Contenido principal -->
     <main class="main-container">
         <div class="title-section">
             <h2>Gestión de Cuentas Contables</h2>
@@ -32,9 +32,10 @@
         <!-- Sección de búsqueda -->
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Buscar" />
+            <button class="btn-agregar" id="btnOpenModal">Agregar</button>
         </div>
 
-        <!-- Tabla para mostrar las cuentas contables -->
+        <!-- Tabla -->
         <table id="accountsTable">
             <thead>
                 <tr>
@@ -52,49 +53,52 @@
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
-        <!-- Formulario para agregar/editar cuenta contable -->
-        <div class="form-container" id="formContainer">
-            <!-- El título se actualizará según la acción -->
-            <h3 class="text-center" id="formTitle">Registrar Cuenta Contable</h3>
-            <form id="accountForm">
-                <div class="form-group">
-                    <label for="numeroCuenta">Número de cuenta:</label>
-                    <input type="text" id="numeroCuenta" name="numeroCuenta" placeholder="Ej. 1000-01" required>
-                </div>
-                <div class="form-group">
-                    <label for="descripcion">Descripción:</label>
-                    <input type="text" id="descripcion" name="descripcion" placeholder="Ej. Caja General" required>
-                </div>
-                <div class="form-group">
-                    <label for="seccion">Sección:</label>
-                    <select id="seccion" name="seccion" required>
-                        <option value="">Selecciona una sección</option>
-                        <option value="1">Sección 1</option>
-                        <option value="2">Sección 2</option>
-                        <option value="3">Sección 3</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="ejercicio">Ejercicio:</label>
-                    <select id="ejercicio" name="ejercicio" required>
-                        <option value="">Selecciona un ejercicio</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                    </select>
-                </div>
-                <button type="submit" id="btnAddOrUpdate">Agregar</button>
-                <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
-            </form>
-        </div>
     </main>
 
-    <!-- Pie de página (opcional) -->
+    <!-- Modal para el formulario -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <span class="btn-close" id="btnCloseModal">&times;</span>
+            <div class="form-container" id="formContainer">
+                <h3 class="text-center" id="formTitle">Registrar Cuenta Contable</h3>
+                <form id="accountForm">
+                    <div class="form-group">
+                        <label for="numeroCuenta">Número de cuenta:</label>
+                        <input type="text" id="numeroCuenta" name="numeroCuenta" placeholder="Ej. 1000-01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <input type="text" id="descripcion" name="descripcion" placeholder="Ej. Caja General" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="seccion">Sección:</label>
+                        <select id="seccion" name="seccion" required>
+                            <option value="">Selecciona una sección</option>
+                            <option value="1">Sección 1</option>
+                            <option value="2">Sección 2</option>
+                            <option value="3">Sección 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ejercicio">Ejercicio:</label>
+                        <select id="ejercicio" name="ejercicio" required>
+                            <option value="">Selecciona un ejercicio</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                    <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
     </footer>
 
-    <!-- Script para cargar el nav -->
     <script>
         fetch('/Componentes/Nav.html')
             .then(response => response.text())

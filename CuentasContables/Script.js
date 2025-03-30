@@ -29,14 +29,111 @@ let cuentasContables = [
         descripcion: "Gastos",
         seccion: "4",
         ejercicio: "2023"
-    }
+    },
+    {
+        numeroCuenta: "1000-01",
+        descripcion: "Caja General",
+        seccion: "1",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "1000-02",
+        descripcion: "Bancos",
+        seccion: "1",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "2000-01",
+        descripcion: "Proveedores",
+        seccion: "2",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "3000-01",
+        descripcion: "Ingresos",
+        seccion: "3",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "4000-01",
+        descripcion: "Gastos",
+        seccion: "4",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "1000-01",
+        descripcion: "Caja General",
+        seccion: "1",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "1000-02",
+        descripcion: "Bancos",
+        seccion: "1",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "2000-01",
+        descripcion: "Proveedores",
+        seccion: "2",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "3000-01",
+        descripcion: "Ingresos",
+        seccion: "3",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "4000-01",
+        descripcion: "Gastos",
+        seccion: "4",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "1000-01",
+        descripcion: "Caja General",
+        seccion: "1",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "1000-02",
+        descripcion: "Bancos",
+        seccion: "1",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "2000-01",
+        descripcion: "Proveedores",
+        seccion: "2",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "3000-01",
+        descripcion: "Ingresos",
+        seccion: "3",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "4000-01",
+        descripcion: "Gastos",
+        seccion: "4",
+        ejercicio: "2023"
+    },
+    {
+        numeroCuenta: "4000-01",
+        descripcion: "Gastos",
+        seccion: "4",
+        ejercicio: "2023"
+    },
+
 ];
 
 // Variables de estado globales
 let isEditing = false;        // Bandera para modo edición
 let currentIndex = null;      // Índice del elemento siendo editado
 let currentPage = 1;          // Página actual
-const rowsPerPage = 6;        // Filas por página
+const rowsPerPage = 10;        // Filas por página
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -68,17 +165,20 @@ function renderTable(data) {
     // Genera las filas de la tabla con paginación
     paginatedData.forEach((cuenta, index) => {
         const row = `
-            <tr>
-                <td>${cuenta.numeroCuenta}</td>
-                <td>${cuenta.descripcion}</td>
-                <td>Sección ${cuenta.seccion}</td>
-                <td>${cuenta.ejercicio}</td>
-                <td>
-                    <button class="action-btn edit" onclick="editAccount(${start + index})">✏️ Editar</button>
-                    <button class="action-btn delete" onclick="deleteAccount(${start + index})">🗑️ Eliminar</button>
-                </td>
-            </tr>
-        `;
+        <tr>
+            <td>${cuenta.numeroCuenta}</td>
+            <td>${cuenta.descripcion}</td>
+            <td>Sección ${cuenta.seccion}</td>
+            <td>${cuenta.ejercicio}</td>
+            <td>
+              <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
+                <img src="/Componentes/editor.png" class="action-icon">
+            </button>
+            <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
+                <img src="/Componentes/eliminar.png" class="action-icon">
+            </button>
+        </tr>
+    `;
         elements.tableBody.insertAdjacentHTML("beforeend", row);
     });
 
@@ -98,7 +198,7 @@ function renderPagination(totalItems) {
         </button>
     `;
 
-    // Rango de páginas a mostrar (mejora la experiencia con muchas páginas)
+    // Rango de páginas a mostrar 
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, currentPage + 2);
 
@@ -147,7 +247,7 @@ function renderPagination(totalItems) {
 elements.form.addEventListener("submit", handleSubmit);
 
 // Evento para cancelar edición
-elements.btnCancel.addEventListener("click", resetForm);
+elements.btnCancel.addEventListener("click", closeModal);
 
 // Evento para búsqueda en tiempo real
 elements.searchInput.addEventListener("input", () => {
@@ -188,7 +288,7 @@ function handleSubmit(e) {
         cuentasContables.push(cuenta);
     }
 
-    resetForm();
+    //resetForm();
     renderTable(filteredAccounts());
 }
 
@@ -255,3 +355,72 @@ function resetForm() {
 document.addEventListener("DOMContentLoaded", () => {
     renderTable(cuentasContables);
 });
+
+// Elementos del modal
+const modalElements = {
+    modalOverlay: document.getElementById('modalOverlay'),
+    btnOpenModal: document.getElementById('btnOpenModal'),
+    btnCloseModal: document.getElementById('btnCloseModal')
+};
+
+/* === FUNCIONES DEL MODAL === */
+function openModal() {
+    modalElements.modalOverlay.style.display = 'block';
+}
+
+function closeModal() {
+    modalElements.modalOverlay.style.display = 'none';
+    resetForm();
+}
+
+/* === MODIFICACIONES DE FUNCIONES EXISTENTES === */
+window.editAccount = function (index) {
+    const cuenta = cuentasContables[index];
+    elements.numeroCuenta.value = cuenta.numeroCuenta;
+    elements.descripcion.value = cuenta.descripcion;
+    elements.seccion.value = cuenta.seccion;
+    elements.ejercicio.value = cuenta.ejercicio;
+    isEditing = true;
+    currentIndex = index;
+    elements.formTitle.textContent = "Editar Cuenta Contable";
+    elements.btnAddOrUpdate.textContent = "Actualizar";
+    openModal();
+};
+
+function handleSubmit(e) {
+    e.preventDefault();
+    const cuenta = {
+        numeroCuenta: elements.numeroCuenta.value,
+        descripcion: elements.descripcion.value,
+        seccion: elements.seccion.value,
+        ejercicio: elements.ejercicio.value
+    };
+
+    if (isEditing) {
+        cuentasContables[currentIndex] = cuenta;
+    } else {
+        cuentasContables.push(cuenta);
+    }
+
+    closeModal();
+    renderTable(filteredAccounts());
+}
+
+/* === EVENT LISTENERS ADICIONALES === */
+// Abrir modal para nueva cuenta
+modalElements.btnOpenModal.addEventListener('click', () => {
+    resetForm();
+    openModal();
+});
+
+// Cerrar modal con botón X
+modalElements.btnCloseModal.addEventListener('click', closeModal);
+
+// Cerrar modal haciendo clic fuera
+/*
+modalElements.modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalElements.modalOverlay) {
+        closeModal();
+    }
+});
+*/
