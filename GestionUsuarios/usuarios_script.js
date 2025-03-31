@@ -6,10 +6,8 @@ const deleteModal = document.getElementById('deleteModal');
 const modalTitle = document.getElementById('modalTitle');
 const userForm = document.getElementById('userForm');
 const userNameInput = document.getElementById('userName');
-const userPasswordInput = document.getElementById('userPassword');
 const userRoleSelect = document.getElementById('userRole');
 const userIdInput = document.getElementById('userId');
-const photoInput = document.getElementById('userPhoto');
 const closeModal = document.querySelectorAll('.close');
 const deleteForm = document.getElementById('deleteForm');
 const deletePassword = document.getElementById('deletePassword');
@@ -17,7 +15,8 @@ const deleteUserId = document.getElementById('deleteUserId');
 
 // Datos de usuarios
 let users = [
-    { id: 1, name: "Administrador", role: "Administrador", photo: "fotos_perfil/foto_perfil.jpg" }
+    { id: 1, name: "Administrador", role: "Administrador", photo: "fotos_perfil/foto_perfil.jpg" },
+    { id: 2, name: "Cajero", role: "Cajero", photo: "fotos_perfil/foto_cajero.jpg" }
 ];
 let currentUserId = 1;
 
@@ -78,7 +77,7 @@ function openDeleteModal(userId) {
 
 function handleFormSubmit(e) {
     e.preventDefault();
-    
+
     const userData = {
         name: userNameInput.value.trim(),
         role: userRoleSelect.value,
@@ -110,7 +109,7 @@ function handleFormSubmit(e) {
 function handleDeleteSubmit(e) {
     e.preventDefault();
     const userId = deleteUserId.value;
-    
+
     users = users.filter(u => u.id != userId);
     document.querySelector(`.user-card[data-id="${userId}"]`)?.remove();
     deleteModal.style.display = 'none';

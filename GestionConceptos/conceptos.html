@@ -18,8 +18,9 @@
     </header>
 
     <div class="main-container">
-        <h2>Registro de Conceptos</h2>
-        
+        <div class="title">
+            <h2>Registro de Conceptos</h2>
+        </div>
         <form class="concept-form" id="conceptForm">
             <input type="hidden" id="id_concepto">
             
@@ -40,14 +41,7 @@
             
             <div class="form-group">
                 <label for="periodicidad">Periodicidad</label>
-                <select id="periodicidad" required>
-                    <option value="">Seleccione...</option>
-                    <option value="mensual">Mensual</option>
-                    <option value="trimestral">Trimestral</option>
-                    <option value="semestral">Semestral</option>
-                    <option value="anual">Anual</option>
-                    <option value="unica">Única</option>
-                </select>
+                <input type="text" id="tipo_servicio" required>
             </div>
             
             <div class="form-group">
