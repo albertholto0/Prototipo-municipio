@@ -1,0 +1,11 @@
+.modal-content {
+    max-height: 80vh; /* Ajusta la altura máxima del modal */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+
+    
+}
