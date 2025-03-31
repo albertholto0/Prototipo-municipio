@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resetForm();
         closeModal();
     });
+    
 
     // FUNCIONALIDAD DE BÚSQUEDA
     searchInput.addEventListener("input", function () {
@@ -98,5 +99,5 @@ document.addEventListener("DOMContentLoaded", function () {
             row.style.display = matchesFilter ? "" : "none";
         }
     });
-    
+
 });
