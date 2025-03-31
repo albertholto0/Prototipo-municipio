@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de Alquiler</title>
-    <link rel="stylesheet" href="../Web_Cobros/styles1.css">
+    <link rel="stylesheet" href="../Web_Cobros/estilo.css">
     <link rel="stylesheet" href="../CuentasContables/Styles.css">
     <link rel="stylesheet" href="GestionAlquiler.css">
     <script src="alquilerJScript.js"></script>
@@ -13,7 +13,7 @@
 <body>
     <header>
         <div class="logo-left">
-            <img src="/Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="../Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
@@ -118,7 +118,7 @@
     </footer>
 
     <script>
-        fetch('/Componentes/Nav.html')
+        fetch('../Componentes/Nav.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('nav-placeholder').innerHTML = data;
