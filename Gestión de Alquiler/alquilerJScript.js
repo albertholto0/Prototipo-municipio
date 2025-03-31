@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function openModal() {
         modalOverlay.style.display = "flex";
     }
-    
 
     // Función para cerrar el modal
     function closeModal() {
