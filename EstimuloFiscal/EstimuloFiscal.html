@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Estímulo Fiscal</title>
+    <link rel="stylesheet" href="/Componentes/Nav.css">
+    <link rel="stylesheet" href="Styles.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo-left">
+            <img src="/Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
+        </div>
+        <div class="title">
+            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
+        <!-- Placeholder para el menú -->
+        <div id="nav-placeholder"></div>
+        
+    </header>
+
+    <main class="main-container">
+        <div class="title-section">
+            <h2>Gestión de Estímulo Fiscal</h2>
+            <hr class="title-line">
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchEstimuloInput" placeholder="Buscar por nombre de contribución o porcentaje" />
+            <button class="btn-agregar" id="btnOpenEstimuloModal">Agregar Estímulo</button>
+        </div>
+
+        <div class="table-container">
+            <table id="estimulosTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Contribución</th>
+                        <th>Características</th>
+                        <th>% Descuento</th>
+                        <th>Requisitos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="pagination-container">
+            <div class="pagination"></div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="estimuloModalOverlay">
+        <div class="modal-content">
+            <span class="btn-close" id="btnCloseEstimuloModal">&times;</span>
+            <div class="form-container">
+                <h3 class="text-center" id="estimuloFormTitle">Registrar Estímulo Fiscal</h3>
+                <form id="estimuloForm">
+                    <div class="form-group">
+                        <label for="idEstimulo">ID Estímulo:</label>
+                        <input type="text" id="idEstimulo" name="idEstimulo" placeholder="Ej. EST-001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreContribucion">Nombre Contribución:</label>
+                        <input type="text" id="nombreContribucion" name="nombreContribucion" placeholder="Ej. Estímulo a la Construcción" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="caracteristicas">Características:</label>
+                        <textarea id="caracteristicas" name="caracteristicas" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group form-inline">
+                        <div class="form-group-inline">
+                            <label for="porcentajeDescuento">% Descuento:</label>
+                            <input type="number" id="porcentajeDescuento" name="porcentajeDescuento" min="0" max="100" step="0.01" placeholder="Ej. 15" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="requisitos">Requisitos:</label>
+                        <textarea id="requisitos" name="requisitos" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" id="btnSaveEstimulo">Guardar</button>
+                    <button type="button" id="btnCancelEstimulo" class="btn-cancel">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 11: Gestión de Estímulo Fiscal</p>
+    </footer>
+    <script>
+        fetch('/Componentes/Nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar el nav:', error));
+    </script>
+</body>
+</html>
