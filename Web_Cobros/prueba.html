@@ -11,7 +11,7 @@
         <div class="logo-left">
             <img src="logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
-        <div class="title">
+        <div class="title-section">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
         </div>
         <nav class="menu-buttons">
@@ -19,17 +19,21 @@
             <button onclick="location.href='#seccion2'">Cobrar</button>
             <button onclick="location.href='prueba.html'">Contribuyentes</button>
             <button onclick="location.href='#seccion4'">Configuración</button>
-            <button onclick="location.href='#seccion5'">Usuarios</button>
+            <button onclick="location.href='menu-catalogos.html'">Catálogos</button>
         </nav>
     </header>
 
     <main>
-        <div class="content">
-            <h2 class="main-title">GESTIÓN DE CONTRIBUYENTES</h2>
-            <hr class="separator">
-            <div class="action-buttons">
-                <button class="add-button" onclick="openForm()">Agregar</button>
-                <button class="search-button">Buscar</button>
+        <div class="main-container">
+            <div class="title-section">
+                <h2>Gestión de Contribuyentes</h2>
+                <hr class="title-line">
+            </div>
+            
+            <!-- Sección de búsqueda -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar" />
+                <button class="btn-agregar" onclick="openForm()">Agregar</button>
             </div>
 
             <!-- Tabla de contribuyentes -->
@@ -38,6 +42,8 @@
                     <tr>
                         <th>Nombre Completo</th>
                         <th>RFC</th>
+                        <th>Domicilio</th>
+                        <th>Télefono</th>
                         <th>Número de Cuenta</th>
                         <th>Acciones</th>
                     </tr>
@@ -46,26 +52,62 @@
                     <!-- Las filas se agregarán dinámicamente con JavaScript -->
                 </tbody>
             </table>
+            
         </div>
+        
+        <div id="overlay" class="overlay"></div> <!-- Div para el fondo oscurecido cuando aparece el formulario -->
 
-        <!-- Formulario para agregar contribuyentes -->
+
         <div id="addForm" class="form-popup">
             <form class="form-container">
-                <h2>AGREGAR CONTRIBUYENTE</h2>
-                <label for="nombre"><b>Nombre Completo</b></label>
-                <input type="text" id="nombre" placeholder="Ingrese el nombre" required>
+                <h2 class="titulo-formulario">Agregar Contribuyente</h2>
+                <div class="form-scrollable">
+                    <div class="form-column">
+                        <label for="nombre"><b>Nombre</b></label>
+                        <input type="text" id="nombre" placeholder="Ingrese el nombre" required>
+        
+                        <label for="apellido_paterno"><b>Apellido Paterno</b></label>
+                        <input type="text" id="apellido_paterno" placeholder="Ingrese el apellido paterno" required>
+        
+                        <label for="apellido_materno"><b>Apellido Materno</b></label>
+                        <input type="text" id="apellido_materno" placeholder="Ingrese el apellido materno" required>
+        
+                        <label for="rfc"><b>RFC</b></label>
+                        <input type="text" id="rfc" placeholder="Ingrese el RFC" required>
 
-                <label for="rfc"><b>RFC</b></label>
-                <input type="text" id="rfc" placeholder="Ingrese el RFC" required>
+                        <label for="cuenta"><b>Número de Cuenta</b></label>
+                        <input type="text" id="cuenta" placeholder="Ingrese el número de cuenta" required>
+                    </div>
+                    
+                    <div class="form-column">
+                        <label for="calle"><b>Calle</b></label>
+                        <input type="text" id="calle" placeholder="Ingrese la calle" required>
+        
+                        <label for="numero_calle"><b>Número de calle</b></label>
+                        <input type="text" id="numero_calle" placeholder="Ingrese el número de calle" required>
+        
+                        <label for="colonia"><b>Colonia</b></label>
+                        <input type="text" id="colonia" placeholder="Ingrese la colonia" required>
+        
+                        <label for="telefono"><b>Teléfono</b></label>
+                        <input type="text" id="telefono" placeholder="Ingrese el número de teléfono" required>
 
-                <label for="cuenta"><b>Número de Cuenta</b></label>
-                <input type="text" id="cuenta" placeholder="Ingrese el número de cuenta" required>
-
-                <button type="button" class="btn" onclick="addContribuyente()">Agregar</button>
-                <button type="button" class="btn cancel" onclick="closeForm()">Cerrar</button>
+                        <div class="form-buttons">
+                            <button type="button" class="btn-cancel" onclick="closeForm()">Cerrar</button>
+                            <button type="button" class="btnAddOrUpdate" onclick="addContribuyente()">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+            
+                
             </form>
         </div>
+
     </main>
+
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 2: Gestión de Contribuyentes</p>
+    </footer>
 
     <script src="java.js"></script>
 </body>

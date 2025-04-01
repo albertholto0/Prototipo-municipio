@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
     <link rel="stylesheet" href="style_usuarios.css">
+    <link rel="stylesheet" href="modal_usuarios.css">
 </head>
+
 <body>
     <header>
         <div class="logo-left">
@@ -17,18 +20,53 @@
         <div id="nav-placeholder"></div>
     </header>
     <div class="register-button">
-        <button class="register">Registrar nuevo usuario</button>
+        <button class="register" id="registerBtn">Registrar nuevo usuario</button>
     </div>
-    <div class="user-card">
-        <img src="foto_perfil.jpg" alt="Foto de perfil">
-        <h2>Zacarias Flores del Monte</h2>
-        <p>Administrador</p>
-        <button>Modificar</button>
-        <button class="delete">Eliminar</button>
-    </div>
+    <div id="users-container"></div>
     <footer class="footer">
         <p>© 2025 Ixtlán - Gestión de usuarios</p>
     </footer>
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Registrar Nuevo Usuario</h2>
+            <form id="userForm" enctype="multipart/form-data">
+                <input type="hidden" id="userId">
+                <div class="form-group">
+                    <label for="userName">Nombre:</label>
+                    <input type="text" id="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Rol:</label>
+                    <select id="userRole" required>
+                        <option value="">Seleccione un rol</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Cajero">Cajero</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="userPhoto">Foto de perfil (se guardará en fotos_perfil):</label>
+                    <input type="file" id="userPhoto" accept="image/*">
+                </div>
+                <button type="submit" class="submit-btn">Guardar</button>
+            </form>
+        </div>
+    </div>
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirmar eliminación</h2>
+            <form id="deleteForm">
+                <input type="hidden" id="deleteUserId">
+                <div class="form-group">
+                    <label for="deletePassword">Contraseña de administrador:</label>
+                    <input type="password" id="deletePassword" required>
+                </div>
+                <button type="submit" class="submit-btn delete">Eliminar</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         fetch('/Componentes/Nav.html')
             .then(response => response.text())
@@ -37,5 +75,7 @@
             })
             .catch(error => console.error('Error al cargar el nav:', error));
     </script>
+    <script src="usuarios_script.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,41 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+}
+
+.logo-left img {
+    height: 100px;
+}
+
+.title h1 {
+    color: black;
+    font-size: 1.5em;
+    margin-left: 40px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.menu-buttons {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.menu-buttons button {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 25px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.menu-buttons button:hover {
+    background-color: green;
+    color: white;
+    border-radius: 20px;
+}
+
