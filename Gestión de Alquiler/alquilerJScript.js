@@ -4,75 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnCancel = document.getElementById("btnCancel");
     const accountForm = document.getElementById("accountForm");
     const btnAddOrUpdate = document.getElementById("btnAddOrUpdate");
-    const btnOpenModal = document.getElementById("btnOpenModal"); // <-- Agregar referencia al botón correcto
-    const accountsTableBody = document.querySelector("#accountsTable tbody");
-
-    // Función para abrir el modal
-    function openModal() {
-        modalOverlay.style.display = "flex";
-    }
-
-    // Función para cerrar el modal
-    function closeModal() {
-        modalOverlay.style.display = "none";
-        resetForm();
-    }
-
-    // Función para limpiar los campos del formulario
-    function resetForm() {
-        accountForm.reset();
-    }
-
-    // Asignar eventos de clic a los botones de cerrar y cancelar
-    btnCloseModal.addEventListener("click", closeModal);
-    btnCancel.addEventListener("click", closeModal);
-
-    // Asignar evento para abrir el modal al botón "Agregar"
-    btnOpenModal.addEventListener("click", openModal);
-
-    // Evento para agregar datos a la tabla
-    accountForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Evita el envío tradicional del formulario
-
-        // Obtener valores del formulario
-        const numeroAlquiler = document.getElementById("numeroAlquiler").value;
-        const descripcion = document.getElementById("descripcion").value;
-        const ubicacion = document.getElementById("ubicacion").value;
-        const fechaInicio = document.getElementById("fechaInicio").value;
-        const fechaCierre = document.getElementById("fechaCierre").value;
-        const montoFinal = document.getElementById("montoFinal").value;
-        const estadoAlquiler = document.getElementById("estadoAlquiler").value;
-        const idContribuyente = document.getElementById("idContribuyente").value;
-        const conceptoContribuyente = document.getElementById("conceptoContribuyente").value;
-
-        // Crear una nueva fila en la tabla
-        const newRow = document.createElement("tr");
-        newRow.innerHTML = `
-            <td>${numeroAlquiler}</td>
-            <td>${descripcion}</td>
-            <td>${ubicacion}</td>
-            <td>${fechaInicio}</td>
-            <td>${fechaCierre}</td>
-            <td>${montoFinal}</td>
-            <td>${estadoAlquiler}</td>
-            <td>${idContribuyente}</td>
-            <td>${conceptoContribuyente}</td>
-        `;
-
-        // Agregar la fila a la tabla
-        accountsTableBody.appendChild(newRow);
-
-        // Reiniciar formulario y cerrar modal
-        resetForm();
-        closeModal();
-    });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    const modalOverlay = document.getElementById("modalOverlay");
-    const btnCloseModal = document.getElementById("btnCloseModal");
-    const btnCancel = document.getElementById("btnCancel");
-    const accountForm = document.getElementById("accountForm");
-    const btnAddOrUpdate = document.getElementById("btnAddOrUpdate");
     const btnOpenModal = document.getElementById("btnOpenModal");
     const accountsTableBody = document.querySelector("#accountsTable tbody");
     const searchInput = document.getElementById("searchInput"); // Campo de búsqueda
@@ -81,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function openModal() {
         modalOverlay.style.display = "flex";
     }
+    
 
     // Función para cerrar el modal
     function closeModal() {
@@ -134,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resetForm();
         closeModal();
     });
+    
 
     // FUNCIONALIDAD DE BÚSQUEDA
     searchInput.addEventListener("input", function () {
@@ -165,8 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Mostrar u ocultar filas según la búsqueda
             row.style.display = matchesFilter ? "" : "none";
-
-            
         }
     });
+
 });
