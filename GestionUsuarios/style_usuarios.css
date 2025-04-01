@@ -38,11 +38,22 @@ header {
   margin-bottom: 0px;
 }
 
+/* Contenedor de usuarios */
+#users-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 /* Tarjeta de usuario */
 .user-card {
-  width: 90%;
+  width: calc(33.333% - 20px);
+  min-width: 300px;
   max-width: 400px;
-  margin: 2rem auto;
   padding: 2rem;
   background: #fff;
   border-radius: 10px;
@@ -150,7 +161,7 @@ button.register {
   }
 
   .user-card {
-    width: 95%;
+    width: 100%;
     padding: 1.5rem;
   }
 }
