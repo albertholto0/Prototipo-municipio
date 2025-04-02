@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="/CuentasContables/Styles.css">
     <script src="java_gestionContribuyentes.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script> <!-- Referencia de donde se va a llamar el navegación -->
 </head>
 
 <body>
@@ -102,17 +103,6 @@
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 2: Gestión de Contribuyentes</p>
     </footer>
-
-    <script>
-        fetch("/Componentes/Nav.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
-
-    <script src="java_gestionContribuyentes.js"></script>
 </body>
 
 </html>

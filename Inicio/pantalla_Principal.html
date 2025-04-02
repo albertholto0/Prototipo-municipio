@@ -6,6 +6,7 @@
     <title>Sistema de Cobros Municipales</title>
     <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="/Inicio/estilo_pantallaPrincipal.css">
+    <script src="/Componentes/Nav.js" defer></script>  <!-- Referencia de donde se va a llamar el navegación -->
 </head>
 <body>
     <header>
@@ -28,14 +29,5 @@
             </div>
         </div>
     </main>
-
-    <script>
-        fetch("/Componentes/Nav.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
 </body>
 </html>
