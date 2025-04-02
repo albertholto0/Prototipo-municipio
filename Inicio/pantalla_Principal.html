@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Cobros Municipales</title>
+    <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="/Inicio/estilo_pantallaPrincipal.css">
 </head>
 <body>
@@ -11,13 +12,7 @@
         <div class="logo-left">
             <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
-        <nav class="menu-center">
-            <button onclick="location.href='pantalla_Principal.html'">Inicio</button>
-            <button onclick="location.href='#generar'">Cobrar</button>
-            <button onclick="location.href='/GestiónContibuyentes/gestion_contribuyentes.html'">Contribuyentes</button>
-            <button onclick="location.href='#refrendos'">Corte de Caja</button>
-            <button onclick="location.href='/Catálogos/menu-catalogos.html'">Catálogos</button>
-        </nav>
+        <div id="nav-placeholder"></div>
         <div class="logo-right">
             <img src="/Assets/logo_mex.png" alt="Logo México">
         </div>
@@ -33,5 +28,14 @@
             </div>
         </div>
     </main>
+
+    <script>
+        fetch("/Componentes/Nav.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar el nav:', error));
+    </script>
 </body>
 </html>
