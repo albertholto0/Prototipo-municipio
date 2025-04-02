@@ -4,23 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Contribuyentes</title>
+    <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="estilo_contribuyentes.css">
 </head>
 <body>
     <header>
         <div class="logo-left">
-            <img src="logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title-section">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
         </div>
-        <nav class="menu-buttons">
-            <button onclick="location.href='pantalla_Principal.html'">Inicio</button>
-            <button onclick="location.href='#seccion2'">Cobrar</button>
-            <button onclick="location.href='prueba.html'">Contribuyentes</button>
-            <button onclick="location.href='#seccion4'">Configuración</button>
-            <button onclick="location.href='menu-catalogos.html'">Catálogos</button>
-        </nav>
+        <div id="nav-placeholder"></div>
     </header>
 
     <main>
@@ -109,6 +104,15 @@
         <p>© 2025 Ixtlán - Módulo 2: Gestión de Contribuyentes</p>
     </footer>
 
-    <script src="java.js"></script>
+    <script>
+        fetch("/Componentes/Nav.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar el nav:', error));
+    </script>
+
+    <script src="java_gestionContribuyentes.js"></script>
 </body>
 </html>

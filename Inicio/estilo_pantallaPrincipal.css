@@ -39,7 +39,7 @@ header {
 }
 
 .background-image {
-    background-image: url('fondo1.jpg');
+    background-image: url('/Assets/fondo_Ixtlán.jpg');
     background-size: cover;
     background-position: center;
     height: 75vh;
