@@ -9,18 +9,12 @@
 <body>
     <header>
         <div class="logo-left">
-            <img src="logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title-section">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
         </div>
-        <nav class="menu-buttons">
-            <button onclick="location.href='pantalla_Principal.html'">Inicio</button>
-            <button onclick="location.href='#seccion2'">Cobrar</button>
-            <button onclick="location.href='prueba.html'">Contribuyentes</button>
-            <button onclick="location.href='#seccion4'">Corte de Caja</button>
-            <button onclick="location.href='menu-catalogos.html'">Catálogos</button>
-        </nav>
+        <div id="nav-placeholder"></div>
     </header>
 
     <main>
@@ -64,5 +58,14 @@
         </div>
 
     </main>
+
+    <script>
+        fetch("/Componentes/Nav.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar el nav:', error));
+    </script>
 </body>
 </html>
