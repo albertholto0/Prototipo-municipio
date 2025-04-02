@@ -6,7 +6,7 @@
   /* Modelo de caja más intuitivo */
   box-sizing: border-box;
   /* Fuente principal de la aplicación */
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Contenedor principal centrado con máximo ancho */
@@ -28,7 +28,7 @@
 }
 
 /* Estructura base de la tabla */
-#accountsTable {
+#establecimientosTable {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9em;
@@ -37,37 +37,37 @@
 }
 
 /* Encabezado de tabla con gradiente de color */
-#accountsTable thead tr {
+#establecimientosTable thead tr {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: white;
   text-align: left;
 }
 
 /* Estilos comunes para celdas */
-#accountsTable th,
-#accountsTable td {
+#establecimientosTable th,
+#establecimientosTable td {
   padding: 15px 20px;
 }
 
 /* Filas del cuerpo de la tabla */
-#accountsTable tbody tr {
+#establecimientosTable tbody tr {
   border-bottom: 1px solid #ecf0f1;
   transition: all 0.3s ease;
   /* Transición suave para efectos hover */
 }
 
 /* Zebra striping para mejor legibilidad */
-#accountsTable tbody tr:nth-of-type(even) {
+#establecimientosTable tbody tr:nth-of-type(even) {
   background-color: #f9f9f9;
 }
 
 /* Borde destacado en última fila */
-#accountsTable tbody tr:last-of-type {
+#establecimientosTable tbody tr:last-of-type {
   border-bottom: 2px solid #2ecc71;
 }
 
 /* Efecto hover para filas */
-#accountsTable tbody tr:hover {
+#establecimientosTable tbody tr:hover {
   background-color: #f1f8fe;
   transform: translateX(5px);
   /* Desplazamiento lateral al pasar el mouse */
@@ -156,21 +156,19 @@
 /* Efecto focus para inputs */
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #2ecc71;
+  border-color: #3498db;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-/* Agrupación en línea para ciertos campos, como fechas */
+/* Agrupación en línea para ciertos campos, como direcciones */
 .form-inline {
   display: flex;
   gap: 1rem;
-  width: 100%;
 }
 
-.form-inline .form-group {
-  flex: 1 1 50%;
-  width: 50%;
+.form-group-inline {
+  flex: 1;
 }
 
 /* ===== BOTONES PRINCIPALES ===== */
@@ -192,7 +190,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 60%;
+  margin-left: 1rem;
   transition: all 0.3s;
 }
 
@@ -263,8 +261,56 @@
 
 #searchInput:focus {
   outline: none;
-  border-color: #2ecc71;
-  box-shadow: 0 2px 15px rgba(46, 204, 113, 0.2);
+  border-color: #3498db;
+  box-shadow: 0 2px 15px rgba(52, 152, 219, 0.2);
+}
+
+/* ===== FILTROS ADICIONALES ===== */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-end;
+}
+
+.filter-container .form-group-inline {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.filter-container select,
+.filter-container input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ecf0f1;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.btn-filtrar {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  height: 40px;
+}
+
+.btn-filtrar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* ===== PAGINACIÓN ===== */
@@ -302,9 +348,9 @@
 }
 
 .pagination button.active {
-  background: #2ecc71;
+  background: #3498db;
   color: white;
-  border-color: #27ae60;
+  border-color: #2980b9;
   font-weight: bold;
 }
 
@@ -331,9 +377,6 @@
   position: relative;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
   animation: slideDown 0.3s ease;
-  overflow-x: auto;
-  -ms-overflow-style: none;  /* IE y Edge */
-  scrollbar-width: none;     /* Firefox */
 }
 
 .btn-close {
@@ -383,7 +426,7 @@
 .btn-agregar {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: #ffffff;
-  border: 2px solid #27ae60;
+  border: 2px solid, #2ecc71;
   padding: 10px 25px;
   border-radius: 30px;
   cursor: pointer;
@@ -398,34 +441,9 @@
 }
 
 .btn-agregar:hover {
-  background: linear-gradient(135deg, #27ae60, #2ecc71);
-  border-color: #219653;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  border-color: #2ecc71;
   color: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-}
-
-.modal-content {
-  width: 90%;
-  max-width: 600px;
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  position: relative;
-  max-height: 80vh;
-  overflow-y: auto; /* Permitir scroll */
-}
-
-.form-container {
-  max-height: 70vh;
-  overflow-y: scroll; /* Scroll para el formulario */
-}
-
-
-.form-container::-webkit-scrollbar {
-  width: 0; /* Oculta el scroll en navegadores basados en WebKit */
-}
-
-.form-container {
-  scrollbar-width: none; /* Oculta el scroll en Firefox */
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }

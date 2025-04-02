@@ -1,0 +1,321 @@
+/* ===== ESTILOS GENERALES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Contenedor principal centrado con máximo ancho */
+.main-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* ===== ESTILOS DE TABLA ===== */
+#contribuyentesTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 600px;
+}
+
+#contribuyentesTable thead tr {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    text-align: left;
+}
+
+#contribuyentesTable th,
+#contribuyentesTable td {
+    padding: 15px 20px;
+}
+
+#contribuyentesTable tbody tr {
+    border-bottom: 1px solid #ecf0f1;
+    transition: all 0.3s ease;
+}
+
+#contribuyentesTable tbody tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+#contribuyentesTable tbody tr:last-of-type {
+    border-bottom: 2px solid #2ecc71;
+}
+
+#contribuyentesTable tbody tr:hover {
+    background-color: #f1f8fe;
+    transform: translateX(5px);
+}
+
+/* ===== BOTONES DE ACCIÓN ===== */
+.action-btn {
+    border: none;
+    padding: 0;
+    background: none !important;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+}
+
+.action-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.action-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.action-btn.delete:hover .action-icon {
+    filter: brightness(0.8) sepia(100%) hue-rotate(310deg) saturate(500%);
+}
+
+/* Estilo para el fondo oscurecido */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 8;
+}
+
+/* Formulario emergente */
+.form-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    max-height: 90vh;
+    width: 900px;
+    border-radius: 10px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: red;
+}
+
+.titulo-formulario {
+    text-align: center;
+}
+
+.form-scrollable {
+    display: flex;
+    gap: 20px;
+    overflow-y: auto;
+    max-height: 60vh;
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: #2c3e50;
+}
+
+.form-column {
+    flex: 1;
+    background-color: aqua;
+}
+
+.form-buttons {
+    width: 260px;
+    margin: 20px;
+    background-color: #27ae60;
+    border-style: solid;
+    border-color: pink;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 35px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* ===== BOTONES DEL FORMULARIO ===== */
+/* Botón primario (verde) */
+.btnAddOrUpdate {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    margin-left: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+/* Botón secundario  */
+.btn-cancel {
+    background: #e74c3c;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: all 0.3s;
+}
+
+/* Efecto hover para botones principales */
+.btnAddOrUpdate:hover,
+.btn-cancel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+}
+
+.logo-left img {
+    height: 100px;
+}
+
+.title-section h1 {
+    color: black;
+    font-size: 1.5em;
+    font-family: 'Poppins', sans-serif;
+}
+
+.menu-buttons {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.menu-buttons button {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 25px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.menu-buttons button:hover {
+    background-color: green;
+    color: white;
+    border-radius: 20px;
+}
+
+/* ===== TÍTULOS ===== */
+.title-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.title-section h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.title-line {
+    width: 15%;
+    height: 3px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    border: none;
+    margin: 0 auto;
+}
+
+/* ===== BUSCADOR ===== */
+.search-container {
+    margin: 2rem 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#searchInput {
+    width: 300px;
+    height: 40px;
+    padding: 12px 20px;
+    border: 2px solid #ecf0f1;
+    border-radius: 30px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: #2ecc71;
+    box-shadow: 0 2px 15px rgba(46, 204, 113, 0.2);
+}
+
+/* ===== BOTÓN AGREGAR ===== */
+.btn-agregar {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: #ffffff;
+    border: 2px solid #27ae60;
+    padding: 10px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-agregar:hover {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    border-color: #219653;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    background: #34495e;
+    color: white;
+    margin-top: 3rem;
+    font-size: 0.9em;
+}

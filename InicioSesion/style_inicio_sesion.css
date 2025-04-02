@@ -1,7 +1,9 @@
 body {
     font-family: Arial, sans-serif;
-    /*background-color: #f4f4f4;*/
-    background-image: url(images/bosque.jpg);
+    background-image: url(images/fondo_inicioSesion.jpg);
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,4 +60,17 @@ body {
 
 .contenedor-inicio-sesion a:hover {
     text-decoration: underline;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
