@@ -1,134 +1,3 @@
-// Datos iniciales de ejemplo para cuentas contables
-let cuentasContables = [
-    {
-        numeroCuenta: "1000-01",
-        descripcion: "Caja General",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "1000-02",
-        descripcion: "Bancos",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "2000-01",
-        descripcion: "Proveedores",
-        seccion: "2",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "3000-01",
-        descripcion: "Ingresos",
-        seccion: "3",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "4000-01",
-        descripcion: "Gastos",
-        seccion: "4",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "1000-01",
-        descripcion: "Caja General",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "1000-02",
-        descripcion: "Bancos",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "2000-01",
-        descripcion: "Proveedores",
-        seccion: "2",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "3000-01",
-        descripcion: "Ingresos",
-        seccion: "3",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "4000-01",
-        descripcion: "Gastos",
-        seccion: "4",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "1000-01",
-        descripcion: "Caja General",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "1000-02",
-        descripcion: "Bancos",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "2000-01",
-        descripcion: "Proveedores",
-        seccion: "2",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "3000-01",
-        descripcion: "Ingresos",
-        seccion: "3",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "4000-01",
-        descripcion: "Gastos",
-        seccion: "4",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "1000-01",
-        descripcion: "Caja General",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "1000-02",
-        descripcion: "Bancos",
-        seccion: "1",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "2000-01",
-        descripcion: "Proveedores",
-        seccion: "2",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "3000-01",
-        descripcion: "Ingresos",
-        seccion: "3",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "4000-01",
-        descripcion: "Gastos",
-        seccion: "4",
-        ejercicio: "2023"
-    },
-    {
-        numeroCuenta: "4000-01",
-        descripcion: "Gastos",
-        seccion: "4",
-        ejercicio: "2023"
-    },
-
-];
-
 // Variables de estado globales
 let isEditing = false;        // Bandera para modo edición
 let currentIndex = null;      // Índice del elemento siendo editado
@@ -140,10 +9,15 @@ const elements = {
     tableBody: document.querySelector("#accountsTable tbody"),
     searchInput: document.getElementById("searchInput"),
     form: document.getElementById("accountForm"),
-    numeroCuenta: document.getElementById("numeroCuenta"),
-    descripcion: document.getElementById("descripcion"),
-    seccion: document.getElementById("seccion"),
-    ejercicio: document.getElementById("ejercicio"),
+    nombre: document.getElementById("nombre"),
+    apellido_paterno: document.getElementById("apellido_paterno"),
+    apellido_materno: document.getElementById("apellido_materno"),
+    rfc: document.getElementById("rfc"),
+    calle: document.getElementById("calle"),
+    num_calle: document.getElementById("num_calle"),
+    colonia: document.getElementById("colonia"),
+    telefono: document.getElementById("telefono"),
+    num_cuenta: document.getElementById("num_cuenta"),
     btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
     btnCancel: document.getElementById("btnCancel"),
     formTitle: document.getElementById("formTitle"),
@@ -162,23 +36,22 @@ function renderTable(data) {
     const end = start + rowsPerPage;
     const paginatedData = data.slice(start, end);
 
-    // Genera las filas de la tabla con paginación
-    paginatedData.forEach((cuenta, index) => {
+    paginatedData.forEach((contribuyente, index) => {
         const row = `
         <tr>
-            <td>${cuenta.numeroCuenta}</td>
-            <td>${cuenta.descripcion}</td>
-            <td>Sección ${cuenta.seccion}</td>
-            <td>${cuenta.ejercicio}</td>
+            <td>${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}</td>
+            <td>${contribuyente.rfc}</td>
+            <td>${contribuyente.num_cuenta}</td>
             <td>
               <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
                 <img src="/Assets/editor.png" class="action-icon">
-            </button>
-            <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
+              </button>
+              <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
                 <img src="/Assets/eliminar.png" class="action-icon">
-            </button>
+              </button>
+            </td>
         </tr>
-    `;
+        `;
         elements.tableBody.insertAdjacentHTML("beforeend", row);
     });
 
@@ -263,9 +136,11 @@ elements.searchInput.addEventListener("input", () => {
  */
 function filteredAccounts() {
     const term = elements.searchInput.value.toLowerCase();
-    return cuentasContables.filter(cuenta =>
-        cuenta.numeroCuenta.toLowerCase().includes(term) ||
-        cuenta.descripcion.toLowerCase().includes(term)
+    return cuentasContables.filter(contribuyente =>
+        contribuyente.nombre.toLowerCase().includes(term) ||
+        contribuyente.apellido_paterno.toLowerCase().includes(term) ||
+        contribuyente.rfc.toLowerCase().includes(term) ||
+        contribuyente.num_cuenta.toLowerCase().includes(term)
     );
 }
 
@@ -275,20 +150,25 @@ function filteredAccounts() {
  */
 function handleSubmit(e) {
     e.preventDefault();
-    const cuenta = {
-        numeroCuenta: elements.numeroCuenta.value,
-        descripcion: elements.descripcion.value,
-        seccion: elements.seccion.value,
-        ejercicio: elements.ejercicio.value
+    const contribuyente = {
+        nombre: elements.nombre.value,
+        apellido_paterno: elements.apellido_paterno.value,
+        apellido_materno: elements.apellido_materno.value,
+        rfc: elements.rfc.value,
+        calle: elements.calle.value,
+        num_calle: elements.num_calle.value,
+        colonia: elements.colonia.value,
+        telefono: elements.telefono.value,
+        num_cuenta: elements.num_cuenta.value
     };
 
     if (isEditing) {
-        cuentasContables[currentIndex] = cuenta;
+        cuentasContables[currentIndex] = contribuyente;
     } else {
-        cuentasContables.push(cuenta);
+        cuentasContables.push(contribuyente);
     }
 
-    //resetForm();
+    closeModal();
     renderTable(filteredAccounts());
 }
 
@@ -306,22 +186,28 @@ window.changePage = function (page) {
  * @param {number} index - Índice de la cuenta a editar
  */
 window.editAccount = function (index) {
-    const cuenta = cuentasContables[index];
-    elements.numeroCuenta.value = cuenta.numeroCuenta;
-    elements.descripcion.value = cuenta.descripcion;
-    elements.seccion.value = cuenta.seccion;
-    elements.ejercicio.value = cuenta.ejercicio;
+    const contribuyente = cuentasContables[index];
+    elements.nombre.value = contribuyente.nombre;
+    elements.apellido_paterno.value = contribuyente.apellido_paterno;
+    elements.apellido_materno.value = contribuyente.apellido_materno;
+    elements.rfc.value = contribuyente.rfc;
+    elements.calle.value = contribuyente.calle;
+    elements.num_calle.value = contribuyente.num_calle;
+    elements.colonia.value = contribuyente.colonia;
+    elements.telefono.value = contribuyente.telefono;
+    elements.num_cuenta.value = contribuyente.num_cuenta;
+    
     isEditing = true;
     currentIndex = index;
-    elements.formTitle.textContent = "Editar Cuenta Contable";
+    elements.formTitle.textContent = "Editar Contribuyente";
     elements.btnAddOrUpdate.textContent = "Actualizar";
+    openModal();
 
     // Desplazamiento suave al formulario
     document.getElementById('formContainer').scrollIntoView({
         behavior: 'smooth',
         block: 'center'
     });
-
 };
 
 /**
@@ -347,7 +233,7 @@ function resetForm() {
     elements.form.reset();
     isEditing = false;
     currentIndex = null;
-    elements.formTitle.textContent = "Registrar Cuenta Contable";
+    elements.formTitle.textContent = "Agregar Contribuyente";
     elements.btnAddOrUpdate.textContent = "Agregar";
 }
 
