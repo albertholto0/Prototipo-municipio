@@ -1,76 +1,169 @@
-// Datos de ejemplo para movimientos de caja
-const movimientosCaja = [
-    { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
-    { fp: '002', clave: 'CLAVE-456', concepto: 'Agua', tipoPago: 'Transferencia', cantidad: 1, importe: 350.50 },
-    { fp: '003', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 },
-    { fp: '004', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
-    { fp: '005', clave: 'CLAVE-321', concepto: 'Multa', tipoPago: 'Efectivo', cantidad: 1, importe: 500.00 }
-];
+// Datos de ejemplo para movimientos de caja (simulando una base de datos)
+const cortesDeCaja = {
+    // Corte de hoy
+    '2025-04-02': {
+        encargado: "Amelia Lopez",
+        movimientos: [
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '002', clave: 'CLAVE-456', concepto: 'Agua', tipoPago: 'Transferencia', cantidad: 1, importe: 350.50 },
+            { fp: '003', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 }
+        ],
+        cerrado: false,
+        horaCierre: null
+    },
+    // Corte de ayer
+    '2025-04-01': {
+        encargado: "Amelia Lopez",
+        movimientos: [
+            { fp: '004', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '005', clave: 'CLAVE-321', concepto: 'Multa', tipoPago: 'Efectivo', cantidad: 1, importe: 500.00 }
+        ],
+        cerrado: true,
+        horaCierre: '18:30 PM'
+    },
+    // Corte de hace 2 días
+    '2025-03-31': {
+        encargado: "Carlos Martínez",
+        movimientos: [
+            { fp: '006', clave: 'CLAVE-547', concepto: 'Renta de local', tipoPago: 'Efectivo', cantidad: 2, importe: 1000.00 },
+            { fp: '007', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 }
+        ],
+        cerrado: true,
+        horaCierre: '19:15 PM'
+    }
+};
 
 // Variables de estado
 let currentPage = 1;
 const rowsPerPage = 10;
-let corteAbierto = true;
+let corteActual = null;
+let fechaSeleccionada = null;
 
 // Elementos del DOM
 const elements = {
+    selectorFecha: document.getElementById('selectorFecha'),
+    btnBuscarCorte: document.getElementById('btnBuscarCorte'),
+    btnHoy: document.getElementById('btnHoy'),
     encargadoCaja: document.getElementById('encargadoCaja'),
-    horaInicio: document.getElementById('horaInicio'),
+    fechaActual: document.getElementById('fechaActual'),
     horaCierre: document.getElementById('horaCierre'),
+    totalMovimientos: document.getElementById('totalMovimientos'),
     totalEfectivo: document.getElementById('totalEfectivo'),
     totalTransferencias: document.getElementById('totalTransferencias'),
     totalTarjetas: document.getElementById('totalTarjetas'),
     totalGeneral: document.getElementById('totalGeneral'),
-    fechaCorte: document.getElementById('fechaCorte'),
     movementsTable: document.querySelector('#movementsTable tbody'),
     paginationContainer: document.querySelector('.pagination'),
-    btnGenerarCorte: document.getElementById('btnGenerarCorte'),
     btnImprimirCorte: document.getElementById('btnImprimirCorte'),
     btnCerrarCorte: document.getElementById('btnCerrarCorte')
 };
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
-    // Establecer fecha actual
+    // Establecer fecha actual en el selector
     const today = new Date().toISOString().split('T')[0];
-    elements.fechaCorte.value = today;
+    elements.selectorFecha.value = today;
+    fechaSeleccionada = today;
     
-    // Cargar datos iniciales
-    loadCorteData();
-    renderMovementsTable();
+    // Cargar corte del día actual
+    cargarCorte(today);
+    
+    // Event listeners
+    elements.btnBuscarCorte.addEventListener('click', buscarCortePorFecha);
+    elements.btnHoy.addEventListener('click', cargarCorteHoy);
 });
 
-// Cargar datos del corte
-function loadCorteData() {
+// Formatear fecha como DD/MM/AAAA
+function formatDate(dateString) {
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+}
+
+// Cargar corte de hoy
+function cargarCorteHoy() {
+    const today = new Date().toISOString().split('T')[0];
+    elements.selectorFecha.value = today;
+    cargarCorte(today);
+}
+
+// Buscar corte por fecha seleccionada
+function buscarCortePorFecha() {
+    const fechaSeleccionada = elements.selectorFecha.value;
+    if (!fechaSeleccionada) {
+        alert('Por favor seleccione una fecha');
+        return;
+    }
+    cargarCorte(fechaSeleccionada);
+}
+
+// Cargar corte específico
+function cargarCorte(fecha) {
+    fechaSeleccionada = fecha;
+    corteActual = cortesDeCaja[fecha];
+    
+    if (!corteActual) {
+        // Si no hay corte para esa fecha, mostrar vacío
+        mostrarCorteVacio();
+        alert('No se encontró corte de caja para la fecha seleccionada');
+        return;
+    }
+    
+    // Actualizar información general
+    elements.encargadoCaja.textContent = corteActual.encargado;
+    elements.fechaActual.textContent = formatDate(fecha);
+    elements.horaCierre.textContent = corteActual.horaCierre || '--:-- --';
+    elements.totalMovimientos.textContent = corteActual.movimientos.length;
+    
     // Calcular totales
-    const totalEfectivo = movimientosCaja
+    const totalEfectivo = corteActual.movimientos
         .filter(m => m.tipoPago === 'Efectivo')
         .reduce((sum, m) => sum + m.importe, 0);
     
-    const totalTransferencias = movimientosCaja
+    const totalTransferencias = corteActual.movimientos
         .filter(m => m.tipoPago === 'Transferencia')
         .reduce((sum, m) => sum + m.importe, 0);
     
-    const totalTarjetas = movimientosCaja
+    const totalTarjetas = corteActual.movimientos
         .filter(m => m.tipoPago === 'Tarjeta')
         .reduce((sum, m) => sum + m.importe, 0);
     
     const totalGeneral = totalEfectivo + totalTransferencias + totalTarjetas;
     
-    // Actualizar UI
+    // Actualizar totales
     elements.totalEfectivo.textContent = formatCurrency(totalEfectivo);
     elements.totalTransferencias.textContent = formatCurrency(totalTransferencias);
     elements.totalTarjetas.textContent = formatCurrency(totalTarjetas);
     elements.totalGeneral.textContent = formatCurrency(totalGeneral);
     
-    // Establecer hora actual si no hay hora de inicio
-    if (elements.horaInicio.textContent === '--:-- --') {
-        const now = new Date();
-        elements.horaInicio.textContent = now.toLocaleTimeString('es-MX', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        });
+    // Habilitar/deshabilitar botones según si el corte está cerrado
+    const esCorteDeHoy = fecha === new Date().toISOString().split('T')[0];
+    
+    if (corteActual.cerrado) {
+        elements.btnImprimirCorte.disabled = false;
+        elements.btnCerrarCorte.disabled = true;
+    } else {
+        elements.btnImprimirCorte.disabled = true;
+        elements.btnCerrarCorte.disabled = !esCorteDeHoy;
     }
+    
+    // Renderizar movimientos
+    renderMovementsTable();
+}
+
+// Mostrar corte vacío
+function mostrarCorteVacio() {
+    elements.encargadoCaja.textContent = '--';
+    elements.fechaActual.textContent = formatDate(fechaSeleccionada);
+    elements.horaCierre.textContent = '--:-- --';
+    elements.totalMovimientos.textContent = '0';
+    elements.totalEfectivo.textContent = '$0.00';
+    elements.totalTransferencias.textContent = '$0.00';
+    elements.totalTarjetas.textContent = '$0.00';
+    elements.totalGeneral.textContent = '$0.00';
+    elements.movementsTable.innerHTML = '';
+    elements.paginationContainer.innerHTML = '';
+    elements.btnImprimirCorte.disabled = true;
+    elements.btnCerrarCorte.disabled = true;
 }
 
 // Formatear moneda
@@ -80,11 +173,17 @@ function formatCurrency(amount) {
 
 // Renderizar tabla de movimientos
 function renderMovementsTable() {
+    if (!corteActual) {
+        elements.movementsTable.innerHTML = '';
+        elements.paginationContainer.innerHTML = '';
+        return;
+    }
+    
     elements.movementsTable.innerHTML = '';
     
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const paginatedData = movimientosCaja.slice(start, end);
+    const paginatedData = corteActual.movimientos.slice(start, end);
     
     paginatedData.forEach(movimiento => {
         const row = `
@@ -105,7 +204,18 @@ function renderMovementsTable() {
 
 // Renderizar paginación
 function renderPagination() {
-    const totalPages = Math.ceil(movimientosCaja.length / rowsPerPage);
+    if (!corteActual) {
+        elements.paginationContainer.innerHTML = '';
+        return;
+    }
+    
+    const totalPages = Math.ceil(corteActual.movimientos.length / rowsPerPage);
+    
+    if (totalPages <= 1) {
+        elements.paginationContainer.innerHTML = '';
+        return;
+    }
+    
     let paginationHTML = `
         <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
             « Anterior
@@ -152,12 +262,6 @@ window.changePage = function(page) {
     renderMovementsTable();
 };
 
-// Generar corte
-elements.btnGenerarCorte.addEventListener('click', () => {
-    alert(`Generando corte para la fecha: ${elements.fechaCorte.value}`);
-    renderMovementsTable();
-});
-
 // Imprimir corte
 elements.btnImprimirCorte.addEventListener('click', () => {
     window.print();
@@ -167,111 +271,20 @@ elements.btnImprimirCorte.addEventListener('click', () => {
 elements.btnCerrarCorte.addEventListener('click', () => {
     if (confirm('¿Está seguro que desea cerrar la caja?')) {
         const now = new Date();
-        elements.horaCierre.textContent = now.toLocaleTimeString('es-MX', { 
+        const horaCierre = now.toLocaleTimeString('es-MX', { 
             hour: '2-digit', 
             minute: '2-digit' 
         });
-        corteAbierto = false;
+        
+        // Actualizar en la "base de datos"
+        cortesDeCaja[fechaSeleccionada].cerrado = true;
+        cortesDeCaja[fechaSeleccionada].horaCierre = horaCierre;
+        
+        // Actualizar UI
+        elements.horaCierre.textContent = horaCierre;
         elements.btnCerrarCorte.disabled = true;
+        elements.btnImprimirCorte.disabled = false;
+        
         alert('Caja cerrada correctamente');
     }
-});
-
-// Variables adicionales para corte parcial
-let corteParcialActivo = false;
-let movimientosParciales = [];
-
-// Elementos del DOM para corte parcial
-const elementosCorteParcial = {
-    btnCorteParcial: document.getElementById('btnCorteParcial'),
-    horaCorteParcial: document.getElementById('horaCorteParcial'),
-    modalCorteParcial: document.getElementById('modalCorteParcial'),
-    btnCloseCorteParcial: document.getElementById('btnCloseCorteParcial'),
-    resumenCorteParcial: document.getElementById('resumenCorteParcial'),
-    btnConfirmarCorteParcial: document.getElementById('btnConfirmarCorteParcial'),
-    btnCancelarCorteParcial: document.getElementById('btnCancelarCorteParcial')
-};
-
-// Inicialización de corte parcial
-function initCorteParcial() {
-    // Establecer hora actual por defecto
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    elementosCorteParcial.horaCorteParcial.value = `${hours}:${minutes}`;
-    
-    // Event listeners
-    elementosCorteParcial.btnCorteParcial.addEventListener('click', generarCorteParcial);
-    elementosCorteParcial.btnCloseCorteParcial.addEventListener('click', cerrarModalCorteParcial);
-    elementosCorteParcial.btnConfirmarCorteParcial.addEventListener('click', confirmarCorteParcial);
-    elementosCorteParcial.btnCancelarCorteParcial.addEventListener('click', cerrarModalCorteParcial);
-}
-
-// Generar corte parcial
-function generarCorteParcial() {
-    if (movimientosCaja.length === 0) {
-        alert('No hay movimientos para generar corte parcial');
-        return;
-    }
-    
-    // Obtener movimientos desde el último corte
-    const ultimoCorte = corteParcialActivo ? movimientosParciales[movimientosParciales.length - 1]?.fecha || null : null;
-    movimientosParciales = ultimoCorte 
-        ? movimientosCaja.filter(m => new Date(m.fecha) > new Date(ultimoCorte))
-        : [...movimientosCaja];
-    
-    if (movimientosParciales.length === 0) {
-        alert('No hay nuevos movimientos desde el último corte');
-        return;
-    }
-    
-    // Calcular totales
-    const totalEfectivo = calcularTotalPorTipo('Efectivo', movimientosParciales);
-    const totalTransferencias = calcularTotalPorTipo('Transferencia', movimientosParciales);
-    const totalTarjetas = calcularTotalPorTipo('Tarjeta', movimientosParciales);
-    const totalGeneral = totalEfectivo + totalTransferencias + totalTarjetas;
-    
-    // Mostrar resumen
-    elementosCorteParcial.resumenCorteParcial.innerHTML = `
-        <p><strong>Hora corte:</strong> ${elementosCorteParcial.horaCorteParcial.value}</p>
-        <p><strong>Movimientos incluidos:</strong> ${movimientosParciales.length}</p>
-        <p><strong>Efectivo:</strong> ${formatCurrency(totalEfectivo)}</p>
-        <p><strong>Transferencias:</strong> ${formatCurrency(totalTransferencias)}</p>
-        <p><strong>Tarjetas:</strong> ${formatCurrency(totalTarjetas)}</p>
-        <p class="total-parcial"><strong>TOTAL PARCIAL:</strong> ${formatCurrency(totalGeneral)}</p>
-    `;
-    
-    // Mostrar modal
-    elementosCorteParcial.modalCorteParcial.style.display = 'block';
-    corteParcialActivo = true;
-}
-
-// Calcular total por tipo de pago
-function calcularTotalPorTipo(tipo, movimientos) {
-    return movimientos
-        .filter(m => m.tipoPago === tipo)
-        .reduce((sum, m) => sum + m.importe, 0);
-}
-
-// Confirmar corte parcial
-function confirmarCorteParcial() {
-    // Aquí iría la lógica para guardar el corte parcial en el sistema
-    const horaCorte = elementosCorteParcial.horaCorteParcial.value;
-    
-    alert(`Corte parcial registrado a las ${horaCorte}`);
-    cerrarModalCorteParcial();
-    
-    // Actualizar interfaz
-    renderMovementsTable();
-}
-
-// Cerrar modal de corte parcial
-function cerrarModalCorteParcial() {
-    elementosCorteParcial.modalCorteParcial.style.display = 'none';
-}
-
-// Agregar al DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    initCorteParcial();
-    // ... resto de tu inicialización
 });
