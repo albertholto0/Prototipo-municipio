@@ -158,7 +158,14 @@
 }
 
 /* ===== BOTONES PRINCIPALES ===== */
-/* Botón primario (verde) */
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinea todo a la derecha */
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
 #btnAddOrUpdate {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: white;
@@ -170,7 +177,6 @@
   transition: all 0.3s;
 }
 
-/* Botón secundario  */
 .btn-cancel {
   background: #e74c3c;
   color: white;
@@ -178,11 +184,10 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 63%;
   transition: all 0.3s;
+  margin-left: 0; /* Eliminamos el margen anterior */
 }
 
-/* Efecto hover para botones principales */
 #btnAddOrUpdate:hover,
 .btn-cancel:hover {
   transform: translateY(-2px);
