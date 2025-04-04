@@ -23,7 +23,21 @@
     <div class="register-button">
         <button class="register" id="registerBtn">Registrar nuevo usuario</button>
     </div>
-    <div id="users-container"></div>
+    <div id="users-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Rol de Usuario</th>
+                    <th>Hora de Acceso</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="users-table-body">
+                <!-- Filas de usuarios generadas dinámicamente -->
+            </tbody>
+        </table>
+    </div>
     <footer class="footer">
         <p>© 2025 Ixtlán - Gestión de usuarios</p>
     </footer>
