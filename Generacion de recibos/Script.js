@@ -156,9 +156,10 @@ function abrirModalNuevoRecibo() {
     document.getElementById("fecha").value = new Date().toISOString().split('T')[0];
     document.getElementById("formTitle").textContent = "Nuevo Recibo";
     elements.btnGuardarRecibo.textContent = "Guardar Recibo";
+    elements.btnImprimirRecibo.textContent = "Cobrar";
     isEditing = false;
     currentReciboId = null;
-    elements.modalOverlay.style.display = "block";
+    elements.modalOverlay.style.display = "flex";
     
     // Llenar select de meses
     llenarSelectMeses();
@@ -344,9 +345,10 @@ function editarRecibo(folio) {
     
     document.getElementById("formTitle").textContent = "Editar Recibo";
     elements.btnGuardarRecibo.textContent = "Actualizar Recibo";
+    elements.btnImprimirRecibo.textContent = "Cobrar";
     isEditing = true;
     currentReciboId = recibo.folio;
-    elements.modalOverlay.style.display = "block";
+    elements.modalOverlay.style.display = "flex";
 }
 
 function eliminarRecibo(folio) {
@@ -460,8 +462,6 @@ function numeroALetras(numero) {
         resultado = convertirMenorMil(entero);
     }
     
-    // Agregar palabra "PESOS"
-    
     // Agregar parte decimal si existe
     if (decimal > 0) {
         if (decimal < 10) {
@@ -473,8 +473,7 @@ function numeroALetras(numero) {
         resultado += ' CON 00/100';
     }
     
-    // Cambiamos "M.N." por "PESOS MEXICANOS"
-    return resultado + 'PESOS MEXICANOS';
+    return resultado + ' PESOS MEXICANOS';
 }
 
 // Funciones globales para llamadas desde HTML

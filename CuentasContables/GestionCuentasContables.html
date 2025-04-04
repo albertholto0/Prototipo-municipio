@@ -8,18 +8,24 @@
     <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="Styles.css">
     <script src="Script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
     <header>
-        <div class="logo-left">
-            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        <div class="header-left"> <!-- Contenedor flex nuevo -->
+            <div class="logo-left">
+                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
         </div>
-        <div class="title">
-            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        
+        <!-- Menú debe estar fuera del header-left -->
+        <div class="menu-buttons" id="nav-placeholder">
+            <!-- Tus botones aquí -->
         </div>
-        <!-- Placeholder para el menú -->
-        <div id="nav-placeholder"></div>
     </header>
 
     <!-- Contenido principal -->
@@ -39,7 +45,7 @@
         <table id="accountsTable">
             <thead>
                 <tr>
-                    <th>Número de cuenta</th>
+                    <th>Número</th>
                     <th>Descripción</th>
                     <th>Sección</th>
                     <th>Ejercicio</th>
@@ -88,8 +94,10 @@
                             <option value="2025">2025</option>
                         </select>
                     </div>
-                    <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
-                    <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                    <div class="form-actions">
+                        <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                        <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                      </div>
                 </form>
             </div>
         </div>
@@ -98,15 +106,6 @@
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
     </footer>
-
-    <script>
-        fetch('/Componentes/Nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
 </body>
 
 </html>

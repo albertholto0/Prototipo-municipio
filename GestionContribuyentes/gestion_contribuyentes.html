@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Contribuyentes</title>
     <link rel="stylesheet" href="/Componentes/Nav.css">
-    <link rel="stylesheet" href="estilo_contribuyentes.css">
+    <link rel="stylesheet" href="/BaseCatastral/Styles.css">
 </head>
 <body>
     <header>
@@ -18,101 +18,91 @@
         <div id="nav-placeholder"></div>
     </header>
 
-    <main>
-        <div class="main-container">
-            <div class="title-section">
-                <h2>Gestión de Contribuyentes</h2>
-                <hr class="title-line">
-            </div>
-            
-            <!-- Sección de búsqueda -->
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Buscar" />
-                <button class="btn-agregar" onclick="openForm()">Agregar</button>
-            </div>
-
-            <!-- Tabla de contribuyentes -->
-            <table id="contribuyentesTable">
-                <thead>
-                    <tr>
-                        <th>Nombre Completo</th>
-                        <th>RFC</th>
-                        <th>Domicilio</th>
-                        <th>Télefono</th>
-                        <th>Número de Cuenta</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Las filas se agregarán dinámicamente con JavaScript -->
-                </tbody>
-            </table>
-            
+    <main class="main-container">
+        <div class="title-section">
+            <h2>Gestión de Contribuyentes</h2>
+            <hr class="title-line">
         </div>
-        
-        <div id="overlay" class="overlay"></div> <!-- Div para el fondo oscurecido cuando aparece el formulario -->
 
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar">
+            <button class="btn-agregar" id="btnOpenModal">Agregar</button>
+        </div>
 
-        <div id="addForm" class="form-popup">
-            <form class="form-container">
-                <h2 class="titulo-formulario">Agregar Contribuyente</h2>
-                <div class="form-scrollable">
-                    <div class="form-column">
-                        <label for="nombre"><b>Nombre</b></label>
-                        <input type="text" id="nombre" placeholder="Ingrese el nombre" required>
+        <table id="accountsTable">
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>RFC</th>
+                    <th>Domicilio</th>
+                    <th>Teléfono</th>
+                    <th>Número de Cuenta</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
         
-                        <label for="apellido_paterno"><b>Apellido Paterno</b></label>
-                        <input type="text" id="apellido_paterno" placeholder="Ingrese el apellido paterno" required>
-        
-                        <label for="apellido_materno"><b>Apellido Materno</b></label>
-                        <input type="text" id="apellido_materno" placeholder="Ingrese el apellido materno" required>
-        
-                        <label for="rfc"><b>RFC</b></label>
-                        <input type="text" id="rfc" placeholder="Ingrese el RFC" required>
+        <div class="pagination-container">
+            <div class="pagination"></div>
+        </div>
 
-                        <label for="cuenta"><b>Número de Cuenta</b></label>
-                        <input type="text" id="cuenta" placeholder="Ingrese el número de cuenta" required>
-                    </div>
-                    
-                    <div class="form-column">
-                        <label for="calle"><b>Calle</b></label>
-                        <input type="text" id="calle" placeholder="Ingrese la calle" required>
-        
-                        <label for="numero_calle"><b>Número de calle</b></label>
-                        <input type="text" id="numero_calle" placeholder="Ingrese el número de calle" required>
-        
-                        <label for="colonia"><b>Colonia</b></label>
-                        <input type="text" id="colonia" placeholder="Ingrese la colonia" required>
-        
-                        <label for="telefono"><b>Teléfono</b></label>
-                        <input type="text" id="telefono" placeholder="Ingrese el número de teléfono" required>
-
-                        <div class="form-buttons">
-                            <button type="button" class="btn-cancel" onclick="closeForm()">Cerrar</button>
-                            <button type="button" class="btnAddOrUpdate" onclick="addContribuyente()">Agregar</button>
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal-content">
+                <span class="btn-close" id="btnCloseModal">&times;</span>
+                <div class="form-container" id="formContainer">
+                    <h3 class="text-center" id="formTitle">Agregar Contribuyente</h3>
+                    <form id="accountForm">
+                        <div class="form-group">
+                            <label>Nombre:</label>
+                            <input type="text" id="nombre" placeholder="Ej. Rafael" required>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label>Apellido Paterno:</label>
+                            <input type="text" id="apellido_paterno" placeholder="Ej. Díaz" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Apellido Materno:</label>
+                            <input type="text" id="apellido_materno" placeholder="Ej. López" required>
+                        </div>
+                        <div class="form-group">
+                            <label>RFC:</label>
+                            <input type="text" id="rfc" placeholder="Ej. DILK040315QM7" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Calle:</label>
+                            <input type="text" id="calle" placeholder="Ej. Calle Constitución" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Número de calle:</label>
+                            <input type="text" id="num_calle" placeholder="Ej. 12" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Colonia:</label>
+                            <input type="text" id="colonia" placeholder="Ej. San Francisco" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono:</label>
+                            <input type="text" id="telefono" placeholder="Ej. 951 580 1224" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Número de cuenta:</label>
+                            <input type="text" id="num_cuenta" placeholder="Ej. 00001" required>
+                        </div>
+                        
+                        <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                        <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                    </form>                    
                 </div>
-            
-                
-            </form>
+            </div>
         </div>
-
     </main>
 
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 2: Gestión de Contribuyentes</p>
     </footer>
 
-    <script>
-        fetch("/Componentes/Nav.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
-
+    <script src="/Componentes/Nav.js"></script>
     <script src="java_gestionContribuyentes.js"></script>
 </body>
 </html>
