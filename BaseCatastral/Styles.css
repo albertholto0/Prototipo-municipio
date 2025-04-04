@@ -174,6 +174,14 @@
 }
 
 /* ===== BOTONES PRINCIPALES ===== */
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinea todo a la derecha */
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
 #btnAddOrUpdate {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: white;
@@ -192,8 +200,8 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 60%;
   transition: all 0.3s;
+  margin-left: 0; /* Eliminamos el margen anterior */
 }
 
 #btnAddOrUpdate:hover,
@@ -428,4 +436,174 @@
 
 .form-container {
   scrollbar-width: none; /* Oculta el scroll en Firefox */
+}
+#viewModalOverlay .modal-content {
+  background: #fbfefc;
+  border-radius: 14px;
+  padding: 35px 45px;
+  max-width: 740px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(40, 167, 69, 0.1);
+  border: 1px solid #e4f3e7;
+  animation: modalEntrance 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: center;
+}
+
+@keyframes modalEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#viewContainer h3 {
+  margin: 0 0 30px 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1d3928;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+  cursor: default;
+}
+
+#viewContainer h3:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: #28a745;
+  transition: width 0.3s ease;
+}
+
+#viewContainer h3:hover:after {
+  width: 80px;
+}
+
+#infoContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+#infoContent p {
+  font-size: 1.02rem;
+  color: #44584d;
+  margin: 0;
+  padding: 15px 20px;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+#infoContent p::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(40, 167, 69, 0);
+  transition: background 0.3s ease;
+  z-index: 0;
+}
+
+#infoContent p:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.08);
+}
+
+#infoContent p:hover::before {
+  background: rgba(40, 167, 69, 0.03);
+}
+
+#infoContent p:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+}
+
+#infoContent p strong {
+  color: #23703c;
+  font-size: 0.96rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#infoContent p strong::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #28a745;
+  border-radius: 50%;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+#infoContent p:hover strong::before {
+  transform: scale(1.6);
+}
+
+.modal-close {
+  color: #a0c1aa;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.modal-close:hover {
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.08);
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* Scroll personalizado */
+#infoContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+#infoContent::-webkit-scrollbar-track {
+  background: rgba(232, 245, 233, 0.3);
+}
+
+#infoContent::-webkit-scrollbar-thumb {
+  background: #c8e6c9;
+  border-radius: 4px;
+}
+
+#infoContent::-webkit-scrollbar-thumb:hover {
+  background: #a5d6a7;
+}
+
+/* Efecto ripple al hacer clic */
+@keyframes ripple {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(40, 167, 69, 0.3);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
 }

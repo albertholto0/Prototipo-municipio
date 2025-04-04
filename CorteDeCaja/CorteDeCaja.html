@@ -12,7 +12,7 @@
 <body>
     <header>
         <div class="logo-left">
-            <img src="/Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
@@ -27,17 +27,40 @@
             <hr class="title-line">
         </div>
         
+        
+        <!-- Selector de fecha en una sola línea -->
+        <div class="date-controls">
+            <div class="search-container">
+                <label for="selectorFecha">Buscar corte:</label>
+                <input type="date" id="selectorFecha" name="selectorFecha">
+                <button class="btn-search" id="btnBuscarCorte">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </button>
+                <button class="btn-today" id="btnHoy">
+                    
+                    Hoy
+                </button>
+            </div>
+        </div>
+
+        <!-- Resto del código permanece igual -->
         <!-- Resumen del corte -->
         <div class="table-container">
             <table id="summaryTable">
                 <tbody>
                     <tr>
                         <th>Encargado en caja:</th>
-                        <td id="encargadoCaja">Juan Pérez</td>
+                        <td id="encargadoCaja">Amelia Lopez</td>
                     </tr>
                     <tr>
-                        <th>Hora inicio:</th>
-                        <td id="horaInicio">08:00 AM</td>
+                        <th>Fecha: </th>
+                        <td id="fechaActual">--/--/----</td>
+                    </tr>
+                    <tr>
+                        <th>Movimientos incluidos:</th>
+                        <td id="totalMovimientos">0</td>
                     </tr>
                     <tr>
                         <th>Hora cierre:</th>
@@ -63,14 +86,9 @@
             </table>
         </div>
 
-        <!-- Controles de fecha -->
+        <!-- Controles de caja -->
         <div class="date-controls">
-            <div class="form-group-inline">
-                <label for="fechaCorte">Fecha de corte:</label>
-                <input type="date" id="fechaCorte" name="fechaCorte">
-            </div>
-            <button class="btn-agregar" id="btnGenerarCorte">Generar Corte</button>
-            <button class="btn-agregar" id="btnImprimirCorte">Imprimir Corte</button>
+            <button class="btn-agregar" id="btnImprimirCorte" disabled>Imprimir Corte</button>
             <button class="btn-cancel" id="btnCerrarCorte">Cerrar Caja</button>
         </div>
 
@@ -96,31 +114,6 @@
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
-
-        <!-- Agregar después de los controles de fecha existentes -->
-<div class="date-controls">
-    <button class="btn-agregar" id="btnCorteParcial">Corte Parcial</button>
-    <div class="form-group-inline">
-        <label for="horaCorteParcial">Hora corte:</label>
-        <input type="time" id="horaCorteParcial" name="horaCorteParcial">
-    </div>
-</div>
-
-<!-- Modal para corte parcial -->
-<div class="modal-overlay" id="modalCorteParcial">
-    <div class="modal-content">
-        <span class="btn-close" id="btnCloseCorteParcial">&times;</span>
-        <div class="form-container">
-            <h3 class="text-center">Corte de Caja Parcial</h3>
-            <div id="resumenCorteParcial"></div>
-            <div class="modal-buttons-container">
-                <button class="btn-agregar" id="btnConfirmarCorteParcial">Confirmar Corte</button>
-                <button class="btn-cancel" id="btnCancelarCorteParcial">Cancelar</button>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
     </main>
 
     <footer class="footer">
@@ -137,4 +130,3 @@
     </script>
 </body>
 </html>
-

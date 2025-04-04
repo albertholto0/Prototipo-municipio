@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tarjetas Responsivas</title>
+    <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="estilo-catalogo.css">
+    <script src="/Componentes/Nav.js" defer></script> <!-- Referencia de donde se va a llamar el navegación -->
 </head>
 <body>
     <header>
@@ -19,31 +21,31 @@
 
     <main>
         <div class="container">
-            <a href="pagina1.html" class="card">
+            <a href="/GestionUsuarios/usuarios.html" class="card">
                 <h2>Gestión de Usuarios</h2>
             </a>
-            <a href="pagina2.html" class="card">
-                <h2>hola</h2>
+            <a href="/CorteDeCaja/CorteDeCaja.html" class="card">
+                <h2>Corte de Caja</h2>
             </a>
-            <a href="pagina3.html" class="card">
+            <a href="/ConfiguracionSistemas/index.html" class="card">
                 <h2>Configuración</h2>
             </a>
             <a href="/CuentasContables/GestionCuentasContables.html" class="card">
                 <h2>Cuentas Contables</h2>
             </a>
-            <a href="pagina5.html" class="card">
+            <a href="/GestionAlquiler/GestionAlquiler.html" class="card">
                 <h2>Gestión del Alquiler</h2>
             </a>
-            <a href="pagina6.html" class="card">
+            <a href="/GestionConexion/Conexion.html" class="card">
                 <h2>Gestión de Conexión</h2>
             </a>
-            <a href="pagina7.html" class="card">
+            <a href="/Establecimientos/GestionEstablecimiento.html" class="card">
                 <h2>Gestión de Establecimiento</h2>
             </a>
             <a href="/BaseCatastral/GestionBaseCatastral.html" class="card">
                 <h2>Gestión de Base Catastral</h2>
             </a>
-            <a href="pagina9.html" class="card">
+            <a href="/EstimuloFiscal/EstimuloFiscal.html" class="card">
                 <h2>Gestión de Estimulo Fiscal</h2>
             </a>
             <a href="pagina10.html" class="card">
@@ -52,20 +54,12 @@
             <a href="pagina11.html" class="card">
                 <h2>Gestión de Sección</h2>
             </a>
-            <a href="pagina12.html" class="card">
+            <a href="/GestionConceptos/conceptos.html" class="card">
                 <h2>Gestión de Concepto</h2>
             </a>
         </div>
 
     </main>
 
-    <script>
-        fetch("/Componentes/Nav.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
 </body>
 </html>

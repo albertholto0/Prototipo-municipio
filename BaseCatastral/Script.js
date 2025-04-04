@@ -1,28 +1,28 @@
 // Datos iniciales de ejemplo para Bases Catastrales
 let basesCatastrales = [
   {
-      claveCatastral: "CLAVE-123",
-      nombrePropietario: "Juan Pérez",
-      ubicacion: "Calle Falsa 123",
-      baseCatastral: "1500 m²",
-      valorTerreno: 50000,
-      valorConstruccion: 75000,
-      impuestoCalculado: 1250,
-      fechaAvaluo: "2023-05-10",
-      historialAvaluos: "2021,2022",
-      usoSuelo: "habitacional"
+    claveCatastral: "CLAVE-123",
+    nombrePropietario: "Juan Pérez",
+    ubicacion: "Calle Falsa 123",
+    baseCatastral: "1500 m²",
+    valorTerreno: 50000,
+    valorConstruccion: 75000,
+    impuestoCalculado: 1250,
+    fechaAvaluo: "2023-05-10",
+    historialAvaluos: "2021,2022",
+    usoSuelo: "habitacional"
   },
   {
-      claveCatastral: "CLAVE-456",
-      nombrePropietario: "María López",
-      ubicacion: "Av. Siempre Viva 742",
-      baseCatastral: "2000 m²",
-      valorTerreno: 60000,
-      valorConstruccion: 90000,
-      impuestoCalculado: 1500,
-      fechaAvaluo: "2023-06-15",
-      historialAvaluos: "2022",
-      usoSuelo: "comercial"
+    claveCatastral: "CLAVE-456",
+    nombrePropietario: "María López",
+    ubicacion: "Av. Siempre Viva 742",
+    baseCatastral: "2000 m²",
+    valorTerreno: 60000,
+    valorConstruccion: 90000,
+    impuestoCalculado: 1500,
+    fechaAvaluo: "2023-06-15",
+    historialAvaluos: "2022",
+    usoSuelo: "comercial"
   }
 ];
 
@@ -67,29 +67,27 @@ function renderTable(data) {
 
   // Genera las filas de la tabla con paginación
   paginatedData.forEach((base, index) => {
-      const row = `
+    const row = `
       <tr>
           <td>${base.claveCatastral}</td>
           <td>${base.nombrePropietario}</td>
           <td>${base.ubicacion}</td>
           <td>${base.baseCatastral}</td>
-          <td>${base.valorTerreno}</td>
-          <td>${base.valorConstruccion}</td>
-          <td>${base.impuestoCalculado}</td>
-          <td>${base.fechaAvaluo}</td>
-          <td>${base.historialAvaluos}</td>
           <td>${base.usoSuelo}</td>
           <td>
               <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
-                  <img src="/Componentes/editor.png" class="action-icon">
+                  <img src="/Assets/editor.png" class="action-icon">
               </button>
               <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
-                  <img src="/Componentes/eliminar.png" class="action-icon">
+                  <img src="/Assets/eliminar.png" class="action-icon">
+              </button>
+              <button class="action-btn view" onclick="viewAccount(${start + index})" title="Ver información">
+                <img src="/Assets/visualizar.png" class="action-icon">
               </button>
           </td>
       </tr>
   `;
-      elements.tableBody.insertAdjacentHTML("beforeend", row);
+    elements.tableBody.insertAdjacentHTML("beforeend", row);  
   });
 
   renderPagination(data.length);
@@ -111,14 +109,14 @@ function renderPagination(totalItems) {
   const endPage = Math.min(totalPages, currentPage + 2);
 
   if (startPage > 1) {
-      paginationHTML += `
+    paginationHTML += `
           <button class="pagination-btn" onclick="changePage(1)">1</button>
           ${startPage > 2 ? '<span>...</span>' : ''}
       `;
   }
 
   for (let i = startPage; i <= endPage; i++) {
-      paginationHTML += `
+    paginationHTML += `
           <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
               ${i}
           </button>
@@ -126,7 +124,7 @@ function renderPagination(totalItems) {
   }
 
   if (endPage < totalPages) {
-      paginationHTML += `
+    paginationHTML += `
           ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
           <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
       `;
@@ -163,8 +161,8 @@ elements.searchInput.addEventListener("input", () => {
 function filteredBases() {
   const term = elements.searchInput.value.toLowerCase();
   return basesCatastrales.filter(base =>
-      base.claveCatastral.toLowerCase().includes(term) ||
-      base.nombrePropietario.toLowerCase().includes(term)
+    base.claveCatastral.toLowerCase().includes(term) ||
+    base.nombrePropietario.toLowerCase().includes(term)
   );
 }
 
@@ -175,22 +173,22 @@ function filteredBases() {
 function handleSubmit(e) {
   e.preventDefault();
   const base = {
-      claveCatastral: elements.claveCatastral.value,
-      nombrePropietario: elements.nombrePropietario.value,
-      ubicacion: elements.ubicacion.value,
-      baseCatastral: elements.baseCatastral.value,
-      valorTerreno: elements.valorTerreno.value,
-      valorConstruccion: elements.valorConstruccion.value,
-      impuestoCalculado: elements.impuestoCalculado.value,
-      fechaAvaluo: elements.fechaAvaluo.value,
-      historialAvaluos: elements.historialAvaluos.value,
-      usoSuelo: elements.usoSuelo.value
+    claveCatastral: elements.claveCatastral.value,
+    nombrePropietario: elements.nombrePropietario.value,
+    ubicacion: elements.ubicacion.value,
+    baseCatastral: elements.baseCatastral.value,
+    valorTerreno: elements.valorTerreno.value,
+    valorConstruccion: elements.valorConstruccion.value,
+    impuestoCalculado: elements.impuestoCalculado.value,
+    fechaAvaluo: elements.fechaAvaluo.value,
+    historialAvaluos: elements.historialAvaluos.value,
+    usoSuelo: elements.usoSuelo.value
   };
 
   if (isEditing) {
-      basesCatastrales[currentIndex] = base;
+    basesCatastrales[currentIndex] = base;
   } else {
-      basesCatastrales.push(base);
+    basesCatastrales.push(base);
   }
 
   closeModal();
@@ -235,12 +233,12 @@ window.editAccount = function (index) {
 */
 window.deleteAccount = function (index) {
   if (confirm("¿Confirmar eliminación?")) {
-      basesCatastrales.splice(index, 1);
-      const totalPages = Math.ceil(filteredBases().length / rowsPerPage);
-      if (currentPage > totalPages && totalPages > 0) {
-          currentPage = totalPages;
-      }
-      renderTable(filteredBases());
+    basesCatastrales.splice(index, 1);
+    const totalPages = Math.ceil(filteredBases().length / rowsPerPage);
+    if (currentPage > totalPages && totalPages > 0) {
+      currentPage = totalPages;
+    }
+    renderTable(filteredBases());
   }
 };
 
@@ -285,3 +283,57 @@ modalElements.btnOpenModal.addEventListener('click', () => {
 
 // Cerrar modal con botón X
 modalElements.btnCloseModal.addEventListener('click', closeModal);
+
+// Función para ver la información completa de una base catastral y abrir el modal de "Ver información"
+window.viewAccount = function(index) {
+  const base = basesCatastrales[index];
+  const infoContent = document.getElementById("infoContent");
+  infoContent.innerHTML = `
+    <p><strong>Clave Catastral:</strong> ${base.claveCatastral}</p>
+    <p><strong>Nombre Propietario:</strong> ${base.nombrePropietario}</p>
+    <p><strong>Ubicación:</strong> ${base.ubicacion}</p>
+    <p><strong>Base Catastral:</strong> ${base.baseCatastral}</p>
+    <p><strong>Valor Terreno:</strong> ${base.valorTerreno}</p>
+    <p><strong>Valor Construcción:</strong> ${base.valorConstruccion}</p>
+    <p><strong>Impuesto Calculado:</strong> ${base.impuestoCalculado}</p>
+    <p><strong>Fecha Avalúo:</strong> ${base.fechaAvaluo}</p>
+    <p><strong>Historial Avalúos:</strong> ${base.historialAvaluos}</p>
+    <p><strong>Uso de Suelo:</strong> ${base.usoSuelo}</p>
+  `;
+  openViewModal();
+};
+
+// Manejo del modal de "Ver información"
+const viewModalElements = {
+  viewModalOverlay: document.getElementById('viewModalOverlay'),
+  btnCloseViewModal: document.getElementById('btnCloseViewModal')
+};
+
+function openViewModal() {
+  viewModalElements.viewModalOverlay.style.display = 'block';
+}
+
+function closeViewModal() {
+  viewModalElements.viewModalOverlay.style.display = 'none';
+}
+
+viewModalElements.btnCloseViewModal.addEventListener('click', closeViewModal);
+
+// Inicialización: renderiza la tabla al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  renderTable(basesCatastrales);
+});
+
+elements.form.addEventListener("submit", handleSubmit);
+
+document.querySelectorAll('#infoContent p').forEach(item => {
+  item.addEventListener('click', function(e) {
+    let ripple = document.createElement('div');
+    ripple.className = 'ripple-effect';
+    const rect = this.getBoundingClientRect();
+    ripple.style.left = (e.clientX - rect.left - 5) + 'px';
+    ripple.style.top = (e.clientY - rect.top - 5) + 'px';
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  });
+});
