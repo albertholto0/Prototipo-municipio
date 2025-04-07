@@ -3,7 +3,7 @@ let isEditing = false;
 let currentIndex = null;
 let currentPage = 1;
 const rowsPerPage = 10;
-let contribuyentes = []; // Cambié el nombre a 'contribuyentes' para mayor claridad
+let contribuyentes = [];
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -25,7 +25,6 @@ const elements = {
     paginationContainer: document.querySelector(".pagination"),
     modalOverlay: document.getElementById('modalOverlay'),
     btnOpenModal: document.getElementById('btnOpenModal'),
-    btnCloseModal: document.getElementById('btnCloseModal')
 };
 
 // Funciones principales
