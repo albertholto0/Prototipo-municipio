@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
         resetForm();
         closeModal();
     });
-    
 
     // FUNCIONALIDAD DE BÚSQUEDA
     searchInput.addEventListener("input", function () {
@@ -100,4 +99,40 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Simulación de datos de la BD
+    const contribuyentes = [
+        { id: 110, nombre: "Juan Pérez" },
+        { id: 115, nombre: "María González" }
+    ];
+
+    const conceptos = [
+        { id: 20, descripcion: "Pago de Agua" },
+        { id: 34, descripcion: "Impuesto Predial" }
+    ];
+
+    // Llenar los selects de contribuyentes y conceptos
+    function fillSelects() {
+        // Obtener elementos select
+        const selectContribuyente = document.getElementById("idContribuyente");
+        const selectConcepto = document.getElementById("id_concepto");
+
+        // Llenar el select de contribuyentes
+        contribuyentes.forEach(contribuyente => {
+            const option = document.createElement("option");
+            option.value = contribuyente.id;
+            option.textContent = `Contribuyente ${contribuyente.id}: ${contribuyente.nombre}`;
+            selectContribuyente.appendChild(option);
+        });
+
+        // Llenar el select de conceptos
+        conceptos.forEach(concepto => {
+            const option = document.createElement("option");
+            option.value = concepto.id;
+            option.textContent = `Concepto ${concepto.id}: ${concepto.descripcion}`;
+            selectConcepto.appendChild(option);
+        });
+    }
+
+    // Llamar a la función para llenar los selects al cargar la página
+    fillSelects();
 });
