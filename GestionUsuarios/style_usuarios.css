@@ -38,25 +38,63 @@ header {
   margin-bottom: 0px;
 }
 
-/* Contenedor de usuarios */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
+/* ===== ESTILOS DE TABLA ===== */
+/* Contenedor de tabla con sombra y bordes redondeados */
+.table-container {
+  background: #fff;
+  border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 2rem auto; /* Centra el contenedor horizontalmente */
+  position: relative;
+  max-width: 1200px; /* Ancho máximo para evitar que ocupe toda la página */
 }
 
-th, td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+/* Estructura base de la tabla */
+table {
+  width: 100%; 
+  border-collapse: collapse;
+  font-size: 0.9em;
+  min-width: 600px; 
 }
 
-th {
-  background-color: #2c3e50;
+/* Encabezado de tabla con gradiente de color */
+table thead tr {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: white;
+  text-align: left;
 }
 
+/* Estilos comunes para celdas */
+table th,
+table td {
+  padding: 15px 20px;
+}
+
+/* Filas del cuerpo de la tabla */
+table tbody tr {
+  border-bottom: 1px solid #ecf0f1;
+  transition: all 0.3s ease; /* Transición suave para efectos hover */
+}
+
+/* Zebra striping para mejor legibilidad */
+table tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+/* Borde destacado en última fila */
+table tbody tr:last-of-type {
+  border-bottom: 2px solid #2ecc71;
+}
+
+/* Efecto hover para filas */
+table tbody tr:hover {
+  background-color: #f1f8fe;
+  transform: translateX(5px);
+  /* Desplazamiento lateral al pasar el mouse */
+}
+
+/* Botones */
 button {
   padding: 5px 10px;
   border: none;

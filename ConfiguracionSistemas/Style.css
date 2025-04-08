@@ -25,9 +25,10 @@
 }
 
 .main-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
+  max-width: 800px; /* Ajusta este valor a tu preferencia */
+  margin: 0 auto; /* Centra el contenedor */
+  padding: 10px; /* Espacio interno reducido */
+  width: 90%;
 }
 
 .footer {
@@ -41,14 +42,14 @@
 
 .form-container {
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   margin-top: 2rem;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .form-group label {
@@ -87,4 +88,19 @@
 #btnAddOrUpdate:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.invalid-input {
+  border: 2px solid #e74c3c !important;
+  background-color: #ffebee !important;
+}
+
+.image-previews {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.image-previews div {
+  flex: 1;
 }

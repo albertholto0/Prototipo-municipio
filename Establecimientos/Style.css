@@ -172,6 +172,14 @@
 }
 
 /* ===== BOTONES PRINCIPALES ===== */
+.form-buttons-container {
+  display: flex;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  gap: 1rem; /* Espacio entre botones (reemplaza margin-left) */
+  margin-top: 20px; /* Espacio arriba del grupo de botones */
+  width: 100%;
+}
+
 #btnAddOrUpdate {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: white;
@@ -190,7 +198,6 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 1rem;
   transition: all 0.3s;
 }
 
