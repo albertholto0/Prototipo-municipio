@@ -3,7 +3,7 @@ let isEditing = false;
 let currentIndex = null;
 let currentPage = 1;
 const rowsPerPage = 10;
-let contribuyentes = [];
+let secciones = JSON.parse(localStorage.getItem('secciones')) || [];
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -11,7 +11,7 @@ const elements = {
     searchInput: document.getElementById("searchInput"),
     form: document.getElementById("accountForm"),
     nombre: document.getElementById("nombre"),
-    apellido_paterno: document.getElementById("año_ejercicio"),
+    año_ejercicio: document.getElementById("año_ejercicio"), // Corregido
     btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
     btnCancel: document.getElementById("btnCancel"),
     formTitle: document.getElementById("formTitle"),
@@ -27,16 +27,18 @@ function renderTable(data) {
     const end = start + rowsPerPage;
     const paginatedData = data.slice(start, end);
 
-    paginatedData.forEach((contribuyente, index) => {
+    paginatedData.forEach((seccion, index) => {
+        const rowNumber = start + index + 1; // Numeración que empieza en 1
         const row = `
         <tr>
-            <td>${contribuyente.nombre}</td>
-            <td>${contribuyente.año_ejercicio}</td>
+            <td>${rowNumber}</td> <!-- Columna de número -->
+            <td>${seccion.nombre}</td>
+            <td>${seccion.año_ejercicio}</td>
             <td>
-                <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
+                <button class="action-btn edit" onclick="editAccount(${secciones.indexOf(seccion)})" title="Editar">
                     <img src="/Assets/editor.png" class="action-icon">
                 </button>
-                <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
+                <button class="action-btn delete" onclick="deleteAccount(${secciones.indexOf(seccion)})" title="Eliminar">
                     <img src="/Assets/eliminar.png" class="action-icon">
                 </button>
             </td>
@@ -92,32 +94,33 @@ function renderPagination(totalItems) {
     elements.paginationContainer.innerHTML = paginationHTML;
 }
 
-// Funciones de manejo de eventos
 function handleSubmit(e) {
     e.preventDefault();
-    const contribuyente = {
+    const seccion = {
         nombre: elements.nombre.value.trim(),
         año_ejercicio: elements.año_ejercicio.value.trim(),
     };
 
     if (isEditing) {
-        contribuyentes[currentIndex] = contribuyente;
+        secciones[currentIndex] = seccion;
     } else {
-        contribuyentes.push(contribuyente);
+        secciones.push(seccion);
     }
 
+    // Guardar en localStorage para persistencia
+    localStorage.setItem('secciones', JSON.stringify(secciones));
+    
     closeModal();
     renderTable(filteredAccounts());
 }
 
 function filteredAccounts() {
     const term = elements.searchInput.value.toLowerCase();
-    return contribuyentes.filter(contribuyente =>
-        contribuyente.nombre.toLowerCase().includes(term) ||
-        contribuyente.año_ejercicio.toLowerCase().includes(term)
+    return secciones.filter(seccion =>
+        seccion.nombre.toLowerCase().includes(term) ||
+        seccion.año_ejercicio.toLowerCase().includes(term)
     );
 }
-
 // Funciones del modal
 function openModal() {
     elements.modalOverlay.style.display = 'block';
@@ -179,8 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resetForm();
         openModal();
     });
-    elements.btnCloseModal.addEventListener('click', closeModal);
     
     // Renderizar tabla inicial
-    renderTable(contribuyentes);
+    renderTable(secciones);
 });
