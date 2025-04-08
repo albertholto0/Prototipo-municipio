@@ -1,15 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const logo = document.getElementById("logoDisplay");
+  // Cargar logo al iniciar
+  const savedLogo = localStorage.getItem("logo");
+  if (savedLogo) {
+    const logoElements = document.querySelectorAll(".logo-image");
+    logoElements.forEach((element) => {
+      element.src = savedLogo;
+    });
+  }
 
-  const updateLogo = () => {
-    const logoSrc = localStorage.getItem("logo");
-    if (logo) {
-      logo.src = logoSrc || "logo_ixtlan.png"; // Si no hay logo en localStorage, usar el logo por defecto
-    }
-  };
-
-  updateLogo(); // Llamar la función para actualizar el logo cuando se cargue la página
-
-  // Detectar cambios en localStorage y actualizar el logo en tiempo real
-  window.addEventListener("storage", updateLogo);
+  // Escuchar actualizaciones de logo
+  if (typeof BroadcastChannel !== "undefined") {
+    const channel = new BroadcastChannel("logo_updates");
+    channel.addEventListener("message", (event) => {
+      if (event.data.type === "logo_update") {
+        const logoElements = document.querySelectorAll(".logo-image");
+        logoElements.forEach((element) => {
+          element.src = event.data.logo;
+        });
+      }
+    });
+  }
 });
