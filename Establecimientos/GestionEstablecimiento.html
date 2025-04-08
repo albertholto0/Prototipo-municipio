@@ -4,32 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Establecimientos</title>
-    <link rel="stylesheet" href="/Web_Cobros/styles1.css" />
+    <link rel="stylesheet" href="/Componentes/Nav.css" />
     <link rel="stylesheet" href="Style.css" />
     <script src="Script.js" defer></script>
-    <script src="/ConfiguracionSistema/ScriptLogo.js" defer></script>
+    <!--<script src="/ConfiguracionSistema/ScriptLogo.js" defer></script>-->
+    <script src="/Componentes/Nav.js" defer></script>
+    <!-- Referencia de donde se va a llamar el navegación -->
   </head>
 
   <body>
     <header>
       <div class="logo-left">
-        <img
-          id="logoDisplay"
-          src="/Web_Cobros/logo_ixtlan.png"
-          a lt="Logo Ixtlán"
-        />
+        <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán" />
       </div>
-      <div class="title">
+      <div class="title-section">
         <h1>SISTEMA DE COBROS MUNICIPAL</h1>
       </div>
-      <!-- Placeholder para el menú -->
       <div id="nav-placeholder"></div>
     </header>
 
-    <!-- Contenido principal -->
     <main class="main-container">
       <div class="title-section">
-        <h2>Gestión de Establecimientos</h2>
+        <h2>Gestión de Establecimiento</h2>
         <hr class="title-line" />
       </div>
 
@@ -106,7 +102,7 @@
       <div class="modal-content">
         <span class="btn-close" id="btnCloseModal">&times;</span>
         <div class="form-container" id="formContainer">
-          <h3 class="text-center" id="formTitle">Registrar Establecimiento</h3>
+          <h3 class="text-center" id="formTitle">Agregar Establecimiento</h3>
           <form id="establecimientoForm">
             <div class="form-group">
               <label for="nombreEstablecimiento">Nombre establecimiento:</label>
@@ -197,10 +193,13 @@
                 <!-- Se llenará dinámicamente -->
               </select>
             </div>
-            <button type="submit" id="btnAddOrUpdate">Agregar</button>
-            <button type="button" id="btnCancel" class="btn-cancel">
-              Cancelar
-            </button>
+
+            <div class="form-buttons-container">
+              <button type="button" id="btnCancel" class="btn-cancel">
+                Cancelar
+              </button>
+              <button type="submit" id="btnAddOrUpdate">Agregar</button>
+            </div>
           </form>
         </div>
       </div>

@@ -375,7 +375,7 @@ function resetForm() {
   elements.form.reset();
   isEditing = false;
   currentIndex = null;
-  elements.formTitle.textContent = "Registrar Establecimiento";
+  elements.formTitle.textContent = "Agregar Establecimiento";
   elements.btnAddOrUpdate.textContent = "Agregar";
 }
 
