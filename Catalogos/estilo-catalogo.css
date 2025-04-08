@@ -54,6 +54,7 @@
 .card.ejercicio-fiscal { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionFiscal.jpg');}
 .card.gestion-seccion { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionSeccion.jpg');}
 .card.gestion-concepto { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionConcepto.jpg');}
+.card.gestion-recibos { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionRecibos.jpg');}
 
 .card::before {
     content: '';
