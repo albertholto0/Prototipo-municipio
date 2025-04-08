@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
     <link rel="stylesheet" href="style_usuarios.css">
+    <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="modal_usuarios.css">
 </head>
 
 <body>
     <header>
         <div class="logo-left">
-            <img src="/Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
@@ -22,7 +23,23 @@
     <div class="register-button">
         <button class="register" id="registerBtn">Registrar nuevo usuario</button>
     </div>
-    <div id="users-container"></div>
+    <div id="users-container">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Rol de Usuario</th>
+                        <th>Hora de Acceso</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body">
+                    <!-- Filas de usuarios generadas dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
     <footer class="footer">
         <p>© 2025 Ixtlán - Gestión de usuarios</p>
     </footer>
@@ -37,6 +54,14 @@
                     <input type="text" id="userName" required>
                 </div>
                 <div class="form-group">
+                    <label for="userLastName">Apellidos:</label>
+                    <input type="text" id="userLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword">Contraseña:</label>
+                    <input type="password" id="userPassword" required>
+                </div>
+                <div class="form-group">
                     <label for="userRole">Rol:</label>
                     <select id="userRole" required>
                         <option value="">Seleccione un rol</option>
@@ -44,10 +69,10 @@
                         <option value="Cajero">Cajero</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="userPhoto">Foto de perfil (se guardará en fotos_perfil):</label>
                     <input type="file" id="userPhoto" accept="image/*">
-                </div>
+                </div> -->
                 <button type="submit" class="submit-btn">Guardar</button>
             </form>
         </div>

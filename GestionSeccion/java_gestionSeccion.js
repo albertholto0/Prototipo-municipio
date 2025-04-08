@@ -3,7 +3,7 @@ let isEditing = false;
 let currentIndex = null;
 let currentPage = 1;
 const rowsPerPage = 10;
-let contribuyentes = [];
+let secciones = JSON.parse(localStorage.getItem('secciones')) || [];
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -11,14 +11,7 @@ const elements = {
     searchInput: document.getElementById("searchInput"),
     form: document.getElementById("accountForm"),
     nombre: document.getElementById("nombre"),
-    apellido_paterno: document.getElementById("apellido_paterno"),
-    apellido_materno: document.getElementById("apellido_materno"),
-    rfc: document.getElementById("rfc"),
-    calle: document.getElementById("calle"),
-    num_calle: document.getElementById("num_calle"),
-    colonia: document.getElementById("colonia"),
-    telefono: document.getElementById("telefono"),
-    num_cuenta: document.getElementById("num_cuenta"),
+    año_ejercicio: document.getElementById("año_ejercicio"), // Corregido
     btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
     btnCancel: document.getElementById("btnCancel"),
     formTitle: document.getElementById("formTitle"),
@@ -34,20 +27,18 @@ function renderTable(data) {
     const end = start + rowsPerPage;
     const paginatedData = data.slice(start, end);
 
-    paginatedData.forEach((contribuyente, index) => {
-        const domicilio = `${contribuyente.calle} ${contribuyente.num_calle}, ${contribuyente.colonia}`;
+    paginatedData.forEach((seccion, index) => {
+        const rowNumber = start + index + 1; // Numeración que empieza en 1
         const row = `
         <tr>
-            <td>${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}</td>
-            <td>${contribuyente.rfc}</td>
-            <td>${domicilio}</td>
-            <td>${contribuyente.telefono}</td>
-            <td>${contribuyente.num_cuenta}</td>
+            <td>${rowNumber}</td> <!-- Columna de número -->
+            <td>${seccion.nombre}</td>
+            <td>${seccion.año_ejercicio}</td>
             <td>
-                <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
+                <button class="action-btn edit" onclick="editAccount(${secciones.indexOf(seccion)})" title="Editar">
                     <img src="/Assets/editor.png" class="action-icon">
                 </button>
-                <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
+                <button class="action-btn delete" onclick="deleteAccount(${secciones.indexOf(seccion)})" title="Eliminar">
                     <img src="/Assets/eliminar.png" class="action-icon">
                 </button>
             </td>
@@ -103,41 +94,33 @@ function renderPagination(totalItems) {
     elements.paginationContainer.innerHTML = paginationHTML;
 }
 
-// Funciones de manejo de eventos
 function handleSubmit(e) {
     e.preventDefault();
-    const contribuyente = {
+    const seccion = {
         nombre: elements.nombre.value.trim(),
-        apellido_paterno: elements.apellido_paterno.value.trim(),
-        apellido_materno: elements.apellido_materno.value.trim(),
-        rfc: elements.rfc.value.trim().toUpperCase(),
-        calle: elements.calle.value.trim(),
-        num_calle: elements.num_calle.value.trim(),
-        colonia: elements.colonia.value.trim(),
-        telefono: elements.telefono.value.trim(),
-        num_cuenta: elements.num_cuenta.value.trim()
+        año_ejercicio: elements.año_ejercicio.value.trim(),
     };
 
     if (isEditing) {
-        contribuyentes[currentIndex] = contribuyente;
+        secciones[currentIndex] = seccion;
     } else {
-        contribuyentes.push(contribuyente);
+        secciones.push(seccion);
     }
 
+    // Guardar en localStorage para persistencia
+    localStorage.setItem('secciones', JSON.stringify(secciones));
+    
     closeModal();
     renderTable(filteredAccounts());
 }
 
 function filteredAccounts() {
     const term = elements.searchInput.value.toLowerCase();
-    return contribuyentes.filter(contribuyente =>
-        contribuyente.nombre.toLowerCase().includes(term) ||
-        contribuyente.apellido_paterno.toLowerCase().includes(term) ||
-        contribuyente.rfc.toLowerCase().includes(term) ||
-        contribuyente.num_cuenta.toLowerCase().includes(term)
+    return secciones.filter(seccion =>
+        seccion.nombre.toLowerCase().includes(term) ||
+        seccion.año_ejercicio.toLowerCase().includes(term)
     );
 }
-
 // Funciones del modal
 function openModal() {
     elements.modalOverlay.style.display = 'block';
@@ -152,7 +135,7 @@ function resetForm() {
     elements.form.reset();
     isEditing = false;
     currentIndex = null;
-    elements.formTitle.textContent = "Agregar Contribuyente";
+    elements.formTitle.textContent = "Agregar Sección";
     elements.btnAddOrUpdate.textContent = "Agregar";
 }
 
@@ -166,18 +149,11 @@ window.changePage = function(page) {
 window.editAccount = function(index) {
     const contribuyente = contribuyentes[index];
     elements.nombre.value = contribuyente.nombre;
-    elements.apellido_paterno.value = contribuyente.apellido_paterno;
-    elements.apellido_materno.value = contribuyente.apellido_materno;
-    elements.rfc.value = contribuyente.rfc;
-    elements.calle.value = contribuyente.calle;
-    elements.num_calle.value = contribuyente.num_calle;
-    elements.colonia.value = contribuyente.colonia;
-    elements.telefono.value = contribuyente.telefono;
-    elements.num_cuenta.value = contribuyente.num_cuenta;
+    elements.año_ejercicio.value = contribuyente.año_ejercicio;
     
     isEditing = true;
     currentIndex = index;
-    elements.formTitle.textContent = "Editar Contribuyente";
+    elements.formTitle.textContent = "Editar Sección";
     elements.btnAddOrUpdate.textContent = "Actualizar";
     openModal();
 };
@@ -206,8 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resetForm();
         openModal();
     });
-    elements.btnCloseModal.addEventListener('click', closeModal);
     
     // Renderizar tabla inicial
-    renderTable(contribuyentes);
+    renderTable(secciones);
 });

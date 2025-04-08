@@ -3,9 +3,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Fuente principal de la aplicación */
     font-family: 'Poppins', sans-serif;
   }
   
+  /* Contenedor principal centrado con máximo ancho */
   .main-container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -19,13 +21,50 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     margin: 2rem 0;
+    max-height: relative;
   }
-  
+  /* Opcional: Estilos para la barra de scroll */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
   #estimulosTable {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9em;
+    display: block;
   }
+
+  #estimulosTable thead,
+#estimulosTable tbody {
+    display: block;
+}
+
+#estimulosTable tbody {
+    max-height: 400px; /* Altura máxima del cuerpo */
+    overflow-y: auto; /* Scroll vertical */
+    overflow-x: hidden; /* Ocultar scroll horizontal */
+}
+
+#estimulosTable tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Para que las columnas mantengan su ancho */
+}
   
   #estimulosTable thead tr {
     background: linear-gradient(135deg, #2ecc71, #27ae60);
@@ -123,11 +162,14 @@
   .form-inline {
     display: flex;
     gap: 1rem;
+    width: 100%;
+  }
+
+  .form-inline .form-group {
+    flex: 1 1 50%;
+    width: 50%;
   }
   
-  .form-group-inline {
-    flex: 1;
-  }
   
   /* ===== BOTONES PRINCIPALES ===== */
   #btnSaveEstimulo {
@@ -280,6 +322,7 @@
     cursor: pointer;
     font-size: 28px;
     color: #7f8c8d;
+    transition: all 0.3s;
   }
   
   .btn-close:hover {
@@ -340,3 +383,15 @@
       justify-content: center;
     }
   }
+
+  @media (max-width: 768px) {
+    .table-container {
+        max-height: none;
+        overflow-x: auto; /* Scroll horizontal en móviles */
+    }
+    
+    #estimulosTable {
+        width: auto;
+        min-width: 100%;
+    }
+}

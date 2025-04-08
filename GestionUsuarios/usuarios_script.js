@@ -1,150 +1,123 @@
-// Elementos del DOM
-const registerBtn = document.getElementById('registerBtn');
-const usersContainer = document.getElementById('users-container');
+const usersTableBody = document.getElementById('users-table-body');
 const userModal = document.getElementById('userModal');
 const deleteModal = document.getElementById('deleteModal');
-const modalTitle = document.getElementById('modalTitle');
 const userForm = document.getElementById('userForm');
-const userNameInput = document.getElementById('userName');
-const userRoleSelect = document.getElementById('userRole');
-const userIdInput = document.getElementById('userId');
-const closeModal = document.querySelectorAll('.close');
 const deleteForm = document.getElementById('deleteForm');
-const deletePassword = document.getElementById('deletePassword');
-const deleteUserId = document.getElementById('deleteUserId');
+const registerBtn = document.getElementById('registerBtn');
+const modalTitle = document.getElementById('modalTitle');
+const userIdInput = document.getElementById('userId');
+const userNameInput = document.getElementById('userName');
+const userLastNameInput = document.getElementById('userLastName');
+const userPasswordInput = document.getElementById('userPassword');
+const userRoleInput = document.getElementById('userRole');
+// const userPhotoInput = document.getElementById('userPhoto');
+const deleteUserIdInput = document.getElementById('deleteUserId');
+const deletePasswordInput = document.getElementById('deletePassword');
 
-// Datos de usuarios
 let users = [
-    { id: 1, name: "Administrador", role: "Administrador", photo: "fotos_perfil/foto_perfil.jpg" },
-    { id: 2, name: "Cajero", role: "Cajero", photo: "fotos_perfil/foto_cajero.jpg" }
+    { id: 1, name: "Diana", lastName: "Luna", role: "Administrador", password: "1234", active: true, accessTime: generarHoraAleatoria() },
+    { id: 2, name: "Alberto", lastName: "Contreras", role: "Cajero", password: "1234", active: true, accessTime: generarHoraAleatoria() }
 ];
-let currentUserId = 1;
 
-// Event Listeners
-registerBtn.addEventListener('click', openRegisterModal);
+function generarHoraAleatoria() {
+    let horas = Math.floor(Math.random() * 12) + 1; // Genera de 1 a 12
+    let minutos = Math.floor(Math.random() * 60);  // Genera de 0 a 59
+    let periodo = Math.random() > 0.5 ? "AM" : "PM"; // Decide AM o PM aleatoriamente
+    return `${horas}:${minutos.toString().padStart(2, '0')} ${periodo}`;
+}
 
-closeModal.forEach(btn => {
-    btn.addEventListener('click', () => {
-        userModal.style.display = 'none';
-        deleteModal.style.display = 'none';
+function renderUsersTable() {
+    usersTableBody.innerHTML = '';
+    users.forEach(user => {
+        const row = document.createElement('tr');
+        row.dataset.id = user.id;
+        row.innerHTML = `
+            <td>${user.name} ${user.lastName}</td>
+            <td>${user.role}</td>
+            <td>${user.accessTime}</td>
+            <td>
+                <button class="modify" onclick="openModifyModal(${user.id})">Modificar</button>
+                <button class="delete" onclick="openDeleteModal(${user.id})">Eliminar</button>
+            </td>
+        `;
+        usersTableBody.appendChild(row);
     });
-});
+}
 
-window.addEventListener('click', (event) => {
-    if (event.target === userModal) {
-        userModal.style.display = 'none';
-    }
-    if (event.target === deleteModal) {
-        deleteModal.style.display = 'none';
-    }
-});
-
-userForm.addEventListener('submit', handleFormSubmit);
-deleteForm.addEventListener('submit', handleDeleteSubmit);
-
-// Delegación de eventos para botones dinámicos
-usersContainer.addEventListener('click', (e) => {
-    if (e.target.classList.contains('delete')) {
-        openDeleteModal(e.target.closest('.user-card').dataset.id);
-    } else if (e.target.classList.contains('modify')) {
-        openEditModal(e.target.closest('.user-card').dataset.id);
-    }
-});
-
-// Funciones
-function openRegisterModal() {
-    modalTitle.textContent = 'Registrar Nuevo Usuario';
-    userForm.reset();
+function openAddModal() {
+    modalTitle.textContent = "Registrar Nuevo Usuario";
     userIdInput.value = '';
+    userNameInput.value = '';
+    userLastNameInput.value = '';
+    userPasswordInput.value = '';
+    userRoleInput.value = '';
+    // userPhotoInput.value = '';
     userModal.style.display = 'block';
 }
 
-function openEditModal(userId) {
-    const user = users.find(u => u.id == userId);
-    if (user) {
-        modalTitle.textContent = 'Modificar Usuario';
-        userNameInput.value = user.name;
-        userRoleSelect.value = user.role;
-        userIdInput.value = user.id;
-        userModal.style.display = 'block';
-    }
+function openModifyModal(userId) {
+    const user = users.find(u => u.id === userId);
+    if (!user) return;
+
+    modalTitle.textContent = "Modificar Usuario";
+    userIdInput.value = user.id;
+    userNameInput.value = user.name;
+    userLastNameInput.value = user.lastName;
+    userPasswordInput.value = user.password;
+    userRoleInput.value = user.role;
+    userModal.style.display = 'block';
 }
 
 function openDeleteModal(userId) {
-    deleteUserId.value = userId;
+    deleteUserIdInput.value = userId;
     deleteModal.style.display = 'block';
 }
 
-function handleFormSubmit(e) {
+function closeModal(modal) {
+    modal.style.display = 'none';
+}
+
+userForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const userData = {
-        name: userNameInput.value.trim(),
-        role: userRoleSelect.value,
-        photo: 'fotos_perfil/foto_perfil.jpg' // Foto por defecto
-    };
+    const id = userIdInput.value ? parseInt(userIdInput.value) : Date.now();
+    const name = userNameInput.value;
+    const lastName = userLastNameInput.value;
+    const password = userPasswordInput.value;
+    const role = userRoleInput.value;
+    const active = true;
 
-    if (!userIdInput.value) {
-        // Nuevo usuario
-        currentUserId++;
-        const newUser = {
-            id: currentUserId,
-            ...userData
-        };
-        users.push(newUser);
-        renderUserCard(newUser);
+    const userIndex = users.findIndex(u => u.id === id);
+    if (userIndex > -1) {
+        users[userIndex] = { id, name, lastName, role, password, active, accessTime: users[userIndex].accessTime };
     } else {
-        // Editar usuario existente
-        const userId = parseInt(userIdInput.value);
-        const userIndex = users.findIndex(u => u.id === userId);
-        if (userIndex !== -1) {
-            users[userIndex] = { id: userId, ...userData };
-            updateUserCard(userId, userData);
-        }
+        users.push({ id, name, lastName, role, password, active, accessTime: generarHoraAleatoria() });
     }
 
-    userModal.style.display = 'none';
-}
+    renderUsersTable();
+    closeModal(userModal);
+});
 
-function handleDeleteSubmit(e) {
+deleteForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const userId = deleteUserId.value;
 
-    users = users.filter(u => u.id != userId);
-    document.querySelector(`.user-card[data-id="${userId}"]`)?.remove();
-    deleteModal.style.display = 'none';
-    deletePassword.value = '';
-}
-
-function renderUserCard(user) {
-    const userCard = document.createElement('div');
-    userCard.className = 'user-card';
-    userCard.dataset.id = user.id;
-    userCard.innerHTML = `
-        <img src="${user.photo}" alt="Foto de perfil">
-        <h2>${user.name}</h2>
-        <p>${user.role}</p>
-        <button class="modify">Modificar</button>
-        <button class="delete">Eliminar</button>
-    `;
-    usersContainer.appendChild(userCard);
-}
-
-function updateUserCard(userId, userData) {
-    const userCard = document.querySelector(`.user-card[data-id="${userId}"]`);
-    if (userCard) {
-        userCard.querySelector('h2').textContent = userData.name;
-        userCard.querySelector('p').textContent = userData.role;
+    const userId = parseInt(deleteUserIdInput.value);
+    const password = deletePasswordInput.value;
+    if (password === "admin123") {
+        users = users.filter(user => user.id !== userId);
+        renderUsersTable();
+        closeModal(deleteModal);
+    } else {
+        alert("Contraseña incorrecta");
     }
-}
+});
 
-// Renderizar usuarios iniciales
-function renderInitialUsers() {
-    usersContainer.innerHTML = '';
-    users.forEach(user => {
-        renderUserCard(user);
+document.querySelectorAll('.close').forEach(closeBtn => {
+    closeBtn.addEventListener('click', () => {
+        closeModal(userModal);
+        closeModal(deleteModal);
     });
-}
+});
 
-// Inicializar
-renderInitialUsers();
+registerBtn.addEventListener('click', openAddModal);
+renderUsersTable();
