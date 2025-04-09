@@ -15,14 +15,23 @@ const deleteUserIdInput = document.getElementById('deleteUserId');
 const deletePasswordInput = document.getElementById('deletePassword');
 
 let users = [
-    { id: 1, name: "Diana", lastName: "Luna", role: "Administrador", password: "1234", active: true, accessTime: generarHoraAleatoria() },
-    { id: 2, name: "Alberto", lastName: "Contreras", role: "Cajero", password: "1234", active: true, accessTime: generarHoraAleatoria() }
+    { id: 1, name: "Diana", lastName: "Luna", role: "Administrador", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 2, name: "Alberto", lastName: "Contreras", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 3, name: "María", lastName: "González", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 4, name: "Luis", lastName: "Martínez", role: "Cajero", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() }
 ];
 
+function generarFechaAleatoria() {
+    let dia = Math.floor(Math.random() * 28) + 1;
+    let mes = Math.floor(Math.random() * 12) + 1;
+    let anio = Math.floor(Math.random() * 3) + 2023;
+    return `${anio}-${mes.toString().padStart(2, '0')}-${dia.toString().padStart(2, '0')}`;
+}
+
 function generarHoraAleatoria() {
-    let horas = Math.floor(Math.random() * 12) + 1; // Genera de 1 a 12
-    let minutos = Math.floor(Math.random() * 60);  // Genera de 0 a 59
-    let periodo = Math.random() > 0.5 ? "AM" : "PM"; // Decide AM o PM aleatoriamente
+    let horas = Math.floor(Math.random() * 12) + 1; 
+    let minutos = Math.floor(Math.random() * 60);  
+    let periodo = Math.random() > 0.5 ? "AM" : "PM"; 
     return `${horas}:${minutos.toString().padStart(2, '0')} ${periodo}`;
 }
 
@@ -34,7 +43,9 @@ function renderUsersTable() {
         row.innerHTML = `
             <td>${user.name} ${user.lastName}</td>
             <td>${user.role}</td>
+            <td>${user.accessDate}</td>
             <td>${user.accessTime}</td>
+            <td>${user.active ? 'Activo' : 'Inactivo'}</td>
             <td>
                 <button class="modify" onclick="openModifyModal(${user.id})">Modificar</button>
                 <button class="delete" onclick="openDeleteModal(${user.id})">Eliminar</button>
@@ -43,6 +54,8 @@ function renderUsersTable() {
         usersTableBody.appendChild(row);
     });
 }
+
+
 
 function openAddModal() {
     modalTitle.textContent = "Registrar Nuevo Usuario";
