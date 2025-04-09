@@ -20,26 +20,37 @@
         </div>
         <div id="nav-placeholder"></div>
     </header>
-    <div class="register-button">
-        <button class="register" id="registerBtn">Registrar nuevo usuario</button>
-    </div>
-    <div id="users-container">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Rol de Usuario</th>
-                        <th>Fecha de Acceso</th>
-                        <th>Hora de Acceso</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="users-table-body">
-                    <!-- Filas de usuarios generadas dinámicamente -->
-                </tbody>
-            </table>
+    <div class="main-container">
+        <div>
+            <h2>Gestión de Usuarios</h2>
+            <hr>
+        </div>
+        <div class="button-container">
+            <div class="filter-buttons">
+                <button class="filter-button" id="defaultBtn">Por defecto</button>
+                <button class="filter-button" id="activeBtn">Ordenar activos</button>
+                <button class="filter-button" id="inactiveBtn">Ordenar inactivos</button>
+            </div>
+            <button class="register" id="registerBtn">Registrar nuevo usuario</button>
+        </div>
+        <div id="users-container">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Rol de Usuario</th>
+                            <th>Fecha de Acceso</th>
+                            <th>Hora de Acceso</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <!-- Filas de usuarios generadas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <footer class="footer">
