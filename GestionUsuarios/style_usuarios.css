@@ -15,29 +15,6 @@ body {
   margin: 0;
 }
 
-/* Header */
-/* header {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.logo-left img {
-  height: 60px;
-  margin-bottom: 0px;
-}
-
-.title h1 {
-  font-size: 1.5rem;
-  color: #2c3e50;
-  text-align: center;
-  margin-bottom: 0px;
-} */
-
 /* Sección del titulo */
 .title-section {
   text-align: center;
