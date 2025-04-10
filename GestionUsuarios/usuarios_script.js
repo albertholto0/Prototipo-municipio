@@ -8,6 +8,7 @@ const modalTitle = document.getElementById('modalTitle');
 const userIdInput = document.getElementById('userId');
 const userNameInput = document.getElementById('userName');
 const userLastNameInput = document.getElementById('userLastName');
+const userUsernameInput = document.getElementById('userUsername');
 const userPasswordInput = document.getElementById('userPassword');
 const userRoleInput = document.getElementById('userRole');
 // const userPhotoInput = document.getElementById('userPhoto');
@@ -15,10 +16,11 @@ const deleteUserIdInput = document.getElementById('deleteUserId');
 const deletePasswordInput = document.getElementById('deletePassword');
 
 let users = [
-    { id: 1, name: "Diana", lastName: "Luna", role: "Administrador", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
-    { id: 2, name: "Alberto", lastName: "Contreras", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
-    { id: 3, name: "María", lastName: "González", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
-    { id: 4, name: "Luis", lastName: "Martínez", role: "Cajero", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 1, name: "Diana", lastName: "Luna", username: "dianaLuher", role: "Administrador", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 2 , name: "Juan", lastName: "Pérez", username: "juanperez", role: "Cajero", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 3, name: "María", lastName: "Gómez", username: "mariagomez", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 4, name: "Carlos", lastName: "López", username: "carloslopez", role: "Administrador", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 5, name: "Ana", lastName: "Martínez", username: "anamartinez", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
 ];
 
 function generarFechaAleatoria() {
@@ -42,6 +44,7 @@ function renderUsersTable() {
         row.dataset.id = user.id;
         row.innerHTML = `
             <td>${user.name} ${user.lastName}</td>
+            <td>${user.username}</td>
             <td>${user.role}</td>
             <td>${user.accessDate}</td>
             <td>${user.accessTime}</td>
@@ -80,6 +83,7 @@ function renderFilteredUsersTable(filteredUsers) {
         row.dataset.id = user.id;
         row.innerHTML = `
             <td>${user.name} ${user.lastName}</td>
+            <td>${user.username}</td>
             <td>${user.role}</td>
             <td>${user.accessDate}</td>
             <td>${user.accessTime}</td>
@@ -99,15 +103,13 @@ function renderFilteredUsersTable(filteredUsers) {
 
 // Agregar eventos a los botones de filtro
 document.getElementById('defaultBtn').addEventListener('click', () => {
-    renderUsersTable(); // Mostrar todos los usuarios
+    renderUsersTable();
 });
-
 document.getElementById('activeBtn').addEventListener('click', () => {
-    filterUsers('active'); // Filtrar usuarios activos
+    filterUsers('active');
 });
-
 document.getElementById('inactiveBtn').addEventListener('click', () => {
-    filterUsers('inactive'); // Filtrar usuarios inactivos
+    filterUsers('inactive');
 });
 
 function openAddModal() {
@@ -115,6 +117,7 @@ function openAddModal() {
     userIdInput.value = '';
     userNameInput.value = '';
     userLastNameInput.value = '';
+    userUsernameInput.value = '';
     userPasswordInput.value = '';
     userRoleInput.value = '';
     // userPhotoInput.value = '';
@@ -149,15 +152,16 @@ userForm.addEventListener('submit', (e) => {
     const id = userIdInput.value ? parseInt(userIdInput.value) : Date.now();
     const name = userNameInput.value;
     const lastName = userLastNameInput.value;
+    const username = userUsernameInput.value;
     const password = userPasswordInput.value;
     const role = userRoleInput.value;
     const active = true;
 
     const userIndex = users.findIndex(u => u.id === id);
     if (userIndex > -1) {
-        users[userIndex] = { id, name, lastName, role, password, active, accessTime: users[userIndex].accessTime };
+        users[userIndex] = { id, name, lastName, username, role, password, active, accessTime: users[userIndex].accessTime };
     } else {
-        users.push({ id, name, lastName, role, password, active, accessTime: generarHoraAleatoria() });
+        users.push({ id, name, lastName, username, role, password, active, accessTime: generarHoraAleatoria() });
     }
 
     renderUsersTable();
@@ -196,7 +200,6 @@ cancelDeleteBtn.addEventListener('click', () => {
     deleteModal.style.display = 'none'; // Ocultar el modal de eliminación
 });
 
-// Opcional: Cerrar el modal al hacer clic fuera del contenido
 window.addEventListener('click', (event) => {
     if (event.target === userModal) {
         userModal.style.display = 'none';
