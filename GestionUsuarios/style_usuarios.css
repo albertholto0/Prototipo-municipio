@@ -252,7 +252,7 @@ button.register {
   transition: all 0.3s;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: inline-block; /* Asegura que esté alineado con otros botones */
-  margin: 0 10px; /* Espaciado entre botones */
+  /* margin: 0 10px; Espaciado entre botones */
 }
 
 button.register:hover {
@@ -302,10 +302,67 @@ button.cancel-btn:hover {
   gap: 0.5rem;
 }
 
+/* Estilo para los botones dentro del modal de eliminación */
+.form-buttons-delete {
+  display: flex;
+  justify-content: space-between; /* Espaciado uniforme entre los botones */
+  gap: 1rem; /* Espaciado entre los botones */
+  margin-top: 1rem; /* Espaciado superior */
+}
+
+button.cancel-btn-delete, button.delete-btn-delete {
+  flex: 1; /* Ambos botones tendrán el mismo ancho */
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 1rem; /* Tamaño de fuente uniforme */
+  border-radius: 5px; /* Bordes redondeados */
+  border: none; /* Sin borde */
+  cursor: pointer; /* Cursor de puntero */
+  transition: all 0.3s ease; /* Transición suave */
+}
+
+button.cancel-btn-delete {
+  background-color: #efefef; /* Color de fondo para cancelar */
+  color: rgb(30, 30, 30); /* Color del texto */
+}
+
+button.cancel-btn-delete:hover {
+  background-color: #d0d0d0; /* Color de fondo al pasar el mouse */
+  box-shadow: 0 5px 15px rgba(100, 100, 100, 0.3); /* Sombra al pasar el mouse */
+}
+
+button.delete-btn-delete {
+  background-color: #e74c3c; /* Color de fondo para eliminar */
+  color: white; /* Color del texto */
+}
+
+button.delete-btn-delete:hover {
+  background-color: #c0392b; /* Color de fondo al pasar el mouse */
+  box-shadow: 0 5px 15px rgba(204, 67, 46, 0.3); /* Sombra al pasar el mouse */
+}
+
 /* Hover botones */
 #users-container button:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón de acción */
+.action-btn {
+  border: none;
+  padding: 0;
+  background: none; /* Elimina el fondo del botón */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* Tamaño del botón */
+  height: 40px; /* Tamaño del botón */
+}
+
+.action-icon {
+  width: 40px; /* Ancho de la imagen */
+  height: 40px; /* Alto de la imagen */
+  object-fit: contain; /* Ajusta la imagen al contenedor */
 }
 
 /* Footer */

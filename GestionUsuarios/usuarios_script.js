@@ -47,15 +47,17 @@ function renderUsersTable() {
             <td>${user.accessTime}</td>
             <td>${user.active ? 'Activo' : 'Inactivo'}</td>
             <td>
-                <button class="modify" onclick="openModifyModal(${user.id})">Modificar</button>
-                <button class="delete" onclick="openDeleteModal(${user.id})">Eliminar</button>
+                <button class="action-btn modify" onclick="openModifyModal(${user.id})">
+                    <img src="/Assets/editor.png" alt="Modificar" class="action-icon">
+                </button>
+                <button class="action-btn delete" onclick="openDeleteModal(${user.id})">
+                    <img src="/Assets/eliminar.png" alt="Eliminar" class="action-icon">
+                </button>
             </td>
         `;
         usersTableBody.appendChild(row);
     });
 }
-
-
 
 function openAddModal() {
     modalTitle.textContent = "Registrar Nuevo Usuario";
@@ -138,10 +140,18 @@ cancelBtn.addEventListener('click', () => {
     userModal.style.display = 'none'; // Ocultar el modal
 });
 
+const cancelDeleteBtn = document.querySelector('.cancel-btn-delete');
+cancelDeleteBtn.addEventListener('click', () => {
+    deleteModal.style.display = 'none'; // Ocultar el modal de eliminación
+});
+
 // Opcional: Cerrar el modal al hacer clic fuera del contenido
 window.addEventListener('click', (event) => {
     if (event.target === userModal) {
         userModal.style.display = 'none';
+    }
+    if (event.target === deleteModal) {
+        deleteModal.style.display = 'none';
     }
 });
 
