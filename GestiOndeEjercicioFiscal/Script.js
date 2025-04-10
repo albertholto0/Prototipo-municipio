@@ -72,10 +72,10 @@ function renderTable(data) {
           <td>${ejercicio.observaciones || '-'}</td>
           <td>
               <button class="action-btn edit" onclick="editFiscal(${start + index})" title="Editar">
-                  <img src="/Componentes/editor.png" class="action-icon">
+                  <img src="/Assets/editor.png" class="action-icon">
               </button>
               <button class="action-btn delete" onclick="deleteFiscal(${start + index})" title="Eliminar">
-                  <img src="/Componentes/eliminar.png" class="action-icon">
+                  <img src="/Assets/eliminar.png" class="action-icon">
               </button>
           </td>
       </tr>

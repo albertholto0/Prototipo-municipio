@@ -32,7 +32,6 @@ const elements = {
     form: document.getElementById("receiptForm"),
     paginationContainer: document.querySelector(".pagination"),
     modalOverlay: document.getElementById("modalOverlay"),
-    btnNuevoRecibo: document.getElementById("btnNuevoRecibo"),
     btnCloseModal: document.getElementById("btnCloseModal"),
     btnGuardarRecibo: document.getElementById("btnGuardarRecibo"),
     btnCancelarRecibo: document.getElementById("btnCancelarRecibo"),
@@ -81,7 +80,6 @@ function setupEventListeners() {
     elements.filterFechaInicio.addEventListener("change", filtrarRecibos);
     elements.filterFechaFin.addEventListener("change", filtrarRecibos);
     
-    elements.btnNuevoRecibo.addEventListener("click", abrirModalNuevoRecibo);
     elements.btnCloseModal.addEventListener("click", cerrarModal);
     elements.btnCancelarRecibo.addEventListener("click", cerrarModal);
     elements.form.addEventListener("submit", guardarRecibo);
@@ -266,13 +264,10 @@ function renderTable(data) {
                 <td>${recibo.formaPago}</td>
                 <td>
                     <button class="action-btn edit" onclick="editarRecibo('${recibo.folio}')" title="Editar">
-                        <img src="/Componentes/editor.png" class="action-icon">
-                    </button>
-                    <button class="action-btn delete" onclick="eliminarRecibo('${recibo.folio}')" title="Eliminar">
-                        <img src="/Componentes/eliminar.png" class="action-icon">
+                        <img src="/Assets/editor.png" class="action-icon">
                     </button>
                     <button class="action-btn print" onclick="imprimirRecibo('${recibo.folio}')" title="Imprimir">
-                        <img src="/Componentes/imprimir.png" class="action-icon">
+                        <img src="/Assets/visualizar.png" class="action-icon">
                     </button>
                 </td>
             </tr>
@@ -349,13 +344,6 @@ function editarRecibo(folio) {
     isEditing = true;
     currentReciboId = recibo.folio;
     elements.modalOverlay.style.display = "flex";
-}
-
-function eliminarRecibo(folio) {
-    if (confirm("¿Está seguro que desea eliminar este recibo?")) {
-        recibos = recibos.filter(r => r.folio !== folio);
-        renderTable(filtrarRecibos());
-    }
 }
 
 function imprimirRecibo(folio) {
@@ -479,5 +467,4 @@ function numeroALetras(numero) {
 // Funciones globales para llamadas desde HTML
 window.changePage = changePage;
 window.editarRecibo = editarRecibo;
-window.eliminarRecibo = eliminarRecibo;
 window.imprimirRecibo = imprimirRecibo;

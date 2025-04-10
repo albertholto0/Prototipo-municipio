@@ -57,10 +57,13 @@ function renderEstimulosTable(data) {
                 <td>${estimulo.requisitos.replace(/\n/g, '<br>')}</td>
                 <td>
                     <button class="action-btn edit" onclick="editEstimulo(${start + index})" title="Editar">
-                        <img src="/Componentes/editor.png" class="action-icon">
+                        <img src="/Assets/editor.png" class="action-icon">
                     </button>
                     <button class="action-btn delete" onclick="deleteEstimulo(${start + index})" title="Eliminar">
-                        <img src="/Componentes/eliminar.png" class="action-icon">
+                        <img src="/Assets/eliminar.png" class="action-icon">
+                    </button>
+                    <button class="action-btn view" onclick="viewAccount(${start + index})" title="Ver información">
+                        <img src="/Assets/visualizar.png" class="action-icon">
                     </button>
                 </td>
             </tr>
