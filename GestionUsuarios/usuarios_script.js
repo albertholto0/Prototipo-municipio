@@ -59,6 +59,57 @@ function renderUsersTable() {
     });
 }
 
+// Función para filtrar y renderizar usuarios
+function filterUsers(filterType) {
+    let filteredUsers = [...users]; // Copia de la lista original
+
+    if (filterType === 'active') {
+        filteredUsers = users.filter(user => user.active);
+    } else if (filterType === 'inactive') {
+        filteredUsers = users.filter(user => !user.active);
+    }
+
+    renderFilteredUsersTable(filteredUsers);
+}
+
+// Renderizar tabla con usuarios filtrados
+function renderFilteredUsersTable(filteredUsers) {
+    usersTableBody.innerHTML = '';
+    filteredUsers.forEach(user => {
+        const row = document.createElement('tr');
+        row.dataset.id = user.id;
+        row.innerHTML = `
+            <td>${user.name} ${user.lastName}</td>
+            <td>${user.role}</td>
+            <td>${user.accessDate}</td>
+            <td>${user.accessTime}</td>
+            <td>${user.active ? 'Activo' : 'Inactivo'}</td>
+            <td>
+                <button class="action-btn modify" onclick="openModifyModal(${user.id})">
+                    <img src="/Assets/editor.png" alt="Modificar" class="action-icon">
+                </button>
+                <button class="action-btn delete" onclick="openDeleteModal(${user.id})">
+                    <img src="/Assets/eliminar.png" alt="Eliminar" class="action-icon">
+                </button>
+            </td>
+        `;
+        usersTableBody.appendChild(row);
+    });
+}
+
+// Agregar eventos a los botones de filtro
+document.getElementById('defaultBtn').addEventListener('click', () => {
+    renderUsersTable(); // Mostrar todos los usuarios
+});
+
+document.getElementById('activeBtn').addEventListener('click', () => {
+    filterUsers('active'); // Filtrar usuarios activos
+});
+
+document.getElementById('inactiveBtn').addEventListener('click', () => {
+    filterUsers('inactive'); // Filtrar usuarios inactivos
+});
+
 function openAddModal() {
     modalTitle.textContent = "Registrar Nuevo Usuario";
     userIdInput.value = '';
