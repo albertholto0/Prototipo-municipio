@@ -7,32 +7,40 @@
     <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="Styles.css">
     <script src="script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
     <header>
-        <div class="logo-left">
-            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        <div class="header-left"> <!-- Contenedor flex nuevo -->
+            <div class="logo-left">
+                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
         </div>
-        <div class="title">
-            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-        </div>
-        <!-- Placeholder para el menú -->
-        <div id="nav-placeholder"></div>
         
+        <!-- Menú debe estar fuera del header-left -->
+        <div class="menu-buttons" id="nav-placeholder">
+            <!-- Tus botones aquí -->
+        </div>
     </header>
 
+    <!-- Contenido principal -->
     <main class="main-container">
         <div class="title-section">
             <h2>Gestión de Estímulo Fiscal</h2>
             <hr class="title-line">
         </div>
 
+        <!-- Sección de búsqueda -->
         <div class="search-container">
-            <input type="text" id="searchEstimuloInput" placeholder="Buscar por nombre de contribución o porcentaje" />
+            <input type="text" id="searchEstimuloInput" placeholder="Buscar por nombre de contribución" />
             <button class="btn-agregar" id="btnOpenEstimuloModal">Agregar Estímulo</button>
         </div>
 
+        <!-- Tabla -->
         <div class="table-container">
             <table id="estimulosTable">
                 <thead>
@@ -45,42 +53,50 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <!-- Se llenará dinámicamente con JavaScript -->
+                </tbody>
             </table>
         </div>
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
     </main>
-
+    <!-- Modal para el formulario -->
     <div class="modal-overlay" id="estimuloModalOverlay">
         <div class="modal-content">
             <span class="btn-close" id="btnCloseEstimuloModal">&times;</span>
-            <div class="form-container">
-                <h3 class="text-center" id="estimuloFormTitle">Registrar Estímulo Fiscal</h3>
+            <div class="form-container" id="formContainer">
+                <h3 class="text-center" id="estimuloFormTitle">Agregar Estímulo Fiscal</h3>
                 <form id="estimuloForm">
-                    <div class="form-group">
-                        <label for="idEstimulo">ID Estímulo:</label>
-                        <input type="text" id="idEstimulo" name="idEstimulo" placeholder="Ej. EST-001" required>
-                    </div>
+                    <!-- Primera fila: ID estimulo y Nombre contribución  -->
+                    <div class="form-inline">
                     <div class="form-group">
                         <label for="nombreContribucion">Nombre Contribución:</label>
                         <input type="text" id="nombreContribucion" name="nombreContribucion" placeholder="Ej. Estímulo a la Construcción" required>
                     </div>
+                    <div class="form-group-inline">
+                        <label for="porcentajeDescuento"> Descuento % :</label>
+                        <input type="number" id="porcentajeDescuento" name="porcentajeDescuento" min="0" max="100" step="1" placeholder="Ej. 15" required>
+                    </div>
+
+                    </div>
+                    <!-- Segunda fila:  Caracteristicas -->
                     <div class="form-group">
                         <label for="caracteristicas">Características:</label>
                         <textarea id="caracteristicas" name="caracteristicas" rows="3" required></textarea>
                     </div>
-                    <div class="form-group form-inline">
-                        <div class="form-group-inline">
-                            <label for="porcentajeDescuento">% Descuento:</label>
-                            <input type="number" id="porcentajeDescuento" name="porcentajeDescuento" min="0" max="100" step="0.01" placeholder="Ej. 15" required>
-                        </div>
-                    </div>
+
+                    <!-- Tercera fila: Descuento y Requisitos  -->
+
+                    <div class="form-inline">
+                    
                     <div class="form-group">
                         <label for="requisitos">Requisitos:</label>
                         <textarea id="requisitos" name="requisitos" rows="3" required></textarea>
                     </div>
+                    </div>
+
                     <button type="submit" id="btnSaveEstimulo">Guardar</button>
                     <button type="button" id="btnCancelEstimulo" class="btn-cancel">Cancelar</button>
                 </form>
@@ -91,13 +107,6 @@
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 11: Gestión de Estímulo Fiscal</p>
     </footer>
-    <script>
-        fetch('/Componentes/Nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
+    
 </body>
 </html>
