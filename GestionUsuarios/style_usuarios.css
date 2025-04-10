@@ -58,6 +58,18 @@ body {
   margin: 0 auto;
 }
 
+/* Sección del modal */
+.modal-title-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.modal-title-section h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
 /* Contenedor de tabla con sombra y bordes redondeados */
 .table-container {
   background: #fff;
@@ -152,7 +164,7 @@ button {
   color: #ffffff;
   /* justify-content: flex-start; */
   border: 2px solid #3498db;
-  padding: 10px 25px; /* Aumenta ligeramente el padding para mejor tacto */
+  padding: 8px 20px; /* Aumenta ligeramente el padding para mejor tacto */
   /* border-radius: 30px; */
   cursor: pointer;
   font-size: 1rem;
@@ -215,13 +227,6 @@ button {
   margin: 0.5rem;
 }
 
-.register-button {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-}
-
 /* Botón principal */
 .user-card button:not(.delete):not(.register) {
   background: linear-gradient(135deg, #2ecc71, #27ae60);
@@ -246,11 +251,8 @@ button.register {
   font-weight: 500;
   transition: all 0.3s;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 1rem;
-  /* margin: 0.5rem; */
+  display: inline-block; /* Asegura que esté alineado con otros botones */
+  margin: 0 10px; /* Espaciado entre botones */
 }
 
 button.register:hover {
@@ -259,6 +261,45 @@ button.register:hover {
   color: #000000;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+button.register-btn {
+  background: #27ae60;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+button.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+/* Botón cancelar */
+button.cancel-btn {
+  background: #e74c3c;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-left: 0; /* Eliminamos el margen anterior */
+}
+
+button.cancel-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-buttons{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 0.5rem;
 }
 
 /* Hover botones */

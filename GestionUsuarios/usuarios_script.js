@@ -18,7 +18,7 @@ let users = [
     { id: 1, name: "Diana", lastName: "Luna", role: "Administrador", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
     { id: 2, name: "Alberto", lastName: "Contreras", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
     { id: 3, name: "María", lastName: "González", role: "Cajero", password: "1234", active: false, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
-    { id: 4, name: "Luis", lastName: "Martínez", role: "Cajero", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() }
+    { id: 4, name: "Luis", lastName: "Martínez", role: "Cajero", password: "1234", active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
 ];
 
 function generarFechaAleatoria() {
@@ -133,4 +133,16 @@ document.querySelectorAll('.close').forEach(closeBtn => {
 });
 
 registerBtn.addEventListener('click', openAddModal);
+const cancelBtn = document.querySelector('.cancel-btn');
+cancelBtn.addEventListener('click', () => {
+    userModal.style.display = 'none'; // Ocultar el modal
+});
+
+// Opcional: Cerrar el modal al hacer clic fuera del contenido
+window.addEventListener('click', (event) => {
+    if (event.target === userModal) {
+        userModal.style.display = 'none';
+    }
+});
+
 renderUsersTable();
