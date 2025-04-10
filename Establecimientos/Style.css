@@ -74,40 +74,35 @@
 }
 
 /* ===== BOTONES DE ACCIÓN ===== */
+/* ===== BOTONES DE ACCIÓN ===== */
+.actions-cell {
+  white-space: nowrap; /* Evita que los botones se apilen */
+}
+
 .action-btn {
   border: none;
   padding: 0;
-  background: none !important; /* Elimina el fondo */
+  background: none;
   cursor: pointer;
-  margin-right: 8px; /* Espaciado entre iconos */
+  margin: 0 5px; /* Espaciado entre iconos */
   transition: all 0.3s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: auto; /* Ancho automático según el icono */
-  height: auto; /* Altura automática según el icono */
+  display: inline-block;
 }
 
 .action-icon {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
-}
-
-/* Variante editar (color naranja) */
-.action-btn.edit {
-  background-color: none;
-}
-
-/* Variante eliminar (color rojo) */
-.action-btn.delete {
-  background-color: none;
+  transition: all 0.3s;
 }
 
 /* Efecto hover para botones */
-.action-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
+.action-btn:hover .action-icon {
+  transform: scale(1.1);
+}
+
+.action-btn.edit:hover .action-icon {
+  filter: brightness(0.8) sepia(100%) hue-rotate(50deg) saturate(500%);
 }
 
 .action-btn.delete:hover .action-icon {
