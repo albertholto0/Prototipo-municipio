@@ -7,9 +7,7 @@
   <title>Gestión de Establecimientos</title>
   <link rel="stylesheet" href="Style.css" />
   <script src="Script.js" defer></script>
-  <!--<script src="/ConfiguracionSistema/ScriptLogo.js" defer></script>-->
   <script src="/Componentes/Nav.js" defer></script>
-  <!-- Referencia de donde se va a llamar el navegación -->
 </head>
 
 <body>
@@ -174,15 +172,6 @@
   <footer class="footer">
     <p>© 2025 Ixtlán - Módulo 9: Gestión de Establecimientos</p>
   </footer>
-
-  <script>
-    fetch("/Componentes/Nav.html")
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById("nav-placeholder").innerHTML = data;
-      })
-      .catch((error) => console.error("Error al cargar el nav:", error));
-  </script>
 </body>
 
 </html>
