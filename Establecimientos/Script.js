@@ -94,7 +94,6 @@ function renderTable(data) {
   paginatedData.forEach((est, index) => {
     const row = `
         <tr>
-            <td>${est.id_establecimiento}</td>
             <td>${est.nombre_establecimiento}</td>
             <td>${est.calle} ${est.numero}, ${est.colonia}</td>
             <td>${est.fecha_registro}</td>
@@ -103,16 +102,12 @@ function renderTable(data) {
             <td>${formatTipoEstablecimiento(est.tipo_establecimiento)}</td>
             <td>${est.nombre_concepto}</td>
             <td>
-                <button class="action-btn edit" onclick="editEstablecimiento(${
-                  start + index
-                })" title="Editar">
-                    <img src="/Componentes/editor.png" class="action-icon">
-                </button>
-                <button class="action-btn delete" onclick="deleteEstablecimiento(${
-                  start + index
-                })" title="Eliminar">
-                    <img src="/Componentes/eliminar.png" class="action-icon">
-                </button>
+              <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
+                  <img src="/Assets/editor.png" class="action-icon">
+              </button>
+              <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
+                  <img src="/Assets/eliminar.png" class="action-icon">
+              </button>            
             </td>
         </tr>
         `;
@@ -121,7 +116,6 @@ function renderTable(data) {
 
   renderPagination(data.length);
 }
-
 /**
  * Formatea el giro de negocio para mostrarlo correctamente
  * @param {string} giro - Valor del giro de negocio
