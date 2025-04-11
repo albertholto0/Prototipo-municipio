@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function fillSelects() {
         // Obtener elementos select
         const selectContribuyente = document.getElementById("idContribuyente");
-        const selectConcepto = document.getElementById("id_concepto");
+        const selectConcepto = document.getElementById("idConceptos");
 
         // Llenar el select de contribuyentes
         contribuyentes.forEach(contribuyente => {
