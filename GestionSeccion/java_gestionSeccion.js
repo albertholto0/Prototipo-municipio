@@ -28,10 +28,8 @@ function renderTable(data) {
     const paginatedData = data.slice(start, end);
 
     paginatedData.forEach((seccion, index) => {
-        const rowNumber = start + index + 1; // Numeración que empieza en 1
         const row = `
         <tr>
-            <td>${rowNumber}</td> <!-- Columna de número -->
             <td>${seccion.nombre}</td>
             <td>${seccion.año_ejercicio}</td>
             <td>
@@ -147,9 +145,9 @@ window.changePage = function(page) {
 };
 
 window.editAccount = function(index) {
-    const contribuyente = contribuyentes[index];
-    elements.nombre.value = contribuyente.nombre;
-    elements.año_ejercicio.value = contribuyente.año_ejercicio;
+    const seccion = secciones[index];
+    elements.nombre.value = seccion.nombre;
+    elements.año_ejercicio.value = seccion.año_ejercicio;
     
     isEditing = true;
     currentIndex = index;
@@ -160,7 +158,7 @@ window.editAccount = function(index) {
 
 window.deleteAccount = function(index) {
     if (confirm("¿Confirmar eliminación?")) {
-        contribuyentes.splice(index, 1);
+        secciones.splice(index, 1);
         const totalPages = Math.ceil(filteredAccounts().length / rowsPerPage);
         if (currentPage > totalPages && totalPages > 0) {
             currentPage = totalPages;
