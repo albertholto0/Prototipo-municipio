@@ -101,17 +101,13 @@ function renderTable(data) {
             <td>${formatGiroNegocio(est.giro_negocio)}</td>
             <td>${formatTipoEstablecimiento(est.tipo_establecimiento)}</td>
             <td>${est.nombre_concepto}</td>
-            <td class="actions-cell">
-                <button class="action-btn edit" onclick="editEstablecimiento(${
-                  start + index
-                })" title="Editar">
-                    <img src="/Assets/editor.png" class="action-icon">
-                </button>
-                <button class="action-btn delete" onclick="deleteEstablecimiento(${
-                  start + index
-                })" title="Eliminar">
-                    <img src="/Assets/eliminar.png" class="action-icon">
-                </button>
+            <td>
+              <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
+                  <img src="/Assets/editor.png" class="action-icon">
+              </button>
+              <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
+                  <img src="/Assets/eliminar.png" class="action-icon">
+              </button>            
             </td>
         </tr>
         `;
