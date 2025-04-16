@@ -20,51 +20,61 @@
     <div class="main-container">
         <div class="title">
             <h2>Registro de Conceptos</h2>
+            <button class="btn-primary" id="btnAgregarConcepto">Agregar Concepto</button>
         </div>
-        <form class="concept-form" id="conceptForm">
-            <input type="hidden" id="id_concepto">
-            
-            <div class="form-group">
-                <label for="descripcion">Descripción</label>
-                <input type="text" id="descripcion" required>
+        
+        <!-- Modal para agregar/editar conceptos -->
+        <div id="modalConcepto" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Nuevo Concepto</h2>
+                </div>
+                <form class="concept-form" id="conceptForm">
+                    <input type="hidden" id="id_concepto">
+                    
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <input type="text" id="descripcion" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tipo_servicio">Tipo de Servicio</label>
+                        <input type="text" id="tipo_servicio" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cuota">Cuota</label>
+                        <input type="number" id="cuota" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="periodicidad">Periodicidad</label>
+                        <input type="text" id="periodicidad" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="seccion">Sección</label>
+                        <select id="seccion" required>
+                            <option value="">Seleccione...</option>
+                            <!-- Opciones se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cuenta_contable">Cuenta Contable</label>
+                        <select id="cuenta_contable" required>
+                            <option value="">Seleccione...</option>
+                            <!-- Opciones se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="btnCancelarModal">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar Concepto</button>
+                    </div>
+                </form>
             </div>
-            
-            <div class="form-group">
-                <label for="tipo_servicio">Tipo de Servicio</label>
-                <input type="text" id="tipo_servicio" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="cuota">Cuota</label>
-                <input type="number" id="cuota" step="0.01" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="periodicidad">Periodicidad</label>
-                <input type="text" id="tipo_servicio" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="seccion">Sección</label>
-                <select id="seccion" required>
-                    <option value="">Seleccione...</option>
-                    <!-- Opciones se cargarán dinámicamente -->
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="cuenta_contable">Cuenta Contable</label>
-                <select id="cuenta_contable" required>
-                    <option value="">Seleccione...</option>
-                    <!-- Opciones se cargarán dinámicamente -->
-                </select>
-            </div>
-            
-            <div class="form-actions">
-                <button type="button" class="btn-secondary" id="btnCancelar">Cancelar</button>
-                <button type="submit" class="btn-primary" id="btnGuardar">Guardar Concepto</button>
-            </div>
-        </form>
+        </div>
         
         <div class="search-bar">
             <input type="text" id="searchDescripcion" placeholder="Buscar por descripción...">
@@ -79,29 +89,32 @@
             <button class="btn-primary" id="btnBuscar">Buscar</button>
         </div>
         
-        <table class="concepts-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Descripción</th>
-                    <th>Tipo Servicio</th>
-                    <th>Cuota</th>
-                    <th>Periodicidad</th>
-                    <th>Sección</th>
-                    <th>Cuenta Contable</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="conceptsTableBody">
-                <!-- Datos se cargarán dinámicamente -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="concepts-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripción</th>
+                        <th>Tipo Servicio</th>
+                        <th>Cuota</th>
+                        <th>Periodicidad</th>
+                        <th>Sección</th>
+                        <th>Cuenta Contable</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="conceptsTableBody">
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer class="footer">
         <p>© 2025 Ixtlán - Gestión de Conceptos</p>
     </footer>
 
+    <script src="conceptos_script.js"></script>
     <script>
         fetch('/Componentes/Nav.html')
             .then(response => response.text())
