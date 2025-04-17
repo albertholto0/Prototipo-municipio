@@ -118,6 +118,9 @@ button {
   max-width: 1200px; /* Mismo ancho máximo que la tabla */
   margin: 2rem auto; /* Mismos márgenes que la tabla */
   padding: 0 20px; /* Añade padding para evitar que los botones toquen los bordes en móviles */
+  min-height: calc(100vh - 100px); /* Ajusta según el tamaño del header y footer */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Contenedor de botones dividido */
@@ -368,4 +371,8 @@ button.delete-btn-delete:hover {
     width: 100%;
     padding: 1.5rem;
   }
+}
+
+footer {
+  margin-top: auto; /* Empuja el footer al final de la página */
 }

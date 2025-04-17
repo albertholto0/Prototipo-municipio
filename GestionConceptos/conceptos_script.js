@@ -88,8 +88,12 @@ function cargarTablaConceptos() {
             <td>${concepto.id_seccion}</td>
             <td>${concepto.id_cuenta_contable}</td>
             <td>
-                <button class="btn-edit" data-id="${concepto.id}">Editar</button>
-                <button class="btn-delete" data-id="${concepto.id}">Eliminar</button>
+                <button class="action-btn" data-id="${concepto.id}">
+                    <img src="/Assets/editor.png" alt="Modificar" class="action-icon">
+                </button>
+                <button class="action-btn" data-id="${concepto.id}">
+                    <img src="/Assets/eliminar.png" alt="Eliminar" class="action-icon">
+                </button>
             </td>
         `;
         tbody.appendChild(row);
