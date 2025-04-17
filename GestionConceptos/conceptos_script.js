@@ -80,7 +80,7 @@ function cargarTablaConceptos() {
     conceptos.forEach(concepto => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${concepto.id}</td>
+            <td class="hidden">${concepto.id}</td>
             <td>${concepto.descripcion}</td>
             <td>${concepto.tipo_servicio}</td>
             <td>${concepto.cuota.toFixed(2)}</td>
@@ -149,42 +149,6 @@ document.getElementById('conceptsTableBody').addEventListener('click', (e) => {
         }
     }
 });
-
-// Manejar búsqueda/filtrado
-document.getElementById('btnBuscar').addEventListener('click', () => {
-    const descripcion = document.getElementById('searchDescripcion').value.toLowerCase();
-    const seccion = document.getElementById('searchSeccion').value;
-    const cuenta = document.getElementById('searchCuentaContable').value;
-
-    const resultados = conceptos.filter(concepto => {
-        return (
-            (descripcion === '' || concepto.descripcion.toLowerCase().includes(descripcion)) &&
-            (seccion === '' || concepto.id_seccion === parseInt(seccion)) &&
-            (cuenta === '' || concepto.id_cuenta_contable === parseInt(cuenta))
-        );
-    });
-
-    const tbody = document.getElementById('conceptsTableBody');
-    tbody.innerHTML = ''; // Limpiar tabla
-    resultados.forEach(concepto => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${concepto.id}</td>
-            <td>${concepto.descripcion}</td>
-            <td>${concepto.tipo_servicio}</td>
-            <td>${concepto.cuota.toFixed(2)}</td>
-            <td>${concepto.periodicidad}</td>
-            <td>${concepto.id_seccion}</td>
-            <td>${concepto.id_cuenta_contable}</td>
-            <td>
-                <button class="btn-edit" data-id="${concepto.id}">Editar</button>
-                <button class="btn-delete" data-id="${concepto.id}">Eliminar</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-});
-
 // Inicializar la página
 document.addEventListener('DOMContentLoaded', () => {
     cargarTablaConceptos();
