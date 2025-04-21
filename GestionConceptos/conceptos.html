@@ -5,66 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Conceptos</title>
     <link rel="stylesheet" href="style_conceptos.css">
+    <link rel="stylesheet" href="/Componentes/Nav.css">
 </head>
 <body>
     <header>
         <div class="logo-left">
-            <img src="/Web_Cobros/logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
         </div>
         <div id="nav-placeholder"></div>
     </header>
-
     <div class="main-container">
-        <div class="title">
+        <div class="title-section">
             <h2>Registro de Conceptos</h2>
+            <button class="btn-register" id="btnAgregarConcepto">Agregar Concepto</button>
         </div>
-        <form class="concept-form" id="conceptForm">
-            <input type="hidden" id="id_concepto">
-            
-            <div class="form-group">
-                <label for="descripcion">Descripción</label>
-                <input type="text" id="descripcion" required>
+        
+        <!-- Modal para agregar/editar conceptos -->
+        <div id="modalConcepto" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Nuevo Concepto</h2>
+                </div>
+                <form class="concept-form" id="conceptForm">
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea id="descripcion" rows="2" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tipo_servicio">Tipo de Servicio (max 30 caracteres)</label>
+                        <input type="text" id="tipo_servicio" maxlength="30" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cuota">Cuota</label>
+                        <input type="number" id="cuota" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="periodicidad">Periodicidad (max 50 caracteres)</label>
+                        <input type="text" id="periodicidad" maxlength="50" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_seccion">ID Sección</label>
+                        <input type="number" id="id_seccion" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_cuenta_contable">ID Cuenta Contable</label>
+                        <input type="number" id="id_cuenta_contable" min="1" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="btnCancelarModal">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar</button>
+                    </div>
+                </form>
             </div>
-            
-            <div class="form-group">
-                <label for="tipo_servicio">Tipo de Servicio</label>
-                <input type="text" id="tipo_servicio" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="cuota">Cuota</label>
-                <input type="number" id="cuota" step="0.01" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="periodicidad">Periodicidad</label>
-                <input type="text" id="tipo_servicio" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="seccion">Sección</label>
-                <select id="seccion" required>
-                    <option value="">Seleccione...</option>
-                    <!-- Opciones se cargarán dinámicamente -->
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="cuenta_contable">Cuenta Contable</label>
-                <select id="cuenta_contable" required>
-                    <option value="">Seleccione...</option>
-                    <!-- Opciones se cargarán dinámicamente -->
-                </select>
-            </div>
-            
-            <div class="form-actions">
-                <button type="button" class="btn-secondary" id="btnCancelar">Cancelar</button>
-                <button type="submit" class="btn-primary" id="btnGuardar">Guardar Concepto</button>
-            </div>
-        </form>
+        </div>
         
         <div class="search-bar">
             <input type="text" id="searchDescripcion" placeholder="Buscar por descripción...">
@@ -79,29 +81,32 @@
             <button class="btn-primary" id="btnBuscar">Buscar</button>
         </div>
         
-        <table class="concepts-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Descripción</th>
-                    <th>Tipo Servicio</th>
-                    <th>Cuota</th>
-                    <th>Periodicidad</th>
-                    <th>Sección</th>
-                    <th>Cuenta Contable</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="conceptsTableBody">
-                <!-- Datos se cargarán dinámicamente -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="concepts-table">
+                <thead>
+                    <tr>
+                        <th class="hidden">ID</th> <!-- Ocultar columna ID -->
+                        <th>Descripción</th>
+                        <th>Tipo Servicio</th>
+                        <th>Cuota</th>
+                        <th>Periodicidad</th>
+                        <th>ID Sección</th>
+                        <th>ID Cuenta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="conceptsTableBody">
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer class="footer">
         <p>© 2025 Ixtlán - Gestión de Conceptos</p>
     </footer>
 
+    <script src="conceptos_script.js"></script>
     <script>
         fetch('/Componentes/Nav.html')
             .then(response => response.text())

@@ -10,6 +10,7 @@ const userNameInput = document.getElementById('userName');
 const userLastNameInput = document.getElementById('userLastName');
 const userUsernameInput = document.getElementById('userUsername');
 const userPasswordInput = document.getElementById('userPassword');
+const searchInput = document.getElementById("searchInput");
 const userRoleInput = document.getElementById('userRole');
 // const userPhotoInput = document.getElementById('userPhoto');
 const deleteUserIdInput = document.getElementById('deleteUserId');
@@ -101,15 +102,16 @@ function renderFilteredUsersTable(filteredUsers) {
     });
 }
 
-// Agregar eventos a los botones de filtro
-document.getElementById('defaultBtn').addEventListener('click', () => {
-    renderUsersTable();
-});
-document.getElementById('activeBtn').addEventListener('click', () => {
-    filterUsers('active');
-});
-document.getElementById('inactiveBtn').addEventListener('click', () => {
-    filterUsers('inactive');
+// Búsqueda en tiempo real
+searchInput.addEventListener("input", () => {
+    const term = searchInput.value.toLowerCase();
+    const filteredUsers = users.filter(user =>
+        user.name.toLowerCase().includes(term) ||
+        user.lastName.toLowerCase().includes(term) ||
+        user.username.toLowerCase().includes(term) ||
+        user.role.toLowerCase().includes(term)
+    );
+    renderFilteredUsersTable(filteredUsers);
 });
 
 function openAddModal() {
