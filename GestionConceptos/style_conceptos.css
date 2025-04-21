@@ -113,19 +113,19 @@ body {
 .action-btn {
     border: none;
     padding: 0;
-    background: none; /* Elimina el fondo del botón */
+    background: none; 
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px; /* Tamaño del botón */
-    height: 40px; /* Tamaño del botón */
+    width: 40px; 
+    height: 40px; 
   }
   
   .action-icon {
-    width: 40px; /* Ancho de la imagen */
-    height: 40px; /* Alto de la imagen */
-    object-fit: contain; /* Ajusta la imagen al contenedor */
+    width: 40px; 
+    height: 40px; 
+    object-fit: contain; 
   }
 
 /* Botones */
