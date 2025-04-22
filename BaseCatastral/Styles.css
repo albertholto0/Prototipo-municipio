@@ -201,7 +201,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s;
-  margin-left: 0; /* Eliminamos el margen anterior */
+  margin-left: 0; 
 }
 
 #btnAddOrUpdate:hover,

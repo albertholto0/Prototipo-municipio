@@ -4,22 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Configuración del Sistema de Cobro</title>
-    <link rel="stylesheet" href="/Componentes/Nav.css" />
     <link rel="stylesheet" href="Style.css" />
     <script src="Script.js" defer></script>
-    <script src="ScriptLogo.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
   </head>
 
 <body>
   <header>
-    <div class="logo-left">
-      <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán" />
+    <div class="header-left"> <!-- Contenedor flex nuevo -->
+        <div class="logo-left">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        </div>
+        <div class="title">
+            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
     </div>
-    <div class="title-section">
-      <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+    <div class="menu-buttons" id="nav-placeholder">
     </div>
-    <div id="nav-placeholder"></div>
-  </header>
+</header>
 
   <main class="main-container">
     <div class="title-section">
@@ -110,13 +112,5 @@
       <p>© 2025 Ixtlán - Módulo 6: Configuración del Sistema de Cobro</p>
     </footer>
   </body>
-    <script>
-      fetch("/Componentes/Nav.html")
-        .then((response) => response.text())
-        .then((data) => {
-          document.getElementById("nav-placeholder").innerHTML = data;
-        })
-        .catch((error) => console.error("Error al cargar el nav:", error));
-    </script>
   </body>
 </html>

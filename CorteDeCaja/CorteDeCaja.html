@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corte de caja</title>
-    <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="Styles.css">
     <script src="Script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
     <header>
-        <div class="logo-left">
-            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        <div class="header-left"> <!-- Contenedor flex nuevo -->
+            <div class="logo-left">
+                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
         </div>
-        <div class="title">
-            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        <div class="menu-buttons" id="nav-placeholder">
         </div>
-        <!-- Placeholder para el menú -->
-        <div id="nav-placeholder"></div>
     </header>
 
     <main class="main-container">

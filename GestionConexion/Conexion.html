@@ -16,14 +16,16 @@
 
 <body>
     <header>
-        <div class="logo-left">
-            <img src="../Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        <div class="header-left"> <!-- Contenedor flex nuevo -->
+            <div class="logo-left">
+                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
         </div>
-        <div class="title">
-            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        <div class="menu-buttons" id="nav-placeholder">
         </div>
-        <!-- Placeholder para el menú -->
-        <div id="nav-placeholder"></div>
     </header>
 
     <!-- Contenido principal -->
@@ -58,7 +60,7 @@
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
-
+        </main>
         <!-- Modal para el formulario -->
         <div class="modal-overlay" id="modalOverlay">
             <div class="modal-content">
@@ -100,8 +102,8 @@
                                 placeholder="Ej. Pago de renta" required>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" id="btnAddOrUpdate">Agregar</button>
                             <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                            <button type="submit" id="btnAddOrUpdate">Agregar</button>
                         </div>
                     </form>
                 </div>
