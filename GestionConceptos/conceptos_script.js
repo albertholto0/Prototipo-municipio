@@ -2,159 +2,215 @@
 const modal = document.getElementById('modalConcepto');
 const btnAgregarConcepto = document.getElementById('btnAgregarConcepto');
 const btnCancelarModal = document.getElementById('btnCancelarModal');
+const conceptForm = document.getElementById('conceptForm');
+const conceptsTableBody = document.getElementById('conceptsTableBody');
+const searchInput = document.getElementById('searchInput');
+const modalTitle = document.getElementById('modalTitle');
+const deleteModal = document.getElementById('deleteModal');
+const deleteConceptForm = document.getElementById('deleteConceptForm');
+const deleteConceptIdInput = document.getElementById('deleteConceptId');
+const deletePasswordInput = document.getElementById('deletePassword');
+
+// Simulación de datos iniciales
+let conceptos = [
+    { id: 1, descripcion: 'Agua potable', tipo_servicio: 'Agua', cuota: 150.00, periodicidad: 'Mensual', id_seccion: 1, id_cuenta_contable: 101, active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
+    { id: 2, descripcion: 'Recolección de basura', tipo_servicio: 'Basura', cuota: 100.00, periodicidad: 'Mensual', id_seccion: 2, id_cuenta_contable: 102, active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() }
+];
+
+// Generar fecha aleatoria
+function generarFechaAleatoria() {
+    const start = new Date(2020, 0, 1);
+    const end = new Date();
+    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    return date.toISOString().split('T')[0];
+}
+
+// Generar hora aleatoria
+function generarHoraAleatoria() {
+    const hours = Math.floor(Math.random() * 24).toString().padStart(2, '0');
+    const minutes = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+}
+
+// Cargar datos en la tabla
+function cargarTablaConceptos(filteredConceptos = null) {
+    const dataToRender = filteredConceptos || conceptos;
+    conceptsTableBody.innerHTML = '';
+    
+    dataToRender.forEach(concepto => {
+        const row = document.createElement('tr');
+        row.dataset.id = concepto.id;
+        row.innerHTML = `
+            <td class="hidden">${concepto.id}</td>
+            <td>${concepto.descripcion}</td>
+            <td>${concepto.tipo_servicio}</td>
+            <td>$${concepto.cuota.toFixed(2)}</td>
+            <td>${concepto.periodicidad}</td>
+            <td>${concepto.id_seccion}</td>
+            <td>${concepto.id_cuenta_contable}</td>
+            <td>
+                <button class="action-btn modify" onclick="openModifyModal(${concepto.id})">
+                    <img src="/Assets/editor.png" alt="Modificar" class="action-icon">
+                </button>
+                <button class="action-btn delete" onclick="openDeleteModal(${concepto.id})">
+                    <img src="/Assets/eliminar.png" alt="Eliminar" class="action-icon">
+                </button>
+            </td>
+        `;
+        conceptsTableBody.appendChild(row);
+    });
+}
 
 // Abrir modal para agregar nuevo concepto
-btnAgregarConcepto.addEventListener('click', () => {
-    document.getElementById('modalTitle').textContent = 'Nuevo Concepto';
-    document.getElementById('conceptForm').reset();
+function openAddModal() {
+    modalTitle.textContent = 'Nuevo Concepto';
+    conceptForm.reset();
     modal.style.display = 'block';
-});
+}
+
+// Abrir modal para modificar concepto
+function openModifyModal(conceptoId) {
+    const concepto = conceptos.find(c => c.id === conceptoId);
+    if (!concepto) return;
+
+    modalTitle.textContent = 'Modificar Concepto';
+    document.getElementById('descripcion').value = concepto.descripcion;
+    document.getElementById('tipo_servicio').value = concepto.tipo_servicio;
+    document.getElementById('cuota').value = concepto.cuota;
+    document.getElementById('periodicidad').value = concepto.periodicidad;
+    document.getElementById('id_seccion').value = concepto.id_seccion;
+    document.getElementById('id_cuenta_contable').value = concepto.id_cuenta_contable;
+    
+    // Agregar campo oculto para el ID del concepto a modificar
+    const existingIdInput = document.getElementById('conceptoId');
+    if (existingIdInput) {
+        existingIdInput.value = concepto.id;
+    } else {
+        const idInput = document.createElement('input');
+        idInput.type = 'hidden';
+        idInput.id = 'conceptoId';
+        idInput.value = concepto.id;
+        conceptForm.appendChild(idInput);
+    }
+    
+    modal.style.display = 'block';
+}
+
+// Función para abrir modal de confirmación de eliminación
+function openDeleteModal(conceptoId) {
+    deleteConceptIdInput.value = conceptoId;
+    deleteModal.style.display = 'block';
+}
+
+function closeDeleteModal() {
+    deleteModal.style.display = 'none';
+}
 
 // Cerrar modal
-btnCancelarModal.addEventListener('click', () => {
+function closeModal() {
     modal.style.display = 'none';
-});
+}
 
-// Cerrar modal al hacer clic fuera del contenido
-window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        modal.style.display = 'none';
-    }
-});
-
-document.getElementById('conceptForm').addEventListener('submit', (e) => {
+// Manejar envío del formulario
+conceptForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     // Validar longitudes máximas
     const tipoServicio = document.getElementById('tipo_servicio').value;
     const periodicidad = document.getElementById('periodicidad').value;
-    
-    if(tipoServicio.length > 30) {
+
+    if (tipoServicio.length > 30) {
         alert('El tipo de servicio no puede exceder 30 caracteres');
         return;
     }
-    
-    if(periodicidad.length > 50) {
+
+    if (periodicidad.length > 50) {
         alert('La periodicidad no puede exceder 50 caracteres');
         return;
     }
-    
-    // Aquí iría la lógica para guardar el concepto
+
+    // Obtener datos del formulario
+    const conceptoId = document.getElementById('conceptoId') ? parseInt(document.getElementById('conceptoId').value) : Date.now();
     const conceptoData = {
-        id_concepto: document.getElementById('id_concepto').value || null,
+        id: conceptoId,
         descripcion: document.getElementById('descripcion').value,
         tipo_servicio: tipoServicio,
         cuota: parseFloat(document.getElementById('cuota').value),
         periodicidad: periodicidad,
         id_seccion: parseInt(document.getElementById('id_seccion').value),
-        id_cuenta_contable: parseInt(document.getElementById('id_cuenta_contable').value)
+        id_cuenta_contable: parseInt(document.getElementById('id_cuenta_contable').value),
+        active: true,
+        accessDate: generarFechaAleatoria(),
+        accessTime: generarHoraAleatoria()
     };
+
+    // Buscar si el concepto ya existe
+    const conceptoIndex = conceptos.findIndex(c => c.id === conceptoId);
     
-    console.log('Datos a guardar:', conceptoData);
-    
-    // Cerrar el modal después de guardar
-    modal.style.display = 'none';
+    if (conceptoIndex > -1) {
+        // Actualizar concepto existente
+        conceptos[conceptoIndex] = conceptoData;
+    } else {
+        // Agregar nuevo concepto
+        conceptos.push(conceptoData);
+    }
+
+    // Actualizar tabla y cerrar modal
+    cargarTablaConceptos();
+    closeModal();
 });
 
-// Simulación de datos iniciales
-const conceptos = [
-    { id: 1, descripcion: 'Agua potable', tipo_servicio: 'Agua', cuota: 150.00, periodicidad: 'Mensual', id_seccion: 1, id_cuenta_contable: 101 },
-    { id: 2, descripcion: 'Recolección de basura', tipo_servicio: 'Basura', cuota: 100.00, periodicidad: 'Mensual', id_seccion: 2, id_cuenta_contable: 102 }
-];
+deleteConceptForm.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-// Simulación de opciones para los select
-const secciones = [
-    { id: 1, nombre: 'Servicios Públicos' },
-    { id: 2, nombre: 'Limpieza' }
-];
-
-const cuentasContables = [
-    { id: 101, nombre: 'Cuenta Agua' },
-    { id: 102, nombre: 'Cuenta Basura' }
-];
-
-// Cargar datos en la tabla
-function cargarTablaConceptos() {
-    const tbody = document.getElementById('conceptsTableBody');
-    tbody.innerHTML = ''; // Limpiar tabla
-    conceptos.forEach(concepto => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="hidden">${concepto.id}</td>
-            <td>${concepto.descripcion}</td>
-            <td>${concepto.tipo_servicio}</td>
-            <td>${concepto.cuota.toFixed(2)}</td>
-            <td>${concepto.periodicidad}</td>
-            <td>${concepto.id_seccion}</td>
-            <td>${concepto.id_cuenta_contable}</td>
-            <td>
-                <button class="action-btn" data-id="${concepto.id}">
-                    <img src="/Assets/editor.png" alt="Modificar" class="action-icon">
-                </button>
-                <button class="action-btn" data-id="${concepto.id}">
-                    <img src="/Assets/eliminar.png" alt="Eliminar" class="action-icon">
-                </button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-// Cargar opciones en los select
-function cargarOpcionesSelect() {
-    const seccionSelect = document.getElementById('searchSeccion');
-    const cuentaSelect = document.getElementById('searchCuentaContable');
-
-    secciones.forEach(seccion => {
-        const option = document.createElement('option');
-        option.value = seccion.id;
-        option.textContent = seccion.nombre;
-        seccionSelect.appendChild(option);
-    });
-
-    cuentasContables.forEach(cuenta => {
-        const option = document.createElement('option');
-        option.value = cuenta.id;
-        option.textContent = cuenta.nombre;
-        cuentaSelect.appendChild(option);
-    });
-}
-
-// Manejar edición de conceptos
-document.getElementById('conceptsTableBody').addEventListener('click', (e) => {
-    if (e.target.classList.contains('btn-edit')) {
-        const id = parseInt(e.target.dataset.id);
-        const concepto = conceptos.find(c => c.id === id);
-
-        if (concepto) {
-            document.getElementById('modalTitle').textContent = 'Editar Concepto';
-            document.getElementById('id_concepto').value = concepto.id;
-            document.getElementById('descripcion').value = concepto.descripcion;
-            document.getElementById('tipo_servicio').value = concepto.tipo_servicio;
-            document.getElementById('cuota').value = concepto.cuota;
-            document.getElementById('periodicidad').value = concepto.periodicidad;
-            document.getElementById('id_seccion').value = concepto.id_seccion;
-            document.getElementById('id_cuenta_contable').value = concepto.id_cuenta_contable;
-
-            modal.style.display = 'block';
-        }
+    const conceptoId = parseInt(deleteConceptIdInput.value);
+    const password = deletePasswordInput.value;
+    
+    // Verificar contraseña (usando la misma que en usuarios)
+    if (password === "admin123") {
+        conceptos = conceptos.filter(concepto => concepto.id !== conceptoId);
+        cargarTablaConceptos();
+        closeDeleteModal();
+        alert('Concepto eliminado correctamente');
+    } else {
+        alert("Contraseña incorrecta");
     }
 });
 
-// Manejar eliminación de conceptos
-document.getElementById('conceptsTableBody').addEventListener('click', (e) => {
-    if (e.target.classList.contains('btn-delete')) {
-        const id = parseInt(e.target.dataset.id);
-        const index = conceptos.findIndex(c => c.id === id);
+document.querySelector('.cancel-btn-delete').addEventListener('click', closeDeleteModal);
 
-        if (index !== -1) {
-            conceptos.splice(index, 1);
-            cargarTablaConceptos();
-        }
+// Actualiza el event listener para cerrar modales al hacer clic fuera
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        closeModal();
+    }
+    if (event.target === deleteModal) {
+        closeDeleteModal();
     }
 });
+
+// Búsqueda en tiempo real
+searchInput.addEventListener("input", () => {
+    const term = searchInput.value.toLowerCase();
+    const filteredConceptos = conceptos.filter(concepto =>
+        concepto.descripcion.toLowerCase().includes(term) ||
+        concepto.tipo_servicio.toLowerCase().includes(term)
+    );
+    cargarTablaConceptos(filteredConceptos);
+});
+
+// Event listeners
+btnAgregarConcepto.addEventListener('click', openAddModal);
+btnCancelarModal.addEventListener('click', closeModal);
+
+// Cerrar modal al hacer clic fuera del contenido
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
 // Inicializar la página
 document.addEventListener('DOMContentLoaded', () => {
     cargarTablaConceptos();
-    cargarOpcionesSelect();
 });

@@ -62,9 +62,27 @@
                         <input type="number" id="id_cuenta_contable" min="1" required>
                     </div>
                     
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" id="btnCancelarModal">Cancelar</button>
-                        <button type="submit" class="btn-primary">Guardar</button>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-btn" id="btnCancelarModal">Cancelar</button>
+                        <button type="submit" class="register-btn">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title-section">
+                    <h2>Confirmar eliminación</h2>
+                </div>
+                <form id="deleteConceptForm">
+                    <input type="hidden" id="deleteConceptId">
+                    <div class="form-group">
+                        <label for="deletePassword">Contraseña de administrador:</label>
+                        <input type="password" id="deletePassword" required>
+                    </div>
+                    <div class="form-buttons-delete">
+                        <button type="button" class="cancel-btn-delete">Cancelar</button>
+                        <button type="submit" class="delete-btn-delete">Eliminar</button>
                     </div>
                 </form>
             </div>
