@@ -1,52 +1,46 @@
+// Script.js
 document.addEventListener("DOMContentLoaded", () => {
   const configForm = document.getElementById("configForm");
 
-  // Expresiones regulares para validación
   const RFC_REGEX = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/;
   const CIF_REGEX = /^[A-Z]\d{7}[A-Z0-9]$/;
 
-  // Función para validar RFC con formato mexicano
   const validateRFC = (rfc) => {
     const cleanedRFC = rfc.trim().toUpperCase();
+    if (!RFC_REGEX.test(cleanedRFC)) return false;
 
-    if (!RFC_REGEX.test(cleanedRFC)) {
-      return false;
-    }
-
-    // Validación de fecha (opcional)
-    if (cleanedRFC.length === 12) {
-      const year = parseInt(cleanedRFC.substr(3, 2));
-      const month = parseInt(cleanedRFC.substr(5, 2));
-      const day = parseInt(cleanedRFC.substr(7, 2));
-      if (month < 1 || month > 12 || day < 1 || day > 31) return false;
-    } else if (cleanedRFC.length === 13) {
-      const year = parseInt(cleanedRFC.substr(4, 2));
-      const month = parseInt(cleanedRFC.substr(6, 2));
-      const day = parseInt(cleanedRFC.substr(8, 2));
-      if (month < 1 || month > 12 || day < 1 || day > 31) return false;
-    }
-
-    return true;
+    const year = parseInt(
+      cleanedRFC.length === 12
+        ? cleanedRFC.substr(3, 2)
+        : cleanedRFC.substr(4, 2)
+    );
+    const month = parseInt(
+      cleanedRFC.length === 12
+        ? cleanedRFC.substr(5, 2)
+        : cleanedRFC.substr(6, 2)
+    );
+    const day = parseInt(
+      cleanedRFC.length === 12
+        ? cleanedRFC.substr(7, 2)
+        : cleanedRFC.substr(8, 2)
+    );
+    return month >= 1 && month <= 12 && day >= 1 && day <= 31;
   };
 
-  // ✅ Función para validar CIF solo con expresión regular (CORREGIDA)
   const validateCIF = (cif) => {
     const cleanedCIF = cif.trim().toUpperCase();
     return CIF_REGEX.test(cleanedCIF);
   };
 
-  // Cargar valores previos del localStorage
   const loadSavedConfig = () => {
     const savedConfig = JSON.parse(localStorage.getItem("configData"));
     if (savedConfig) {
       document.getElementById("dependencia").value =
         savedConfig.dependencia || "";
-      document.getElementById("logo").value = savedConfig.logo || "";
       document.getElementById("lema").value = savedConfig.lema || "";
       document.getElementById("rfc").value = savedConfig.rfc || "";
       document.getElementById("periodo").value = savedConfig.periodo || "";
       document.getElementById("idCif").value = savedConfig.idCif || "";
-      document.getElementById("codigoQR").value = savedConfig.codigoQR || "";
 
       const savedLogo = localStorage.getItem("logo");
       if (savedLogo) {
@@ -62,11 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const updateLogoInAllTabs = (logoData) => {
-    const logoElements = document.querySelectorAll(".logo-image");
-    logoElements.forEach((element) => {
+    document.querySelectorAll(".logo-image").forEach((element) => {
       element.src = logoData;
     });
-
     if (typeof BroadcastChannel !== "undefined") {
       const channel = new BroadcastChannel("logo_updates");
       channel.postMessage({ type: "logo_update", logo: logoData });
@@ -104,8 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
       rfc: rfc.toUpperCase(),
       periodo: document.getElementById("periodo").value.trim(),
       idCif: idCif.toUpperCase(),
-      logo: document.getElementById("logo").value,
-      codigoQR: document.getElementById("codigoQR").value,
     };
 
     localStorage.setItem("configData", JSON.stringify(configData));
@@ -135,11 +125,24 @@ document.addEventListener("DOMContentLoaded", () => {
     location.reload();
   };
 
+  const resetConfig = () => {
+    if (
+      confirm(
+        "¿Estás seguro de restablecer todos los datos? Esta acción no se puede deshacer."
+      )
+    ) {
+      localStorage.removeItem("configData");
+      localStorage.removeItem("logo");
+      localStorage.removeItem("codigoQR");
+      location.reload();
+    }
+  };
+
   document.getElementById("logo").addEventListener("change", function (e) {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = function (event) {
+      reader.onload = (event) => {
         document.getElementById("logoPreview").src = event.target.result;
       };
       reader.readAsDataURL(file);
@@ -150,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = function (event) {
+      reader.onload = (event) => {
         document.getElementById("qrPreview").src = event.target.result;
       };
       reader.readAsDataURL(file);
@@ -158,36 +161,35 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("rfc").addEventListener("input", function () {
-    const rfcValue = this.value.trim();
-    if (rfcValue && !validateRFC(rfcValue)) {
-      this.classList.add("invalid-input");
-    } else {
-      this.classList.remove("invalid-input");
-    }
+    this.classList.toggle(
+      "invalid-input",
+      this.value && !validateRFC(this.value)
+    );
   });
 
   document.getElementById("idCif").addEventListener("input", function () {
-    const cifValue = this.value.trim();
-    if (cifValue && !validateCIF(cifValue)) {
-      this.classList.add("invalid-input");
-    } else {
-      this.classList.remove("invalid-input");
-    }
+    this.classList.toggle(
+      "invalid-input",
+      this.value && !validateCIF(this.value)
+    );
   });
 
   loadSavedConfig();
   configForm.addEventListener("submit", saveConfig);
 
-  window.addEventListener("storage", () => {
-    loadSavedConfig();
-  });
+  // Botón de restablecer cambios
+  const resetButton = document.getElementById("resetButton");
+  if (resetButton) {
+    resetButton.addEventListener("click", resetConfig);
+  }
+
+  window.addEventListener("storage", loadSavedConfig);
 
   if (typeof BroadcastChannel !== "undefined") {
     const channel = new BroadcastChannel("logo_updates");
     channel.addEventListener("message", (event) => {
       if (event.data.type === "logo_update") {
-        const logoElements = document.querySelectorAll(".logo-image");
-        logoElements.forEach((element) => {
+        document.querySelectorAll(".logo-image").forEach((element) => {
           element.src = event.data.logo;
         });
       }
