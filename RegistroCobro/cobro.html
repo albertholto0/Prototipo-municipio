@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registo de cobro</title>
+  <title>Registro de cobro</title>
   <link rel="stylesheet" href="../Componentes/Nav.css">
   <link rel="stylesheet" href="/BaseCatastral/Styles.css">
   <link rel="stylesheet" href="StylesE.css">
-  <script src="Script.js" defer></script>
+  <script src="ScriptCobro.js" defer></script>
   <script src="/Componentes/Nav.js" defer></script>
 </head>
 
@@ -36,7 +36,7 @@
     <div class="form-container">
       <form id="receiptForm">
         <!-- Primera fila: Folio y Fecha -->
-        <div class="form-inline">
+        <div class="form-row-3cols">
           <div class="form-group">
             <label for="folio">Folio:</label>
             <input type="text" id="folio" name="folio" readonly>
@@ -45,10 +45,6 @@
             <label for="fecha">Fecha:</label>
             <input type="date" id="fecha" name="fecha" required>
           </div>
-        </div>
-
-        <!-- Segunda fila: Ejercicio Fiscal y Periodo -->
-        <div class="form-inline">
           <div class="form-group">
             <label for="ejercicioFiscal">Ejercicio Fiscal:</label>
             <select id="ejercicioFiscal" name="ejercicioFiscal" required>
@@ -57,62 +53,64 @@
               <option value="2025">2025</option>
             </select>
           </div>
+        </div>
+
+        <!-- Segunda fila: Periodo, Contribuyente y Domicilio -->
+        <div class="form-row-3cols">
           <div class="form-group">
             <label for="ejercicioPeriodo">Periodo:</label>
             <select id="ejercicioPeriodo" name="ejercicioPeriodo" required>
               <option value="">Seleccionar mes</option>
             </select>
           </div>
-        </div>
-
-        <!-- Tercera fila: Contribuyente y Domicilio -->
-        <div class="form-group">
-          <label for="contribuyente">Contribuyente:</label>
-          <select id="contribuyente" name="contribuyente" required></select>
-        </div>
-        <div class="form-group">
-          <label for="domicilio">Domicilio:</label>
-          <input type="text" id="domicilio" name="domicilio">
-        </div>
-
-        <!-- Cuarta fila: Cuenta Contable y Referencia -->
-        <div class="form-inline">
           <div class="form-group">
-            <label for="cuentaContable">Cuenta Contable:</label>
-            <select id="cuentaContable" name="cuentaContable" required></select>
+            <label for="contribuyente">Contribuyente:</label>
+            <select id="contribuyente" name="contribuyente" required></select>
           </div>
+          <div class="form-group">
+            <label for="domicilio">Domicilio:</label>
+            <input type="text" id="domicilio" name="domicilio">
+          </div>
+        </div>
+
+        <!-- Cuenta Contable que abarca 3 columnas -->
+        <div class="form-group full-width">
+          <label for="cuentaContable">Cuenta Contable:</label>
+          <select id="cuentaContable" name="cuentaContable" required></select>
+        </div>
+
+        <!-- Tercera fila: Referencia, Base Catastral y Forma de Pago -->
+        <div class="form-row-3cols">
           <div class="form-group">
             <label for="cuentaReferencia">Cuenta Referencia:</label>
             <input type="text" id="cuentaReferencia" name="cuentaReferencia" required>
-          </div>
-        </div>
-
-        <!-- Quinta fila: Descripción y Base Catastral -->
-        <div class="form-inline">
-          <div class="form-group">
-            <label for="descripcion">Descripción:</label>
-            <input type="text" id="descripcion" name="descripcion" required>
           </div>
           <div class="form-group">
             <label for="baseCatastral">Base Catastral:</label>
             <input type="number" id="baseCatastral" name="baseCatastral" step="0.01">
           </div>
+          <div class="form-group">
+            <label for="formaPago">Forma de Pago:</label>
+            <select id="formaPago" name="formaPago" required>
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="TARJETA">Tarjeta</option>
+              <option value="TRANSFERENCIA">Transferencia</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Sexta fila: Subtotal y Descuento -->
-        <div class="form-inline">
+        <!-- Descripción que abarca 3 columnas -->
+        <div class="form-group full-width">
+          <label for="descripcion">Descripción:</label>
+          <input type="text" id="descripcion" name="descripcion" required>
+        </div>
+
+        <!-- Cuarta fila: Subtotal, Descuento y Total -->
+        <div class="form-row-3cols">
           <div class="form-group">
             <label for="subtotal">Subtotal:</label>
             <input type="number" id="subtotal" name="subtotal" step="0.01" required>
           </div>
-          <div class="form-group">
-            <label for="motivoDescuento">Motivo Descuento:</label>
-            <input type="text" id="motivoDescuento" name="motivoDescuento">
-          </div>
-        </div>
-
-        <!-- Séptima fila: Descuento y Total -->
-        <div class="form-inline">
           <div class="form-group">
             <label for="descuento">Descuento:</label>
             <input type="number" id="descuento" name="descuento" step="0.01" value="0.00">
@@ -123,15 +121,11 @@
           </div>
         </div>
 
-        <!-- Octava fila: Forma de Pago y Total en Letra -->
-        <div class="form-inline">
+        <!-- Quinta fila: Motivo Descuento y Total en Letra -->
+        <div class="form-row-2cols">
           <div class="form-group">
-            <label for="formaPago">Forma de Pago:</label>
-            <select id="formaPago" name="formaPago" required>
-              <option value="EFECTIVO">Efectivo</option>
-              <option value="TARJETA">Tarjeta</option>
-              <option value="TRANSFERENCIA">Transferencia</option>
-            </select>
+            <label for="motivoDescuento">Motivo Descuento:</label>
+            <input type="text" id="motivoDescuento" name="motivoDescuento">
           </div>
           <div class="form-group">
             <label for="totalLetra">Total en Letra:</label>
@@ -142,8 +136,7 @@
         <!-- Contenedor para botones -->
         <div class="form-actions">
           <button type="button" id="btnCancelarRecibo" class="btn-cancel">Cancelar</button>
-          <button type="submit" id="btnGuardarRecibo">Guardar</button>
-          <button type="button" id="btnImprimirRecibo">Cobrar e Imprimir</button>
+          <button type="submit" id="btnGuardarRecibo">Cobrar</button>
         </div>
       </form>
     </div>
