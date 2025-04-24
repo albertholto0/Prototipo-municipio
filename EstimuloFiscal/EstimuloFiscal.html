@@ -63,7 +63,7 @@
 
     <!-- Modal para agregar/editar (usando clases de Base Catastral) -->
     <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="max-height: 60vh; overflow-y: auto">
             <span class="btn-close" id="btnCloseModal">&times;</span>
             <div class="form-container">
                 <div class="form-container" id="formContainer"></div>
@@ -84,13 +84,14 @@
 
                     <div class="form-inline">
                         <div class="form-group">
-                            <label for="caracteristicas">Caracteristicas:</label>
-                            <textarea id="caracteristicas" class="form-textarea" rows="7" required></textarea>
+                            <label for="caracteristicas">Características:</label>
+                            <textarea id="caracteristicas" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="requisitos">Requisitos:</label>
-                            <textarea id="requisitos" class="form-textarea" rows="7" required></textarea>
-                        </div>    
+                            <textarea id="requisitos" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
+                        </div>
+                           
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
