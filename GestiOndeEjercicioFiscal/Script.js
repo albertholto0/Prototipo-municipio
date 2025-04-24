@@ -32,7 +32,6 @@ const rowsPerPage = 10;
 const elements = {
   tableBody: document.querySelector("#fiscalTable tbody"),
   searchInput: document.getElementById("searchInput"),
-  searchType: document.getElementById("searchType"),
   form: document.getElementById("fiscalForm"),
   anio: document.getElementById("anio"),
   fecha_inicio: document.getElementById("fecha_inicio"),
@@ -62,7 +61,6 @@ function renderTable(data) {
   paginatedData.forEach((ejercicio, index) => {
       const row = `
       <tr>
-          <td>${ejercicio.id_ejercicio}</td>
           <td>${ejercicio.anio}</td>
           <td>${formatDate(ejercicio.fecha_inicio)}</td>
           <td>${formatDate(ejercicio.fecha_fin)}</td>
@@ -70,12 +68,12 @@ function renderTable(data) {
           <td>$${ejercicio.presupuesto_asignado.toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
           <td>$${ejercicio.presupuesto_ejecutado.toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
           <td>${ejercicio.observaciones || '-'}</td>
-          <td>
+          <td class="actions-cell">
               <button class="action-btn edit" onclick="editFiscal(${start + index})" title="Editar">
-                  <img src="/Assets/editor.png" class="action-icon">
+                  <img src="/Assets/editor.png" class="action-icon" alt="Editar">
               </button>
               <button class="action-btn delete" onclick="deleteFiscal(${start + index})" title="Eliminar">
-                  <img src="/Assets/eliminar.png" class="action-icon">
+                  <img src="/Assets/eliminar.png" class="action-icon" alt="Eliminar">
               </button>
           </td>
       </tr>
@@ -160,21 +158,28 @@ elements.searchInput.addEventListener("input", () => {
 
 /**
 * Filtra los ejercicios fiscales según el término de búsqueda.
+* Detecta automáticamente si se busca por año o por estado.
 * @returns {Array} Datos filtrados.
 */
 function filteredFiscal() {
-  const term = elements.searchInput.value.toLowerCase();
-  const searchType = elements.searchType.value;
+  const term = elements.searchInput.value.toLowerCase().trim();
   
-  if (searchType === "anio") {
+  if (term === "") {
+      return ejerciciosFiscales; // Si no hay término de búsqueda, retorna todos los datos
+  }
+  
+  // Detecta si el término es numérico (buscar por año)
+  const isNumeric = /^\d+$/.test(term);
+  
+  if (isNumeric) {
+      // Búsqueda por año
       return ejerciciosFiscales.filter(ejercicio => 
           ejercicio.anio.toString().includes(term));
-  } else if (searchType === "estado") {
+  } else {
+      // Búsqueda por estado
       return ejerciciosFiscales.filter(ejercicio => 
           ejercicio.estado.toLowerCase().includes(term));
   }
-  
-  return ejerciciosFiscales;
 }
 
 /**
