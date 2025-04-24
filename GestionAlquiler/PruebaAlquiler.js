@@ -4,16 +4,16 @@ let GestionAlquileres = [
       nombreDescripcion: "Juan Pérez",
       ubicacion: "Calle Falsa 123",
       valorFinal: 50000,
-      fechaAvaluo: "2023-05-10",
-      fechaAvaluo: "2023-06-10",
+      fechaInicio: "2023-05-10",
+      fechaCierre: "2023-06-10",
       estadoAlquiler: "Activo"
     },
     {
       nombreDescripcion: "Maria",
       ubicacion: "Calle Falsa 123",
       valorFinal: 20000,
-      fechaAvaluo: "2023-07-10",
-      fechaAvaluo: "2023-08-10",
+      fechaInicio: "2023-07-10",
+      fechaCierre: "2023-08-10",
       estadoAlquiler: "Activo"
     }
   ];
@@ -171,19 +171,14 @@ let GestionAlquileres = [
   function handleSubmit(e) {
     e.preventDefault();
     const base = {
-      //claveCatastral: elements.claveCatastral.value,
       nombreDescripcion: elements.nombreDescripcion.value,
       ubicacion: elements.ubicacion.value,
-      //baseCatastral: elements.baseCatastral.value,
       fechaInicio: elements.fechaInicio.value,
       fechaCierre: elements.fechaCierre.value,
-
       valorFinal: elements.valorFinal.value,
       estadoAlquiler: elements.estadoAlquiler.value,
-      //valorConstruccion: elements.valorConstruccion.value,
-      impuestoCalculado: elements.impuestoCalculado.value,
-      fechaAvaluo: elements.fechaAvaluo.value,
-      historialAvaluos: elements.historialAvaluos.value,
+      idContribuyentes: elements.idContribuyentes.value,
+      idConceptos: elements.idConceptos.value,
       
     };
   
@@ -212,21 +207,14 @@ let GestionAlquileres = [
   */
   window.editAccount = function (index) {
     const base = GestionAlquileres[index];
-    //elements.claveCatastral.value = base.claveCatastral;
     elements.nombreDescripcion.value = base.nombreDescripcion;
     elements.ubicacion.value = base.ubicacion;
-    //elements.baseCatastral.value = base.baseCatastral;
     elements.fechaInicio.value = base.fechaInicio;
     elements.fechaCierre.value = base.fechaCierre;
-
     elements.valorFinal.value = base.valorFinal;
-
     elements.estadoAlquiler.value = base.estadoAlquiler;
-
-    //elements.valorConstruccion.value = base.valorConstruccion;
-    elements.impuestoCalculado.value = base.impuestoCalculado;
-    //elements.fechaAvaluo.value = base.fechaAvaluo;
-    elements.historialAvaluos.value = base.historialAvaluos;
+    elements.idContribuyentes.value = base.idContribuyentes;
+    elements.idConceptos.value = base.idConceptos;
     
     isEditing = true;
     currentIndex = index;
@@ -304,12 +292,12 @@ let GestionAlquileres = [
       <p><strong>Fecha Inicio:</strong> ${base.fechaInicio}</p>
       <p><strong>Fecha Cierre:</strong> ${base.fechaCierre}</p>
 
-      <p><strong>Valor Terreno:</strong> ${base.valorFinal}</p>
+      <p><strong>Valor Final:</strong> ${base.valorFinal}</p>
 
-      <p><strong>Uso de Suelo:</strong> ${base.estadoAlquiler}</p>
+      <p><strong>Estado Alquiler:</strong> ${base.estadoAlquiler}</p>
 
-      <p><strong>Impuesto Calculado:</strong> ${base.impuestoCalculado}</p>
-      <p><strong>Historial Avalúos:</strong> ${base.historialAvaluos}</p>
+      <p><strong>Contribuyente:</strong> ${base.idContribuyentes}</p>
+      <p><strong>Concepto:</strong> ${base.idConceptos}</p>
       
     `;
     openViewModal();
