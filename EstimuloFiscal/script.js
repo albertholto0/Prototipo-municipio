@@ -1,211 +1,294 @@
-// Datos iniciales de ejemplo para Estímulos Fiscales
+// Datos de ejemplo
 let estimulosFiscales = [
-    
+    {
+        nombre_contribucion: "Descuento a adultos mayores",
+        porcentaje_descuento: 50,
+        caracteristicas: "Aplicable a contribuyentes mayores de 60 años",
+        requisitos: "1. Identificación oficial"
+    }
 ];
 
-// Variables de estado
-let isEditingEstimulo = false;
-let currentEstimuloIndex = null;
-let currentEstimuloPage = 1;
-const estimulosPerPage = 10;
+// Variables globales
+let isEditing = false;
+let currentIndex = null;
+let currentPage = 1;
+const rowsPerPage = 10;
 
-// Mapeo de elementos del DOM
-const elements = {
-    tableBody: document.querySelector("#estimulosTable tbody"),
-    searchInput: document.getElementById("searchEstimuloInput"),
-    form: document.getElementById("estimuloForm"),
-    idEstimulo: document.getElementById("idEstimulo"),
-    nombreContribucion: document.getElementById("nombreContribucion"),
-    caracteristicas: document.getElementById("caracteristicas"),
-    porcentajeDescuento: document.getElementById("porcentajeDescuento"),
-    requisitos: document.getElementById("requisitos"),
-    btnSave: document.getElementById("btnSaveEstimulo"),
-    btnCancel: document.getElementById("btnCancelEstimulo"),
-    formTitle: document.getElementById("estimuloFormTitle"),
-    paginationContainer: document.querySelector(".pagination"),
-    modalOverlay: document.getElementById("estimuloModalOverlay"),
-    btnOpenModal: document.getElementById("btnOpenEstimuloModal"),
-    btnCloseModal: document.getElementById("btnCloseEstimuloModal")
-};
-
-// Inicialización
-document.addEventListener("DOMContentLoaded", () => {
-    renderEstimulosTable(estimulosFiscales);
-    
-    // Event listeners
-    elements.btnOpenModal.addEventListener("click", openEstimuloModal);
-    elements.btnCloseModal.addEventListener("click", closeEstimuloModal);
-    elements.btnCancel.addEventListener("click", closeEstimuloModal);
-    elements.form.addEventListener("submit", handleEstimuloSubmit);
-    elements.searchInput.addEventListener("input", searchEstimulos);
-});
-
-// Renderizar tabla de estímulos
-function renderEstimulosTable(data) {
-    elements.tableBody.innerHTML = "";
-    const start = (currentEstimuloPage - 1) * estimulosPerPage;
-    const end = start + estimulosPerPage;
-    const paginatedData = data.slice(start, end);
-
-    paginatedData.forEach((estimulo, index) => {
-        const row = `
-            <tr>
-                <td>${estimulo.idEstimulo}</td>
-                <td>${estimulo.nombreContribucion}</td>
-                <td>${estimulo.caracteristicas}</td>
-                <td>${estimulo.porcentajeDescuento}%</td>
-                <td>${estimulo.requisitos.replace(/\n/g, '<br>')}</td>
-                <td>
-                    <button class="action-btn edit" onclick="editEstimulo(${start + index})" title="Editar">
-                        <img src="/Assets/editor.png" class="action-icon">
-                    </button>
-                    <button class="action-btn delete" onclick="deleteEstimulo(${start + index})" title="Eliminar">
-                        <img src="/Assets/eliminar.png" class="action-icon">
-                    </button>
-                    <button class="action-btn view" onclick="viewAccount(${start + index})" title="Ver información">
-                        <img src="/Assets/visualizar.png" class="action-icon">
-                    </button>
-                </td>
-            </tr>
-        `;
-        elements.tableBody.insertAdjacentHTML("beforeend", row);
-    });
-
-    renderEstimulosPagination(data.length);
-}
-
-// Renderizar paginación
-function renderEstimulosPagination(totalItems) {
-    const totalPages = Math.ceil(totalItems / estimulosPerPage);
-    let paginationHTML = `
-        <button class="pagination-btn" onclick="changeEstimuloPage(${currentEstimuloPage - 1})" ${currentEstimuloPage === 1 ? 'disabled' : ''}>
-            « Anterior
-        </button>
-    `;
-
-    const startPage = Math.max(1, currentEstimuloPage - 2);
-    const endPage = Math.min(totalPages, currentEstimuloPage + 2);
-
-    if (startPage > 1) {
-        paginationHTML += `
-            <button class="pagination-btn" onclick="changeEstimuloPage(1)">1</button>
-            ${startPage > 2 ? '<span>...</span>' : ''}
-        `;
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-        paginationHTML += `
-            <button class="pagination-btn ${i === currentEstimuloPage ? 'active' : ''}" onclick="changeEstimuloPage(${i})">
-                ${i}
-            </button>
-        `;
-    }
-
-    if (endPage < totalPages) {
-        paginationHTML += `
-            ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
-            <button class="pagination-btn" onclick="changeEstimuloPage(${totalPages})">${totalPages}</button>
-        `;
-    }
-
-    paginationHTML += `
-        <button class="pagination-btn" onclick="changeEstimuloPage(${currentEstimuloPage + 1})" ${currentEstimuloPage === totalPages ? 'disabled' : ''}>
-            Siguiente »
-        </button>
-    `;
-    
-    elements.paginationContainer.innerHTML = paginationHTML;
-}
-
-// Buscar estímulos
-function searchEstimulos() {
-    const term = elements.searchInput.value.toLowerCase();
-    const filtered = estimulosFiscales.filter(estimulo =>
-        estimulo.nombreContribucion.toLowerCase().includes(term) ||
-        estimulo.porcentajeDescuento.toString().includes(term) ||
-        estimulo.requisitos.toLowerCase().includes(term)
-    );
-    currentEstimuloPage = 1;
-    renderEstimulosTable(filtered);
-}
-
-// Manejar envío del formulario
-function handleEstimuloSubmit(e) {
-    e.preventDefault();
-    
-    const estimulo = {
-        idEstimulo: elements.idEstimulo.value,
-        nombreContribucion: elements.nombreContribucion.value,
-        caracteristicas: elements.caracteristicas.value,
-        porcentajeDescuento: parseFloat(elements.porcentajeDescuento.value),
-        requisitos: elements.requisitos.value
+// Esperar a que el DOM esté completamente cargado
+document.addEventListener("DOMContentLoaded", function() {
+    // Elementos del DOM
+    const elements = {
+        tableBody: document.querySelector("#accountsTable tbody"),
+        searchInput: document.getElementById("searchInput"),
+        form: document.getElementById("estimuloForm"),
+        nombreInput: document.getElementById("nombre_contribucion"),
+        caracteristicasInput: document.getElementById("caracteristicas"),
+        porcentajeInput: document.getElementById("porcentaje"),
+        requisitosInput: document.getElementById("requisitos"),
+        btnAdd: document.getElementById("btnAddOrUpdate"),
+        btnCancel: document.getElementById("btnCancel"),
+        formTitle: document.getElementById("formTitle"),
+        pagination: document.querySelector(".pagination"),
+        btnOpenModal: document.getElementById("btnOpenModal"),
+        btnCloseModal: document.getElementById("btnCloseModal"),
+        btnCloseViewModal: document.getElementById("btnCloseViewModal")
     };
 
-    if (isEditingEstimulo) {
-        estimulosFiscales[currentEstimuloIndex] = estimulo;
-    } else {
-        estimulosFiscales.push(estimulo);
-    }
+    // ===== FUNCIONES PRINCIPALES =====
+    function renderTable(data) {
+        const filteredData = filteredEstimulos(data);
+        elements.tableBody.innerHTML = "";
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedData = filteredData.slice(start, end);
 
-    closeEstimuloModal();
-    renderEstimulosTable(estimulosFiscales);
-}
-
-// Abrir modal de estímulo
-function openEstimuloModal() {
-    elements.modalOverlay.style.display = 'block';
-}
-
-// Cerrar modal de estímulo
-function closeEstimuloModal() {
-    elements.modalOverlay.style.display = 'none';
-    resetEstimuloForm();
-}
-
-// Reiniciar formulario
-function resetEstimuloForm() {
-    elements.form.reset();
-    isEditingEstimulo = false;
-    currentEstimuloIndex = null;
-    elements.formTitle.textContent = "Registrar Estímulo Fiscal";
-    elements.btnSave.textContent = "Guardar";
-}
-
-// Editar estímulo
-function editEstimulo(index) {
-    const estimulo = estimulosFiscales[index];
-    elements.idEstimulo.value = estimulo.idEstimulo;
-    elements.nombreContribucion.value = estimulo.nombreContribucion;
-    elements.caracteristicas.value = estimulo.caracteristicas;
-    elements.porcentajeDescuento.value = estimulo.porcentajeDescuento;
-    elements.requisitos.value = estimulo.requisitos;
-    
-    isEditingEstimulo = true;
-    currentEstimuloIndex = index;
-    elements.formTitle.textContent = "Editar Estímulo Fiscal";
-    elements.btnSave.textContent = "Actualizar";
-    openEstimuloModal();
-}
-
-// Eliminar estímulo
-function deleteEstimulo(index) {
-    if (confirm("¿Confirmar eliminación de este estímulo fiscal?")) {
-        estimulosFiscales.splice(index, 1);
-        const totalPages = Math.ceil(estimulosFiscales.length / estimulosPerPage);
-        if (currentEstimuloPage > totalPages && totalPages > 0) {
-            currentEstimuloPage = totalPages;
+        if (paginatedData.length === 0) {
+            elements.tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="no-data">No se encontraron estímulos fiscales</td>
+                </tr>
+            `;
+            renderPagination(0);
+            aplicarEstilosATabla();
+            return;
         }
-        renderEstimulosTable(estimulosFiscales);
+
+        paginatedData.forEach((estimulo, index) => {
+            const row = `
+                <tr>
+                    <td>${estimulo.nombre_contribucion}</td>
+                    <td>${estimulo.porcentaje_descuento}%</td>
+                    <td title="${estimulo.caracteristicas}">
+                        ${estimulo.caracteristicas.substring(0, 30)}${estimulo.caracteristicas.length > 30 ? '...' : ''}
+                    </td>
+                    <td title="${estimulo.requisitos}">
+                        ${estimulo.requisitos.substring(0, 30)}${estimulo.requisitos.length > 30 ? '...' : ''}
+                    </td>
+                    <td class="actions">
+                        <button class="action-btn edit" onclick="editEstimulo(${start + index})">
+                            <img src="/Assets/editor.png" alt="Editar">
+                        </button>
+                        <button class="action-btn delete" onclick="deleteEstimulo(${start + index})">
+                            <img src="/Assets/eliminar.png" alt="Eliminar">
+                        </button>
+                        <button class="action-btn view" onclick="viewEstimulo(${start + index})">
+                            <img src="/Assets/visualizar.png" alt="Ver">
+                        </button>
+                    </td>
+                </tr>
+            `;
+            elements.tableBody.insertAdjacentHTML("beforeend", row);
+        });
+
+        renderPagination(filteredData.length);
+        aplicarEstilosATabla();
     }
+
+    function renderPagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / rowsPerPage);
+        elements.pagination.innerHTML = '';
+
+        if (totalPages <= 1) return;
+
+        // Botón Anterior
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '« Anterior';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener('click', () => changePage(currentPage - 1));
+        elements.pagination.appendChild(prevBtn);
+
+        // Números de página
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            if (i === currentPage) {
+                pageBtn.classList.add('active');
+            }
+            pageBtn.addEventListener('click', () => changePage(i));
+            elements.pagination.appendChild(pageBtn);
+        }
+
+        // Botón Siguiente
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'Siguiente »';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener('click', () => changePage(currentPage + 1));
+        elements.pagination.appendChild(nextBtn);
+    }
+
+    // ===== FUNCIONES CRUD =====
+    function handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!elements.nombreInput.value || !elements.porcentajeInput.value) {
+            alert("Por favor complete los campos requeridos");
+            return;
+        }
+
+        const estimulo = {
+            nombre_contribucion: elements.nombreInput.value,
+            porcentaje_descuento: parseInt(elements.porcentajeInput.value),
+            caracteristicas: elements.caracteristicasInput.value,
+            requisitos: elements.requisitosInput.value
+        };
+
+        if (isEditing) {
+            estimulosFiscales[currentIndex] = estimulo;
+        } else {
+            estimulosFiscales = [estimulo, ...estimulosFiscales];
+        }
+
+        currentPage = 1;
+        elements.searchInput.value = '';
+        
+        closeModal();
+        renderTable(estimulosFiscales);
+        showNotification(isEditing ? "Estímulo actualizado" : "Estímulo agregado");
+    }
+
+    function filteredEstimulos(data) {
+        const term = elements.searchInput.value.toLowerCase();
+        if (!term) return data;
+        
+        return data.filter(estimulo =>
+            estimulo.nombre_contribucion.toLowerCase().includes(term) ||
+            (estimulo.caracteristicas && estimulo.caracteristicas.toLowerCase().includes(term)) ||
+            (estimulo.requisitos && estimulo.requisitos.toLowerCase().includes(term))
+        );
+    }
+
+    // ===== FUNCIONES DE INTERFAZ =====
+    window.changePage = function(page) {
+        currentPage = page;
+        renderTable(estimulosFiscales);
+    };
+
+    window.editEstimulo = function(index) {
+        const estimulo = estimulosFiscales[index];
+        elements.nombreInput.value = estimulo.nombre_contribucion;
+        elements.porcentajeInput.value = estimulo.porcentaje_descuento;
+        elements.caracteristicasInput.value = estimulo.caracteristicas;
+        elements.requisitosInput.value = estimulo.requisitos;
+        
+        isEditing = true;
+        currentIndex = index;
+        elements.formTitle.textContent = "Editar Estímulo Fiscal";
+        elements.btnAdd.textContent = "Actualizar";
+        
+        openModal();
+    };
+
+    window.deleteEstimulo = function(index) {
+        if (confirm("¿Está seguro de eliminar este estímulo fiscal?")) {
+            estimulosFiscales.splice(index, 1);
+            
+            const filtered = filteredEstimulos(estimulosFiscales);
+            const totalPages = Math.ceil(filtered.length / rowsPerPage);
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            }
+            
+            renderTable(estimulosFiscales);
+            showNotification("Estímulo eliminado");
+        }
+    };
+
+    window.viewEstimulo = function(index) {
+        const estimulo = estimulosFiscales[index];
+        const infoContent = document.getElementById("infoContent");
+        
+        infoContent.innerHTML = `
+            <p><strong>Nombre:</strong> ${estimulo.nombre_contribucion}</p>
+            <p><strong>Porcentaje de descuento:</strong> ${estimulo.porcentaje_descuento}%</p>
+            <p><strong>Características:</strong> ${estimulo.caracteristicas}</p>
+            <p><strong>Requisitos:</strong><br>${estimulo.requisitos.replace(/\n/g, '<br>')}</p>
+        `;
+        
+        openViewModal();
+    };
+
+    // ===== MANEJO DE MODALES =====
+    function openModal() {
+        document.getElementById("modalOverlay").style.display = "flex";
+    }
+    
+    function closeModal() {
+        document.getElementById("modalOverlay").style.display = "none";
+        elements.form.reset();
+        isEditing = false;
+        elements.formTitle.textContent = "Agregar Estímulo Fiscal";
+        elements.btnAdd.textContent = "Agregar";
+    }
+
+    function openViewModal() {
+        document.getElementById("viewModalOverlay").style.display = "block";
+    }
+
+    function closeViewModal() {
+        document.getElementById("viewModalOverlay").style.display = "none";
+    }
+
+    function resetForm() {
+        elements.form.reset();
+        isEditing = false;
+        currentIndex = null;
+        elements.formTitle.textContent = "Agregar Estímulo Fiscal";
+        elements.btnAdd.textContent = "Agregar";
+    }
+
+    // ===== FUNCIONES AUXILIARES =====
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            setTimeout(() => notification.remove(), 500);
+        }, 3000);
+    }
+
+    // ===== INICIALIZACIÓN =====
+    // Configurar event listeners
+    elements.form.addEventListener("submit", handleSubmit);
+    elements.btnCancel.addEventListener("click", closeModal);
+    elements.searchInput.addEventListener("input", function() {
+        currentPage = 1;
+        renderTable(estimulosFiscales);
+    });
+    
+    elements.btnOpenModal.addEventListener("click", function() {
+        resetForm();
+        openModal();
+    });
+    
+    elements.btnCloseModal.addEventListener("click", closeModal);
+    elements.btnCloseViewModal.addEventListener("click", closeViewModal);
+    
+    // Renderizar tabla inicial
+    renderTable(estimulosFiscales);
+});
+
+function aplicarEstilosATabla() {
+    const celdas = document.querySelectorAll(".data-table td, .data-table th");
+    celdas.forEach(celda => {
+        celda.style.fontSize = "15px";
+        celda.style.padding = "6px 8px";
+        celda.style.lineHeight = "1.2";
+    });
+
+    const filas = document.querySelectorAll(".data-table tr");
+    filas.forEach(fila => {
+        fila.style.height = "auto";
+    });
+
+    const iconos = document.querySelectorAll(".action-btn img");
+    iconos.forEach(icono => {
+        icono.style.width = "41px";
+        icono.style.height = "41px";
+    });
 }
 
-// Cambiar página
-function changeEstimuloPage(page) {
-    currentEstimuloPage = page;
-    renderEstimulosTable(estimulosFiscales);
-}
-
-// Hacer funciones disponibles globalmente
-window.editEstimulo = editEstimulo;
-window.deleteEstimulo = deleteEstimulo;
-window.changeEstimuloPage = changeEstimuloPage;
+// Ejecutar al cargar la página
+document.addEventListener("DOMContentLoaded", aplicarEstilosATabla);
