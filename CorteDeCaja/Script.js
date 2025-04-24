@@ -1,6 +1,5 @@
 // Datos de ejemplo para movimientos de caja (simulando una base de datos)
 const cortesDeCaja = {
-    // Corte de hoy
     '2025-04-02': {
         encargado: "Amelia Lopez",
         movimientos: [
@@ -11,7 +10,6 @@ const cortesDeCaja = {
         cerrado: false,
         horaCierre: null
     },
-    // Corte de ayer
     '2025-04-01': {
         encargado: "Amelia Lopez",
         movimientos: [
@@ -21,7 +19,6 @@ const cortesDeCaja = {
         cerrado: true,
         horaCierre: '18:30 PM'
     },
-    // Corte de hace 2 días
     '2025-03-31': {
         encargado: "Carlos Martínez",
         movimientos: [
@@ -65,12 +62,30 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.selectorFecha.value = today;
     fechaSeleccionada = today;
     
-    // Cargar corte del día actual
+    // Cargar (o generar) corte del día actual
     cargarCorte(today);
     
     // Event listeners
     elements.btnBuscarCorte.addEventListener('click', buscarCortePorFecha);
     elements.btnHoy.addEventListener('click', cargarCorteHoy);
+    elements.btnImprimirCorte.addEventListener('click', () => { 
+        window.print(); 
+    });
+    // Ocultar botones antes de imprimir y restaurar después
+window.onbeforeprint = () => {
+    elements.btnImprimirCorte.style.display    = 'none';
+    elements.btnCerrarCorte.style.display      = 'none';
+    elements.btnBuscarCorte.style.display      = 'none';
+    elements.btnHoy.style.display              = 'none';
+  };
+  
+  window.onafterprint = () => {
+    elements.btnImprimirCorte.style.display    = '';
+    elements.btnCerrarCorte.style.display      = '';
+    elements.btnBuscarCorte.style.display      = '';
+    elements.btnHoy.style.display              = '';
+  };
+  
 });
 
 // Formatear fecha como DD/MM/AAAA
@@ -88,82 +103,80 @@ function cargarCorteHoy() {
 
 // Buscar corte por fecha seleccionada
 function buscarCortePorFecha() {
-    const fechaSeleccionada = elements.selectorFecha.value;
-    if (!fechaSeleccionada) {
-        alert('Por favor seleccione una fecha');
+    const sel = elements.selectorFecha.value;
+    if (!sel) {
+        alert('Por favor selecciona una fecha');
         return;
     }
-    cargarCorte(fechaSeleccionada);
+    cargarCorte(sel);
 }
 
-// Cargar corte específico
+// Cargar (o generar) corte específico
 function cargarCorte(fecha) {
+    currentPage = 1;
     fechaSeleccionada = fecha;
     corteActual = cortesDeCaja[fecha];
-    
+
+    // Si no existe, lo generamos automáticamente
     if (!corteActual) {
-        // Si no hay corte para esa fecha, mostrar vacío
-        mostrarCorteVacio();
-        alert('No se encontró corte de caja para la fecha seleccionada');
-        return;
+        cortesDeCaja[fecha] = {
+            encargado: elements.encargadoCaja.textContent || "Desconocido",
+            movimientos: [],
+            cerrado: false,
+            horaCierre: null
+        };
+        corteActual = cortesDeCaja[fecha];
     }
     
-    // Actualizar información general
+    // Actualizar info general
     elements.encargadoCaja.textContent = corteActual.encargado;
     elements.fechaActual.textContent = formatDate(fecha);
     elements.horaCierre.textContent = corteActual.horaCierre || '--:-- --';
     elements.totalMovimientos.textContent = corteActual.movimientos.length;
     
-    // Calcular totales
-    const totalEfectivo = corteActual.movimientos
-        .filter(m => m.tipoPago === 'Efectivo')
-        .reduce((sum, m) => sum + m.importe, 0);
+    // Calcular y actualizar totales
+    const sum = tipo => corteActual.movimientos
+        .filter(m => m.tipoPago === tipo)
+        .reduce((s, m) => s + m.importe, 0);
+
+    const efectivo = sum('Efectivo');
+    const trans  = sum('Transferencia');
+    const tarjeta= sum('Tarjeta');
+    const general= efectivo + trans + tarjeta;
+
+    elements.totalEfectivo.textContent       = formatCurrency(efectivo);
+    elements.totalTransferencias.textContent = formatCurrency(trans);
+    elements.totalTarjetas.textContent       = formatCurrency(tarjeta);
+    elements.totalGeneral.textContent        = formatCurrency(general);
     
-    const totalTransferencias = corteActual.movimientos
-        .filter(m => m.tipoPago === 'Transferencia')
-        .reduce((sum, m) => sum + m.importe, 0);
-    
-    const totalTarjetas = corteActual.movimientos
-        .filter(m => m.tipoPago === 'Tarjeta')
-        .reduce((sum, m) => sum + m.importe, 0);
-    
-    const totalGeneral = totalEfectivo + totalTransferencias + totalTarjetas;
-    
-    // Actualizar totales
-    elements.totalEfectivo.textContent = formatCurrency(totalEfectivo);
-    elements.totalTransferencias.textContent = formatCurrency(totalTransferencias);
-    elements.totalTarjetas.textContent = formatCurrency(totalTarjetas);
-    elements.totalGeneral.textContent = formatCurrency(totalGeneral);
-    
-    // Habilitar/deshabilitar botones según si el corte está cerrado
-    const esCorteDeHoy = fecha === new Date().toISOString().split('T')[0];
-    
+    // Botones según estado de cierre
+    const esHoy = fecha === new Date().toISOString().split('T')[0];
     if (corteActual.cerrado) {
         elements.btnImprimirCorte.disabled = false;
-        elements.btnCerrarCorte.disabled = true;
+        elements.btnCerrarCorte.disabled   = true;
     } else {
         elements.btnImprimirCorte.disabled = true;
-        elements.btnCerrarCorte.disabled = !esCorteDeHoy;
+        elements.btnCerrarCorte.disabled   = !esHoy;
     }
-    
-    // Renderizar movimientos
+
+    // Renderizar movimientos y paginación
     renderMovementsTable();
 }
 
-// Mostrar corte vacío
+// Mostrar corte vacío (ya no se usa para fechas nuevas)
 function mostrarCorteVacio() {
-    elements.encargadoCaja.textContent = '--';
-    elements.fechaActual.textContent = formatDate(fechaSeleccionada);
-    elements.horaCierre.textContent = '--:-- --';
-    elements.totalMovimientos.textContent = '0';
-    elements.totalEfectivo.textContent = '$0.00';
+    elements.encargadoCaja.textContent       = '--';
+    elements.fechaActual.textContent         = formatDate(fechaSeleccionada);
+    elements.horaCierre.textContent          = '--:-- --';
+    elements.totalMovimientos.textContent    = '0';
+    elements.totalEfectivo.textContent       = '$0.00';
     elements.totalTransferencias.textContent = '$0.00';
-    elements.totalTarjetas.textContent = '$0.00';
-    elements.totalGeneral.textContent = '$0.00';
-    elements.movementsTable.innerHTML = '';
-    elements.paginationContainer.innerHTML = '';
-    elements.btnImprimirCorte.disabled = true;
-    elements.btnCerrarCorte.disabled = true;
+    elements.totalTarjetas.textContent       = '$0.00';
+    elements.totalGeneral.textContent        = '$0.00';
+    elements.movementsTable.innerHTML        = '';
+    elements.paginationContainer.innerHTML   = '';
+    elements.btnImprimirCorte.disabled       = true;
+    elements.btnCerrarCorte.disabled         = true;
 }
 
 // Formatear moneda
@@ -173,87 +186,57 @@ function formatCurrency(amount) {
 
 // Renderizar tabla de movimientos
 function renderMovementsTable() {
-    if (!corteActual) {
-        elements.movementsTable.innerHTML = '';
+    elements.movementsTable.innerHTML      = '';
+    if (!corteActual || corteActual.movimientos.length === 0) {
         elements.paginationContainer.innerHTML = '';
         return;
     }
-    
-    elements.movementsTable.innerHTML = '';
-    
+
     const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedData = corteActual.movimientos.slice(start, end);
-    
-    paginatedData.forEach(movimiento => {
-        const row = `
-            <tr>
-                <td>${movimiento.fp}</td>
-                <td>${movimiento.clave}</td>
-                <td>${movimiento.concepto}</td>
-                <td>${movimiento.tipoPago}</td>
-                <td>${movimiento.cantidad}</td>
-                <td>${formatCurrency(movimiento.importe)}</td>
-            </tr>
-        `;
-        elements.movementsTable.insertAdjacentHTML('beforeend', row);
-    });
-    
+    const end   = start + rowsPerPage;
+    corteActual.movimientos.slice(start, end)
+        .forEach(mov => {
+            elements.movementsTable.insertAdjacentHTML('beforeend', `
+                <tr>
+                    <td>${mov.fp}</td>
+                    <td>${mov.clave}</td>
+                    <td>${mov.concepto}</td>
+                    <td>${mov.tipoPago}</td>
+                    <td>${mov.cantidad}</td>
+                    <td>${formatCurrency(mov.importe)}</td>
+                </tr>
+            `);
+        });
+
     renderPagination();
 }
 
 // Renderizar paginación
 function renderPagination() {
-    if (!corteActual) {
-        elements.paginationContainer.innerHTML = '';
-        return;
-    }
-    
     const totalPages = Math.ceil(corteActual.movimientos.length / rowsPerPage);
-    
     if (totalPages <= 1) {
         elements.paginationContainer.innerHTML = '';
         return;
     }
-    
-    let paginationHTML = `
-        <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-            « Anterior
-        </button>
+
+    let html = `
+        <button onclick="changePage(${currentPage - 1})" ${currentPage===1?'disabled':''}>« Anterior</button>
     `;
+    const start = Math.max(1, currentPage - 2);
+    const end   = Math.min(totalPages, currentPage + 2);
 
-    const startPage = Math.max(1, currentPage - 2);
-    const endPage = Math.min(totalPages, currentPage + 2);
-
-    if (startPage > 1) {
-        paginationHTML += `
-            <button class="pagination-btn" onclick="changePage(1)">1</button>
-            ${startPage > 2 ? '<span>...</span>' : ''}
-        `;
+    if (start > 1) {
+        html += `<button onclick="changePage(1)">1</button>${start>2?'...':''}`;
     }
-
-    for (let i = startPage; i <= endPage; i++) {
-        paginationHTML += `
-            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
-                ${i}
-            </button>
-        `;
+    for (let i = start; i <= end; i++) {
+        html += `<button class="${i===currentPage?'active':''}" onclick="changePage(${i})">${i}</button>`;
     }
-
-    if (endPage < totalPages) {
-        paginationHTML += `
-            ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
-            <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
-        `;
+    if (end < totalPages) {
+        html += `${end<totalPages-1?'...':''}<button onclick="changePage(${totalPages})">${totalPages}</button>`;
     }
+    html += `<button onclick="changePage(${currentPage + 1})" ${currentPage===totalPages?'disabled':''}>Siguiente »</button>`;
 
-    paginationHTML += `
-        <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-            Siguiente »
-        </button>
-    `;
-    
-    elements.paginationContainer.innerHTML = paginationHTML;
+    elements.paginationContainer.innerHTML = html;
 }
 
 // Cambiar página
@@ -262,29 +245,18 @@ window.changePage = function(page) {
     renderMovementsTable();
 };
 
-// Imprimir corte
-elements.btnImprimirCorte.addEventListener('click', () => {
-    window.print();
-});
+// Imprimir corte (ya registrado en DOMContentLoaded)
 
 // Cerrar caja
 elements.btnCerrarCorte.addEventListener('click', () => {
-    if (confirm('¿Está seguro que desea cerrar la caja?')) {
+    if (confirm('¿Seguro que deseas cerrar la caja?')) {
         const now = new Date();
-        const horaCierre = now.toLocaleTimeString('es-MX', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        });
-        
-        // Actualizar en la "base de datos"
-        cortesDeCaja[fechaSeleccionada].cerrado = true;
-        cortesDeCaja[fechaSeleccionada].horaCierre = horaCierre;
-        
-        // Actualizar UI
-        elements.horaCierre.textContent = horaCierre;
-        elements.btnCerrarCorte.disabled = true;
-        elements.btnImprimirCorte.disabled = false;
-        
+        const hora = now.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
+        cortesDeCaja[fechaSeleccionada].cerrado     = true;
+        cortesDeCaja[fechaSeleccionada].horaCierre = hora;
+        elements.horaCierre.textContent            = hora;
+        elements.btnCerrarCorte.disabled           = true;
+        elements.btnImprimirCorte.disabled         = false;
         alert('Caja cerrada correctamente');
     }
 });
