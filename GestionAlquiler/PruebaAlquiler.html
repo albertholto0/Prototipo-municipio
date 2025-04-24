@@ -65,10 +65,11 @@
     <div class="modal-content">
       <span class="btn-close" id="btnCloseModal">&times;</span>
       <div class="form-container" id="formContainer">
-        <h3 class="text-center" id="formTitle">Agregar Base Catastral</h3>
+        <h3 class="text-center" id="formTitle">Agregar Alquiler</h3>
         <form id="accountForm">
+
           <!-- Primera fila: Clave catastral y Base catastral -->
-          <div class="form-inline">
+          <!-- <div class="form-inline">
             <div class="form-group">
               <label for="claveCatastral">Clave catastral:</label>
               <input type="text" id="claveCatastral" name="claveCatastral" placeholder="Ej. CLAVE-123" required>
@@ -77,12 +78,12 @@
               <label for="baseCatastral">Base catastral:</label>
               <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 1500 m²" required>
             </div>
-          </div>
+          </div> -->
 
           <!-- Segunda fila: Nombre propietario (cada uno en su propia fila) -->
           <div class="form-group">
-            <label for="nombrePropietario">Nombre propietario:</label>
-            <input type="text" id="nombrePropietario" name="nombrePropietario" placeholder="Ej. Juan Pérez" required>
+            <label for="nombrePropietario">Descripcion:</label>
+            <input type="text" id="nombreDescripcion" name="nombreDescripcion" placeholder="Ej. Juan Pérez" required>
           </div>
 
           <!-- Tercera fila: Ubicación -->
@@ -91,48 +92,77 @@
             <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
           </div>
 
+
+
+          <div class="form-inline">
+            <div class="form-group">
+                <label for="fechaInicio">Fecha de Inicio:</label>
+                <input type="date" id="fechaInicio" name="fechaInicio" required>
+            </div>
+            <div class="form-group">
+                <label for="fechaCierre">Fecha de Cierre:</label>
+                <input type="date" id="fechaCierre" name="fechaCierre" required>
+            </div>
+        </div>
+
+
+
+
+
           <!-- Cuarta fila: Valor terreno y Valor construcción -->
           <div class="form-inline">
             <div class="form-group">
-              <label for="valorTerreno">Valor terreno:</label>
-              <input type="number" id="valorTerreno" name="valorTerreno" placeholder="Ej. 50000" required>
+              <label for="valorTerreno">Monto Final:</label>
+              <input type="number" id="valorFinal" name="valorFinal" placeholder="Ej. 50000" required>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="valorConstruccion">Valor construcción:</label>
               <input type="number" id="valorConstruccion" name="valorConstruccion" placeholder="Ej. 75000" required>
-            </div>
+            </div> -->
           </div>
+
+
+
 
           <!-- Quinta fila: Impuesto calculado y Uso de suelo -->
           <div class="form-inline">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="impuestoCalculado">Impuesto calculado:</label>
               <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" required>
-            </div>
+            </div> -->
             <div class="form-group">
               <label for="usoSuelo">Uso de suelo:</label>
-              <select id="usoSuelo" name="usoSuelo" required>
+
+              <!-- <select id="usoSuelo" name="usoSuelo" required>
                 <option value="">Selecciona un uso</option>
                 <option value="habitacional">Habitacional</option>
                 <option value="comercial">Comercial</option>
                 <option value="industrial">Industrial</option>
                 <option value="mixto">Mixto</option>
                 <option value="otro">Otro</option>
-              </select>
+              </select> -->
+
+              <select id="estadoAlquiler" name="estadoAlquiler" required>
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="Activo">Activo</option>
+                <option value="Finalizado">Finalizado</option>
+                <option value="Pendiente">Pendiente</option>
+            </select>
             </div>
           </div>
 
-          <!-- Sexta fila: Fecha avalúo y Historial avalúos -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="fechaAvaluo">Fecha avalúo:</label>
-              <input type="date" id="fechaAvaluo" name="fechaAvaluo" required>
-            </div>
-            <div class="form-group">
-              <label for="historialAvaluos">Historial avalúos:</label>
-              <input type="text" id="historialAvaluos" name="historialAvaluos" placeholder="Ej. 2021,2022" required>
-            </div>
-          </div>
+          <div class="form-group">
+            <label for="idContribuyente">Contribuyente:</label>
+            <select id="idContribuyente" name="Contribuyente" required>
+                <option value="">Seleccione un contribuyente</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="idConceptos">Concepto:</label>
+            <select id="idConceptos" name="Conceptos" required>
+                <option value="">Seleccione un concepto</option>
+            </select>
+        </div>
 
           <!-- Contenedor para botones alineados a la derecha -->
           <div class="form-actions">

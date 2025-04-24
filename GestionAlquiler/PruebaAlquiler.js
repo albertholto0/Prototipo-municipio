@@ -1,28 +1,20 @@
 // Datos iniciales de ejemplo para Bases Catastrales
-let basesCatastrales = [
+let GestionAlquileres = [
     {
-      claveCatastral: "CLAVE-123",
-      nombrePropietario: "Juan Pérez",
+      nombreDescripcion: "Juan Pérez",
       ubicacion: "Calle Falsa 123",
-      baseCatastral: "1500 m²",
-      valorTerreno: 50000,
-      valorConstruccion: 75000,
-      impuestoCalculado: 1250,
+      valorFinal: 50000,
       fechaAvaluo: "2023-05-10",
-      historialAvaluos: "2021,2022",
-      usoSuelo: "habitacional"
+      fechaAvaluo: "2023-06-10",
+      estadoAlquiler: "Activo"
     },
     {
-      claveCatastral: "CLAVE-456",
-      nombrePropietario: "María López",
-      ubicacion: "Av. Siempre Viva 742",
-      baseCatastral: "2000 m²",
-      valorTerreno: 60000,
-      valorConstruccion: 90000,
-      impuestoCalculado: 1500,
-      fechaAvaluo: "2023-06-15",
-      historialAvaluos: "2022",
-      usoSuelo: "comercial"
+      nombreDescripcion: "Maria",
+      ubicacion: "Calle Falsa 123",
+      valorFinal: 20000,
+      fechaAvaluo: "2023-07-10",
+      fechaAvaluo: "2023-08-10",
+      estadoAlquiler: "Activo"
     }
   ];
   
@@ -37,16 +29,21 @@ let basesCatastrales = [
     tableBody: document.querySelector("#accountsTable tbody"),
     searchInput: document.getElementById("searchInput"),
     form: document.getElementById("accountForm"),
-    claveCatastral: document.getElementById("claveCatastral"),
+    //claveCatastral: document.getElementById("claveCatastral"),
     nombrePropietario: document.getElementById("nombrePropietario"),
     ubicacion: document.getElementById("ubicacion"),
-    baseCatastral: document.getElementById("baseCatastral"),
-    valorTerreno: document.getElementById("valorTerreno"),
-    valorConstruccion: document.getElementById("valorConstruccion"),
-    impuestoCalculado: document.getElementById("impuestoCalculado"),
-    fechaAvaluo: document.getElementById("fechaAvaluo"),
-    historialAvaluos: document.getElementById("historialAvaluos"),
-    usoSuelo: document.getElementById("usoSuelo"),
+    //baseCatastral: document.getElementById("baseCatastral"),
+
+    fechaInicio: document.getElementById("fechaInicio"),
+    fechaCierre: document.getElementById("fechaCierre"),
+    valorFinal: document.getElementById("valorFinal"),
+    estadoAlquiler: document.getElementById("estadoAlquiler"),
+    //valorConstruccion: document.getElementById("valorConstruccion"),
+    //impuestoCalculado: document.getElementById("impuestoCalculado"),
+    //fechaAvaluo: document.getElementById("fechaAvaluo"),
+    //historialAvaluos: document.getElementById("historialAvaluos"),
+    
+
     btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
     btnCancel: document.getElementById("btnCancel"),
     formTitle: document.getElementById("formTitle"),
@@ -69,11 +66,12 @@ let basesCatastrales = [
     paginatedData.forEach((base, index) => {
       const row = `
         <tr>
-            <td>${base.claveCatastral}</td>
-            <td>${base.nombrePropietario}</td>
-            <td>${base.ubicacion}</td>
+            <td>${base.nombreDescripcion}</td>
+            <td>${base.fechaInicio}</td>
+            <td>${base.fechaCierre}</td>
+
             <td>${base.baseCatastral}</td>
-            <td>${base.usoSuelo}</td>
+            <td>${base.estadoAlquiler}</td>
             <td>
                 <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
                     <img src="/Assets/editor.png" class="action-icon">
@@ -160,7 +158,7 @@ let basesCatastrales = [
   */
   function filteredBases() {
     const term = elements.searchInput.value.toLowerCase();
-    return basesCatastrales.filter(base =>
+    return GestionAlquileres.filter(base =>
       base.claveCatastral.toLowerCase().includes(term) ||
       base.nombrePropietario.toLowerCase().includes(term)
     );
@@ -173,22 +171,26 @@ let basesCatastrales = [
   function handleSubmit(e) {
     e.preventDefault();
     const base = {
-      claveCatastral: elements.claveCatastral.value,
-      nombrePropietario: elements.nombrePropietario.value,
+      //claveCatastral: elements.claveCatastral.value,
+      nombreDescripcion: elements.nombreDescripcion.value,
       ubicacion: elements.ubicacion.value,
-      baseCatastral: elements.baseCatastral.value,
-      valorTerreno: elements.valorTerreno.value,
-      valorConstruccion: elements.valorConstruccion.value,
+      //baseCatastral: elements.baseCatastral.value,
+      fechaInicio: elements.fechaInicio.value,
+      fechaCierre: elements.fechaCierre.value,
+
+      valorFinal: elements.valorFinal.value,
+      estadoAlquiler: elements.estadoAlquiler.value,
+      //valorConstruccion: elements.valorConstruccion.value,
       impuestoCalculado: elements.impuestoCalculado.value,
       fechaAvaluo: elements.fechaAvaluo.value,
       historialAvaluos: elements.historialAvaluos.value,
-      usoSuelo: elements.usoSuelo.value
+      
     };
   
     if (isEditing) {
-      basesCatastrales[currentIndex] = base;
+      GestionAlquileres[currentIndex] = base;
     } else {
-      basesCatastrales.push(base);
+      GestionAlquileres.push(base);
     }
   
     closeModal();
@@ -209,20 +211,26 @@ let basesCatastrales = [
   * @param {number} index - Índice de la base a editar.
   */
   window.editAccount = function (index) {
-    const base = basesCatastrales[index];
-    elements.claveCatastral.value = base.claveCatastral;
-    elements.nombrePropietario.value = base.nombrePropietario;
+    const base = GestionAlquileres[index];
+    //elements.claveCatastral.value = base.claveCatastral;
+    elements.nombreDescripcion.value = base.nombreDescripcion;
     elements.ubicacion.value = base.ubicacion;
-    elements.baseCatastral.value = base.baseCatastral;
-    elements.valorTerreno.value = base.valorTerreno;
-    elements.valorConstruccion.value = base.valorConstruccion;
+    //elements.baseCatastral.value = base.baseCatastral;
+    elements.fechaInicio.value = base.fechaInicio;
+    elements.fechaCierre.value = base.fechaCierre;
+
+    elements.valorFinal.value = base.valorFinal;
+
+    elements.estadoAlquiler.value = base.estadoAlquiler;
+
+    //elements.valorConstruccion.value = base.valorConstruccion;
     elements.impuestoCalculado.value = base.impuestoCalculado;
-    elements.fechaAvaluo.value = base.fechaAvaluo;
+    //elements.fechaAvaluo.value = base.fechaAvaluo;
     elements.historialAvaluos.value = base.historialAvaluos;
-    elements.usoSuelo.value = base.usoSuelo;
+    
     isEditing = true;
     currentIndex = index;
-    elements.formTitle.textContent = "Editar Base Catastral";
+    elements.formTitle.textContent = "Editar Alquiler";
     elements.btnAddOrUpdate.textContent = "Actualizar";
     openModal();
   };
@@ -233,7 +241,7 @@ let basesCatastrales = [
   */
   window.deleteAccount = function (index) {
     if (confirm("¿Confirmar eliminación?")) {
-      basesCatastrales.splice(index, 1);
+      GestionAlquileres.splice(index, 1);
       const totalPages = Math.ceil(filteredBases().length / rowsPerPage);
       if (currentPage > totalPages && totalPages > 0) {
         currentPage = totalPages;
@@ -249,13 +257,13 @@ let basesCatastrales = [
     elements.form.reset();
     isEditing = false;
     currentIndex = null;
-    elements.formTitle.textContent = "Registrar Base Catastral";
+    elements.formTitle.textContent = "Registrar Alquiler";
     elements.btnAddOrUpdate.textContent = "Agregar";
   }
   
   /* === INICIALIZACIÓN === */
   document.addEventListener("DOMContentLoaded", () => {
-    renderTable(basesCatastrales);
+    renderTable(GestionAlquileres);
   });
   
   // Elementos del modal
@@ -286,19 +294,23 @@ let basesCatastrales = [
   
   // Función para ver la información completa de una base catastral y abrir el modal de "Ver información"
   window.viewAccount = function(index) {
-    const base = basesCatastrales[index];
+    const base = GestionAlquileres[index];
     const infoContent = document.getElementById("infoContent");
     infoContent.innerHTML = `
-      <p><strong>Clave Catastral:</strong> ${base.claveCatastral}</p>
+      
       <p><strong>Nombre Propietario:</strong> ${base.nombrePropietario}</p>
       <p><strong>Ubicación:</strong> ${base.ubicacion}</p>
-      <p><strong>Base Catastral:</strong> ${base.baseCatastral}</p>
-      <p><strong>Valor Terreno:</strong> ${base.valorTerreno}</p>
-      <p><strong>Valor Construcción:</strong> ${base.valorConstruccion}</p>
+
+      <p><strong>Fecha Inicio:</strong> ${base.fechaInicio}</p>
+      <p><strong>Fecha Cierre:</strong> ${base.fechaCierre}</p>
+
+      <p><strong>Valor Terreno:</strong> ${base.valorFinal}</p>
+
+      <p><strong>Uso de Suelo:</strong> ${base.estadoAlquiler}</p>
+
       <p><strong>Impuesto Calculado:</strong> ${base.impuestoCalculado}</p>
-      <p><strong>Fecha Avalúo:</strong> ${base.fechaAvaluo}</p>
       <p><strong>Historial Avalúos:</strong> ${base.historialAvaluos}</p>
-      <p><strong>Uso de Suelo:</strong> ${base.usoSuelo}</p>
+      
     `;
     openViewModal();
   };
@@ -321,7 +333,7 @@ let basesCatastrales = [
   
   // Inicialización: renderiza la tabla al cargar la página
   document.addEventListener("DOMContentLoaded", () => {
-    renderTable(basesCatastrales);
+    renderTable(GestionAlquileres);
   });
   
   elements.form.addEventListener("submit", handleSubmit);
