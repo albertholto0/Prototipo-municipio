@@ -7,18 +7,21 @@
     <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="Styles.css">
     <script src="Script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
     <header>
-        <div class="logo-left">
-            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-        </div>
-        <div class="title">
-            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        <div class="header-left"> <!-- Contenedor flex nuevo -->
+            <div class="logo-left">
+                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
         </div>
         <!-- Placeholder para el menú -->
-        <div id="nav-placeholder"></div>
+        <div id="nav-placeholder" class="no-print"></div>
     </header>
 
     <main class="main-container">
@@ -31,7 +34,7 @@
         <!-- Selector de fecha en una sola línea -->
         <div class="date-controls">
             <div class="search-container">
-                <label for="selectorFecha">Buscar corte:</label>
+                <label for="selectorFecha" class="no-print">Buscar corte:</label>
                 <input type="date" id="selectorFecha" name="selectorFecha">
                 <button class="btn-search" id="btnBuscarCorte">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -88,8 +91,8 @@
 
         <!-- Controles de caja -->
         <div class="date-controls">
-            <button class="btn-agregar" id="btnImprimirCorte" disabled>Imprimir Corte</button>
-            <button class="btn-cancel" id="btnCerrarCorte">Cerrar Caja</button>
+            <button class="btn-agregar"  class="no-print" id="btnImprimirCorte" disabled>Imprimir Corte</button>
+            <button class="btn-cancel"  class="no-print" id="btnCerrarCorte">Cerrar Caja</button>
         </div>
 
         <!-- Tabla de movimientos -->
