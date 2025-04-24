@@ -1,4 +1,3 @@
-// Control del modal
 const modal = document.getElementById('modalConcepto');
 const btnAgregarConcepto = document.getElementById('btnAgregarConcepto');
 const btnCancelarModal = document.getElementById('btnCancelarModal');
@@ -13,24 +12,17 @@ const deletePasswordInput = document.getElementById('deletePassword');
 
 // Simulación de datos iniciales
 let conceptos = [
-    { id: 1, descripcion: 'Agua potable', tipo_servicio: 'Agua', cuota: 150.00, periodicidad: 'Mensual', id_seccion: 1, id_cuenta_contable: 101, active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() },
-    { id: 2, descripcion: 'Recolección de basura', tipo_servicio: 'Basura', cuota: 100.00, periodicidad: 'Mensual', id_seccion: 2, id_cuenta_contable: 102, active: true, accessDate: generarFechaAleatoria(), accessTime: generarHoraAleatoria() }
+    { id: 1, descripcion: 'Agua potable', tipo_servicio: 'Agua', cuota: 150.00, periodicidad: 'Mensual', id_seccion: 1, id_cuenta_contable: 101 },
+    { id: 2, descripcion: 'Recolección de basura', tipo_servicio: 'Basura', cuota: 100.00, periodicidad: 'Mensual', id_seccion: 2, id_cuenta_contable: 102 },
+    { id: 3, descripcion: 'Alumbrado público', tipo_servicio: 'Electricidad', cuota: 200.00, periodicidad: 'Mensual', id_seccion: 3, id_cuenta_contable: 103 },
+    { id: 4, descripcion: 'Mantenimiento de parques', tipo_servicio: 'Parques', cuota: 50.00, periodicidad: 'Trimestral', id_seccion: 4, id_cuenta_contable: 104 },
+    { id: 5, descripcion: 'Pavimentación de calles', tipo_servicio: 'Infraestructura', cuota: 500.00, periodicidad: 'Anual', id_seccion: 5, id_cuenta_contable: 105 },
+    { id: 6, descripcion: 'Servicio de drenaje', tipo_servicio: 'Drenaje', cuota: 120.00, periodicidad: 'Mensual', id_seccion: 6, id_cuenta_contable: 106 },
+    { id: 7, descripcion: 'Reparación de banquetas', tipo_servicio: 'Infraestructura', cuota: 300.00, periodicidad: 'Semestral', id_seccion: 7, id_cuenta_contable: 107 },
+    { id: 8, descripcion: 'Recolección de escombros', tipo_servicio: 'Basura', cuota: 80.00, periodicidad: 'Mensual', id_seccion: 8, id_cuenta_contable: 108 },
+    { id: 9, descripcion: 'Limpieza de ríos', tipo_servicio: 'Medio Ambiente', cuota: 250.00, periodicidad: 'Anual', id_seccion: 9, id_cuenta_contable: 109 },
+    { id: 10, descripcion: 'Control de plagas', tipo_servicio: 'Salud Pública', cuota: 180.00, periodicidad: 'Semestral', id_seccion: 10, id_cuenta_contable: 110 }
 ];
-
-// Generar fecha aleatoria
-function generarFechaAleatoria() {
-    const start = new Date(2020, 0, 1);
-    const end = new Date();
-    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    return date.toISOString().split('T')[0];
-}
-
-// Generar hora aleatoria
-function generarHoraAleatoria() {
-    const hours = Math.floor(Math.random() * 24).toString().padStart(2, '0');
-    const minutes = Math.floor(Math.random() * 60).toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-}
 
 // Cargar datos en la tabla
 function cargarTablaConceptos(filteredConceptos = null) {
@@ -139,9 +131,6 @@ conceptForm.addEventListener('submit', (e) => {
         periodicidad: periodicidad,
         id_seccion: parseInt(document.getElementById('id_seccion').value),
         id_cuenta_contable: parseInt(document.getElementById('id_cuenta_contable').value),
-        active: true,
-        accessDate: generarFechaAleatoria(),
-        accessTime: generarHoraAleatoria()
     };
 
     // Buscar si el concepto ya existe
