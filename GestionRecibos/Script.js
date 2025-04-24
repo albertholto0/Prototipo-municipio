@@ -263,8 +263,8 @@ function renderTable(data) {
                 <td>$${recibo.total.toFixed(2)}</td>
                 <td>${recibo.formaPago}</td>
                 <td>
-                    <button class="action-btn edit" onclick="editarRecibo('${recibo.folio}')" title="Editar">
-                        <img src="/Assets/editor.png" class="action-icon">
+                    <button class="action-btn view" onclick="visualizarRecibo('${recibo.folio}')" title="Visualizar">
+                        <img src="/Assets/ver.png" class="action-icon">
                     </button>
                     <button class="action-btn print" onclick="imprimirRecibo('${recibo.folio}')" title="Imprimir">
                         <img src="/Assets/visualizar.png" class="action-icon">
@@ -356,6 +356,19 @@ function imprimirRecibo(folio) {
 
 function cerrarModal() {
     elements.modalOverlay.style.display = "none";
+    
+    // Restablecer los botones a su estado original
+    elements.btnGuardarRecibo.style.display = "inline-block";
+    elements.btnCancelarRecibo.textContent = "Cancelar";
+    
+    // Eliminar los atributos readonly y disabled de los campos
+    const formInputs = elements.form.querySelectorAll("input, select");
+    formInputs.forEach(input => {
+        input.removeAttribute("readonly");
+        if (input.tagName === "SELECT") {
+            input.removeAttribute("disabled");
+        }
+    });
 }
 
 function numeroALetras(numero) {
@@ -468,3 +481,50 @@ function numeroALetras(numero) {
 window.changePage = changePage;
 window.editarRecibo = editarRecibo;
 window.imprimirRecibo = imprimirRecibo;
+function visualizarRecibo(folio) {
+    const recibo = recibos.find(r => r.folio === folio);
+    if (!recibo) return;
+    
+    // Llenar los datos del formulario
+    document.getElementById("folio").value = recibo.folio;
+    document.getElementById("fecha").value = recibo.fecha;
+    document.getElementById("ejercicioFiscal").value = recibo.ejercicioFiscal;
+    
+    // Llenar select de meses y seleccionar el correcto
+    llenarSelectMeses();
+    document.getElementById("ejercicioPeriodo").value = recibo.ejercicioPeriodo;
+    
+    document.getElementById("contribuyente").value = recibo.idContribuyente;
+    document.getElementById("domicilio").value = contribuyentes.find(c => c.id === recibo.idContribuyente)?.domicilio || "";
+    document.getElementById("cuentaContable").value = recibo.idCuentaContable;
+    document.getElementById("cuentaReferencia").value = recibo.cuentaReferencia;
+    document.getElementById("descripcion").value = recibo.descripcion;
+    document.getElementById("baseCatastral").value = recibo.baseCatastral || "";
+    document.getElementById("subtotal").value = recibo.subtotal;
+    document.getElementById("motivoDescuento").value = recibo.motivoDescuento;
+    document.getElementById("descuento").value = recibo.descuento;
+    document.getElementById("total").value = recibo.total;
+    document.getElementById("formaPago").value = recibo.formaPago;
+    document.getElementById("totalLetra").value = recibo.totalLetra || numeroALetras(recibo.total);
+    
+    // Cambiar el título y configurar el formulario como solo lectura
+    document.getElementById("formTitle").textContent = "Visualizar Recibo";
+    
+    // Ocultar botones de guardar/actualizar y mostrar solo el de imprimir
+    elements.btnGuardarRecibo.style.display = "none";
+    elements.btnImprimirRecibo.textContent = "Imprimir Recibo";
+    elements.btnCancelarRecibo.textContent = "Cerrar";
+    
+    // Hacer todos los campos del formulario de solo lectura
+    const formInputs = elements.form.querySelectorAll("input, select");
+    formInputs.forEach(input => {
+        input.setAttribute("readonly", true);
+        if (input.tagName === "SELECT") {
+            input.setAttribute("disabled", true);
+        }
+    });
+    
+    isEditing = false; // No estamos en modo edición
+    currentReciboId = recibo.folio;
+    elements.modalOverlay.style.display = "flex";
+}
