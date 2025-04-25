@@ -3,7 +3,28 @@ let isEditing = false;
 let currentIndex = null;
 let currentPage = 1;
 const rowsPerPage = 10;
-let secciones = JSON.parse(localStorage.getItem('secciones')) || [];
+let secciones = JSON.parse(localStorage.getItem('secciones')) || [
+    {
+        nombre: "Segunda De Panteones",
+        año_ejercicio: "2019"
+    },
+    {
+        nombre: "Obras Públicas",
+        año_ejercicio: "2020"
+    },
+    {
+        nombre: "Drenaje",
+        año_ejercicio: "2023"
+    },
+    {
+        nombre: "Sección Sexta",
+        año_ejercicio: "2024"
+    },
+    {
+        nombre: "Tercera De Rastro",
+        año_ejercicio: "2024"
+    }
+];
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -11,7 +32,7 @@ const elements = {
     searchInput: document.getElementById("searchInput"),
     form: document.getElementById("accountForm"),
     nombre: document.getElementById("nombre"),
-    año_ejercicio: document.getElementById("año_ejercicio"), // Corregido
+    año_ejercicio: document.getElementById("año_ejercicio"),
     btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
     btnCancel: document.getElementById("btnCancel"),
     formTitle: document.getElementById("formTitle"),
@@ -23,6 +44,13 @@ const elements = {
 // Funciones principales
 function renderTable(data) {
     elements.tableBody.innerHTML = "";
+    
+    // Mensaje si no hay datos
+    if (data.length === 0) {
+        elements.tableBody.innerHTML = '<tr><td colspan="3">No hay secciones registradas</td></tr>';
+        return;
+    }
+
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedData = data.slice(start, end);
@@ -33,10 +61,10 @@ function renderTable(data) {
             <td>${seccion.nombre}</td>
             <td>${seccion.año_ejercicio}</td>
             <td>
-                <button class="action-btn edit" onclick="editAccount(${secciones.indexOf(seccion)})" title="Editar">
+                <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
                     <img src="/Assets/editor.png" class="action-icon">
                 </button>
-                <button class="action-btn delete" onclick="deleteAccount(${secciones.indexOf(seccion)})" title="Eliminar">
+                <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
                     <img src="/Assets/eliminar.png" class="action-icon">
                 </button>
             </td>
@@ -169,6 +197,11 @@ window.deleteAccount = function(index) {
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", () => {
+    // Verificar si hay datos en localStorage, si no, guardar los iniciales
+    if (!localStorage.getItem('secciones')) {
+        localStorage.setItem('secciones', JSON.stringify(secciones));
+    }
+
     // Event listeners
     elements.form.addEventListener("submit", handleSubmit);
     elements.btnCancel.addEventListener("click", closeModal);
