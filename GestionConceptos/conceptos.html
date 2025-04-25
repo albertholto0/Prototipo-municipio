@@ -19,11 +19,13 @@
     </header>
     <div class="main-container">
         <div class="title-section">
-            <h2>Registro de Conceptos</h2>
-            <button class="btn-register" id="btnAgregarConcepto">Agregar Concepto</button>
+            <h2>Gestión de Conceptos</h2>
+            <hr class="title-line">
         </div>
-        
-        <!-- Modal para agregar/editar conceptos -->
+        <div class="button-container">
+            <input type="text" id="searchInput" placeholder="Buscar por usuario o nombre" />
+            <button class="btn-register" id="btnAgregarConcepto">Registrar nuevo concepto</button>
+        </div>
         <div id="modalConcepto" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -60,27 +62,31 @@
                         <input type="number" id="id_cuenta_contable" min="1" required>
                     </div>
                     
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" id="btnCancelarModal">Cancelar</button>
-                        <button type="submit" class="btn-primary">Guardar</button>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-btn" id="btnCancelarModal">Cancelar</button>
+                        <button type="submit" class="register-btn">Registrar</button>
                     </div>
                 </form>
             </div>
         </div>
-        
-        <div class="search-bar">
-            <input type="text" id="searchDescripcion" placeholder="Buscar por descripción...">
-            <select id="searchSeccion">
-                <option value="">Todas las secciones</option>
-                <!-- Opciones se cargarán dinámicamente -->
-            </select>
-            <select id="searchCuentaContable">
-                <option value="">Todas las cuentas</option>
-                <!-- Opciones se cargarán dinámicamente -->
-            </select>
-            <button class="btn-primary" id="btnBuscar">Buscar</button>
-        </div>
-        
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title-section">
+                    <h2>Confirmar eliminación</h2>
+                </div>
+                <form id="deleteConceptForm">
+                    <input type="hidden" id="deleteConceptId">
+                    <div class="form-group">
+                        <label for="deletePassword">Contraseña de administrador:</label>
+                        <input type="password" id="deletePassword" required>
+                    </div>
+                    <div class="form-buttons-delete">
+                        <button type="button" class="cancel-btn-delete">Cancelar</button>
+                        <button type="submit" class="delete-btn-delete">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>           
         <div class="table-container">
             <table class="concepts-table">
                 <thead>

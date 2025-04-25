@@ -65,7 +65,7 @@ function renderUsersTable() {
 
 // Función para filtrar y renderizar usuarios
 function filterUsers(filterType) {
-    let filteredUsers = [...users]; // Copia de la lista original
+    let filteredUsers = [...users];
 
     if (filterType === 'active') {
         filteredUsers = users.filter(user => user.active);
