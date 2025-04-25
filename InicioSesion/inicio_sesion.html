@@ -3,22 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Cobros Municipales - Iniciar Sesión</title>
+    <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="style_inicio_sesion.css">
 </head>
 <body>
-    <div class="contenedor-inicio-sesion">
-        <h2>Iniciar Sesión</h2>
-        <form id="loginForm" action="#" method="post">
-            <input type="text" name="nombre_usuario" placeholder="Nombre del usuario" required>
-            <input type="password" name="contraseña" placeholder="Contraseña" required>
-            <input type="submit" value="INGRESAR">
-        </form>
-    </div>
-    <div id="mensajeModal" class="modal">
-        <div class="modal-contenido">
-            <p id="mensajeTexto"></p>
-            <button class="modal-boton" onclick="cerrarModal()">Confirmar</button>
+    <header class="login-header">
+        <div class="logo-left">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        </div>
+        <div class="title-center">
+            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
+        <div class="logo-right">
+            <img src="/Assets/logo_me.png" alt="Logo mexico">
+        </div>
+    </header>
+    
+    <div class="main-container">
+        <div class="contenedor-inicio-sesion">
+            <h2>Iniciar Sesión</h2>
+            <form id="loginForm" action="#" method="post">
+                <input class="modal-contenido" type="text" name="nombre_usuario" placeholder="Nombre del usuario" required>
+                <input class="modal-contenido" type="password" name="contraseña" placeholder="Contraseña" required>
+                <input class="modal-boton" type="submit" value="INGRESAR">
+            </form>
+        </div>
+        
+        <div id="mensajeModal" class="modal">
+            <div class="modal-contenido">
+                <p id="mensajeTexto"></p>
+                <button class="modal-boton" onclick="cerrarModal()">Confirmar</button>
+            </div>
         </div>
     </div>
     
@@ -27,6 +42,7 @@
     </footer>
 
     <script>
+        // Mantén tus funciones JavaScript existentes
         function mostrarModal(mensaje) {
             document.getElementById('mensajeTexto').textContent = mensaje;
             document.getElementById('mensajeModal').style.display = 'block';
@@ -42,14 +58,13 @@
             const usuario = document.querySelector('input[name="nombre_usuario"]').value;
             const contraseña = document.querySelector('input[name="contraseña"]').value;
             
-            if (usuario === 'admin' && contraseña === 'admin') {
-                window.location.href = '/Inicio/pantalla_Principal.html';
-            } else {
-                mostrarModal('Usuario o contraseña incorrectos');
-            }
+            // if (usuario === 'admin' && contraseña === 'admin') {
+            //     window.location.href = '/Inicio/pantalla_Principal.html';
+            // } else {
+            //     mostrarModal('Usuario o contraseña incorrectos');
+            // }
         });
         
-        // Cerrar el modal si se hace clic fuera del contenido
         window.addEventListener('click', function(event) {
             const modal = document.getElementById('mensajeModal');
             if (event.target === modal) {

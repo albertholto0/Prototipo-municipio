@@ -1,65 +1,58 @@
 body {
     font-family: Arial, sans-serif;
     background-image: url(images/fondo_inicioSesion.jpg);
-    background-size: cover; 
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #f5f5f5;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Elimina la barra de desplazamiento */
+}
+
+.login-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo-left, .logo-right {
+    width: 100px; /* Ajusta según el tamaño de tus logos */
+}
+
+.logo-left img, .logo-right img {
+    max-height: 60px;
+    width: auto;
+}
+
+.title-center {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.title-center h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.main-container {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    padding: 20px;
 }
 
 .contenedor-inicio-sesion {
     background-color: #fff;
-    padding: 20px;
+    padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 320px;
     text-align: center;
-}
-
-.contenedor-inicio-sesion h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-}
-
-.contenedor-inicio-sesion input[type="text"],
-.contenedor-inicio-sesion input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.contenedor-inicio-sesion input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #27ae60;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.contenedor-inicio-sesion input[type="submit"]:hover {
-    background-color: #27ae60;
-}
-
-.contenedor-inicio-sesion a {
-    display: block;
-    margin-top: 10px;
-    color: #007bff;
-    text-decoration: none;
-}
-
-.contenedor-inicio-sesion a:hover {
-    text-decoration: underline;
 }
 
 /* Estilos para el modal */
@@ -75,14 +68,12 @@ body {
 }
 
 .modal-contenido {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 300px;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .modal-boton {
@@ -102,13 +93,11 @@ body {
 
 .footer {
     text-align: center;
-    margin-top: 20px;
     font-size: 14px;
     color: #666;
     background-color: #f8f9fa;
     padding: 10px 0;
     border-top: 1px solid #ddd;
-    position: fixed;
-    bottom: 0;
+    position: static;
     width: 100%;
 }
