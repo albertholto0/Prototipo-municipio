@@ -9,15 +9,53 @@
 <body>
     <div class="contenedor-inicio-sesion">
         <h2>Iniciar Sesión</h2>
-        <form action="#" method="post">
+        <form id="loginForm" action="#" method="post">
             <input type="text" name="nombre_usuario" placeholder="Nombre del usuario" required>
             <input type="password" name="contraseña" placeholder="Contraseña" required>
             <input type="submit" value="INGRESAR">
         </form>
     </div>
-
+    <div id="mensajeModal" class="modal">
+        <div class="modal-contenido">
+            <p id="mensajeTexto"></p>
+            <button class="modal-boton" onclick="cerrarModal()">Confirmar</button>
+        </div>
+    </div>
+    
     <footer class="footer">
-        <p>© 2025 Ixtlán de Juárez
+        <p>© 2025 Ixtlán de Juárez</p>
     </footer>
+
+    <script>
+        function mostrarModal(mensaje) {
+            document.getElementById('mensajeTexto').textContent = mensaje;
+            document.getElementById('mensajeModal').style.display = 'block';
+        }
+        
+        function cerrarModal() {
+            document.getElementById('mensajeModal').style.display = 'none';
+        }
+        
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const usuario = document.querySelector('input[name="nombre_usuario"]').value;
+            const contraseña = document.querySelector('input[name="contraseña"]').value;
+            
+            if (usuario === 'admin' && contraseña === 'admin') {
+                window.location.href = '/Inicio/pantalla_Principal.html';
+            } else {
+                mostrarModal('Usuario o contraseña incorrectos');
+            }
+        });
+        
+        // Cerrar el modal si se hace clic fuera del contenido
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('mensajeModal');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        });
+    </script>
 </body>
 </html>

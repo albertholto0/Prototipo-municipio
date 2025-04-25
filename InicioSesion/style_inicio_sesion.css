@@ -39,7 +39,7 @@ body {
 .contenedor-inicio-sesion input[type="submit"] {
     width: 100%;
     padding: 10px;
-    background-color: #28a745;
+    background-color: #27ae60;
     border: none;
     border-radius: 4px;
     color: #fff;
@@ -48,7 +48,7 @@ body {
 }
 
 .contenedor-inicio-sesion input[type="submit"]:hover {
-    background-color: #218838;
+    background-color: #27ae60;
 }
 
 .contenedor-inicio-sesion a {
@@ -60,6 +60,44 @@ body {
 
 .contenedor-inicio-sesion a:hover {
     text-decoration: underline;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-contenido {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.modal-boton {
+    background: #27ae60;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.modal-boton:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .footer {

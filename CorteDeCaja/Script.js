@@ -1,5 +1,17 @@
 // Datos de ejemplo para movimientos de caja (simulando una base de datos)
 const cortesDeCaja = {
+    // Corte de caja de hoy
+    '2025-04-25': {
+        encargado: "Kevin Diaz",
+        movimientos: [
+            { fp: '006', clave: 'CLAVE-547', concepto: 'Agua potable', tipoPago: 'Efectivo', cantidad: 2, importe: 128.00 },
+            { fp: '007', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '005', clave: 'CLAVE-321', concepto: 'Multa', tipoPago: 'Efectivo', cantidad: 1, importe: 500.00 }
+        ],
+        cerrado: false,
+        horaCierre: null
+    },
     // Corte de hoy
     '2025-04-02': {
         encargado: "Amelia Lopez",
@@ -8,8 +20,8 @@ const cortesDeCaja = {
             { fp: '002', clave: 'CLAVE-456', concepto: 'Agua', tipoPago: 'Transferencia', cantidad: 1, importe: 350.50 },
             { fp: '003', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 }
         ],
-        cerrado: false,
-        horaCierre: null
+        cerrado: true,
+        horaCierre: '18:33 PM'
     },
     // Corte de ayer
     '2025-04-01': {
@@ -31,6 +43,7 @@ const cortesDeCaja = {
         cerrado: true,
         horaCierre: '19:15 PM'
     }
+    
 };
 
 // Variables de estado
@@ -71,6 +84,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listeners
     elements.btnBuscarCorte.addEventListener('click', buscarCortePorFecha);
     elements.btnHoy.addEventListener('click', cargarCorteHoy);
+    elements.btnImprimirCorte.addEventListener('click', () => { 
+        window.print(); 
+
+    });
+
+
+        // Ocultar botones antes de imprimir y restaurar después
+    window.onbeforeprint = () => {
+        elements.btnImprimirCorte.style.display    = 'none';
+        elements.btnCerrarCorte.style.display      = 'none';
+        elements.btnBuscarCorte.style.display      = 'none';
+        elements.btnHoy.style.display              = 'none';
+    };
+    
+    window.onafterprint = () => {
+        elements.btnImprimirCorte.style.display    = '';
+        elements.btnCerrarCorte.style.display      = '';
+        elements.btnBuscarCorte.style.display      = '';
+        elements.btnHoy.style.display              = '';
+    };
+   
 });
 
 // Formatear fecha como DD/MM/AAAA
@@ -98,16 +132,22 @@ function buscarCortePorFecha() {
 
 // Cargar corte específico
 function cargarCorte(fecha) {
+    currentPage = 1;
     fechaSeleccionada = fecha;
     corteActual = cortesDeCaja[fecha];
     
     if (!corteActual) {
         // Si no hay corte para esa fecha, mostrar vacío
         mostrarCorteVacio();
-        alert('No se encontró corte de caja para la fecha seleccionada');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se encontró corte de caja para la fecha seleccionada'
+          });
+          
         return;
     }
-    
+
     // Actualizar información general
     elements.encargadoCaja.textContent = corteActual.encargado;
     elements.fechaActual.textContent = formatDate(fecha);
@@ -228,7 +268,7 @@ function renderPagination() {
     if (startPage > 1) {
         paginationHTML += `
             <button class="pagination-btn" onclick="changePage(1)">1</button>
-            ${startPage > 2 ? '<span>...</span>' : ''}
+            ${startPage > 2 ? '<span>...</span>' : ''} 
         `;
     }
 
@@ -242,7 +282,7 @@ function renderPagination() {
 
     if (endPage < totalPages) {
         paginationHTML += `
-            ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
+            ${endPage < totalPages - 1 ? '<span>...</span>' : ''} 
             <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
         `;
     }
@@ -262,29 +302,40 @@ window.changePage = function(page) {
     renderMovementsTable();
 };
 
-// Imprimir corte
-elements.btnImprimirCorte.addEventListener('click', () => {
-    window.print();
-});
-
 // Cerrar caja
 elements.btnCerrarCorte.addEventListener('click', () => {
-    if (confirm('¿Está seguro que desea cerrar la caja?')) {
+    Swal.fire({
+      title: '¿Estás seguro que deseas cerrar la caja?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Cerrar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
         const now = new Date();
         const horaCierre = now.toLocaleTimeString('es-MX', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
+          hour: '2-digit', 
+          minute: '2-digit' 
         });
-        
+  
         // Actualizar en la "base de datos"
         cortesDeCaja[fechaSeleccionada].cerrado = true;
         cortesDeCaja[fechaSeleccionada].horaCierre = horaCierre;
-        
+  
         // Actualizar UI
         elements.horaCierre.textContent = horaCierre;
         elements.btnCerrarCorte.disabled = true;
         elements.btnImprimirCorte.disabled = false;
-        
-        alert('Caja cerrada correctamente');
-    }
-});
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'Caja cerrada correctamente'
+        });
+      }
+    });
+  });
+  
+
