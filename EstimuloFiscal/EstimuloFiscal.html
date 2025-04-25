@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Estímulo Fiscal</title>
-    <link rel="stylesheet" href="Styles.css">
+    <title>Estímulo Fiscal</title>
+    <link rel="stylesheet" href="/Componentes/Nav.css">
+    <link rel="stylesheet" href="/BaseCatastral/Styles.css"> <!-- Solo CSS de Base Catastral -->
     <script src="script.js" defer></script>
     <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
     <header>
-        <div class="header-left"> <!-- Contenedor flex nuevo -->
+<<<<<<< HEAD
+        <div class="header-left"><!-- Contenedor flex nuevo -->
+=======
+        <div class="header-left">
+>>>>>>> main
             <div class="logo-left">
                 <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
             </div>
@@ -19,93 +24,157 @@
                 <h1>SISTEMA DE COBROS MUNICIPAL</h1>
             </div>
         </div>
-        
-        <!-- Menú debe estar fuera del header-left -->
-        <div class="menu-buttons" id="nav-placeholder">
-            <!-- Tus botones aquí -->
-        </div>
+
+        <div class="menu-buttons" id="nav-placeholder"></div>
     </header>
 
-    <!-- Contenido principal -->
+ <!-- Contenido principal -->
     <main class="main-container">
         <div class="title-section">
-            <h2>Gestión de Estímulo Fiscal</h2>
+            <h2>Estímulo Fiscal</h2>
             <hr class="title-line">
         </div>
 
-        <!-- Sección de búsqueda -->
+        <!-- Barra de búsqueda y botón agregar -->
         <div class="search-container">
-            <input type="text" id="searchEstimuloInput" placeholder="Buscar por nombre de contribución" />
-            <button class="btn-agregar" id="btnOpenEstimuloModal">Agregar Estímulo</button>
+            <input type="text" id="searchInput" placeholder="Buscar estímulo..." class="search-input">
+            <button class="btn-agregar" id="btnOpenModal">
+<<<<<<< HEAD
+                Agregar 
+=======
+                Agregar Estímulo
+>>>>>>> main
+            </button>
         </div>
 
-        <!-- Tabla -->
+        <!-- Tabla de estímulos -->
         <div class="table-container">
-            <table id="estimulosTable">
+<<<<<<< HEAD
+        <table id="accountsTable">
+            <thead>
+                <tr>
+                    <th>Nombre Contribución</th>
+                    <th>% Descuento</th>
+                    <th>Caracteristicas</th>
+                    <th>Requisitos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody> <!-- Asegúrate de incluir esto -->
+        </table>
+=======
+            <table id="accountsTable" class="data-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nombre Contribución</th>
-                        <th>Características</th>
                         <th>% Descuento</th>
+                        <th>Caracteristicas</th>
                         <th>Requisitos</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Se llenará dinámicamente con JavaScript -->
-                </tbody>
+                <tbody></tbody> <!-- Asegúrate de incluir esto -->
             </table>
+            
+>>>>>>> main
         </div>
+        
+        <!-- Paginación -->
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
     </main>
-    <!-- Modal para el formulario -->
-    <div class="modal-overlay" id="estimuloModalOverlay">
-        <div class="modal-content">
-            <span class="btn-close" id="btnCloseEstimuloModal">&times;</span>
-            <div class="form-container" id="formContainer">
-                <h3 class="text-center" id="estimuloFormTitle">Agregar Estímulo Fiscal</h3>
-                <form id="estimuloForm">
-                    <!-- Primera fila: ID estimulo y Nombre contribución  -->
-                    <div class="form-inline">
-                    <div class="form-group">
-                        <label for="nombreContribucion">Nombre Contribución:</label>
-                        <input type="text" id="nombreContribucion" name="nombreContribucion" placeholder="Ej. Estímulo a la Construcción" required>
-                    </div>
-                    <div class="form-group-inline">
-                        <label for="porcentajeDescuento"> Descuento % :</label>
-                        <input type="number" id="porcentajeDescuento" name="porcentajeDescuento" min="0" max="100" step="1" placeholder="Ej. 15" required>
-                    </div>
 
-                    </div>
-                    <!-- Segunda fila:  Caracteristicas -->
-                    <div class="form-group">
-                        <label for="caracteristicas">Características:</label>
-                        <textarea id="caracteristicas" name="caracteristicas" rows="3" required></textarea>
-                    </div>
-
-                    <!-- Tercera fila: Descuento y Requisitos  -->
-
-                    <div class="form-inline">
+    <!-- Modal para agregar/editar (usando clases de Base Catastral) -->
+    <div id="modalOverlay" class="modal-overlay">
+<<<<<<< HEAD
+        <div class="modal-content" style="max-height: 60vh; overflow-y: auto">
+=======
+        <div class="modal-content"  style="max-height: 60vh; overflow-y: auto">
+>>>>>>> main
+            <span class="btn-close" id="btnCloseModal">&times;</span>
+            <div class="form-container">
+                <div class="form-container" id="formContainer"></div>
+                <h3 class="text-center" id="formTitle">Agregar Estímulo Fiscal</h3>
+                <form id="estimuloForm" >
+<<<<<<< HEAD
+=======
                     
-                    <div class="form-group">
-                        <label for="requisitos">Requisitos:</label>
-                        <textarea id="requisitos" name="requisitos" rows="3" required></textarea>
-                    </div>
+>>>>>>> main
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="nombre_contribucion">Nombre de Contribución:</label>
+                            <input type="text" id="nombre_contribucion" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="porcentaje">% Descuento:</label>
+                            <input type="number" id="porcentaje" class="form-input" min="0" max="100" required>
+                        </div>
+                        
+<<<<<<< HEAD
                     </div>
 
-                    <button type="submit" id="btnSaveEstimulo">Guardar</button>
-                    <button type="button" id="btnCancelEstimulo" class="btn-cancel">Cancelar</button>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="caracteristicas">Características:</label>
+                            <textarea id="caracteristicas" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="requisitos">Requisitos:</label>
+                            <textarea id="requisitos" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
+                        </div>
+                           
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
+                        <button type="submit" class="btn-primary" id="btnAddOrUpdate">Agregar</button>
+                    </div>
+=======
+                    </div>
+
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="caracteristicas">Características:</label>
+                            <textarea id="caracteristicas" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="requisitos">Requisitos:</label>
+                            <textarea id="requisitos" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
+                        </div>
+                          
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
+                        <button type="submit" class="btn-primary" id="btnAddOrUpdate">Agregar</button>
+                    </div>
+>>>>>>> main
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- Modal para ver detalles -->
+    <div id="viewModalOverlay" class="modal-overlay">
+        <div class="modal-content">
+<<<<<<< HEAD
+            <span class="btn-close" id="btnCloseViewModal">&times;</span>
+            <div id="viewContainer" class="form-container">
+                <h3 class="text-center">Información</h3>
+                <div id="infoContent" ></div>
+=======
+            <span class="modal-close" id="btnCloseViewModal">&times;</span>
+            <div id="viewContainer" class="view-container">
+                <h3>Detalles del Estímulo</h3>
+                <div id="infoContent" class="info-content"></div>
+>>>>>>> main
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
-        <p>© 2025 Ixtlán - Módulo 11: Gestión de Estímulo Fiscal</p>
+        <p>© 2025 Ixtlán - Módulo 11: Gestión de Estímulo fiscal</p>
     </footer>
+
     
 </body>
 </html>
