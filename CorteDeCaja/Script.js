@@ -1,5 +1,21 @@
 // Datos de ejemplo para movimientos de caja (simulando una base de datos)
 const cortesDeCaja = {
+<<<<<<< HEAD
+=======
+    // Corte de caja de hoy
+    '2025-04-25': {
+        encargado: "Kevin Diaz",
+        movimientos: [
+            { fp: '006', clave: 'CLAVE-547', concepto: 'Agua potable', tipoPago: 'Efectivo', cantidad: 2, importe: 128.00 },
+            { fp: '007', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '005', clave: 'CLAVE-321', concepto: 'Multa', tipoPago: 'Efectivo', cantidad: 1, importe: 500.00 }
+        ],
+        cerrado: false,
+        horaCierre: null
+    },
+    // Corte de hoy
+>>>>>>> main
     '2025-04-02': {
         encargado: "Amelia Lopez",
         movimientos: [
@@ -7,8 +23,8 @@ const cortesDeCaja = {
             { fp: '002', clave: 'CLAVE-456', concepto: 'Agua', tipoPago: 'Transferencia', cantidad: 1, importe: 350.50 },
             { fp: '003', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 }
         ],
-        cerrado: false,
-        horaCierre: null
+        cerrado: true,
+        horaCierre: '18:33 PM'
     },
     '2025-04-01': {
         encargado: "Amelia Lopez",
@@ -28,6 +44,7 @@ const cortesDeCaja = {
         cerrado: true,
         horaCierre: '19:15 PM'
     }
+    
 };
 
 // Variables de estado
@@ -70,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.btnHoy.addEventListener('click', cargarCorteHoy);
     elements.btnImprimirCorte.addEventListener('click', () => { 
         window.print(); 
+<<<<<<< HEAD
     });
     // Ocultar botones antes de imprimir y restaurar después
 window.onbeforeprint = () => {
@@ -86,6 +104,27 @@ window.onbeforeprint = () => {
     elements.btnHoy.style.display              = '';
   };
   
+=======
+
+    });
+
+
+        // Ocultar botones antes de imprimir y restaurar después
+    window.onbeforeprint = () => {
+        elements.btnImprimirCorte.style.display    = 'none';
+        elements.btnCerrarCorte.style.display      = 'none';
+        elements.btnBuscarCorte.style.display      = 'none';
+        elements.btnHoy.style.display              = 'none';
+    };
+    
+    window.onafterprint = () => {
+        elements.btnImprimirCorte.style.display    = '';
+        elements.btnCerrarCorte.style.display      = '';
+        elements.btnBuscarCorte.style.display      = '';
+        elements.btnHoy.style.display              = '';
+    };
+   
+>>>>>>> main
 });
 
 // Formatear fecha como DD/MM/AAAA
@@ -119,6 +158,7 @@ function cargarCorte(fecha) {
 
     // Si no existe, lo generamos automáticamente
     if (!corteActual) {
+<<<<<<< HEAD
         cortesDeCaja[fecha] = {
             encargado: elements.encargadoCaja.textContent || "Desconocido",
             movimientos: [],
@@ -129,6 +169,20 @@ function cargarCorte(fecha) {
     }
     
     // Actualizar info general
+=======
+        // Si no hay corte para esa fecha, mostrar vacío
+        mostrarCorteVacio();
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se encontró corte de caja para la fecha seleccionada'
+          });
+          
+        return;
+    }
+
+    // Actualizar información general
+>>>>>>> main
     elements.encargadoCaja.textContent = corteActual.encargado;
     elements.fechaActual.textContent = formatDate(fecha);
     elements.horaCierre.textContent = corteActual.horaCierre || '--:-- --';
@@ -225,14 +279,34 @@ function renderPagination() {
     const start = Math.max(1, currentPage - 2);
     const end   = Math.min(totalPages, currentPage + 2);
 
+<<<<<<< HEAD
     if (start > 1) {
         html += `<button onclick="changePage(1)">1</button>${start>2?'...':''}`;
+=======
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+
+    if (startPage > 1) {
+        paginationHTML += `
+            <button class="pagination-btn" onclick="changePage(1)">1</button>
+            ${startPage > 2 ? '<span>...</span>' : ''} 
+        `;
+>>>>>>> main
     }
     for (let i = start; i <= end; i++) {
         html += `<button class="${i===currentPage?'active':''}" onclick="changePage(${i})">${i}</button>`;
     }
+<<<<<<< HEAD
     if (end < totalPages) {
         html += `${end<totalPages-1?'...':''}<button onclick="changePage(${totalPages})">${totalPages}</button>`;
+=======
+
+    if (endPage < totalPages) {
+        paginationHTML += `
+            ${endPage < totalPages - 1 ? '<span>...</span>' : ''} 
+            <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
+        `;
+>>>>>>> main
     }
     html += `<button onclick="changePage(${currentPage + 1})" ${currentPage===totalPages?'disabled':''}>Siguiente »</button>`;
 
@@ -245,6 +319,7 @@ window.changePage = function(page) {
     renderMovementsTable();
 };
 
+<<<<<<< HEAD
 // Imprimir corte (ya registrado en DOMContentLoaded)
 
 // Cerrar caja
@@ -260,3 +335,42 @@ elements.btnCerrarCorte.addEventListener('click', () => {
         alert('Caja cerrada correctamente');
     }
 });
+=======
+// Cerrar caja
+elements.btnCerrarCorte.addEventListener('click', () => {
+    Swal.fire({
+      title: '¿Estás seguro que deseas cerrar la caja?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Cerrar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const now = new Date();
+        const horaCierre = now.toLocaleTimeString('es-MX', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        });
+  
+        // Actualizar en la "base de datos"
+        cortesDeCaja[fechaSeleccionada].cerrado = true;
+        cortesDeCaja[fechaSeleccionada].horaCierre = horaCierre;
+  
+        // Actualizar UI
+        elements.horaCierre.textContent = horaCierre;
+        elements.btnCerrarCorte.disabled = true;
+        elements.btnImprimirCorte.disabled = false;
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'Caja cerrada correctamente'
+        });
+      }
+    });
+  });
+  
+
+>>>>>>> main

@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Ejercicio Fiscal</title>
+    <link rel="stylesheet" href="../Componentes/Nav.css">
+    <link rel="stylesheet" href="/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="StylesE.css">
-    <link rel="stylesheet" href="/Componentes/Nav.css">
     <script src="Script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
@@ -32,11 +34,7 @@
         <!-- Sección de búsqueda -->
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Buscar por año o estado" />
-            <select id="searchType">
-                <option value="anio">Año</option>
-                <option value="estado">Estado</option>
-            </select>
-            <button class="btn-agregar" id="btnOpenModal">Agregar Ejercicio</button>
+            <button class="btn-agregar" id="btnOpenModal">Agregar</button>
         </div>
 
         <!-- Tabla -->
@@ -44,7 +42,6 @@
             <table id="fiscalTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Año</th>
                         <th>Fecha Inicio</th>
                         <th>Fecha Fin</th>
@@ -56,7 +53,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Se llenará dinámicamente con JavaScript -->
+                    <!-- Datos de ejemplo (se llenará dinámicamente con JavaScript) -->
+                    <tr>
+                        <td>2024</td>
+                        <td>01/01/2024</td>
+                        <td>31/12/2024</td>
+                        <td><span class="estado-badge activo">Activo</span></td>
+                        <td>$5,000,000.00</td>
+                        <td>$1,250,000.00</td>
+                        <td>Ejercicio fiscal del año 2024</td>
+                        <td class="action-buttons">
+                            <button class="action-btn edit" title="Editar">
+                                <img src="/Assets/editor.png" class="action-icon">
+                            </button>
+                            <button class="action-btn delete" title="Eliminar">
+                                <img src="/Assets/eliminar.png" class="action-icon">
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2023</td>
+                        <td>01/01/2023</td>
+                        <td>31/12/2023</td>
+                        <td><span class="estado-badge finalizado">Finalizado</span></td>
+                        <td>$4,800,000.00</td>
+                        <td>$4,750,000.00</td>
+                        <td>Ejercicio fiscal del año 2023</td>
+                        <td class="action-buttons">
+                            <button class="action-btn edit" title="Editar">
+                                <img src="/Assets/editor.png" class="action-icon">
+                            </button>
+                            <button class="action-btn delete" title="Eliminar">
+                                <img src="/Assets/eliminar.png" class="action-icon">
+                            </button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -110,8 +141,8 @@
                         <textarea id="observaciones" name="observaciones" rows="3"></textarea>
                     </div>
                     <div class="form-buttons">
-                        <button type="submit" id="btnAddOrUpdate">Guardar</button>
                         <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                        <button type="submit" id="btnAddOrUpdate">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -131,5 +162,3 @@
             .catch(error => console.error('Error al cargar el nav:', error));
     </script>
 </body>
-
-</html>
