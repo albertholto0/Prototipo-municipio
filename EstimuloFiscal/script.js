@@ -41,11 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const start = (currentPage - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const paginatedData = filteredData.slice(start, end);
-<<<<<<< HEAD
-
-=======
     
->>>>>>> main
         if (paginatedData.length === 0) {
             elements.tableBody.innerHTML = `
                 <tr>
@@ -53,17 +49,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 </tr>
             `;
             renderPagination(0);
-<<<<<<< HEAD
-            aplicarEstilosATabla();
-            return;
-        }
-
-=======
             aplicarEstilosATabla(); // ✅ Aquí también, por si no hay datos
             return;
         }
     
->>>>>>> main
         paginatedData.forEach((estimulo, index) => {
             const row = `
                 <tr>
@@ -90,18 +79,11 @@ document.addEventListener("DOMContentLoaded", function() {
             `;
             elements.tableBody.insertAdjacentHTML("beforeend", row);
         });
-<<<<<<< HEAD
-
-        renderPagination(filteredData.length);
-        aplicarEstilosATabla();
-    }
-=======
     
         renderPagination(filteredData.length);
         aplicarEstilosATabla(); // ✅ Asegura que se apliquen los estilos al renderizar
     }
     
->>>>>>> main
 
     function renderPagination(totalItems) {
         const totalPages = Math.ceil(totalItems / rowsPerPage);
@@ -310,8 +292,4 @@ function aplicarEstilosATabla() {
 }
 
 // Ejecutar al cargar la página
-<<<<<<< HEAD
 document.addEventListener("DOMContentLoaded", aplicarEstilosATabla);
-=======
-document.addEventListener("DOMContentLoaded", aplicarEstilosATabla);
->>>>>>> main

@@ -1,23 +1,43 @@
 // Datos iniciales de ejemplo para Bases Catastrales
 let GestionAlquileres = [
     {
-      nombreDescripcion: "Juan Pérez",
+      nombreDescripcion: "Prestamo de un volteo",
       ubicacion: "Calle Falsa 123",
       valorFinal: 50000,
       fechaInicio: "2023-05-10",
       fechaCierre: "2023-06-10",
-      estadoAlquiler: "Activo"
+      estadoAlquiler: "Activo",
+      //Sacados de la Bd
+      selectContribuyente: "Eden Mendoza",      
+      selectConcepto: "Prestamo x"
+
     },
     {
-      nombreDescripcion: "Maria",
+      nombreDescripcion: "Prestamo de una retroescabadora",
       ubicacion: "Calle Falsa 123",
       valorFinal: 20000,
       fechaInicio: "2023-07-10",
       fechaCierre: "2023-08-10",
-      estadoAlquiler: "Activo"
+      estadoAlquiler: "Finalizado",
+      //Sacados de la Bd
+      selectContribuyente: "Rosendo Casarrubia",      
+      selectConcepto: "Prestamo x"
     }
   ];
-  
+
+    // Simulación de datos de la BD
+  const contribuyentes = [
+      { nombre: "Juan Pérez" },
+      { nombre: "María González" }
+  ];
+
+  const conceptos = [
+      { descripcion: "Pago de Agua" },
+      { descripcion: "Impuesto Predial" }
+  ];
+
+
+
   // Variables de estado globales
   let isEditing = false;        // Bandera para modo edición
   let currentIndex = null;      // Índice del elemento siendo editado
@@ -29,20 +49,18 @@ let GestionAlquileres = [
     tableBody: document.querySelector("#accountsTable tbody"),
     searchInput: document.getElementById("searchInput"),
     form: document.getElementById("accountForm"),
-    //claveCatastral: document.getElementById("claveCatastral"),
-    nombrePropietario: document.getElementById("nombrePropietario"),
-    ubicacion: document.getElementById("ubicacion"),
-    //baseCatastral: document.getElementById("baseCatastral"),
 
+    nombreDescripcion: document.getElementById("nombreDescripcion"),
+    ubicacion: document.getElementById("ubicacion"),
     fechaInicio: document.getElementById("fechaInicio"),
     fechaCierre: document.getElementById("fechaCierre"),
     valorFinal: document.getElementById("valorFinal"),
     estadoAlquiler: document.getElementById("estadoAlquiler"),
-    //valorConstruccion: document.getElementById("valorConstruccion"),
-    //impuestoCalculado: document.getElementById("impuestoCalculado"),
-    //fechaAvaluo: document.getElementById("fechaAvaluo"),
-    //historialAvaluos: document.getElementById("historialAvaluos"),
+
+    selectContribuyente: document.getElementById("selectContribuyente"),
+    selectConcepto: document.getElementById("selectConcepto"),
     
+   
 
     btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
     btnCancel: document.getElementById("btnCancel"),
@@ -69,9 +87,8 @@ let GestionAlquileres = [
             <td>${base.nombreDescripcion}</td>
             <td>${base.fechaInicio}</td>
             <td>${base.fechaCierre}</td>
-
-            <td>${base.baseCatastral}</td>
             <td>${base.estadoAlquiler}</td>
+            <td>${base.selectContribuyente}</td>
             <td>
                 <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
                     <img src="/Assets/editor.png" class="action-icon">
@@ -159,8 +176,8 @@ let GestionAlquileres = [
   function filteredBases() {
     const term = elements.searchInput.value.toLowerCase();
     return GestionAlquileres.filter(base =>
-      base.claveCatastral.toLowerCase().includes(term) ||
-      base.nombrePropietario.toLowerCase().includes(term)
+      base.fechaInicio.toLowerCase().includes(term) ||
+      base.nombreDescripcion.toLowerCase().includes(term)
     );
   }
   
@@ -177,8 +194,9 @@ let GestionAlquileres = [
       fechaCierre: elements.fechaCierre.value,
       valorFinal: elements.valorFinal.value,
       estadoAlquiler: elements.estadoAlquiler.value,
-      idContribuyentes: elements.idContribuyentes.value,
-      idConceptos: elements.idConceptos.value,
+
+      selectContribuyente: elements.selectContribuyente.value,
+      selectConcepto: elements.selectConcepto.value,
       
     };
   
@@ -213,8 +231,8 @@ let GestionAlquileres = [
     elements.fechaCierre.value = base.fechaCierre;
     elements.valorFinal.value = base.valorFinal;
     elements.estadoAlquiler.value = base.estadoAlquiler;
-    elements.idContribuyentes.value = base.idContribuyentes;
-    elements.idConceptos.value = base.idConceptos;
+    elements.selectContribuyente.value = base.selectContribuyente;
+    elements.selectConcepto.value = base.selectConcepto;
     
     isEditing = true;
     currentIndex = index;
@@ -286,18 +304,15 @@ let GestionAlquileres = [
     const infoContent = document.getElementById("infoContent");
     infoContent.innerHTML = `
       
-      <p><strong>Nombre Propietario:</strong> ${base.nombrePropietario}</p>
+      <p><strong>Descripcion:</strong> ${base.nombreDescripcion}</p>
       <p><strong>Ubicación:</strong> ${base.ubicacion}</p>
-
       <p><strong>Fecha Inicio:</strong> ${base.fechaInicio}</p>
       <p><strong>Fecha Cierre:</strong> ${base.fechaCierre}</p>
-
       <p><strong>Valor Final:</strong> ${base.valorFinal}</p>
-
       <p><strong>Estado Alquiler:</strong> ${base.estadoAlquiler}</p>
-
-      <p><strong>Contribuyente:</strong> ${base.idContribuyentes}</p>
-      <p><strong>Concepto:</strong> ${base.idConceptos}</p>
+      
+      <p><strong>Contribuyente:</strong> ${base.selectContribuyente}</p>
+      <p><strong>Concepto:</strong> ${base.selectConcepto}</p>
       
     `;
     openViewModal();
