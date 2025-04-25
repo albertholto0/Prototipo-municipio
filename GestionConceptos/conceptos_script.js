@@ -20,8 +20,6 @@ let conceptos = [
     { id: 6, descripcion: 'Servicio de drenaje', tipo_servicio: 'Drenaje', cuota: 120.00, periodicidad: 'Mensual', id_seccion: 6, id_cuenta_contable: 106 },
     { id: 7, descripcion: 'Reparación de banquetas', tipo_servicio: 'Infraestructura', cuota: 300.00, periodicidad: 'Semestral', id_seccion: 7, id_cuenta_contable: 107 },
     { id: 8, descripcion: 'Recolección de escombros', tipo_servicio: 'Basura', cuota: 80.00, periodicidad: 'Mensual', id_seccion: 8, id_cuenta_contable: 108 },
-    { id: 9, descripcion: 'Limpieza de ríos', tipo_servicio: 'Medio Ambiente', cuota: 250.00, periodicidad: 'Anual', id_seccion: 9, id_cuenta_contable: 109 },
-    { id: 10, descripcion: 'Control de plagas', tipo_servicio: 'Salud Pública', cuota: 180.00, periodicidad: 'Semestral', id_seccion: 10, id_cuenta_contable: 110 }
 ];
 
 // Cargar datos en la tabla
