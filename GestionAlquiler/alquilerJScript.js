@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Asignar eventos de clic a los botones de cerrar y cancelar
-    btnCloseModal.addEventListener("click", closeModal);
+    //btnCloseModal.addEventListener("click", closeModal);
     btnCancel.addEventListener("click", closeModal);
     btnOpenModal.addEventListener("click", openModal);
 
@@ -56,6 +56,19 @@ document.addEventListener("DOMContentLoaded", function () {
             <td>${estadoAlquiler}</td>
             <td>${idContribuyente}</td>
             <td>${conceptoContribuyente}</td>
+            <td>
+              <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
+                  <img src="/Assets/editor.png" class="action-icon">
+              </button>
+              <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
+                  <img src="/Assets/eliminar.png" class="action-icon">
+              </button>
+              <button class="action-btn view" onclick="viewAccount(${start + index})" title="Ver información">
+                <img src="/Assets/visualizar.png" class="action-icon">
+              </button>
+          </td>
+      </tr>
+
         `;
 
         // Agregar la fila a la tabla

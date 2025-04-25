@@ -44,15 +44,11 @@
             <table id="accountsTable">
                 <thead>
                     <tr>
-                        <th>Número de Alquiler</th>
                         <th>Descripción</th>
-                        <th>Ubicación</th>
                         <th>Fecha de Inicio</th>
                         <th>Fecha de Cierre</th>
-                        <th>Monto Final</th>
                         <th>Estado del Alquiler </th>
-                        <th>Id del Contribuyente</th>
-                        <th>Concepto del Contribuyente</th>
+                        <th>Contribuyente</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,14 +63,10 @@
     <!-- Modal para el formulario -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
-            <span class="btn-close" id="btnCloseModal">&times;</span>
+            <!-- <span class="btn-close" id="btnCloseModal">&times;</span>-->
             <div class="form-container" id="formContainer">
                 <h3 class="text-center" id="formTitle">Agregar Alquiler</h3>
                 <form id="accountForm">
-                    <div class="form-group">
-                        <label for="numeroAlquiler">Número de Alquiler:</label>
-                        <input type="text" id="numeroAlquiler" name="numeroAlquiler" placeholder="Ej. 1000-01" required>
-                    </div>
 
                     <div class="form-group">
                         <label for="descripcion">Descripción:</label>
