@@ -58,9 +58,10 @@
             const usuario = document.querySelector('input[name="nombre_usuario"]').value;
             const contraseña = document.querySelector('input[name="contraseña"]').value;
             
-            // if (usuario === 'admin' && contraseña === 'admin') {
-            //     window.location.href = '/Inicio/pantalla_Principal.html';
-            // } else {
+            if (usuario === 'admin' && contraseña === 'admin') {
+                window.location.href = '/Inicio/pantalla_Principal.html';
+            } 
+            // else {
             //     mostrarModal('Usuario o contraseña incorrectos');
             // }
         });
