@@ -3,7 +3,63 @@ let isEditing = false;
 let currentIndex = null;
 let currentPage = 1;
 const rowsPerPage = 10;
-let contribuyentes = [];
+let contribuyentes = [
+    {
+        nombre: "Juan",
+        apellido_paterno: "Pérez",
+        apellido_materno: "Gómez",
+        rfc: "PEGJ800101AB05",
+        calle: "Av. Independencia",
+        num_calle: "123",
+        colonia: "La Asunción",
+        telefono: "9511234567",
+        num_cuenta: "00001"
+    },
+    {
+        nombre: "María",
+        apellido_paterno: "López",
+        apellido_materno: "Martínez",
+        rfc: "LOMM850202DEF",
+        calle: "Calle Reforma",
+        num_calle: "456",
+        colonia: "San Pedro",
+        telefono: "9517654321",
+        num_cuenta: "00002"
+    },
+    {
+        nombre: "Alberto",
+        apellido_paterno: "Barbosa",
+        apellido_materno: "Martínez",
+        rfc: "MABA159865JFIG",
+        calle: "Calle La Luciernaga",
+        num_calle: "S/N",
+        colonia: "San Francisco",
+        telefono: "9517685821",
+        num_cuenta: "00003"
+    },
+    {
+        nombre: "Luis",
+        apellido_paterno: "López",
+        apellido_materno: "Hernández",
+        rfc: "HELL150465CR90",
+        calle: "Calle Constitución",
+        num_calle: "12",
+        colonia: "San Francisco",
+        telefono: "9515801224",
+        num_cuenta: "00004"
+    },
+    {
+        nombre: "Sergio Elias",
+        apellido_paterno: "Robles",
+        apellido_materno: "Ignacio",
+        rfc: "ROIS250404US03",
+        calle: "Calle Independencia",
+        num_calle: "2",
+        colonia: "La Soledad",
+        telefono: "9514220042",
+        num_cuenta: "00005"
+    }
+];
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -25,11 +81,19 @@ const elements = {
     paginationContainer: document.querySelector(".pagination"),
     modalOverlay: document.getElementById('modalOverlay'),
     btnOpenModal: document.getElementById('btnOpenModal'),
+    btnCloseModal: document.getElementById('btnCloseModal') // Asegúrate de que este elemento existe
 };
 
 // Funciones principales
 function renderTable(data) {
+    console.log("Renderizando tabla con datos:", data); // Para depuración
     elements.tableBody.innerHTML = "";
+    
+    if (!data || data.length === 0) {
+        elements.tableBody.innerHTML = '<tr><td colspan="6">No hay datos disponibles</td></tr>';
+        return;
+    }
+
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedData = data.slice(start, end);
@@ -125,7 +189,7 @@ function handleSubmit(e) {
     }
 
     closeModal();
-    renderTable(filteredAccounts());
+    renderTable(contribuyentes); // Mostrar todos los contribuyentes
 }
 
 function filteredAccounts() {
@@ -140,7 +204,7 @@ function filteredAccounts() {
 
 // Funciones del modal
 function openModal() {
-    elements.modalOverlay.style.display = 'block';
+    elements.modalOverlay.style.display = 'flex'; // Cambiado a flex para mejor centrado
 }
 
 function closeModal() {
@@ -158,9 +222,9 @@ function resetForm() {
 
 // Funciones globales
 window.changePage = function(page) {
-    if (page < 1 || page > Math.ceil(filteredAccounts().length / rowsPerPage)) return;
+    if (page < 1 || page > Math.ceil(contribuyentes.length / rowsPerPage)) return;
     currentPage = page;
-    renderTable(filteredAccounts());
+    renderTable(contribuyentes);
 };
 
 window.editAccount = function(index) {
@@ -185,29 +249,39 @@ window.editAccount = function(index) {
 window.deleteAccount = function(index) {
     if (confirm("¿Confirmar eliminación?")) {
         contribuyentes.splice(index, 1);
-        const totalPages = Math.ceil(filteredAccounts().length / rowsPerPage);
-        if (currentPage > totalPages && totalPages > 0) {
-            currentPage = totalPages;
-        }
-        renderTable(filteredAccounts());
+        renderTable(contribuyentes);
     }
 };
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", () => {
+    // Verifica que los elementos del DOM existen
+    if (!elements.tableBody || !elements.form) {
+        console.error("No se encontraron elementos críticos del DOM");
+        return;
+    }
+
     // Event listeners
     elements.form.addEventListener("submit", handleSubmit);
     elements.btnCancel.addEventListener("click", closeModal);
     elements.searchInput.addEventListener("input", () => {
         currentPage = 1;
-        renderTable(filteredAccounts());
+        const filtered = filteredAccounts();
+        renderTable(filtered);
     });
+    
     elements.btnOpenModal.addEventListener('click', () => {
         resetForm();
         openModal();
     });
-    elements.btnCloseModal.addEventListener('click', closeModal);
-    
+
+    // Si btnCloseModal existe en el HTML, agregar el event listener
+    if (elements.btnCloseModal) {
+        elements.btnCloseModal.addEventListener('click', closeModal);
+    } else {
+        console.warn("El botón btnCloseModal no se encontró en el DOM");
+    }
+
     // Renderizar tabla inicial
     renderTable(contribuyentes);
 });
