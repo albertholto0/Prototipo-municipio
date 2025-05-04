@@ -41,10 +41,11 @@
 }
 
 .form-container {
-  background: #fff;
+  background: linear-gradient(135deg, #e8f5e9, #d0f0dc); /* verde muy suave */
+  border: 2px solid #2ecc71;
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(39, 174, 96, 0.15);
   margin-top: 2rem;
 }
 
@@ -167,3 +168,11 @@
 .reset-button:hover {
   background-color: #c0392b;
 }
+
+/*TONOS VERDES
+background: #fff;
+border-radius: 12px;
+padding: 2rem;
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+margin-top: 2rem;
+*/
