@@ -94,6 +94,7 @@ function renderTable(data) {
   paginatedData.forEach((est, index) => {
     const row = `
         <tr>
+            <td>${est.id_establecimiento}</td>
             <td>${est.nombre_establecimiento}</td>
             <td>${est.calle} ${est.numero}, ${est.colonia}</td>
             <td>${est.fecha_registro}</td>
