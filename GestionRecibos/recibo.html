@@ -7,6 +7,7 @@
   <title>Gestión de Recibos</title>
   <link rel="stylesheet" href="../Componentes/Nav.css">
   <link rel="stylesheet" href="/BaseCatastral/Styles.css">
+  <link rel="stylesheet" href="style_gestionRecibos.css">
   <script src="javaScript_gestionRecibos.js" defer></script>
   <script src="/Componentes/Nav.js" defer></script>
 </head>
@@ -34,20 +35,16 @@
     <!-- Sección de búsqueda -->
     <div class="search-container">
       <div class="filters-container">
-        <input type="text" id="searchInput" placeholder="Buscar por folio, nombre, etc.">
-        <select id="filterEjercicio">
-          <option value="">Todos los ejercicios</option>
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-        </select>
+        <input type="text" id="searchInput" placeholder="Buscar por folio, nombre">
+      </div>
+      <div class="busqueda-container">
         <input type="date" id="filterFechaInicio" placeholder="Fecha inicio">
         <input type="date" id="filterFechaFin" placeholder="Fecha fin">
       </div>
     </div>
+    
 
     <!-- Tabla de recibos -->
-
     <table id="accountsTable">
       <thead>
         <tr>
