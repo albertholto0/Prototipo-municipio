@@ -2,8 +2,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
-    padding: 10px 20px;
+    background-color: rgb(255, 255, 255);
+    padding: 20px 20px;
 }
 
 .header-left {
@@ -12,18 +12,14 @@ header {
     gap: 15px;
 }
 
-.logo-left img {
-    height: 100px;
-    width: auto; /* Importante para mantener proporciones */
-    display: block; /* Elimina espacio fantasma debajo del logo */
+.logo-left img, .logo-right img {
+    height: 90px;
 }
 
-/* Si el texto no se alinea verticalmente */
 .title {
     display: flex;
     align-items: center;
-    height: 100px; /* Misma altura que el logo */
-    margin-left: 20px; /* Le agregué esta linea para hacer que el titulo tenga más separación de la imagen*/
+    margin-left: 25px; /* Le agregué esta linea para hacer que el titulo tenga más separación de la imagen*/
 }
 
 .title h1 {
@@ -37,14 +33,14 @@ header {
 
 .menu-buttons {
     display: flex;
-    gap: 15px; /* Mejor que márgenes individuales */
+    gap: 30px; /* Mejor que márgenes individuales */
 }
 
 .menu-buttons button {
     background-color: white;
     color: black;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 25px;
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s ease; /* Suaviza efectos hover */
@@ -54,9 +50,4 @@ header {
     background-color: green;
     color: white;
     border-radius: 20px;
-}
-.logo-left img {
-    height: 100px;
-    width: auto; /* Importante para mantener proporciones */
-    display: block; /* Elimina espacio fantasma debajo del logo */
 }
