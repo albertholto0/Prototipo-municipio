@@ -7,197 +7,68 @@
   <title>Gestión de Recibos</title>
   <link rel="stylesheet" href="../Componentes/Nav.css">
   <link rel="stylesheet" href="/BaseCatastral/Styles.css">
-  <link rel="stylesheet" href="StylesE.css">
-  <script src="Script.js" defer></script>
+  <link rel="stylesheet" href="style_gestionRecibos.css">
+  <script src="javaScript_gestionRecibos.js" defer></script>
   <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
   <header>
     <div class="header-left">
-      <div class="logo-left">
-        <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-      </div>
-      <div class="title">
-        <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-      </div>
+        <div class="logo-left">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        </div>
+        <div class="title">
+            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
     </div>
-    <div class="menu-buttons" id="nav-placeholder"></div>
-  </header>
+    <div class="menu-buttons" id="nav-placeholder"> </div>
+</header>
 
   <!-- Contenido principal -->
   <main class="main-container">
     <div class="title-section">
-      <h2>Generación de Recibos</h2>
+      <h2>Gestión de Recibos</h2>
       <hr class="title-line">
     </div>
 
     <!-- Sección de búsqueda -->
     <div class="search-container">
       <div class="filters-container">
-        <input type="text" id="searchInput" placeholder="Buscar por folio, nombre o referencia">
-        <select id="filterEjercicio">
-          <option value="">Todos los ejercicios</option>
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-        </select>
+        <input type="text" id="searchInput" placeholder="Buscar por folio, nombre">
+      </div>
+      <div class="busqueda-container">
         <input type="date" id="filterFechaInicio" placeholder="Fecha inicio">
         <input type="date" id="filterFechaFin" placeholder="Fecha fin">
       </div>
     </div>
+    
 
     <!-- Tabla de recibos -->
-    <div class="table-container">
-      <table id="receiptsTable">
-        <thead>
-          <tr>
-            <th>Folio</th>
-            <th>Fecha</th>
-            <th>Contribuyente</th>
-            <th>Ejercicio</th>
-            <th>Periodo</th>
-            <th>Concepto</th>
-            <th>Total</th>
-            <th>Forma de Pago</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Se llenará dinámicamente con JavaScript -->
-        </tbody>
-      </table>
-    </div>
-    <div class="pagination-container">
-      <div class="pagination"></div>
-    </div>
+    <table id="accountsTable">
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Fecha</th>
+          <th>Contribuyente</th>
+          <th>Ejercicio</th>
+          <th>Periodo</th>
+          <th>Concepto</th>
+          <th>Total</th>
+          <th>Forma de Pago</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Se llenará dinámicamente con JavaScript -->
+      </tbody>
+    </table>
   </main>
-
-  <!-- Modal para el formulario de recibo -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
-      <span class="btn-close" id="btnCloseModal">&times;</span>
-      <div class="form-container" id="formContainer">
-        <h3 class="text-center" id="formTitle">Visualizar Recibo</h3>
-        <form id="receiptForm">
-          <!-- Primera fila: Folio y Fecha -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="folio">Folio:</label>
-              <input type="text" id="folio" name="folio" readonly>
-            </div>
-            <div class="form-group">
-              <label for="fecha">Fecha:</label>
-              <input type="date" id="fecha" name="fecha" required>
-            </div>
-          </div>
-
-          <!-- Segunda fila: Ejercicio Fiscal y Periodo -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="ejercicioFiscal">Ejercicio Fiscal:</label>
-              <select id="ejercicioFiscal" name="ejercicioFiscal" required>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="ejercicioPeriodo">Periodo:</label>
-              <select id="ejercicioPeriodo" name="ejercicioPeriodo" required>
-                <option value="">Seleccionar mes</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Tercera fila: Contribuyente y Domicilio -->
-          <div class="form-group">
-            <label for="contribuyente">Contribuyente:</label>
-            <select id="contribuyente" name="contribuyente" required></select>
-          </div>
-          <div class="form-group">
-            <label for="domicilio">Domicilio:</label>
-            <input type="text" id="domicilio" name="domicilio">
-          </div>
-
-          <!-- Cuarta fila: Cuenta Contable y Referencia -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="cuentaContable">Cuenta Contable:</label>
-              <select id="cuentaContable" name="cuentaContable" required></select>
-            </div>
-            <div class="form-group">
-              <label for="cuentaReferencia">Cuenta Referencia:</label>
-              <input type="text" id="cuentaReferencia" name="cuentaReferencia" required>
-            </div>
-          </div>
-
-          <!-- Quinta fila: Descripción y Base Catastral -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="descripcion">Descripción:</label>
-              <input type="text" id="descripcion" name="descripcion" required>
-            </div>
-            <div class="form-group">
-              <label for="baseCatastral">Base Catastral:</label>
-              <input type="number" id="baseCatastral" name="baseCatastral" step="0.01">
-            </div>
-          </div>
-
-          <!-- Sexta fila: Subtotal y Descuento -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="subtotal">Subtotal:</label>
-              <input type="number" id="subtotal" name="subtotal" step="0.01" required>
-            </div>
-            <div class="form-group">
-              <label for="motivoDescuento">Motivo Descuento:</label>
-              <input type="text" id="motivoDescuento" name="motivoDescuento">
-            </div>
-          </div>
-
-          <!-- Séptima fila: Descuento y Total -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="descuento">Descuento:</label>
-              <input type="number" id="descuento" name="descuento" step="0.01" value="0.00">
-            </div>
-            <div class="form-group">
-              <label for="total">Total:</label>
-              <input type="number" id="total" name="total" step="0.01" readonly>
-            </div>
-          </div>
-
-          <!-- Octava fila: Forma de Pago y Total en Letra -->
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="formaPago">Forma de Pago:</label>
-              <select id="formaPago" name="formaPago" required>
-                <option value="EFECTIVO">Efectivo</option>
-                <option value="TARJETA">Tarjeta</option>
-                <option value="TRANSFERENCIA">Transferencia</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="totalLetra">Total en Letra:</label>
-              <input type="text" id="totalLetra" name="totalLetra" readonly>
-            </div>
-          </div>
-
-          <!-- Contenedor para botones -->
-          <div class="form-actions">
-            <button type="button" id="btnCancelarRecibo" class="btn-cancel">Cerrar</button>
-            <button type="submit" id="btnGuardarRecibo">Guardar</button>
-            <button type="button" id="btnImprimirRecibo">Imprimir</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 
   <footer class="footer">
     <p>© 2025 Ixtlán - Módulo 3: Generación de Recibos</p>
   </footer>
+
 </body>
 
 </html>

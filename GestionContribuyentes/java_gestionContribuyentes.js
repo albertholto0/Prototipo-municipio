@@ -81,7 +81,7 @@ const elements = {
     paginationContainer: document.querySelector(".pagination"),
     modalOverlay: document.getElementById('modalOverlay'),
     btnOpenModal: document.getElementById('btnOpenModal'),
-    btnCloseModal: document.getElementById('btnCloseModal') // Asegúrate de que este elemento existe
+    btnCloseModal: document.getElementById('btnCloseModal')
 };
 
 // Funciones principales
