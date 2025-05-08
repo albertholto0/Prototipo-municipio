@@ -220,7 +220,6 @@ window.editAccount = function (index) {
   elements.valorBase.value = base.valorBase;
   elements.fechaPagado.value = base.fechaPagado;
   elements.tipoConexion.value = base.tipoConexion;
-
   elements.selectContribuyente.value = base.selectContribuyente;
   elements.selectConcepto.value = base.selectConcepto;
   
@@ -297,7 +296,7 @@ window.viewAccount = function(index) {
     <p><strong>Ubicación:</strong> ${base.ubicacion}</p>
     <p><strong>Valor Base:</strong> ${base.valorBase}</p>
     <p><strong>Fecha Pagado:</strong> ${base.fechaPagado}</p>
-    <p><strong>Tipo de Concexion:</strong> ${base.tipoConexion}</p>
+    <p><strong>Tipo de Conexión:</strong> ${base.tipoConexion}</p>
     <p><strong>Contribuyente:</strong> ${base.selectContribuyente}</p>
     <p><strong>Concepto:</strong> ${base.selectConcepto}</p>
   `;
