@@ -42,7 +42,7 @@
 
 .form-container {
   background: linear-gradient(135deg, #e8f5e9, #d0f0dc); /* verde muy suave */
-  border: 2px solid #2ecc71;
+  /*border: 2px solid #b1e7bd;*/
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 0 20px rgba(39, 174, 96, 0.15);
@@ -124,6 +124,14 @@
   margin-top: 2rem;
 }
 
+.form-buttons-container {
+  display: flex;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  gap: 1rem; /* Espacio entre botones (reemplaza margin-left) */
+  margin-top: 20px; /* Espacio arriba del grupo de botones */
+  width: 100%;
+}
+
 .reset-button {
   background-color: #e74c3c;
   color: white;
@@ -135,6 +143,7 @@
 }
 .reset-button:hover {
   background-color: #c0392b;
+  justify-content: flex-end;
 }
 
 .preview-container {
