@@ -1,0 +1,28 @@
+/* ===== BARRA DE BÚSQUEDA ===== */
+.busqueda-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin: 2rem 0 1.5rem 0;
+}
+
+.busqueda-container input, 
+.busqueda-container select {
+  padding: 0.70rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 30px;
+  height: 40px;
+  flex: 1;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.busqueda-container input:focus, 
+.busqueda-container select:focus {
+  outline: none;
+  border-color: #2ecc71;
+  box-shadow: 0 2px 15px rgba(46, 204, 113, 0.2);
+}

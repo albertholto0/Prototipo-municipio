@@ -5,7 +5,7 @@ let GestionConexiones = [
     ubicacion: "Calle Falsa 123",
     valorBase: 50000,
     fechaPagado: "2023-06-10",
-    tipoConexion: "Activo",
+    tipoConexion: "Comercial",
     selectContribuyente: "Eden Mendoza",      
     selectConcepto: "Prestamo x"
 
@@ -15,8 +15,17 @@ let GestionConexiones = [
     ubicacion: "Calle Falsa 123",
     valorBase: 50000,
     fechaPagado: "2023-06-10",
-    tipoConexion: "Activo",
+    tipoConexion: "Domestico",
     selectContribuyente: "Eden Mendoza",      
+    selectConcepto: "Prestamo x"
+  },
+  {
+    fechaConcexion: "2023-05-10",
+    ubicacion: "Calle Contitucion",
+    valorBase: 45000,
+    fechaPagado: "2025-09-15",
+    tipoConexion: "Industrial",
+    selectContribuyente: "Elton Yael",      
     selectConcepto: "Prestamo x"
   }
 ];

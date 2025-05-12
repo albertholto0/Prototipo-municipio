@@ -86,3 +86,28 @@ function numeroALetras(numero) {
     
     return resultado.trim() + (numero === 1 ? ' peso mexicano' : ' pesos mexicanos');
 }
+
+// Lógica para el iniciar la caja
+document.addEventListener("DOMContentLoaded", () => {
+  const modalApertura = document.getElementById("modalAperturaCaja");
+  const btnConfirmar = document.getElementById("btnConfirmarApertura");
+
+  // Verificar si ya hay apertura (ejemplo con localStorage)
+  if (!localStorage.getItem("cajaAbierta")) {
+    modalApertura.style.display = "flex"; // Mostrar modal
+    document.getElementById("receiptForm").style.opacity = "0.5"; // Bloquear formulario
+  }
+
+  // Confirmar apertura
+  btnConfirmar.addEventListener("click", () => {
+    const monto = parseFloat(document.getElementById("montoInicialCaja").value);
+    if (monto >= 0) {
+      localStorage.setItem("cajaAbierta", true);
+      localStorage.setItem("montoInicial", monto);
+      modalApertura.style.display = "none";
+      document.getElementById("receiptForm").style.opacity = "1"; // Habilitar formulario
+    } else {
+      alert("Ingrese una cantidad correcta por favor");
+    }
+  });
+});

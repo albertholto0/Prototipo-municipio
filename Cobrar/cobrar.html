@@ -12,6 +12,18 @@
 </head>
 
 <body>
+
+  <div id="modalAperturaCaja" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Apertura de Caja</h2>
+      <p>Ingrese el monto inicial</p>
+      <input type="text" id="montoInicialCaja" required>
+      <div class="modal-actions">
+        <button id="btnConfirmarApertura">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
   <header>
     <div class="header-left">
       <div class="logo-left">
@@ -26,7 +38,12 @@
 
   <!-- Contenido principal -->
   <main class="main-container">
-    
+
+    <div class="title-section">
+      <h2>Generar Nuevo Recibo</h2>
+      <hr class="title-line">
+    </div>
+
     <!-- Formulario de recibo -->
     <div class="form-container">
       <form id="receiptForm">
@@ -137,7 +154,9 @@
             <label for="descuento">Descuento:</label>
             <select id="descuento" name="descuento" required>
               <option value="0">0%</option>
+              <option value="20">20%</option>
               <option value="50">50%</option>
+              <option vallue="70">70%</option>
             </select>
           </div>
           <div class="form-group">
