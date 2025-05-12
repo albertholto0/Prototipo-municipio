@@ -24,12 +24,12 @@ const rowsPerPage = 10;
 
 // Mapeo de elementos del DOM
 const elements = {
-    tableBody: document.querySelector("#receiptsTable tbody"),
+    tableBody: document.querySelector("#accountsTable tbody"),
     searchInput: document.getElementById("searchInput"),
     filterEjercicio: document.getElementById("filterEjercicio"),
     filterFechaInicio: document.getElementById("filterFechaInicio"),
     filterFechaFin: document.getElementById("filterFechaFin"),
-    form: document.getElementById("receiptForm"),
+    form: document.getElementById("accountForm"),
     paginationContainer: document.querySelector(".pagination"),
     modalOverlay: document.getElementById("modalOverlay"),
     btnCloseModal: document.getElementById("btnCloseModal"),

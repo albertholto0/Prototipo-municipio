@@ -5,18 +5,9 @@ let GestionConexiones = [
     ubicacion: "Calle Falsa 123",
     valorBase: 50000,
     fechaPagado: "2023-06-10",
-    tipoConexion: "Activo",
+    tipoConexion: "Comercial",
     selectContribuyente: "Eden Mendoza",      
     selectConcepto: "Prestamo x"
-    // nombreDescripcion: "Prestamo de un volteo",
-    // ubicacion: "Calle Falsa 123",
-    // valorFinal: 50000,
-    // fechaInicio: "2023-05-10",
-    // fechaCierre: "2023-06-10",
-    // estadoAlquiler: "Activo",
-    // //Sacados de la Bd
-    // selectContribuyente: "Eden Mendoza",      
-    // selectConcepto: "Prestamo x"
 
   },
   {
@@ -24,18 +15,18 @@ let GestionConexiones = [
     ubicacion: "Calle Falsa 123",
     valorBase: 50000,
     fechaPagado: "2023-06-10",
-    tipoConexion: "Activo",
+    tipoConexion: "Domestico",
     selectContribuyente: "Eden Mendoza",      
     selectConcepto: "Prestamo x"
-    // nombreDescripcion: "Prestamo de una retroescabadora",
-    // ubicacion: "Calle Falsa 123",
-    // valorFinal: 20000,
-    // fechaInicio: "2023-07-10",
-    // fechaCierre: "2023-08-10",
-    // estadoAlquiler: "Finalizado",
-    // //Sacados de la Bd
-    // selectContribuyente: "Rosendo Casarrubia",      
-    // selectConcepto: "Prestamo x"
+  },
+  {
+    fechaConcexion: "2023-05-10",
+    ubicacion: "Calle Contitucion",
+    valorBase: 45000,
+    fechaPagado: "2025-09-15",
+    tipoConexion: "Industrial",
+    selectContribuyente: "Elton Yael",      
+    selectConcepto: "Prestamo x"
   }
 ];
 
@@ -70,18 +61,6 @@ const elements = {
   selectContribuyente: document.getElementById("selectContribuyente"),
   selectConcepto: document.getElementById("selectConcepto"),
 
-
-  // nombreDescripcion: document.getElementById("nombreDescripcion"),
-  // ubicacion: document.getElementById("ubicacion"),
-  // fechaInicio: document.getElementById("fechaInicio"),
-  // fechaCierre: document.getElementById("fechaCierre"),
-  // valorFinal: document.getElementById("valorFinal"),
-  // estadoAlquiler: document.getElementById("estadoAlquiler"),
-
-  // selectContribuyente: document.getElementById("selectContribuyente"),
-  // selectConcepto: document.getElementById("selectConcepto"),
-  
- 
   btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
   btnCancel: document.getElementById("btnCancel"),
   formTitle: document.getElementById("formTitle"),
@@ -256,7 +235,7 @@ window.editAccount = function (index) {
   
   isEditing = true;
   currentIndex = index;
-  elements.formTitle.textContent = "Editar Alquiler";
+  elements.formTitle.textContent = "Editar Conexión";
   elements.btnAddOrUpdate.textContent = "Actualizar";
   openModal();
 };
@@ -283,7 +262,7 @@ function resetForm() {
   elements.form.reset();
   isEditing = false;
   currentIndex = null;
-  elements.formTitle.textContent = "Registrar Alquiler";
+  elements.formTitle.textContent = "Registrar Conexión";
   elements.btnAddOrUpdate.textContent = "Agregar";
 }
 
@@ -323,16 +302,13 @@ window.viewAccount = function(index) {
   const base = GestionConexiones[index];
   const infoContent = document.getElementById("infoContent");
   infoContent.innerHTML = `
-    
     <p><strong>Fecha Conexión:</strong> ${base.fechaConcexion}</p>
     <p><strong>Ubicación:</strong> ${base.ubicacion}</p>
     <p><strong>Valor Base:</strong> ${base.valorBase}</p>
     <p><strong>Fecha Pagado:</strong> ${base.fechaPagado}</p>
     <p><strong>Tipo de Concexion:</strong> ${base.tipoConexion}</p>
-    
     <p><strong>Contribuyente:</strong> ${base.selectContribuyente}</p>
     <p><strong>Concepto:</strong> ${base.selectConcepto}</p>
-    
   `;
   openViewModal();
 };

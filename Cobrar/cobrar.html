@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de cobro</title>
+  <link rel="stylesheet" href="../Componentes/Nav.css">
+  <link rel="stylesheet" href="estilos_cobro.css">
+  <script src="javaScript_cobros.js" defer></script>
+  <script src="/Componentes/Nav.js" defer></script>
+</head>
+
+<body>
+
+  <div id="modalAperturaCaja" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Apertura de Caja</h2>
+      <p>Ingrese el monto inicial</p>
+      <input type="text" id="montoInicialCaja" required>
+      <div class="modal-actions">
+        <button id="btnConfirmarApertura">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-left">
+      <div class="logo-left">
+        <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+      </div>
+      <div class="title">
+        <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+      </div>
+    </div>
+    <div class="menu-buttons" id="nav-placeholder"></div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="main-container">
+
+    <div class="title-section">
+      <h2>Generar Nuevo Recibo</h2>
+      <hr class="title-line">
+    </div>
+
+    <!-- Formulario de recibo -->
+    <div class="form-container">
+      <form id="receiptForm">
+        <!-- Primera fila: Folio y Fecha -->
+        <div class="form-row-3cols">
+          <div class="form-group">
+            <label for="folio">Folio:</label>
+            <input type="text" id="folio" name="folio" readonly>
+          </div>
+          <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" readonly>
+          </div>
+          <div class="form-group">
+            <label for="ejercicioFiscal">Ejercicio Fiscal:</label>
+            <input type="text" id="ejercicioFiscal" name="ejercicioFiscal" readonly>
+          </div>
+        </div>
+
+        <!-- Segunda fila: Periodo, Contribuyente y Domicilio -->
+        <div class="form-row-3cols">
+          <div class="form-group">
+            <label for="ejercicioPeriodo">Periodo:</label>
+            <input type="text" id="ejercicioPeriodo" name="ejercicioPeriodo" required>
+          </div>
+          <div class="form-group">
+            <label for="contribuyente">Contribuyente:</label>
+            <select id="contribuyente" name="contribuyente" required>
+              <option value="1">Juan Pérez López</option>
+              <option value="2">María García Hernández</option>
+              <option value="3">Carlos Martínez Jiménez</option>
+              <option value="4">Ana Rodríguez Sánchez</option>
+              <option value="5">Pedro Gómez Ramírez</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="domicilio">Domicilio:</label>
+            <select id="domicilio" name="domicilio">
+              <option value="Calle Constitución #12, San Francisco"> Calle Constitución #12, San Francisco </option>
+              <option value="Avenida Juárez #456, Col. Reforma"> Avenida Juárez #456, Col. Reforma </option>
+              <option value="Calle Morelos #789, Barrio Alto"> Calle Morelos #789, Barrio Alto </option>
+              <option value="Boulevard Hidalgo #101, Zona Norte"> Boulevard Hidalgo #101, Zona Norte </option>
+              <option value="Callejón del Rosario #234, Centro"> Callejón del Rosario #234, Centro </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cuenta Contable que abarca 3 columnas -->
+        <div class="form-group full-width">
+          <label for="cuentaContable">Cuenta Contable:</label>
+          <select id="cuentaContable" name="cuentaContable" required>
+            <option value="100000">100000 - Impuestos </option>
+            <option value="110000">110000 - Impuestos sobre los ingresos</option>
+            <option value="110100">110100 - Rifas, Sorteos, Loterias y Concursos</option>
+            <option value="110101">110101 - Rifas</option>
+            <option value="110102">110102 - Sorteos</option>
+          </select>
+        </div>
+
+        <!-- Tercera fila: Referencia, Base Catastral y Forma de Pago -->
+        <div class="form-row-3cols">
+          <div class="form-group">
+            <label for="cuentaReferencia">Motivo de Pago:</label>
+            <select id="cuentaReferencia" name="cuentaReferencia" required>
+              <option value="cuentaReferencia">Cuenta Referencia</option>
+              <option value="cuentaConexion">Conexión</option>
+              <option value="cuentaAlquiler">Alquiler</option>
+              <option value="cuentaBaseCatastral">Base Catastral</option>
+              <option value="cuentaEstablecimiento">Establecimiento</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="baseCatastral">Clave del Pago:</label>
+            <input type="text" id="baseCatastral" name="baseCatastral" required>
+          </div>
+          <div class="form-group">
+            <label for="formaPago">Forma de Pago:</label>
+            <select id="formaPago" name="formaPago" required>
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
+              <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
+              <option value="TRANSFERENCIA">Transferencia</option>
+              <option value="CHEQUE">Cheque</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Descripción que abarca 3 columnas -->
+        <div class="form-group full-width">
+          <label for="descripcion">Descripción:</label>
+          <input type="text" id="descripcion" name="descripcion" list="descripciones" required>
+          <datalist id="descripciones">
+            <option value="Pago de impuesto predial anual">
+            <option value="Pago de servicio de agua potable">
+            <option value="Contribución por alumbrado público">
+            <option value="Pago de recolección de basura">
+            <option value="Derechos por licencia de construcción">
+          </datalist>
+        </div>
+
+        <!-- Cuarta fila: Subtotal, Descuento y Total -->
+        <div class="form-row-3cols">
+          <div class="form-group">
+            <label for="subtotal">Subtotal:</label>
+            <input type="text" id="subtotal" name="subtotal" required>
+          </div>
+          <div class="form-group">
+            <label for="descuento">Descuento:</label>
+            <select id="descuento" name="descuento" required>
+              <option value="0">0%</option>
+              <option value="20">20%</option>
+              <option value="50">50%</option>
+              <option vallue="70">70%</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="descuentoAdicional">Descuento Adicional (Ene-Feb):</label>
+            <select id="descuentoAdicional" name="descuentoAdicional" required>
+              <option value="0">0%</option>
+              <option value="20">20%</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="total">Total:</label>
+            <input type="text" id="total" name="total" readonly>
+          </div>
+        </div>
+
+        <!-- Quinta fila: Motivo Descuento y Total en Letra -->
+        <div class="form-row-2cols">
+          <div class="form-group">
+            <label for="motivoDescuento">Motivo Descuento:</label>
+            <select id="motivoDescuento" name="motivoDescuento" required>
+              <option value="No Aplica"> No Aplica </option>
+              <option value="Ciudadano Cumplido"> Ciudadano Cumplido </option>
+              <option value="Adulto mayor"> Adulto Mayor </option>
+              <option value="Discapacidad"> Discapacidad </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cantidadLetra">Total en Letra:</label>
+            <input type="text" id="cantidadLetra" name="cantidadLetra" readonly>
+          </div>
+        </div>
+
+        <!-- Contenedor para botones -->
+        <div class="form-actions">
+          <button type="button" id="btnCancelarRecibo" class="btn-cancel">Cancelar</button>
+          <button type="submit" id="btnGuardarRecibo">Cobrar</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Ixtlán - Módulo 3: Generación de Recibos</p>
+  </footer>
+</body>
+
+</html>
