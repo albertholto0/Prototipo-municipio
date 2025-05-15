@@ -1,3 +1,4 @@
+// Obtener referencias a los elementos del DOM
 const modal = document.getElementById('modalConcepto');
 const btnAgregarConcepto = document.getElementById('btnAgregarConcepto');
 const btnCancelarModal = document.getElementById('btnCancelarModal');
@@ -12,14 +13,16 @@ const deletePasswordInput = document.getElementById('deletePassword');
 
 // Simulación de datos iniciales
 let conceptos = [
-    { id: 1, descripcion: 'Agua potable', tipo_servicio: 'Agua', cuota: 150.00, periodicidad: 'Mensual', id_seccion: 1, id_cuenta_contable: 101 },
-    { id: 2, descripcion: 'Recolección de basura', tipo_servicio: 'Basura', cuota: 100.00, periodicidad: 'Mensual', id_seccion: 2, id_cuenta_contable: 102 },
-    { id: 3, descripcion: 'Alumbrado público', tipo_servicio: 'Electricidad', cuota: 200.00, periodicidad: 'Mensual', id_seccion: 3, id_cuenta_contable: 103 },
-    { id: 4, descripcion: 'Mantenimiento de parques', tipo_servicio: 'Parques', cuota: 50.00, periodicidad: 'Trimestral', id_seccion: 4, id_cuenta_contable: 104 },
-    { id: 5, descripcion: 'Pavimentación de calles', tipo_servicio: 'Infraestructura', cuota: 500.00, periodicidad: 'Anual', id_seccion: 5, id_cuenta_contable: 105 },
-    { id: 6, descripcion: 'Servicio de drenaje', tipo_servicio: 'Drenaje', cuota: 120.00, periodicidad: 'Mensual', id_seccion: 6, id_cuenta_contable: 106 },
-    { id: 7, descripcion: 'Reparación de banquetas', tipo_servicio: 'Infraestructura', cuota: 300.00, periodicidad: 'Semestral', id_seccion: 7, id_cuenta_contable: 107 },
-    { id: 8, descripcion: 'Recolección de escombros', tipo_servicio: 'Basura', cuota: 80.00, periodicidad: 'Mensual', id_seccion: 8, id_cuenta_contable: 108 },
+    { id: 1, clave: 'A001', descripcion: 'Agua potable', tipo_servicio: 'Agua', cuota: 150.00, periodicidad: 'Mensual', id_seccion: 1, id_cuenta_contable: 101 },
+    { id: 2, clave: 'B002', descripcion: 'Recolección de basura', tipo_servicio: 'Basura', cuota: 100.00, periodicidad: 'Mensual', id_seccion: 2, id_cuenta_contable: 102 },
+    { id: 3, clave: 'E003', descripcion: 'Alumbrado público', tipo_servicio: 'Electricidad', cuota: 200.00, periodicidad: 'Mensual', id_seccion: 3, id_cuenta_contable: 103 },
+    { id: 4, clave: 'P004', descripcion: 'Mantenimiento de parques', tipo_servicio: 'Parques', cuota: 50.00, periodicidad: 'Trimestral', id_seccion: 4, id_cuenta_contable: 104 },
+    { id: 5, clave: 'I005', descripcion: 'Pavimentación de calles', tipo_servicio: 'Infraestructura', cuota: 500.00, periodicidad: 'Anual', id_seccion: 5, id_cuenta_contable: 105 },
+    { id: 6, clave: 'D006', descripcion: 'Servicio de drenaje', tipo_servicio: 'Drenaje', cuota: 120.00, periodicidad: 'Mensual', id_seccion: 6, id_cuenta_contable: 106 },
+    { id: 7, clave: 'R007', descripcion: 'Reparación de banquetas', tipo_servicio: 'Infraestructura', cuota: 300.00, periodicidad: 'Semestral', id_seccion: 7, id_cuenta_contable: 107 },
+    { id: 8, clave: 'B008', descripcion: 'Recolección de escombros', tipo_servicio: 'Basura', cuota: 80.00, periodicidad: 'Mensual', id_seccion: 8, id_cuenta_contable: 108 },
+    { id: 9, clave: 'M009', descripcion: 'Limpieza de ríos', tipo_servicio: 'Medio Ambiente', cuota: 250.00, periodicidad: 'Anual', id_seccion: 9, id_cuenta_contable: 109 },
+    { id: 10, clave: 'S010', descripcion: 'Control de plagas', tipo_servicio: 'Salud Pública', cuota: 180.00, periodicidad: 'Semestral', id_seccion: 10, id_cuenta_contable: 110 }
 ];
 
 // Cargar datos en la tabla
@@ -32,6 +35,7 @@ function cargarTablaConceptos(filteredConceptos = null) {
         row.dataset.id = concepto.id;
         row.innerHTML = `
             <td class="hidden">${concepto.id}</td>
+            <td>${concepto.clave}</td>
             <td>${concepto.descripcion}</td>
             <td>${concepto.tipo_servicio}</td>
             <td>$${concepto.cuota.toFixed(2)}</td>
@@ -64,6 +68,7 @@ function openModifyModal(conceptoId) {
     if (!concepto) return;
 
     modalTitle.textContent = 'Modificar Concepto';
+    document.getElementById('clave').value = concepto.clave;
     document.getElementById('descripcion').value = concepto.descripcion;
     document.getElementById('tipo_servicio').value = concepto.tipo_servicio;
     document.getElementById('cuota').value = concepto.cuota;
@@ -106,8 +111,15 @@ conceptForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     // Validar longitudes máximas
+    const clave = document.getElementById('clave').value;
+    const descripcion = document.getElementById('descripcion').value;
     const tipoServicio = document.getElementById('tipo_servicio').value;
     const periodicidad = document.getElementById('periodicidad').value;
+
+    if (clave.length > 20) {
+        alert('La clave no puede exceder 20 caracteres');
+        return;
+    }
 
     if (tipoServicio.length > 30) {
         alert('El tipo de servicio no puede exceder 30 caracteres');
@@ -123,7 +135,8 @@ conceptForm.addEventListener('submit', (e) => {
     const conceptoId = document.getElementById('conceptoId') ? parseInt(document.getElementById('conceptoId').value) : Date.now();
     const conceptoData = {
         id: conceptoId,
-        descripcion: document.getElementById('descripcion').value,
+        clave: clave,
+        descripcion: descripcion,
         tipo_servicio: tipoServicio,
         cuota: parseFloat(document.getElementById('cuota').value),
         periodicidad: periodicidad,
