@@ -285,3 +285,4 @@ document.addEventListener("DOMContentLoaded", () => {
     // Renderizar tabla inicial
     renderTable(contribuyentes);
 });
+
