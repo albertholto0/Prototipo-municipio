@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const fila = document.createElement('tr');
         
         fila.innerHTML = `
-          <td>${contribuyente.id}</td>
-          <td>${contribuyente.nombre}</td>
+          <td>${contribuyente.id_contribuyente}</td>
+          <td>${contribuyente.nombre_completo}</td>
           <td>${contribuyente.rfc}</td>
-          <td>${contribuyente.direccion}</td>
+          <td>${contribuyente.calle} ${contribuyente.numero_vivienda}, ${contribuyente.barrio} ${contribuyente.localidad}</td>
           <!-- Añade más celdas según tu estructura -->
         `;
         

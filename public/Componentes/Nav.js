@@ -9,7 +9,7 @@ const injectStyles = () => {
 // Cargar HTML dinámicamente
 const injectHTML = async () => {
   try {
-    const response = await fetch("/Componentes/Nav.html"); // Ajusta la ruta
+    const response = await fetch("/public/Componentes/Nav.html"); // Ajusta la ruta
     const html = await response.text();
     const placeholder = document.getElementById("nav-placeholder");
     if (placeholder) placeholder.innerHTML = html;
