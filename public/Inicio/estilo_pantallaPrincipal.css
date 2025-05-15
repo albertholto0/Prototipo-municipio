@@ -5,7 +5,7 @@ body, html {
 }
 
 .background-image {
-    background-image: url('/Assets/fondo_Ixtlán.jpg');
+    background-image: url('/public/Assets/fondo_Ixtlán.jpg');
     background-size: cover;
     background-position: center;
     height: 75vh;
