@@ -42,19 +42,19 @@
 }
 
 /* Imagenes de fondo para cada tarjeta */
-.card.gestion-usuarios { background-image: url('/Assets/ImagenesCatalogo/imagen-usuarios.jpeg'); }
-.card.corte-caja { background-image: url('/Assets/ImagenesCatalogo/imagen-corteCaja.jpg'); }
-.card.configuracion { background-image: url('/Assets/ImagenesCatalogo/imagen-configuracion.jpg');}
-.card.cuentas-contables { background-image: url('/Assets/ImagenesCatalogo/imagen-cuentasContables.jpg');}
-.card.gestion-alquiler { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionAlquiler.jpg');}
-.card.gestion-conexion { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionConexion.jpg');}
-.card.gestion-establecimiento { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionEstablecimiento.png');}
-.card.gestion-base { background-image: url('/Assets/ImagenesCatalogo/imagen-baseCatastral.jpeg');}
-.card.estimulo-fiscal { background-image: url('/Assets/ImagenesCatalogo/imagen-estimuloFiscal.jpg');}
-.card.ejercicio-fiscal { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionFiscal.jpg');}
-.card.gestion-seccion { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionSeccion.jpg');}
-.card.gestion-concepto { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionConcepto.jpg');}
-.card.gestion-recibos { background-image: url('/Assets/ImagenesCatalogo/imagen-gestionRecibos.jpg');}
+.card.gestion-usuarios { background-image: url('/public/Assets/ImagenesCatalogo/imagen-usuarios.jpeg'); }
+.card.corte-caja { background-image: url('/public/Assets/ImagenesCatalogo/imagen-corteCaja.jpg'); }
+.card.configuracion { background-image: url('/public/Assets/ImagenesCatalogo/imagen-configuracion.jpg');}
+.card.cuentas-contables { background-image: url('/public/Assets/ImagenesCatalogo/imagen-cuentasContables.jpg');}
+.card.gestion-alquiler { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionAlquiler.jpg');}
+.card.gestion-conexion { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionConexion.jpg');}
+.card.gestion-establecimiento { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionEstablecimiento.png');}
+.card.gestion-base { background-image: url('/public/Assets/ImagenesCatalogo/imagen-baseCatastral.jpeg');}
+.card.estimulo-fiscal { background-image: url('/public/Assets/ImagenesCatalogo/imagen-estimuloFiscal.jpg');}
+.card.ejercicio-fiscal { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionFiscal.jpg');}
+.card.gestion-seccion { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionSeccion.jpg');}
+.card.gestion-concepto { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionConcepto.jpg');}
+.card.gestion-recibos { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionRecibos.jpg');}
 
 .card::before {
     content: '';
