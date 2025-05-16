@@ -26,5 +26,4 @@ Sistema web para gestionar pagos, impuestos, multas y servicios municipales en I
 
 ##  Licencias
 
-Universidad de la Sierra Juárez
-Ixtlán de Juárez, Oax.
+Universidad de la Sierra Juárez.
