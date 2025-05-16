@@ -5,22 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Alquiler</title>
-  <link rel="stylesheet" href="/BaseCatastral/Styles.css">
-  <script src="PruebaAlquiler.js" defer></script>
-  <script src="/Componentes/Nav.js" defer></script>
+  <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
+  <link rel="stylesheet" href="/public/Componentes/Nav.css">
 </head>
 
 <body>
   <header>
-    <div class="header-left"> <!-- Contenedor flex nuevo -->
+    <div class="header-left">
       <div class="logo-left">
-        <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
       </div>
       <div class="title">
         <h1>SISTEMA DE COBROS MUNICIPAL</h1>
       </div>
     </div>
+
+    <!-- Menú debe estar fuera del header-left -->
     <div class="menu-buttons" id="nav-placeholder">
+      <!-- Tus botones aquí -->
     </div>
   </header>
 
@@ -33,7 +35,7 @@
 
     <!-- Sección de búsqueda -->
     <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Buscar por Fecha de inicio o Descripción" />
+      <input type="text" id="searchInput" placeholder="Buscar por Fecha o Descripción" />
       <button class="btn-agregar" id="btnOpenModal">Agregar</button>
     </div>
 
@@ -71,7 +73,8 @@
           <!-- Segunda fila: Nombre propietario (cada uno en su propia fila) -->
           <div class="form-group">
             <label for="nombreDescripcion">Descripcion:</label>
-            <input type="text" id="nombreDescripcion" name="nombreDescripcion" placeholder="Prestamo de retroescabadora" required>
+            <input type="text" id="nombreDescripcion" name="nombreDescripcion" placeholder="Prestamo de retroescabadora"
+              required>
           </div>
 
           <!-- Tercera fila: Ubicación -->
@@ -127,8 +130,8 @@
             <select id="selectContribuyente" name="contribuyente" required>
               <option value="">Seleccione un contribuyente</option>
               <option value="Rosendo Vazquez Lopez">Luna Hernandez Mendoza</option>
-                <option value="Rosendo Vazquez Lopez">Rosendo Vazquez Lopez</option>
-                <option value="Marizol Diaz Lopez">Marizol Diaz Lopez</option>
+              <option value="Rosendo Vazquez Lopez">Rosendo Vazquez Lopez</option>
+              <option value="Marizol Diaz Lopez">Marizol Diaz Lopez</option>
             </select>
           </div>
           <div class="form-group">
@@ -136,7 +139,7 @@
             <select id="selectConcepto" name="concepto" required>
               <option value="">Seleccione un concepto</option>
               <option value="Recoleccion de basura">Recoleccion de basura</option>
-                <option value="Agua potable">Agua potable</option>
+              <option value="Agua potable">Agua potable</option>
             </select>
           </div>
 
@@ -166,6 +169,9 @@
   <footer class="footer">
     <p>© 2025 Ixtlán - Módulo 7: Gestión de Alquiler</p>
   </footer>
+
+  <script src="/public/Componentes/Nav.js"></script>
+  <script src="/public/PruebaAlquiler.js" defer></script>
 </body>
 
 </html>
