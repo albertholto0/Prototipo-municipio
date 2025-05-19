@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corte de caja</title>
+    <link rel="stylesheet" href="/Componentes/Nav.css">
+    <link rel="stylesheet" href="Styles.css">
+    <script src="Script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="header-left"> <!-- Contenedor flex nuevo -->
+            <div class="logo-left">
+                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
+        </div>
+        <div class="no-print" class="menu-buttons"   id="nav-placeholder">
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="title-section">
+            <h2>Corte de caja</h2>
+            <hr class="title-line">
+        </div>
+        
+        
+        <!-- Selector de fecha en una sola línea -->
+        <div class="date-controls" >
+            <div class="search-container"  class="no-print" >
+                <label for="selectorFecha" class="no-print">Buscar corte:</label>
+                <input type="date" id="selectorFecha" name="selectorFecha">
+                <button class="btn-search"  id="btnBuscarCorte">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </button>
+                <button class="btn-today" id="btnHoy">
+                    
+                    Hoy
+                </button>
+            </div>
+        </div>
+
+        <!-- Resto del código permanece igual -->
+        <!-- Resumen del corte -->
+        <div class="table-container">
+            <table id="summaryTable">
+                <tbody>
+                    <tr>
+                        <th>Encargado en caja:</th>
+                        <td id="encargadoCaja">Amelia Lopez</td>
+                    </tr>
+                    <tr>
+                        <th>Fecha: </th>
+                        <td id="fechaActual">--/--/----</td>
+                    </tr>
+                    <tr>
+                        <th>Movimientos incluidos:</th>
+                        <td id="totalMovimientos">0</td>
+                    </tr>
+                    <tr>
+                        <th>Hora cierre:</th>
+                        <td id="horaCierre">--:-- --</td>
+                    </tr>
+                    <tr>
+                        <th>Total en efectivo:</th>
+                        <td id="totalEfectivo">$0.00</td>
+                    </tr>
+                    <tr>
+                        <th>Total en transferencias:</th>
+                        <td id="totalTransferencias">$0.00</td>
+                    </tr>
+                    <tr>
+                        <th>Total en tarjetas:</th>
+                        <td id="totalTarjetas">$0.00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <th>TOTAL DEL DÍA:</th>
+                        <td id="totalGeneral">$0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Controles de caja -->
+        <div class="date-controls">
+            <button class="btn-agregar" id="btnImprimirCorte"   class="no-print" disabled>Imprimir Corte</button>
+            <button class="btn-cancel"  class="no-print" id="btnCerrarCorte">Cerrar Caja</button>
+        </div>
+
+        <!-- Tabla de movimientos -->
+        <div class="table-container">
+            <table id="movementsTable">
+                <thead>
+                    <tr>
+                        <th>FP</th>
+                        <th>CLAVE</th>
+                        <th>CONCEPTO</th>
+                        <th>TIPO DE PAGO</th>
+                        <th>CANTIDAD</th>
+                        <th>IMPORTE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos se llenarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="pagination-container">
+            <div class="pagination"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 4: Corte de caja</p>
+    </footer>
+
+    <script>
+        fetch('/Componentes/Nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar el nav:', error));
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+</body>
+
+</html>

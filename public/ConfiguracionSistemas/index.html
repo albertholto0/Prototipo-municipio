@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuración del Sistema de Cobro</title>
+    <link rel="stylesheet" href="Style.css" />
+    <!-- Redirecciona el logotipo -->
+    <script src="Script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-left">
+        <div class="logo-left">
+          <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán" />
+        </div>
+        <div class="title">
+          <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
+      </div>
+      <div id="nav-placeholder"></div>
+    </header>
+
+    <main class="main-container">
+      <div class="title-section">
+        <h2>Configuración del Sistema</h2>
+        <hr class="title-line" />
+      </div>
+
+      <div class="form-container">
+        <form id="configForm">
+          <div class="form-grid">
+            <!--DEPENDENCIA-->
+            <div class="form-group">
+              <label for="dependencia">Dependencia:</label>
+              <input type="text" id="dependencia" name="dependencia" required />
+            </div>
+
+            <!--LEMA-->
+            <div class="form-group">
+              <label for="lema">Lema:</label>
+              <input type="text" id="lema" name="lema" required />
+            </div>
+
+            <!--LOGO-->
+            <div class="form-group">
+              <label for="logo">Logo:</label>
+              <input type="file" id="logo" name="logo" accept="image/*" />
+            </div>
+
+            <!--PERIODO-->
+            <div class="form-group">
+              <label for="periodo">Periodo:</label>
+              <input type="text" id="periodo" name="periodo" required />
+            </div>
+
+            <!--RFC-->
+            <div class="form-group">
+              <label for="rfc">RFC:</label>
+              <input type="text" id="rfc" name="rfc" required />
+            </div>
+
+            <!--IDCIF-->
+            <div class="form-group">
+              <label for="idCif">ID CIF:</label>
+              <input type="text" id="idCif" name="idCif" required />
+            </div>
+
+            <!--QR-->
+            <div class="form-group">
+              <label for="codigoQR">Código QR:</label>
+              <input
+                type="file"
+                id="codigoQR"
+                name="codigoQR"
+                accept="image/*"
+              />
+            </div>
+          </div>
+
+          <!--Vista previa del logotipo y QR-->
+          <div class="preview-container">
+            <div class="image-previews">
+              <div>
+                <label>Vista previa del logo:</label>
+                <img
+                  id="logoPreview"
+                  src=""
+                  alt="Vista previa del logo"
+                  style="max-width: 200px; display: block; margin-top: 10px"
+                />
+              </div>
+              <div>
+                <label>Vista previa del QR:</label>
+                <img
+                  id="qrPreview"
+                  src=""
+                  alt="Vista previa del código QR"
+                  style="max-width: 200px; display: block; margin-top: 10px"
+                />
+              </div>
+            </div>
+
+            <div class="form-buttons-container">
+              <button type="button" id="resetButton" class="reset-button">
+                Restablecer Cambios
+              </button>
+              <button type="submit" id="btnAddOrUpdate">
+                Guardar Configuración
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>© 2025 Ixtlán - Módulo 6: Configuración del Sistema de Cobro</p>
+    </footer>
+  </body>
+</html>

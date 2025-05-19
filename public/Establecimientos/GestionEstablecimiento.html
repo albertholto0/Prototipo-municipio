@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Establecimientos</title>
+    <link rel="stylesheet" href="/public/Componentes/Nav.css" />
+    <link rel="stylesheet" href="Style.css" />
+    <script src="Script.js" defer></script>
+    <script src="/Componentes/Nav.js" defer></script>
+    <!--<script src="ScriptLogo.js" defer></script>-->
+    <script src="/Componentes/logo-sync.js" defer></script>
+
+    <!-- Referencia de donde se va a llamar el navegación -->
+  </head>
+
+  <body>
+    <header>
+      <div class="header-left">
+        <div class="logo-left">
+          <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán" />
+        </div>
+        <div class="title">
+          <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
+      </div>
+      <div class="menu-buttons" id="nav-placeholder"></div>
+    </header>
+
+    <main class="main-container">
+      <div class="title-section">
+        <h2>Gestión de Establecimientos</h2>
+        <hr class="title-line" />
+      </div>
+
+      <!-- Sección de búsqueda -->
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar por nombre o contribuyente"
+        />
+        <button class="btn-agregar" id="btnOpenModal">Agregar</button>
+      </div>
+
+      <!-- Filtros adicionales -->
+      <div class="filter-container">
+        <div class="form-group-inline">
+          <label for="tipoNegocioFilter">Giro de negocio:</label>
+          <select id="tipoNegocioFilter">
+            <option value="">Todos</option>
+            <option value="alimentos">Alimentos</option>
+            <option value="bebidas">Bebidas</option>
+            <option value="comercio">Comercio</option>
+            <option value="servicios">Servicios</option>
+          </select>
+        </div>
+        <div class="form-group-inline">
+          <label for="tipoEstablecimientoFilter">Tipo establecimiento:</label>
+          <select id="tipoEstablecimientoFilter">
+            <option value="">Todos</option>
+            <option value="fijo">Fijo</option>
+            <option value="semifijo">Semifijo</option>
+            <option value="ambulante">Ambulante</option>
+          </select>
+        </div>
+        <div class="form-group-inline">
+          <label for="fechaInicio">Fecha inicio:</label>
+          <input type="date" id="fechaInicio" />
+        </div>
+        <div class="form-group-inline">
+          <label for="fechaFin">Fecha fin:</label>
+          <input type="date" id="fechaFin" />
+        </div>
+        <button class="btn-filtrar" id="btnFiltrar">Filtrar</button>
+      </div>
+
+      <!-- Tabla -->
+      <div class="table-container">
+        <table id="establecimientosTable">
+          <thead>
+            <tr>
+              <th>Clave</th>
+              <th>Nombre</th>
+              <th>Dirección</th>
+              <th>Fecha registro</th>
+              <th>Contribuyente</th>
+              <th>Giro negocio</th>
+              <th>Tipo establecimiento</th>
+              <th>Concepto</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Se llenará dinámicamente con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-container">
+        <div class="pagination"></div>
+      </div>
+    </main>
+
+    <!-- Modal para el formulario -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-content">
+        <span class="btn-close" id="btnCloseModal">&times;</span>
+        <div class="form-container" id="formContainer">
+          <h3 class="text-center" id="formTitle">Agregar Establecimiento</h3>
+          <form id="establecimientoForm">
+            <div class="form-group">
+              <label for="nombreEstablecimiento">Nombre establecimiento:</label>
+              <input
+                type="text"
+                id="nombreEstablecimiento"
+                name="nombreEstablecimiento"
+                placeholder="Ej. Tienda de abarrotes"
+                required
+              />
+            </div>
+            <div class="form-group form-inline">
+              <div class="form-group-inline">
+                <label for="calle">Calle:</label>
+                <input
+                  type="text"
+                  id="calle"
+                  name="calle"
+                  placeholder="Ej. Av. Principal"
+                  required
+                />
+              </div>
+              <div class="form-group-inline">
+                <label for="numero">Número:</label>
+                <input
+                  type="text"
+                  id="numero"
+                  name="numero"
+                  placeholder="Ej. 123"
+                  required
+                />
+              </div>
+              <div class="form-group-inline">
+                <label for="colonia">Colonia:</label>
+                <input
+                  type="text"
+                  id="colonia"
+                  name="colonia"
+                  placeholder="Ej. Centro"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fechaRegistro">Fecha registro:</label>
+              <input
+                type="date"
+                id="fechaRegistro"
+                name="fechaRegistro"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="contribuyente">Contribuyente:</label>
+              <select id="contribuyente" name="contribuyente" required>
+                <option value="">Seleccione un contribuyente</option>
+                <!-- Se llenará dinámicamente -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="giroNegocio">Giro de negocio:</label>
+              <select id="giroNegocio" name="giroNegocio" required>
+                <option value="">Seleccione un giro</option>
+                <option value="alimentos">Alimentos</option>
+                <option value="bebidas">Bebidas</option>
+                <option value="comercio">Comercio</option>
+                <option value="servicios">Servicios</option>
+                <option value="otros">Otros</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tipoEstablecimiento">Tipo establecimiento:</label>
+              <select
+                id="tipoEstablecimiento"
+                name="tipoEstablecimiento"
+                required
+              >
+                <option value="">Seleccione un tipo</option>
+                <option value="fijo">Fijo</option>
+                <option value="semifijo">Semifijo</option>
+                <option value="ambulante">Ambulante</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="idConcepto">Concepto (Ley de ingresos):</label>
+              <select id="idConcepto" name="idConcepto" required>
+                <option value="">Seleccione un concepto</option>
+                <!-- Se llenará dinámicamente -->
+              </select>
+            </div>
+
+            <div class="form-buttons-container">
+              <button type="button" id="btnCancel" class="btn-cancel">
+                Cancelar
+              </button>
+              <button type="submit" id="btnAddOrUpdate">Agregar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>© 2025 Ixtlán - Módulo 9: Gestión de Establecimientos</p>
+    </footer>
+  </body>
+</html>
