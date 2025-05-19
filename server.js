@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'root',
-  database: 'bd_municipio'
+  database: 'db_municipio'
 });
 
 // Conexión a MySQL
@@ -57,8 +57,4 @@ app.get('/api/contribuyentes', (req, res) => {
 // Ruta para servir tu HTML principal
 app.get('/gestion-contribuyentes', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'GestionContribuyentes', 'index.html'));
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
