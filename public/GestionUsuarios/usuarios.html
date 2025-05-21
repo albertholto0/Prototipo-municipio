@@ -6,20 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
     <link rel="stylesheet" href="style_usuarios.css">
-    <link rel="stylesheet" href="/Componentes/Nav.css">
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
     <link rel="stylesheet" href="modal_usuarios.css">
 </head>
 
 <body>
     <header>
-        <div class="logo-left">
-            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-        </div>
-        <div class="title">
-            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-        </div>
-        <div id="nav-placeholder"></div>
-    </header>
+    <div class="header-left">
+      <div class="logo-left">
+        <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+      </div>
+      <div class="title">
+        <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+      </div>
+    </div>
+    <div class="menu-buttons" id="nav-placeholder"></div>
+  </header>
     <div class="main-container">
         <div class="title-section">
             <h2>Gestión de Usuarios</h2>
@@ -117,7 +119,7 @@
     </div>
 
     <script>
-        fetch('/Componentes/Nav.html')
+        fetch('/public/Componentes/Nav.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('nav-placeholder').innerHTML = data;

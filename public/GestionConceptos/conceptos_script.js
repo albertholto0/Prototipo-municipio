@@ -44,10 +44,10 @@ function cargarTablaConceptos(filteredConceptos = null) {
             <td>${concepto.id_cuenta_contable}</td>
             <td>
                 <button class="action-btn modify" onclick="openModifyModal(${concepto.id})">
-                    <img src="/Assets/editor.png" alt="Modificar" class="action-icon">
+                    <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
                 </button>
                 <button class="action-btn delete" onclick="openDeleteModal(${concepto.id})">
-                    <img src="/Assets/eliminar.png" alt="Eliminar" class="action-icon">
+                    <img src="/public/Assets/eliminar.png" alt="Eliminar" class="action-icon">
                 </button>
             </td>
         `;
