@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Recibos</title>
+  <link rel="stylesheet" href="../Componentes/Nav.css">
+  <link rel="stylesheet" href="/BaseCatastral/Styles.css">
+  <link rel="stylesheet" href="style_gestionRecibos.css">
+  <script src="javaScript_gestionRecibos.js" defer></script>
+  <script src="/Componentes/Nav.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <div class="header-left">
+        <div class="logo-left">
+            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        </div>
+        <div class="title">
+            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
+    </div>
+    <div class="menu-buttons" id="nav-placeholder"> </div>
+</header>
+
+  <!-- Contenido principal -->
+  <main class="main-container">
+    <div class="title-section">
+      <h2>Gestión de Recibos</h2>
+      <hr class="title-line">
+    </div>
+
+    <!-- Sección de búsqueda -->
+    <div class="search-container">
+      <div class="filters-container">
+        <input type="text" id="searchInput" placeholder="Buscar por folio, nombre">
+      </div>
+      <div class="busqueda-container">
+        <input type="date" id="filterFechaInicio" placeholder="Fecha inicio">
+        <input type="date" id="filterFechaFin" placeholder="Fecha fin">
+      </div>
+    </div>
+    
+
+    <!-- Tabla de recibos -->
+    <table id="accountsTable">
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Fecha</th>
+          <th>Contribuyente</th>
+          <th>Ejercicio</th>
+          <th>Periodo</th>
+          <th>Concepto</th>
+          <th>Total</th>
+          <th>Forma de Pago</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Se llenará dinámicamente con JavaScript -->
+      </tbody>
+    </table>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Ixtlán - Módulo 3: Generación de Recibos</p>
+  </footer>
+
+</body>
+
+</html>
