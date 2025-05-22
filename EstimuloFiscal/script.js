@@ -71,9 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <button class="action-btn delete" onclick="deleteEstimulo(${start + index})">
                             <img src="/Assets/eliminar.png" alt="Eliminar">
                         </button>
-                        <button class="action-btn view" onclick="viewEstimulo(${start + index})">
-                            <img src="/Assets/visualizar.png" alt="Ver">
-                        </button>
+                    
                     </td>
                 </tr>
             `;
