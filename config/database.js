@@ -1,21 +1,16 @@
-const mysql = require('mysql2');
+// filepath: /home/rafaeldiaz/Documentos/Sexto Semestre/Ingenieria de Software II/Prototipo-municipio/config/database.js
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-// Configuración de MySQL
-const db = mysql.createConnection({
+// Configuración de MySQL con soporte para promesas
+const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'root',
-  database: 'db_municipio'
+  database: 'db_municipio',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-// Conexión a MySQL
-db.connect(err => {
-  if (err) {
-    console.error('Error conectando a MySQL:', err);
-    return;
-  }
-  console.log('Conectado a MySQL con éxito');
-});
-
-// module.exports = pool.promise(); // Usamos promises en lugar de callbacks
+module.exports = pool;
