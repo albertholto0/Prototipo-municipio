@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cargarContribuyentes = async () => {
     try {
       // Usa la URL completa para desarrollo
-      const response = await fetch('http://localhost:3000/api/contribuyentes');
+      const response = await fetch('http://localhost:5000/api/contribuyentes');
 
       if (!response.ok) {
         throw new Error(`Error HTTP! estado: ${response.status}`);
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fila.innerHTML = `
           <td>${contribuyente.nombre_completo || 'N/A'}</td>
           <td>${contribuyente.rfc || 'N/A'}</td>
-          <td>${contribuyente.calle || ''} ${contribuyente.numero_vivienda || ''}, ${contribuyente.barrio || ''}</td>
+          <td>${contribuyente.calle || ''} ${contribuyente.numero_vivienda || ''} ${contribuyente.barrio || ''}</td>
           <td>${contribuyente.fecha_nacimiento ? new Date(contribuyente.fecha_nacimiento).toLocaleDateString() : 'N/A'}</td>
           <td>${contribuyente.tipo_contribuyente || 'N/A'}</td>
           <td>
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (error) {
       console.error('Error al cargar contribuyentes:', error);
-      tablaBody.innerHTML = '<tr><td colspan="6">Error al cargar los datos. Ver consola para detalles.</td></tr>';
+      tablaBody.innerHTML = '<tr><td colspan="6">Error al cargar los datos :( </td></tr>';
     }
   };
 
