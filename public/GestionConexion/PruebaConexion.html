@@ -5,16 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Conexión</title>
-  <link rel="stylesheet" href="/BaseCatastral/Styles.css">
+  <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
+  <link rel="stylesheet" href="/public/Componentes/Nav.css">
   <script src="PruebaConexion.js" defer></script>
-  <script src="/Componentes/Nav.js" defer></script>
 </head>
 
 <body>
   <header>
     <div class="header-left"> <!-- Contenedor flex nuevo -->
       <div class="logo-left">
-        <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+        <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
       </div>
       <div class="title">
         <h1>SISTEMA DE COBROS MUNICIPAL</h1>
@@ -33,7 +33,7 @@
 
     <!-- Sección de búsqueda -->
     <div class="search-container">
-      <input type="text" id="searchInput" placeholder="Buscar por Fecha de inicio o Monto base" />
+      <input type="text" id="searchInput" placeholder="Buscar" />
       <button class="btn-agregar" id="btnOpenModal">Agregar</button>
     </div>
 
@@ -43,10 +43,9 @@
         <thead>
           <tr>
             <th>Fecha de Conexión</th>
-            <th>Monto Base</th>
-            <th>Ultimo año pagado </th>
-            <th>Uso del Servicio</th>
-            <th>Contribuyente</th>
+            <th>Contribuyente </th>
+            <th>Cuenta de la Conexión</th>
+            <th>Tipo del Servicio</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -173,6 +172,8 @@
   <footer class="footer">
     <p>© 2025 Ixtlán - Módulo 8: Gestión de Conexión</p>
   </footer>
+
+  <script src="/public/Componentes/Nav.js"></script>
 </body>
 
 </html>

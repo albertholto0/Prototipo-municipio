@@ -1,34 +1,3 @@
-// Datos iniciales de ejemplo para Bases Catastrales
-let GestionConexiones = [
-  {
-    fechaConcexion: "2023-05-10",
-    ubicacion: "Calle Falsa 123",
-    valorBase: 50000,
-    fechaPagado: "2023-06-10",
-    tipoConexion: "Comercial",
-    selectContribuyente: "Eden Mendoza",      
-    selectConcepto: "Prestamo x"
-
-  },
-  {
-    fechaConcexion: "2023-05-10",
-    ubicacion: "Calle Falsa 123",
-    valorBase: 50000,
-    fechaPagado: "2023-06-10",
-    tipoConexion: "Domestico",
-    selectContribuyente: "Eden Mendoza",      
-    selectConcepto: "Prestamo x"
-  },
-  {
-    fechaConcexion: "2023-05-10",
-    ubicacion: "Calle Contitucion",
-    valorBase: 45000,
-    fechaPagado: "2025-09-15",
-    tipoConexion: "Industrial",
-    selectContribuyente: "Elton Yael",      
-    selectConcepto: "Prestamo x"
-  }
-];
 
 //   // Simulación de datos de la BD
 // const contribuyentes = [
@@ -268,7 +237,7 @@ function resetForm() {
 
 /* === INICIALIZACIÓN === */
 document.addEventListener("DOMContentLoaded", () => {
-  renderTable(GestionConexiones);
+  // renderTable(GestionConexiones);
 });
 
 // Elementos del modal
