@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const contribuyentes = await response.json();
-      console.log('Datos recibidos:', contribuyentes); // Para depuración
 
       tablaBody.innerHTML = '';
 
@@ -26,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fila.innerHTML = `
           <td>${contribuyente.nombre_completo || 'N/A'}</td>
           <td>${contribuyente.rfc || 'N/A'}</td>
-          <td>${contribuyente.calle || ''} ${contribuyente.numero_vivienda || ''} ${contribuyente.barrio || ''}</td>
-          <td>${contribuyente.fecha_nacimiento ? new Date(contribuyente.fecha_nacimiento).toLocaleDateString() : 'N/A'}</td>
+          <td>${contribuyente.direccion || ''} ${contribuyente.barrio || ''} ${contribuyente.localidad || ''}</td>
+          <td>${contribuyente.fecha_nacimiento || 'N/A'}</td>
           <td>${contribuyente.tipo_contribuyente || 'N/A'}</td>
           <td>
             <button class="btn-editar">Editar</button>

@@ -62,10 +62,10 @@ function renderTable(data) {
             <td>${seccion.año_ejercicio}</td>
             <td>
                 <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
-                    <img src="/Assets/editor.png" class="action-icon">
+                    <img src="/public/Assets/editor.png" class="action-icon">
                 </button>
                 <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
-                    <img src="/Assets/eliminar.png" class="action-icon">
+                    <img src="/public/Assets/eliminar.png" class="action-icon">
                 </button>
             </td>
         </tr>
