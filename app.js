@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const contribuyenteRoutes = require('./routes/gestionContribuyenteRoute');
+const seccionRoutes = require('./routes/gestionSeccionRoutes');
 
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(bodyParser.json());
 
 // Rutas
 app.use('/api/contribuyentes', contribuyenteRoutes);
-// Agregar más rutas para otros módulos
+app.use('/api/secciones', seccionRoutes);
 
 // Manejo de errores
 app.use((err, req, res, next) => {
