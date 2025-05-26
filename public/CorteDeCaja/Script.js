@@ -1,6 +1,21 @@
 // Datos de ejemplo para movimientos de caja (simulando una base de datos)
 const cortesDeCaja = {
     // Corte de caja de hoy
+    '2025-05-26': {
+        encargado: "Eden Mendoza",
+        movimientos: [
+            { fp: '006', clave: 'CLAVE-547', concepto: 'Agua potable', tipoPago: 'Efectivo', cantidad: 2, importe: 128.00 },
+            { fp: '007', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '005', clave: 'CLAVE-321', concepto: 'Multa', tipoPago: 'Efectivo', cantidad: 1, importe: 500.00 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '002', clave: 'CLAVE-456', concepto: 'Agua', tipoPago: 'Transferencia', cantidad: 1, importe: 350.50 },
+            { fp: '003', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 }
+        ],
+        cerrado: false,
+        horaCierre: null
+    },
+
     '2025-05-18': {
         encargado: "Eden Mendoza",
         movimientos: [

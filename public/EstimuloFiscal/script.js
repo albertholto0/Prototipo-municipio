@@ -66,10 +66,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>
                     <td class="actions">
                         <button class="action-btn edit" onclick="editEstimulo(${start + index})">
-                            <img src="/Assets/editor.png" alt="Editar">
+                            <img src="/public/Assets/editor.png" alt="Editar">
                         </button>
                         <button class="action-btn delete" onclick="deleteEstimulo(${start + index})">
-                            <img src="/Assets/eliminar.png" alt="Eliminar">
+                            <img src="/public/Assets/eliminar.png" alt="Eliminar">
                         </button>
                     
                     </td>
