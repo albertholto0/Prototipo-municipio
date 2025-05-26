@@ -11,3 +11,5 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Error al obtener cuentas contables' });
     }
 });
+
+module.exports = router;

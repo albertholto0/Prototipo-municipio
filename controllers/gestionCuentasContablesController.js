@@ -1,4 +1,4 @@
-const CuentaContable = require('../models/CuentasContables');
+const CuentaContable = require('../models/CuentasContablesModel');
 
 exports.getAllCuentasContables = async (req, res) => {
     try{

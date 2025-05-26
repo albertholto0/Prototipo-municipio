@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const contribuyenteRoutes = require('./routes/gestionContribuyenteRoute');
 const seccionRoutes = require('./routes/gestionSeccionRoutes');
+const cuentaContableRoutes = require('./routes/gestionCuentasContablesRoute');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 // Rutas
 app.use('/api/contribuyentes', contribuyenteRoutes);
 app.use('/api/secciones', seccionRoutes);
+app.use('/api/cuentasContables', cuentaContableRoutes);
 
 // Manejo de errores
 app.use((err, req, res, next) => {
