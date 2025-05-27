@@ -5,9 +5,9 @@ const contribuyenteRoutes = require("./routes/gestionContribuyenteRoute");
 const EstablecimientoRouter = require("./routes/gestionEstablecimientosRoute");
 const app = express();
 
-// Middleware
+// // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Rutas
 app.use("/api/contribuyentes", contribuyenteRoutes);
@@ -21,6 +21,7 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
