@@ -7,21 +7,12 @@
 }
 
 body {
-<<<<<<< HEAD
   display: flex;
   justify-content: center;
   background-color: #f5f5f5;
   min-height: 100vh;
   flex-direction: column;
   margin: 0;
-=======
-    display: flex;
-    justify-content: center;
-    background-color: rgb(255, 255, 255);
-    min-height: 100vh;
-    flex-direction: column;
-    margin: 0;
->>>>>>> 367da427094d3a7624a8e241e710500d43186392
 }
 
 .title-section {

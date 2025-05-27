@@ -223,14 +223,11 @@
 .btn-cancel {
   background: #e74c3c;
   color: white;
-<<<<<<< HEAD
-=======
   padding: 16px 35px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s;
->>>>>>> Ame.Mendoza
 }
 
 #btnAddOrUpdate:hover,
