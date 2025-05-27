@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const contribuyenteRoutes = require("./routes/gestionContribuyenteRoute");
 const EstablecimientoRouter = require("./routes/gestionEstablecimientosRoute");
+const seccionesRoutes = require("./routes/gestionSeccionRoutes");
+const cuentaContableRoutes = require('./routes/gestionCuentasContablesRoute');
 const app = express();
 
 // // Middleware
@@ -12,6 +14,8 @@ app.use(express.json());
 // Rutas
 app.use("/api/contribuyentes", contribuyenteRoutes);
 app.use("/api/establecimientos", EstablecimientoRouter);
+app.use("/api/secciones", seccionesRoutes);
+app.use("/api/cuentasContables", cuentaContableRoutes);
 // Agregar más rutas para otros módulos
 
 // Manejo de errores
