@@ -2,16 +2,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const contribuyenteRoutes = require('./routes/gestionContribuyenteRoute');
-
+const conexiones =require('./routes/gestionConexionRoute');
 const app = express();
 
-// Middleware
+// // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Rutas
+// // Rutas
 app.use('/api/contribuyentes', contribuyenteRoutes);
-// Agregar más rutas para otros módulos
+app.use('/api/conexion',conexiones );
+// // Agregar más rutas para otros módulos
 
 // Manejo de errores
 app.use((err, req, res, next) => {
@@ -20,6 +21,7 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
