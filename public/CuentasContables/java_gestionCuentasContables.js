@@ -1,132 +1,3 @@
-// Datos iniciales de ejemplo para cuentas contables
-let cuentasContables = [
-  {
-    numeroCuenta: "1000-01",
-    descripcion: "Caja General",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "1000-02",
-    descripcion: "Bancos",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "2000-01",
-    descripcion: "Proveedores",
-    seccion: "2",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "3000-01",
-    descripcion: "Ingresos",
-    seccion: "3",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "4000-01",
-    descripcion: "Gastos",
-    seccion: "4",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "1000-01",
-    descripcion: "Caja General",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "1000-02",
-    descripcion: "Bancos",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "2000-01",
-    descripcion: "Proveedores",
-    seccion: "2",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "3000-01",
-    descripcion: "Ingresos",
-    seccion: "3",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "4000-01",
-    descripcion: "Gastos",
-    seccion: "4",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "1000-01",
-    descripcion: "Caja General",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "1000-02",
-    descripcion: "Bancos",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "2000-01",
-    descripcion: "Proveedores",
-    seccion: "2",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "3000-01",
-    descripcion: "Ingresos",
-    seccion: "3",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "4000-01",
-    descripcion: "Gastos",
-    seccion: "4",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "1000-01",
-    descripcion: "Caja General",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "1000-02",
-    descripcion: "Bancos",
-    seccion: "1",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "2000-01",
-    descripcion: "Proveedores",
-    seccion: "2",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "3000-01",
-    descripcion: "Ingresos",
-    seccion: "3",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "4000-01",
-    descripcion: "Gastos",
-    seccion: "4",
-    ejercicio: "2023",
-  },
-  {
-    numeroCuenta: "4000-01",
-    descripcion: "Gastos",
-    seccion: "4",
-    ejercicio: "2023",
-  },
-];
 
 // Variables de estado globales
 let isEditing = false; // Bandera para modo edición
@@ -170,14 +41,12 @@ function renderTable(data) {
             <td>Sección ${cuenta.seccion}</td>
             <td>${cuenta.ejercicio}</td>
             <td>
-            <button class="action-btn edit" onclick="editAccount(${
-              start + index
-            })" title="Editar">
+            <button class="action-btn edit" onclick="editAccount(${start + index
+      })" title="Editar">
                 <img src="/Assets/editor.png" class="action-icon">
             </button>
-            <button class="action-btn delete" onclick="deleteAccount(${
-              start + index
-            })" title="Eliminar">
+            <button class="action-btn delete" onclick="deleteAccount(${start + index
+      })" title="Eliminar">
                 <img src="/Assets/eliminar.png" class="action-icon">
             </button>
         </tr>
@@ -196,9 +65,8 @@ function renderPagination(totalItems) {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
 
   let paginationHTML = `
-        <button class="pagination-btn" onclick="changePage(${
-          currentPage - 1
-        })" ${currentPage === 1 ? "disabled" : ""}>
+        <button class="pagination-btn" onclick="changePage(${currentPage - 1
+    })" ${currentPage === 1 ? "disabled" : ""}>
             « Anterior
         </button>
     `;
@@ -238,9 +106,8 @@ function renderPagination(totalItems) {
   }
 
   paginationHTML += `
-        <button class="pagination-btn" onclick="changePage(${
-          currentPage + 1
-        })" ${currentPage === totalPages ? "disabled" : ""}>
+        <button class="pagination-btn" onclick="changePage(${currentPage + 1
+    })" ${currentPage === totalPages ? "disabled" : ""}>
             Siguiente »
         </button>
     `;
@@ -360,7 +227,52 @@ function resetForm() {
 
 /* === INICIALIZACIÓN === */
 document.addEventListener("DOMContentLoaded", () => {
-  renderTable(cuentasContables);
+  // renderTable(cuentasContables);
+
+  const tablaBody = document.querySelector("#accountsTable tbody");
+
+  const cargarCuentasContables = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/cuentasContables');
+      if (!response.ok) {
+        throw new Error(`Error HTTP! estado: ${response.status}`);
+      }
+      const cuentas = await response.json();
+
+      tablaBody.innerHTML = '';
+      if (cuentas.length === 0) {
+        tablaBody.innerHTML = '<tr><td colspan="4">No hay cuentas contables registradas</td></tr>';
+        return;
+      }
+
+      cuentas.forEach(cuenta => {
+        const fila = document.createElement('tr');
+
+        fila.innerHTML = `
+          <td>${cuenta.clave_cuenta_contable}</td>
+          <td>${cuenta.nombre_cuentaContable}</td>
+          <td>${cuenta.descripcion}</td>
+          <td>
+            <button class="action-btn edit" title="Editar">
+                <img src="/public/Assets/editor.png" class="action-icon">
+            </button>
+            <button class="action-btn delete" title="Eliminar">
+                <img src="/public/Assets/eliminar.png" class="action-icon">
+            </button>
+          </td>
+        `;
+
+        tablaBody.appendChild(fila);
+      })
+    } catch (error) {
+      console.error('Error al cargar cuentas contables:', error);
+      tablaBody.innerHTML = '<tr><td colspan="4">Error al cargar los datos :( </td></tr>';
+
+    }
+  }
+
+  cargarCuentasContables();
+
 });
 
 // Elementos del modal

@@ -44,7 +44,7 @@ const elements = {
 // Funciones principales
 function renderTable(data) {
     elements.tableBody.innerHTML = "";
-    
+
     // Mensaje si no hay datos
     if (data.length === 0) {
         elements.tableBody.innerHTML = '<tr><td colspan="3">No hay secciones registradas</td></tr>';
@@ -62,10 +62,10 @@ function renderTable(data) {
             <td>${seccion.año_ejercicio}</td>
             <td>
                 <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
-                    <img src="/Assets/editor.png" class="action-icon">
+                    <img src="/public/Assets/editor.png" class="action-icon">
                 </button>
                 <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
-                    <img src="/Assets/eliminar.png" class="action-icon">
+                    <img src="/public/Assets/eliminar.png" class="action-icon">
                 </button>
             </td>
         </tr>
@@ -135,7 +135,7 @@ function handleSubmit(e) {
 
     // Guardar en localStorage para persistencia
     localStorage.setItem('secciones', JSON.stringify(secciones));
-    
+
     closeModal();
     renderTable(filteredAccounts());
 }
@@ -166,17 +166,17 @@ function resetForm() {
 }
 
 // Funciones globales
-window.changePage = function(page) {
+window.changePage = function (page) {
     if (page < 1 || page > Math.ceil(filteredAccounts().length / rowsPerPage)) return;
     currentPage = page;
     renderTable(filteredAccounts());
 };
 
-window.editAccount = function(index) {
+window.editAccount = function (index) {
     const seccion = secciones[index];
     elements.nombre.value = seccion.nombre;
     elements.año_ejercicio.value = seccion.año_ejercicio;
-    
+
     isEditing = true;
     currentIndex = index;
     elements.formTitle.textContent = "Editar Sección";
@@ -184,7 +184,7 @@ window.editAccount = function(index) {
     openModal();
 };
 
-window.deleteAccount = function(index) {
+window.deleteAccount = function (index) {
     if (confirm("¿Confirmar eliminación?")) {
         secciones.splice(index, 1);
         const totalPages = Math.ceil(filteredAccounts().length / rowsPerPage);
@@ -197,10 +197,6 @@ window.deleteAccount = function(index) {
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", () => {
-    // Verificar si hay datos en localStorage, si no, guardar los iniciales
-    if (!localStorage.getItem('secciones')) {
-        localStorage.setItem('secciones', JSON.stringify(secciones));
-    }
 
     // Event listeners
     elements.form.addEventListener("submit", handleSubmit);
@@ -213,7 +209,49 @@ document.addEventListener("DOMContentLoaded", () => {
         resetForm();
         openModal();
     });
-    
+
     // Renderizar tabla inicial
-    renderTable(secciones);
+    // renderTable(secciones);
+
+    const tablaBody = document.querySelector('#accountsTable tbody');
+
+    const cargarSecciones = async () => {
+        try {
+            // Usa la URL completa para desarrollo
+            const response = await fetch('http://localhost:5000/api/secciones');
+
+            if (!response.ok) {
+                throw new Error(`Error HTTP! estado: ${response.status}`);
+            }
+
+            const secciones = await response.json();
+
+            tablaBody.innerHTML = '';
+
+            if (secciones.length === 0) {
+                tablaBody.innerHTML = '<tr><td colspan="6">No hay secciones registradas</td></tr>';
+                return;
+            }
+
+            secciones.forEach(seccion => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${seccion.clave_subcuenta || 'N/A'}</td>
+                    <td>${seccion.clave_seccion || 'N/A'}</td>
+                    <td>${seccion.nombre_seccion || ''}</td>
+                    <td>
+                        <button class="btn-editar">Editar</button>
+                        <button class="btn-eliminar">Eliminar</button>
+                    </td>
+                `;
+                tablaBody.appendChild(fila);
+            });
+
+        } catch (error) {
+            console.error('Error al cargar las secciones:', error);
+            tablaBody.innerHTML = '<tr><td colspan="6">Error al cargar los datos :( </td></tr>';
+        }
+    };
+
+    cargarSecciones();
 });
