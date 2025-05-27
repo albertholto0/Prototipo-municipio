@@ -50,12 +50,9 @@ function renderUsersTable() {
             <td>${user.accessDate}</td>
             <td>${user.accessTime}</td>
             <td>${user.active ? 'Activo' : 'Inactivo'}</td>
-            <td>
+            <td id="action-buttons">
                 <button class="action-btn modify" onclick="openModifyModal(${user.id})">
-                    <img src="/Assets/editor.png" alt="Modificar" class="action-icon">
-                </button>
-                <button class="action-btn delete" onclick="openDeleteModal(${user.id})">
-                    <img src="/Assets/eliminar.png" alt="Eliminar" class="action-icon">
+                    <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
                 </button>
             </td>
         `;
