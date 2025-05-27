@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Ejercicio Fiscal</title>
-    <link rel="stylesheet" href="../Componentes/Nav.css">
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
     <link rel="stylesheet" href="/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="StylesE.css">
     <script src="Script.js" defer></script>
@@ -15,7 +15,7 @@
 <body>
     <header>
         <div class="logo-left">
-            <img src="../Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
@@ -64,10 +64,10 @@
                         <td>Ejercicio fiscal del año 2024</td>
                         <td class="action-buttons">
                             <button class="action-btn edit" title="Editar">
-                                <img src="/Assets/editor.png" class="action-icon">
+                                <img src="/public/Assets/editor.png" class="action-icon">
                             </button>
                             <button class="action-btn delete" title="Eliminar">
-                                <img src="/Assets/eliminar.png" class="action-icon">
+                                <img src="/public/Assets/eliminar.png" class="action-icon">
                             </button>
                         </td>
                     </tr>
@@ -81,10 +81,10 @@
                         <td>Ejercicio fiscal del año 2023</td>
                         <td class="action-buttons">
                             <button class="action-btn edit" title="Editar">
-                                <img src="/Assets/editor.png" class="action-icon">
+                                <img src="/public/Assets/editor.png" class="action-icon">
                             </button>
                             <button class="action-btn delete" title="Eliminar">
-                                <img src="/Assets/eliminar.png" class="action-icon">
+                                <img src="/public/Assets/eliminar.png" class="action-icon">
                             </button>
                         </td>
                     </tr>
@@ -154,7 +154,7 @@
     </footer>
 
     <script>
-        fetch('/Componentes/Nav.html')
+        fetch('/public/Componentes/Nav.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('nav-placeholder').innerHTML = data;

@@ -11,12 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const contribuyentes = await response.json();
-      console.log('Datos recibidos:', contribuyentes); // Para depuración
 
       tablaBody.innerHTML = '';
 
       if (contribuyentes.length === 0) {
-        tablaBody.innerHTML = '<tr><td colspan="6">No hay contribuyentes registrados</td></tr>';
+        tablaBody.innerHTML = '<tr><td colspan="4">No hay contribuyentes registrados</td></tr>';
         return;
       }
 
@@ -26,12 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
         fila.innerHTML = `
           <td>${contribuyente.nombre_completo || 'N/A'}</td>
           <td>${contribuyente.rfc || 'N/A'}</td>
-          <td>${contribuyente.calle || ''} ${contribuyente.numero_vivienda || ''} ${contribuyente.barrio || ''}</td>
-          <td>${contribuyente.fecha_nacimiento ? new Date(contribuyente.fecha_nacimiento).toLocaleDateString() : 'N/A'}</td>
-          <td>${contribuyente.tipo_contribuyente || 'N/A'}</td>
+          <td>${contribuyente.direccion || ''}, ${contribuyente.barrio || ''}, ${contribuyente.localidad || ''}</td>
+          <td>${contribuyente.numero_telefono || 'N/A'}</td>
           <td>
-            <button class="btn-editar">Editar</button>
-            <button class="btn-eliminar">Eliminar</button>
+            <button class="action-btn edit" title="Editar">
+                <img src="/public/Assets/editor.png" class="action-icon">
+            </button>
+            <button class="action-btn delete" title="Eliminar">
+                <img src="/public/Assets/eliminar.png" class="action-icon">
+            </button>
           </td>
         `;
 

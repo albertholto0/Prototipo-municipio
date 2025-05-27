@@ -6,7 +6,7 @@
   /* Modelo de caja más intuitivo */
   box-sizing: border-box;
   /* Fuente principal de la aplicación */
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Contenedor principal centrado con máximo ancho */
@@ -113,8 +113,6 @@
 .action-btn.delete:hover .action-icon {
   filter: brightness(0.8) sepia(100%) hue-rotate(310deg) saturate(500%);
 }
-
-
 
 /* ===== FORMULARIO ===== */
 .form-container {

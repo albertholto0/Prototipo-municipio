@@ -2,23 +2,18 @@
 <html lang="en">
 
 <head>
-
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Alquiler</title>
-    <link rel="stylesheet" href="/Componentes/Nav.css">
-    <link rel="stylesheet" href="/BaseCatastral/Styles.css">
-    <script src="Conexion.js"></script>
-    <script src="/Componentes/Nav.js" defer></script>
-
+    <title>Gestión de Conexión</title>
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
 </head>
 
 <body>
     <header>
         <div class="header-left"> <!-- Contenedor flex nuevo -->
             <div class="logo-left">
-                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
             </div>
             <div class="title">
                 <h1>SISTEMA DE COBROS MUNICIPAL</h1>
@@ -43,26 +38,27 @@
 
         <!-- Tabla -->
         <div class="table-container">
-        <table id="accountsTable">
-            <thead>
-                <tr>
-                    <th>Fecha de Conexion</th>
-                    <th>Monto Base</th>
-                    <th>Ultimo año pagado </th>
-                    <th>Tipo de Conexion</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Se llenará dinámicamente con JavaScript -->
-            </tbody>
-        </table>
+            <table id="accountsTable">
+                <thead>
+                    <tr>
+                        <th>Fecha de Conexion</th>
+                        <th>Contribuyente</th>
+                        <th>Cuenta</th>
+                        <th>Tipo de Conexion</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Se llenará dinámicamente con JavaScript -->
+                </tbody>
+            </table>
         </div>
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
-        </main>
-        <!-- Modal para el formulario -->
-        <div class="modal-overlay" id="modalOverlay">
+    </main>
+    <!-- Modal para el formulario -->
+    <!--   <div class="modal-overlay" id="modalOverlay">
             <div class="modal-content">
                 <span class="btn-close" id="btnCloseModal">&times;</span>
                 <div class="form-container" id="formContainer">
@@ -108,10 +104,13 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <footer class="footer">
-            <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
-        </footer>
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
+    </footer>
+    <script src="/public/Componentes/Nav.js"></script>
+    <script src="/public/GestionConexion/java_gestionConexion.js"></script>
+</body>
 
 </html>
