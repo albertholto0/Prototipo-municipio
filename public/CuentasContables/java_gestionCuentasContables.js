@@ -32,28 +32,6 @@ function renderTable(data) {
   const end = start + rowsPerPage;
   const paginatedData = data.slice(start, end);
 
-  // Genera las filas de la tabla con paginación
-  paginatedData.forEach((cuenta, index) => {
-    const row = `
-        <tr>
-            <td>${cuenta.numeroCuenta}</td>
-            <td>${cuenta.descripcion}</td>
-            <td>Sección ${cuenta.seccion}</td>
-            <td>${cuenta.ejercicio}</td>
-            <td>
-            <button class="action-btn edit" onclick="editAccount(${start + index
-      })" title="Editar">
-                <img src="/Assets/editor.png" class="action-icon">
-            </button>
-            <button class="action-btn delete" onclick="deleteAccount(${start + index
-      })" title="Eliminar">
-                <img src="/Assets/eliminar.png" class="action-icon">
-            </button>
-        </tr>
-    `;
-    elements.tableBody.insertAdjacentHTML("beforeend", row);
-  });
-
   renderPagination(data.length);
 }
 
@@ -213,17 +191,6 @@ window.deleteAccount = function (index) {
     renderTable(filteredAccounts());
   }
 };
-
-/**
- * Reinicia el formulario a su estado inicial
- */
-function resetForm() {
-  elements.form.reset();
-  isEditing = false;
-  currentIndex = null;
-  elements.formTitle.textContent = "Registrar Cuenta Contable";
-  elements.btnAddOrUpdate.textContent = "Agregar";
-}
 
 /* === INICIALIZACIÓN === */
 document.addEventListener("DOMContentLoaded", () => {
