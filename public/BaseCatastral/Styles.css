@@ -6,7 +6,7 @@
   /* Modelo de caja más intuitivo */
   box-sizing: border-box;
   /* Fuente principal de la aplicación */
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Contenedor principal centrado con máximo ancho */
@@ -77,21 +77,24 @@
 .action-btn {
   border: none;
   padding: 0;
-  background: none !important; /* Elimina el fondo */
+  background: none !important;
   cursor: pointer;
-  margin-right: 8px; /* Espaciado entre iconos */
-  transition: all 0.3s;
+  margin-right: 12px; /* Más espacio entre iconos */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: auto; /* Ancho automático según el icono */
-  height: auto; /* Altura automática según el icono */
+  border-radius: 50%;
+  width: 44px; /* Tamaño fijo para el área clickeable */
+  height: 44px; /* Tamaño fijo para el área clickeable */
 }
 
 .action-icon {
-  width: 40px;
-  height: 40px;
+  width: 32px; /* Tamaño aumentado respecto a la versión anterior */
+  height: 32px;
   object-fit: contain;
+  transition: all 0.2s ease;
+  padding: 6px; /* Espacio interno para mejor tactil */
 }
 
 /* Variante editar (color naranja) */
@@ -110,8 +113,26 @@
   transform: translateY(-2px);
 }
 
+.action-btn:active {
+  transform: translateY(0);
+}
+
+/* Estilo específico para editar */
+.action-btn.edit:hover .action-icon {
+  filter: brightness(0.9) sepia(1) hue-rotate(40deg) saturate(8);
+}
+
+/* Estilo específico para eliminar */
 .action-btn.delete:hover .action-icon {
-  filter: brightness(0.8) sepia(100%) hue-rotate(310deg) saturate(500%);
+  filter: brightness(0.9) sepia(1) hue-rotate(340deg) saturate(8);
+}
+
+/* Efecto de círculo al hacer hover */
+.action-btn:hover .action-icon {
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  padding: 6px;
 }
 
 /* ===== FORMULARIO ===== */
@@ -201,7 +222,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s;
-  margin-left: 0; 
+  margin-left: 0;
 }
 
 #btnAddOrUpdate:hover,
@@ -431,7 +452,6 @@
   overflow-y: scroll; /* Scroll para el formulario */
 }
 
-
 .form-container::-webkit-scrollbar {
   width: 0; /* Oculta el scroll en navegadores basados en WebKit */
 }
@@ -474,7 +494,7 @@
 }
 
 #viewContainer h3:after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -508,7 +528,7 @@
 }
 
 #infoContent p::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -545,7 +565,7 @@
 }
 
 #infoContent p strong::before {
-  content: '';
+  content: "";
   width: 6px;
   height: 6px;
   background: #28a745;

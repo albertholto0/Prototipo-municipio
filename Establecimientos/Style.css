@@ -61,7 +61,7 @@
 }
 
 #establecimientosTable thead tr {
-  background: linear-gradient(200deg, #2ecc71, #27ae60);
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: white;
   text-align: left;
 }
@@ -223,11 +223,6 @@
 .btn-cancel {
   background: #e74c3c;
   color: white;
-  padding: 16px 35px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s;
 }
 
 #btnAddOrUpdate:hover,

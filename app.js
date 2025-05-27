@@ -1,23 +1,23 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const contribuyenteRoutes = require('./routes/gestionContribuyenteRoute');
-const conexiones =require('./routes/gestionConexionRoute');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const contribuyenteRoutes = require("./routes/gestionContribuyenteRoute");
+const EstablecimientoRouter = require("./routes/gestionEstablecimientosRoute");
 const app = express();
 
 // // Middleware
 app.use(cors());
 app.use(express.json());
 
-// // Rutas
-app.use('/api/contribuyentes', contribuyenteRoutes);
-app.use('/api/conexion',conexiones );
-// // Agregar más rutas para otros módulos
+// Rutas
+app.use("/api/contribuyentes", contribuyenteRoutes);
+app.use("/api/establecimientos", EstablecimientoRouter);
+// Agregar más rutas para otros módulos
 
 // Manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(500).send("Something broke!");
 });
 
 const PORT = process.env.PORT || 5000;
