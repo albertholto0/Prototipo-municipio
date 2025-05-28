@@ -1,39 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const tablaBody = document.querySelector('#accountsTable tbody');
+  const tablaBody = document.getElementById('users-table-body');
 
-  const cargarContribuyentes = async () => {
+  const cargarUsuarios = async () => {
     try {
-      // Usa la URL completa para desarrollo
-      const response = await fetch('http://localhost:5000/api/contribuyentes');
+      const response = await fetch('http://localhost:5000/api/usuarios');
 
       if (!response.ok) {
         throw new Error(`Error HTTP! estado: ${response.status}`);
       }
 
-      const contribuyentes = await response.json();
+      const usuarios = await response.json();
 
       tablaBody.innerHTML = '';
 
-      if (contribuyentes.length === 0) {
-        tablaBody.innerHTML = '<tr><td colspan="4">No hay contribuyentes registrados</td></tr>';
+      if (usuarios.length === 0) {
+        tablaBody.innerHTML = '<tr><td colspan="7">No hay usuarios registrados</td></tr>';
         return;
       }
 
-      contribuyentes.forEach(contribuyente => {
+      usuarios.forEach(usuario => {
         const fila = document.createElement('tr');
 
         fila.innerHTML = `
-          <td>${contribuyente.nombre_completo || 'N/A'}</td>
-          <td>${contribuyente.rfc || 'N/A'}</td>
-          <td>${contribuyente.direccion || ''}, ${contribuyente.barrio || ''}, ${contribuyente.localidad || ''}</td>
-          <td>${contribuyente.numero_telefono || 'N/A'}</td>
-          <td>
-            <button class="action-btn edit" title="Editar">
-                <img src="/public/Assets/editor.png" class="action-icon">
-            </button>
-            <button class="action-btn delete" title="Eliminar">
-                <img src="/public/Assets/eliminar.png" class="action-icon">
-            </button>
+          <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
+          <td>${usuario.usuario}</td>
+          <td>${usuario.rol_usuario}</td>
+          <td>${usuario.fecha_acceso || ''}</td>
+          <td>${usuario.hora_acceso || 'null'}</td>
+          <td>${usuario.estado}</td>
+          <td id="action-buttons">
+              <button class="action-btn modify" onclick="openModifyModal('${usuario.usuario}')">
+                  <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
+              </button>
           </td>
         `;
 
@@ -41,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
     } catch (error) {
-      console.error('Error al cargar contribuyentes:', error);
-      tablaBody.innerHTML = '<tr><td colspan="6">Error al cargar los datos :( </td></tr>';
+      console.error('Error al cargar usuarios:', error);
+      tablaBody.innerHTML = '<tr><td colspan="7">Error al cargar los datos :/ </td></tr>';
     }
   };
 
-  cargarContribuyentes();
+  cargarUsuarios();
 });
