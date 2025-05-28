@@ -1,17 +1,33 @@
-const express = require('express');
-const pool = require('./db_municipio'); // Importas la conexión
-
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const contribuyenteRoutes = require("./routes/gestionContribuyenteRoute");
+const EstablecimientoRouter = require("./routes/gestionEstablecimientosRoute");
+const seccionesRoutes = require("./routes/gestionSeccionRoutes");
+const cuentaContableRoutes = require('./routes/gestionCuentasContablesRoute');
+const conexionRouter = require("./routes/gestionConexionRoute");
 const app = express();
+
+// // Middleware
+app.use(cors());
 app.use(express.json());
 
-// Ruta de ejemplo: Obtener todos los recibos
-app.get('/recibos', async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM recibos');
-        res.json(rows);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+// Rutas
+app.use("/api/contribuyentes", contribuyenteRoutes);
+app.use("/api/establecimientos", EstablecimientoRouter);
+app.use("/api/secciones", seccionesRoutes);
+app.use("/api/cuentasContables", cuentaContableRoutes);
+app.use("/api/conexion", conexionRouter);
+// Agregar más rutas para otros módulos
+
+// Manejo de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
 });
 
-app.listen(3000, () => console.log('Servidor en http://localhost:3000'));
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

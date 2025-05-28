@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Sección</title>
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-left"> <!-- Contenedor flex nuevo -->
+            <div class="logo-left">
+                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
+        </div>
+
+        <!-- Menú debe estar fuera del header-left -->
+        <div class="menu-buttons" id="nav-placeholder">
+            <!-- Tus botones aquí -->
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="title-section">
+            <h2>Gestión de Sección</h2>
+            <hr class="title-line">
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar">
+            <button class="btn-agregar" id="btnOpenModal">Agregar</button>
+        </div>
+
+        <table id="accountsTable">
+            <thead>
+                <tr>
+                    <th>Clave Subcuenta</th>
+                    <th>Clave Sección</th>
+                    <th>Nombre Sección</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="pagination-container">
+            <div class="pagination"></div>
+        </div>
+
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal-content">
+                <div class="form-container" id="formContainer">
+                    <h3 class="text-center" id="formTitle">Agregar Sección</h3>
+                    <form id="accountForm">
+                        <div class="form-group">
+                            <label>Clave Subcuenta:</label>
+                            <input type="text" id="clave_subcuenta" placeholder="Ej. 4100000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Clave Sección:</label>
+                            <input type="text" id="clave_seccion" placeholder="Ej. 4102000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nombre:</label>
+                            <input type="text" id="nombre_seccion" placeholder="Ej. Panteones" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                            <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 2: Gestión de Sección</p>
+    </footer>
+
+    <script src="/public/Componentes/Nav.js"></script>
+    <script src="java_gestionSeccion.js"></script>
+</body>
+
+</html>

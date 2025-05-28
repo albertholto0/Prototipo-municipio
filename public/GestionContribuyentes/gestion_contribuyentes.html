@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Contribuyentes</title>
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <div class="logo-left">
+                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
+        </div>
+
+        <!-- Menú debe estar fuera del header-left -->
+        <div class="menu-buttons" id="nav-placeholder">
+            <!-- Tus botones aquí -->
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="title-section">
+            <h2>Gestión de Contribuyentes</h2>
+            <hr class="title-line">
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar">
+            <button class="btn-agregar" id="btnOpenModal">Agregar</button>
+        </div>
+
+        <table id="accountsTable">
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>RFC</th>
+                    <th>Domicilio</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="pagination-container">
+            <div class="pagination"></div>
+        </div>
+
+        <!-- <div class="modal-overlay" id="modalOverlay">
+            <div class="modal-content">
+                <div class="form-container" id="formContainer">
+                    <h3 class="text-center" id="formTitle">Agregar Contribuyente</h3>
+                    <form id="accountForm">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>Nombre:</label>
+                                <input type="text" id="nombre" placeholder="Ej. Rafael" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido Paterno:</label>
+                                <input type="text" id="apellido_paterno" placeholder="Ej. Díaz" required>
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>Apellido Materno:</label>
+                                <input type="text" id="apellido_materno" placeholder="Ej. López" required>
+                            </div>
+                            <div class="form-group">
+                                <label>RFC:</label>
+                                <input type="text" id="rfc" placeholder="Ej. DILK040315QM7" required>
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label>Calle:</label>
+                                    <input type="text" id="calle" placeholder="Ej. Calle Constitución" required>
+                                </div>
+                            </div>
+                          
+                            <div class="form-group">
+                                <label>Número de calle:</label>
+                                <input type="text" id="num_calle" placeholder="Ej. 12" required>
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label>Colonia:</label>
+                                <input type="text" id="colonia" placeholder="Ej. San Francisco" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono:</label>
+                                <input type="text" id="telefono" placeholder="Ej. 951 580 1224" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Número de cuenta:</label>
+                            <input type="text" id="num_cuenta" placeholder="Ej. 00001" required>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                            <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> -->
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 2: Gestión de Contribuyentes</p>
+    </footer>
+
+    <script src="/public/Componentes/Nav.js"></script>
+    <script src="/public/GestionContribuyentes/scripts.js"></script>
+</body>
+
+</html>
