@@ -12,7 +12,6 @@ const modalElements = {
     modalOverlay: document.getElementById('modalOverlay'),
     btnOpenModal: document.getElementById('btnOpenModal'),
     btnCancel: document.getElementById('btnCancel'),
-    searchInput: document.getElementById("searchInput"),
 };
 
 // Función para cargar las secciones
@@ -69,15 +68,6 @@ function openModal() {
     modalElements.modalOverlay.style.display = 'block';
 }
 
-// Función para filtrar las secciones según el término de búsqueda
-function filteredBases() {
-    const term = elements.searchInput.value.toLowerCase();
-    return secciones.filter(seccion =>
-        seccion.clave_seccion.toLowerCase().includes(term) ||
-        seccion.nombre_seccion.toLowerCase().includes(term)
-    );
-}
-
 // Evento para abrir el modal
 modalElements.btnOpenModal.addEventListener('click', () => {
     openModal();
@@ -86,9 +76,5 @@ modalElements.btnOpenModal.addEventListener('click', () => {
 // Evento para cerrar el modal al presionar "Cancelar"
 modalElements.btnCancel.addEventListener('click', () => {
     modalElements.modalOverlay.style.display = 'none';
-});
-
-modalElements.searchInput.addEventListener("input", () => {
-    cargarSecciones(filteredBases());
 });
 
