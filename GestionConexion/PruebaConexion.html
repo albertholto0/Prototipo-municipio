@@ -99,62 +99,68 @@
           </div> -->
 
           <!-- Cuarta fila: Valor terreno y Valor construcción -->
-          <div class="form-inline">
+
+
+
+          <!-- <div class="form-inline">
             <div class="form-group">
               <label for="valorFinal">Monto Final:</label>
               <input type="number" id="valorFinal" name="valorFinal" placeholder="Ej. 50000" required>
-            </div>
-            <!-- <div class="form-group">
+            </div> -->
+
+
+          <!-- <div class="form-group">
               <label for="valorConstruccion">Valor construcción:</label>
               <input type="number" id="valorConstruccion" name="valorConstruccion" placeholder="Ej. 75000" required>
             </div> -->
-          </div>
+      </div>
 
-          <!-- Quinta fila: Impuesto calculado y Uso de suelo -->
-          <div class="form-inline">
-            <!-- <div class="form-group">
+      <!-- Quinta fila: Impuesto calculado y Uso de suelo -->
+      <div class="form-inline">
+        <!-- <div class="form-group">
               <label for="impuestoCalculado">Impuesto calculado:</label>
               <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" required>
             </div> -->
-            <div class="form-group">
-              <label for="tipoConexion">Tipo de la Conexión:</label>
+        <div class="form-group">
+          <label for="tipoConexion">Tipo de la Conexión:</label>
 
 
-              <select id="tipoConexion" name="tipoConexion" required>
-                <option value="" disabled selected>Seleccione una opción</option>
-                <option value="Activo">Activo</option>
-                <option value="Finalizado">Finalizado</option>
-                <option value="Pendiente">Pendiente</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="selectContribuyente">Contribuyente:</label>
-            <select id="selectContribuyente" name="contribuyente" required>
-              <option value="">Seleccione un contribuyente</option>
-              <option value="Rosendo Vazquez Lopez">Luna Hernandez Mendoza</option>
-                <option value="Rosendo Vazquez Lopez">Rosendo Vazquez Lopez</option>
-                <option value="Marizol Diaz Lopez">Marizol Diaz Lopez</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="selectConcepto">Concepto:</label>
-            <select id="selectConcepto" name="concepto" required>
-              <option value="">Seleccione un concepto</option>
-              <option value="Recoleccion de basura">Recoleccion de basura</option>
-                <option value="Agua potable">Agua potable</option>
-            </select>
-          </div>
-
-          <!-- Contenedor para botones alineados a la derecha -->
-          <div class="form-actions">
-            <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
-            <button type="submit" id="btnAddOrUpdate">Agregar</button>
-          </div>
-        </form>
+          <select id="tipoConexion" name="tipoConexion" required>
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option value="Domestico">Domestico</option>
+            <option value="Comercial">Comercial</option>
+            <option value="Industrial">Industrial</option>
+            <option value="General">General</option>
+          </select>
+        </div>
       </div>
+
+      <div class="form-group">
+        <label for="selectContribuyente">Contribuyente:</label>
+        <select id="selectContribuyente" name="contribuyente" required>
+          <option value="">Seleccione un contribuyente</option>
+          <option value="Rosendo Vazquez Lopez">Luna Hernandez Mendoza</option>
+          <option value="Rosendo Vazquez Lopez">Rosendo Vazquez Lopez</option>
+          <option value="Marizol Diaz Lopez">Marizol Diaz Lopez</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="selectConcepto">Concepto:</label>
+        <select id="selectConcepto" name="concepto" required>
+          <option value="">Seleccione un concepto</option>
+          <option value="Recoleccion de basura">Recoleccion de basura</option>
+          <option value="Agua potable">Agua potable</option>
+        </select>
+      </div>
+
+      <!-- Contenedor para botones alineados a la derecha -->
+      <div class="form-actions">
+        <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+        <button type="submit" id="btnAddOrUpdate">Agregar</button>
+      </div>
+      </form>
     </div>
+  </div>
   </div>
 
   <!-- Modal para Ver Información Completa -->

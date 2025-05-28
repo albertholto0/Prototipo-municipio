@@ -95,9 +95,9 @@ function renderTable(data) {
               <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
                   <img src="/Assets/eliminar.png" class="action-icon">
               </button>
-              <button class="action-btn view" onclick="viewAccount(${start + index})" title="Ver información">
-                <img src="/Assets/visualizar.png" class="action-icon">
-              </button>
+               <button class="action-btn view" onclick="viewAccount(${start + index})" title="Ver información">
+              <img src="/Assets/visualizar.png" class="action-icon">
+            </button>
           </td>
       </tr>
   `;
