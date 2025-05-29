@@ -1,5 +1,6 @@
 const express = require('express');
 const Conceptos = require('../models/gestionConceptosModel');
+const { route } = require('./gestionContribuyenteRoute');
 const router = express.Router();
 // Ruta para obtener todos los conceptos
 router.get('/', async (req, res) => {
@@ -11,3 +12,5 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Error al obtener conceptos' });
     }
 });
+
+module.exports = router;

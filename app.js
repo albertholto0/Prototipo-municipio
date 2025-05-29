@@ -7,6 +7,7 @@ const seccionesRoutes = require("./routes/gestionSeccionRoutes");
 const cuentaContableRoutes = require('./routes/gestionCuentasContablesRoute');
 const conexionRouter = require("./routes/gestionConexionRoute");
 const usuariosRoutes = require("./routes/gestionUsuariosRoute");
+const conceptoRoutes = require("./routes/gestionConceptoRoute");
 const app = express();
 
 // // Middleware
@@ -20,6 +21,7 @@ app.use("/api/secciones", seccionesRoutes);
 app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
+app.use("/api/conceptos", conceptoRoutes);
 // Agregar más rutas para otros módulos
 
 // Manejo de errores
