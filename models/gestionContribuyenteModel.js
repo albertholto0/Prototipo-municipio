@@ -11,7 +11,7 @@ class Contribuyente {
           direccion,
           barrio,
           localidad,
-          fecha_nacimiento,
+          numero_telefono,
           tipo_contribuyente
         FROM contribuyentes
       `);
