@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
         <td>${usuario.usuario}</td>
         <td>${usuario.rol_usuario}</td>
-        <td>${usuario.fecha_acceso || ''}</td>
+        <td>${usuario.fecha_acceso || 'null'}</td>
         <td>${usuario.hora_acceso || 'null'}</td>
         <td>${usuario.estado}</td>
         <td id="action-buttons">
