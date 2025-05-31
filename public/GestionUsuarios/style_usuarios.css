@@ -419,3 +419,8 @@ footer {
   color: white;
   border-color: #2ecc71;
 }
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
