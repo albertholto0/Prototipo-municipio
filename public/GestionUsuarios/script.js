@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Evento para filtrar usuarios
   searchInput.addEventListener('input', () => {
     const valor = searchInput.value.toLowerCase();
     const filtrados = usuarios.filter(usuario =>
@@ -57,4 +56,57 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   cargarUsuarios();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('userModal');
+    const registerBtn = document.getElementById('registerBtn');
+    const userForm = document.getElementById('userForm');
+    const cancelBtn = document.querySelector('.cancel-btn');
+
+    registerBtn.addEventListener('click', () => {
+        document.getElementById('modalTitle').textContent = 'Registrar Nuevo Usuario';
+        userForm.reset();
+        modal.style.display = 'block';
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    userForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const nombres = document.getElementById('userName').value;
+    const apellido_paterno = document.getElementById('userLastName').value;
+    const apellido_materno = document.getElementById('userSecondLastName').value;
+    const usuario = document.getElementById('userUsername').value;
+    const password = document.getElementById('userPassword').value;
+    const rol_usuario = document.getElementById('userRole').value;
+
+    try {
+        const response = await fetch('http://localhost:5000/api/usuarios', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombres,
+                apellido_paterno,
+                apellido_materno,
+                usuario,
+                password,
+                rol_usuario
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) throw new Error(data.error || 'Error al registrar usuario');
+        
+        alert(data.message || 'Usuario registrado exitosamente');
+        modal.style.display = 'none';
+        window.location.reload();
+    } catch (error) {
+        alert(error.message || 'Error al registrar usuario');
+    }
+});
 });
