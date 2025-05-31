@@ -392,3 +392,30 @@ button.delete-btn-delete:hover {
 footer {
   margin-top: auto;
 }
+
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-btn.active {
+  background-color: #2ecc71;
+  color: white;
+  border-color: #2ecc71;
+}

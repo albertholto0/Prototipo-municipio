@@ -1,19 +1,28 @@
 const searchInput = document.getElementById("searchInput"); // Input para búsqueda
+const paginationContainer = document.getElementById('pagination');
+const ItemsPorPagina = 5;
+let currentPage = 1;
 
 //Este script se encarga de cargar los usuarios desde el servidor y mostrarlos en la tabla
 document.addEventListener('DOMContentLoaded', () => {
   const tablaBody = document.getElementById('users-table-body');
   let usuarios = []; // Guardar todos los usuarios aquí
 
-  const mostrarUsuarios = (usuariosFiltrados) => {
+  // Mostrar usuarios con paginación
+  const mostrarUsuarios = (usuariosFiltrados, page = 1) => {
     tablaBody.innerHTML = '';
 
     if (usuariosFiltrados.length === 0) {
       tablaBody.innerHTML = '<tr><td colspan="7">No hay usuarios registrados</td></tr>';
+      paginationContainer.innerHTML = '';
       return;
     }
 
-    usuariosFiltrados.forEach(usuario => {
+    const start = (page - 1) * ItemsPorPagina;
+    const end = start + ItemsPorPagina;
+    const pageItems = usuariosFiltrados.slice(start, end);
+
+    pageItems.forEach(usuario => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
         <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
@@ -30,8 +39,28 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       tablaBody.appendChild(fila);
     });
+    renderPagination(usuariosFiltrados, page);
   };
 
+  // Renderizar paginación
+  const renderPagination = (usuariosFiltrados, page) => {
+    const totalPages = Math.ceil(usuariosFiltrados.length / ItemsPorPagina);
+    paginationContainer.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      btn.className = 'pagination-btn' + (i === page ? ' active' : '');
+      btn.addEventListener('click', () => {
+        currentPage = i;
+        mostrarUsuarios(usuariosFiltrados, currentPage);
+      });
+      paginationContainer.appendChild(btn);
+    }
+  };
+
+  // Cargar usuarios desde el servidor
   const cargarUsuarios = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/usuarios');
@@ -39,20 +68,22 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(`Error HTTP! estado: ${response.status}`);
       }
       usuarios = await response.json();
-      mostrarUsuarios(usuarios);
+      mostrarUsuarios(usuarios, 1);
     } catch (error) {
       console.error('Error al cargar usuarios:', error);
       tablaBody.innerHTML = '<tr><td colspan="7">Error al cargar los datos :/ </td></tr>';
+      paginationContainer.innerHTML = '';
     }
   };
 
+  // Búsqueda
   searchInput.addEventListener('input', () => {
     const valor = searchInput.value.toLowerCase();
     const filtrados = usuarios.filter(usuario =>
       (`${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`.toLowerCase().includes(valor) ||
       usuario.usuario.toLowerCase().includes(valor))
     );
-    mostrarUsuarios(filtrados);
+    mostrarUsuarios(filtrados, 1);
   });
 
   cargarUsuarios();
