@@ -70,5 +70,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
+    document.getElementById('modalTitle').textContent = 'Nuevo Concepto';
+    document.getElementById('conceptForm').reset();
+    document.getElementById('modalConcepto').style.display = 'block';
+  });
+
+  document.getElementById('btnCancelarModal').addEventListener('click', () => {
+    document.getElementById('modalConcepto').style.display = 'none';
+  });
+
+  document.getElementById('conceptForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const conceptoData = {
+      clave_concepto: parseInt(document.getElementById('clave_concepto').value),
+      clave_seccion: parseInt(document.getElementById('clave_seccion').value),
+      nombre_conceptos: document.getElementById('nombre_conceptos').value,
+      descripcion: document.getElementById('descripcion').value,
+      tipo_servicio: document.getElementById('tipo_servicio').value
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/conceptos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(conceptoData)
+      });
+
+      let result;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        result = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`Respuesta inesperada: ${text.substring(0, 100)}...`);
+      }
+
+      if (!response.ok) throw new Error(result.error || 'Error al registrar concepto');
+      
+      alert(result.message || 'Concepto registrado exitosamente');
+      document.getElementById('modalConcepto').style.display = 'none';
+      cargarConceptos();
+    } catch (error) {
+      console.error('Error completo:', error);
+      alert('Error: ' + error.message);
+    }
+  });
+
   cargarConceptos();
 });
