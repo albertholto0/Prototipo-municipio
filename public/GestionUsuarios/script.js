@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     pageItems.forEach(usuario => {
       const fila = document.createElement('tr');
+      // Agregar clase inactive-user si el estado no es activo
+      if (usuario.estado && usuario.estado.toLowerCase() !== 'activo') {
+        fila.classList.add('inactive-user');
+      }
       fila.innerHTML = `
         <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
         <td>${usuario.usuario}</td>
@@ -35,8 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="action-btn modify" onclick="openModifyModal('${usuario.usuario}')">
                 <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
             </button>
+            <button class="action-btn down" onclick="openDownModal('${usuario.usuario}')">
+                <img src="/public/Assets/baja.png" alt="Baja" class="action-icon" width="50">
+            </button>
         </td>
-      `;
+        `;
       tablaBody.appendChild(fila);
     });
     renderPagination(usuariosFiltrados, page);
@@ -80,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   searchInput.addEventListener('input', () => {
     const valor = searchInput.value.toLowerCase();
     const filtrados = usuarios.filter(usuario =>
-      (`${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`.toLowerCase().includes(valor) ||
+    (`${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`.toLowerCase().includes(valor) ||
       usuario.usuario.toLowerCase().includes(valor))
     );
     mostrarUsuarios(filtrados, 1);
@@ -90,24 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('userModal');
-    const registerBtn = document.getElementById('registerBtn');
-    const userForm = document.getElementById('userForm');
-    const cancelBtn = document.querySelector('.cancel-btn');
+  const modal = document.getElementById('userModal');
+  const registerBtn = document.getElementById('registerBtn');
+  const userForm = document.getElementById('userForm');
+  const cancelBtn = document.querySelector('.cancel-btn');
 
-    registerBtn.addEventListener('click', () => {
-        document.getElementById('modalTitle').textContent = 'Registrar Nuevo Usuario';
-        userForm.reset();
-        modal.style.display = 'block';
-    });
+  registerBtn.addEventListener('click', () => {
+    document.getElementById('modalTitle').textContent = 'Registrar Nuevo Usuario';
+    userForm.reset();
+    modal.style.display = 'block';
+  });
 
-    cancelBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+  cancelBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
 
-    userForm.addEventListener('submit', async (e) => {
+  userForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const nombres = document.getElementById('userName').value;
     const apellido_paterno = document.getElementById('userLastName').value;
     const apellido_materno = document.getElementById('userSecondLastName').value;
@@ -116,28 +123,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const rol_usuario = document.getElementById('userRole').value;
 
     try {
-        const response = await fetch('http://localhost:5000/api/usuarios', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nombres,
-                apellido_paterno,
-                apellido_materno,
-                usuario,
-                password,
-                rol_usuario
-            })
-        });
+      const response = await fetch('http://localhost:5000/api/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombres,
+          apellido_paterno,
+          apellido_materno,
+          usuario,
+          password,
+          rol_usuario
+        })
+      });
 
-        const data = await response.json();
-        
-        if (!response.ok) throw new Error(data.error || 'Error al registrar usuario');
-        
-        alert(data.message || 'Usuario registrado exitosamente');
-        modal.style.display = 'none';
-        window.location.reload();
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.error || 'Error al registrar usuario');
+
+      alert(data.message || 'Usuario registrado exitosamente');
+      modal.style.display = 'none';
+      window.location.reload();
     } catch (error) {
-        alert(error.message || 'Error al registrar usuario');
+      alert(error.message || 'Error al registrar usuario');
     }
-});
+  });
 });
