@@ -24,26 +24,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     pageItems.forEach(usuario => {
       const fila = document.createElement('tr');
-      // Agregar clase inactive-user si el estado no es activo
-      if (usuario.estado && usuario.estado.toLowerCase() !== 'activo') {
-        fila.classList.add('inactive-user');
+      const esActivo = usuario.estado && usuario.estado.toLowerCase() === 'activo';
+      
+      // Aplica estilo de usuario inactivo si no está activo
+      if (!esActivo) {
+          fila.classList.add('inactive-user');
       }
+
       fila.innerHTML = `
-        <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
-        <td>${usuario.usuario}</td>
-        <td>${usuario.rol_usuario}</td>
-        <td>${usuario.fecha_acceso || 'null'}</td>
-        <td>${usuario.hora_acceso || 'null'}</td>
-        <td>${usuario.estado}</td>
-        <td id="action-buttons">
-            <button class="action-btn modify" onclick="openModifyModal('${usuario.usuario}')">
-                <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
-            </button>
-            <button class="action-btn down" onclick="openDownModal('${usuario.usuario}')">
-                <img src="/public/Assets/baja.png" alt="Baja" class="action-icon" width="50">
-            </button>
-        </td>
-        `;
+          <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
+          <td>${usuario.usuario}</td>
+          <td>${usuario.rol_usuario}</td>
+          <td>${usuario.fecha_acceso || 'null'}</td>
+          <td>${usuario.hora_acceso || 'null'}</td>
+          <td>${usuario.estado}</td>
+          <td id="action-buttons">
+              <button class="action-btn modify" onclick="openModifyModal('${usuario.usuario}')">
+                  <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
+              </button>
+              ${esActivo 
+                  ? `<button class="action-btn down" onclick="openDownModal('${usuario.usuario}')">
+                      <img src="/public/Assets/baja.png" alt="Baja" class="action-icon">
+                     </button>`
+                  : `<button class="action-btn up" onclick="openUpModal('${usuario.usuario}')">
+                      <img src="/public/Assets/alta.png" alt="Alta" class="action-icon">
+                     </button>`
+              }
+          </td>
+      `;
       tablaBody.appendChild(fila);
     });
     renderPagination(usuariosFiltrados, page);
