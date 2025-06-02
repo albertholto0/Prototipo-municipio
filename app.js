@@ -8,6 +8,7 @@ const cuentaContableRoutes = require('./routes/gestionCuentasContablesRoute');
 const conexionRouter = require("./routes/gestionConexionRoute");
 const usuariosRoutes = require("./routes/gestionUsuariosRoute");
 const conceptoRoutes = require("./routes/gestionConceptoRoute");
+const cobrar = require("./routes/cobrarRoute");
 const app = express();
 
 // // Middleware
@@ -22,16 +23,17 @@ app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
+app.use("/api/cobrar", cobrar);
 // Agregar más rutas para otros módulos
 
 // Manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send("Something broke!");
+  res.status(500).send("Algo anda mal!");
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
