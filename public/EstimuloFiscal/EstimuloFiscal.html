@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estímulo Fiscal</title>
-    <link rel="stylesheet" href="/Componentes/Nav.css">
-    <link rel="stylesheet" href="/BaseCatastral/Styles.css"> <!-- Solo CSS de Base Catastral -->
-    <script src="script.js" defer></script>
-    <script src="/Componentes/Nav.js" defer></script>
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css"> <!-- Solo CSS de Base Catastral -->
 </head>
 
 <body>
     <header>
         <div class="header-left">
             <div class="logo-left">
-                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
             </div>
             <div class="title">
                 <h1>SISTEMA DE COBROS MUNICIPAL</h1>
@@ -24,7 +23,7 @@
         <div class="menu-buttons" id="nav-placeholder"></div>
     </header>
 
- <!-- Contenido principal -->
+    <!-- Contenido principal -->
     <main class="main-container">
         <div class="title-section">
             <h2>Estímulo Fiscal</h2>
@@ -33,7 +32,7 @@
 
         <!-- Barra de búsqueda y botón agregar -->
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Buscar estímulo..." class="search-input">
+            <input type="text" id="searchInput" placeholder="Buscar estímulo" class="search-input">
             <button class="btn-agregar" id="btnOpenModal">
                 Agregar Estímulo
             </button>
@@ -41,7 +40,7 @@
 
         <!-- Tabla de estímulos -->
         <div class="table-container">
-            <table id="accountsTable" class="data-table">
+            <table id="accountsTable">
                 <thead>
                     <tr>
                         <th>Nombre Contribución</th>
@@ -53,9 +52,9 @@
                 </thead>
                 <tbody></tbody> <!-- Asegúrate de incluir esto -->
             </table>
-            
+
         </div>
-        
+
         <!-- Paginación -->
         <div class="pagination-container">
             <div class="pagination"></div>
@@ -64,13 +63,13 @@
 
     <!-- Modal para agregar/editar (usando clases de Base Catastral) -->
     <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content"  style="max-height: 60vh; overflow-y: auto">
+        <div class="modal-content" style="max-height: 60vh; overflow-y: auto">
             <span class="btn-close" id="btnCloseModal">&times;</span>
             <div class="form-container">
                 <div class="form-container" id="formContainer"></div>
                 <h3 class="text-center" id="formTitle">Agregar Estímulo Fiscal</h3>
-                <form id="estimuloForm" >
-                    
+                <form id="estimuloForm">
+
                     <div class="form-inline">
                         <div class="form-group">
                             <label for="nombre_contribucion">Nombre de Contribución:</label>
@@ -80,19 +79,21 @@
                             <label for="porcentaje">% Descuento:</label>
                             <input type="number" id="porcentaje" class="form-input" min="0" max="100" required>
                         </div>
-                        
+
                     </div>
 
                     <div class="form-inline">
                         <div class="form-group">
                             <label for="caracteristicas">Características:</label>
-                            <textarea id="caracteristicas" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
+                            <textarea id="caracteristicas" class="form-textarea" rows="7" required
+                                style="width: 100%;"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="requisitos">Requisitos:</label>
-                            <textarea id="requisitos" class="form-textarea" rows="7" required style="width: 100%;"></textarea>
+                            <textarea id="requisitos" class="form-textarea" rows="7" required
+                                style="width: 100%;"></textarea>
                         </div>
-                          
+
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
@@ -118,6 +119,9 @@
         <p>© 2025 Ixtlán - Módulo 11: Gestión de Estímulo fiscal</p>
     </footer>
 
-    
+    <script src="script.js" defer></script>
+    <script src="/public/Componentes/Nav.js" defer></script>
+
 </body>
+
 </html>
