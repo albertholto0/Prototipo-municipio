@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
-    document.getElementById('modalTitle').textContent = 'Nuevo Concepto';
     document.getElementById('conceptForm').reset();
     document.getElementById('modalConcepto').style.display = 'block';
   });

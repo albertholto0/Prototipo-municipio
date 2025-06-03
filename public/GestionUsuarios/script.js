@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelBtn = document.querySelector('.cancel-btn');
 
   registerBtn.addEventListener('click', () => {
-    document.getElementById('modalTitle').textContent = 'Registrar Nuevo Usuario';
     userForm.reset();
     modal.style.display = 'block';
   });
