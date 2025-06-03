@@ -7,7 +7,6 @@
     <title>Gestión de Usuarios</title>
     <link rel="stylesheet" href="style_usuarios.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
-    <link rel="stylesheet" href="modal_usuarios.css">
 </head>
 
 <body>
@@ -29,7 +28,7 @@
         </div>
         <div class="button-container">
             <input type="text" id="searchInput" placeholder="Buscar por usuario o nombre" />
-            <button class="register" id="registerBtn">Registrar nuevo usuario</button>
+            <button class="register" id="registerBtn">Agregar</button>
         </div>
         <div id="users-container">
             <div class="table-container">
@@ -51,6 +50,9 @@
                 </table>
             </div>
         </div>
+        <div class="pagination-container">
+            <div id="pagination" class="pagination"></div>
+        </div>
     </div>
     <footer class="footer">
         <p>© 2025 Ixtlán - Gestión de usuarios</p>
@@ -58,7 +60,7 @@
     <div id="userModal" class="modal">
         <div class="modal-content">
              <div class="modal-title-section">
-                <h3 id="modalTitle">Registrar Nuevo Usuario</h3>
+                <h3 id="modalTitle">Agregar nuevo Usuario</h3>
              </div>
             <form id="userForm" enctype="multipart/form-data">
                 <input type="hidden" id="userId">
@@ -67,8 +69,12 @@
                     <input type="text" id="userName" required>
                 </div>
                 <div class="form-group">
-                    <label for="userLastName">Apellidos:</label>
+                    <label for="userLastName">Apellido paterno:</label>
                     <input type="text" id="userLastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="userSecondLastName">Apellido materno:</label>
+                    <input type="text" id="userSecondLastName" required>
                 </div>
                 <div class="form-group">
                     <label for="userUsername">Usuario:</label>
@@ -126,6 +132,7 @@
             })
             .catch(error => console.error('Error al cargar el nav:', error));
     </script>
-    <script src="usuarios_script.js"></script>
+    <!-- <script src="usuarios_script.js"></script> -->
+     <script src="script.js"></script>
 </body>
 </html>

@@ -27,13 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fila.innerHTML = `
           <td>${est.nombre_establecimiento || "N/A"}</td>
-          <td>${est.direccion_establecimiento || ""} ${
-          est.barrio_establecimiento || ""
-        } ${est.localidad_establecimiento || ""}</td>
-          <td>${est.codigo_postal_establecimiento || "N/A"}</td>
-          <td>${est.fecha_apertura_establecimiento || "N/A"}</td>
-          <td>${est.giro_negocio_establecimiento || "N/A"}</td>
-          <td>${est.nombre_completo || "N/A"}</td>
+          <td>${est.direccion || ""} ${est.barrio || ""} ${
+          est.localidad || ""
+        }</td>
+          <td>${est.codigo_postal || "N/A"}</td>
+          <td>${est.fecha_apertura || "N/A"}</td>
+          <td>${est.giro_negocio || "N/A"}</td>
+          <td>${est.nombre_contribuyente || "N/A"}</td>
         `;
 
         tablaBody.appendChild(fila);
