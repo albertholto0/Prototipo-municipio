@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="style_inicio_sesion.css">
-    <link rel="stylesheet" href="/Componentes/Nav.css" />
-    <script src="/Componentes/Nav.js" defer></script>
+    <link rel="stylesheet" href="/public/Componentes/Nav.css" />
+    <script src="/public/Componentes/Nav.js" defer></script>
 </head>
 <body>
     <header>
         <div class="logo-left">
-            <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
         </div>
         <div class="title-center">
             <h1>SISTEMA DE COBROS MUNICIPAL</h1>
         </div>
         <div class="logo-right">
-            <img src="/Assets/logo_mex.png" alt="Logo mexico">
+            <img src="/public/Assets/logo_mex.png" alt="Logo mexico">
         </div>
     </header>
     
@@ -43,37 +43,6 @@
         <p>© 2025 Ixtlán de Juárez</p>
     </footer>
 
-    <script>
-        // Mantén tus funciones JavaScript existentes
-        function mostrarModal(mensaje) {
-            document.getElementById('mensajeTexto').textContent = mensaje;
-            document.getElementById('mensajeModal').style.display = 'block';
-        }
-        
-        function cerrarModal() {
-            document.getElementById('mensajeModal').style.display = 'none';
-        }
-        
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const usuario = document.querySelector('input[name="nombre_usuario"]').value;
-            const contraseña = document.querySelector('input[name="contraseña"]').value;
-            
-            if (usuario === 'admin' && contraseña === 'admin') {
-                window.location.href = '/Inicio/pantalla_Principal.html';
-            } 
-            // else {
-            //     mostrarModal('Usuario o contraseña incorrectos');
-            // }
-        });
-        
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('mensajeModal');
-            if (event.target === modal) {
-                cerrarModal();
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
