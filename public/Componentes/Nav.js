@@ -56,7 +56,7 @@ const setupEventListeners = () => {
 
   if (infoBtn) {
     infoBtn.addEventListener('click', () => {
-      alert('Ya mero queda no se me agüiten');
+      alert('Ya mero queda no se me agüiten :)');
     });
   }
 
