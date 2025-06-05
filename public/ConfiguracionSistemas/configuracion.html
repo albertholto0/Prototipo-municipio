@@ -3,26 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Configuración del Sistema de Cobro</title>
-    <link rel="stylesheet" href="Style.css" />
-    <!-- Redirecciona el logotipo -->
-    <script src="Script.js" defer></script>
-    <script src="/Componentes/Nav.js" defer></script>
+
+    <link rel="stylesheet" href="/public/Componentes/Nav.css" />
+    <link rel="stylesheet" href="/public/Cobrar/estilos_cobro.css" />
   </head>
 
   <body>
     <header>
       <div class="header-left">
         <div class="logo-left">
-          <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán" />
+          <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán" />
         </div>
         <div class="title">
           <h1>SISTEMA DE COBROS MUNICIPAL</h1>
         </div>
       </div>
-      <div id="nav-placeholder"></div>
+      <div class="menu-buttons" id="nav-placeholder"></div>
     </header>
 
+    <!--Contenido principal-->
     <main class="main-container">
       <div class="title-section">
         <h2>Configuración del Sistema</h2>
@@ -30,7 +29,7 @@
       </div>
 
       <div class="form-container">
-        <form id="configForm">
+        <form id="receiptForm">
           <div class="form-grid">
             <!--DEPENDENCIA-->
             <div class="form-group">
@@ -82,7 +81,7 @@
 
           <!--Vista previa del logotipo y QR-->
           <div class="preview-container">
-            <div class="image-previews">
+            <!--<div class="image-previews">
               <div>
                 <label>Vista previa del logo:</label>
                 <img
@@ -101,13 +100,17 @@
                   style="max-width: 200px; display: block; margin-top: 10px"
                 />
               </div>
-            </div>
-
-            <div class="form-buttons-container">
-              <button type="button" id="resetButton" class="reset-button">
+            </div>-->
+            <!--
+            NOTA: Para que ambos botones adopten el color se modifico
+            class -> restablecer
+            id -> guardar 
+            -->
+            <div class="form-actions">
+              <button type="button" id="resetButton" class="btn-cancel">
                 Restablecer Cambios
               </button>
-              <button type="submit" id="btnAddOrUpdate">
+              <button type="submit" id="btnGuardarRecibo">
                 Guardar Configuración
               </button>
             </div>
@@ -119,5 +122,8 @@
     <footer class="footer">
       <p>© 2025 Ixtlán - Módulo 6: Configuración del Sistema de Cobro</p>
     </footer>
+
+    <script src="/public/Componentes/Nav.js"></script>
+    <script src="/public/ConfiguracionSistemas/S.js"></script>
   </body>
 </html>

@@ -1,13 +1,13 @@
-// filepath: /routes/gestionEstablecimientoRoute.js
+// filepath: /routes/gestionConfiguracionRoute.js
 const express = require("express");
-const Establecimiento = require("../models/gestionEstablecimientoModel");
+const Configuracion = require("../models/gestionConfiguracionModel");
 const router = express.Router();
 
-// Ruta para obtener todos los establecimientos
+// Ruta para obtener todos los configuraciones
 router.get("/", async (req, res) => {
   try {
-    const establecimientos = await Establecimiento.getAll();
-    res.json(establecimientos);
+    const configuracion = await Configuracion.getAll();
+    res.json(configuracion);
   } catch (err) {
     console.error("Error al obtener establecimientos:", err);
     res.status(500).json({ error: "Error   al obtener establecimientos" });
