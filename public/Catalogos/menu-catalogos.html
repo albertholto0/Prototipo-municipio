@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Cobros Municipal</title>
     <link rel="stylesheet" href="/public//Componentes/Nav.css">
     <link rel="stylesheet" href="/public/Catalogos/estilo-catalogo.css">
-    <script src="/public/Componentes/Nav.js" defer></script> <!-- Referencia de donde se va a llamar el navegación -->
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
 </head>
+
 <body>
     <header>
         <div class="header-left"> <!-- Contenedor flex nuevo -->
@@ -18,7 +20,7 @@
                 <h1>SISTEMA DE COBROS MUNICIPAL</h1>
             </div>
         </div>
-        
+
         <!-- Menú debe estar fuera del header-left -->
         <div class="menu-buttons" id="nav-placeholder">
             <!-- Tus botones aquí -->
@@ -66,8 +68,18 @@
             <a href="/public/ConfiguracionSistemas/index.html" class="card configuracion">
                 <h2>Configuración</h2>
             </a>
+            <a href="/public/SubcuentasContables/subcuentasContables.html" class="card subcuentas">
+                <h2>Catálogos</h2>
+            </a>
         </div>
+
+        <footer class="footer">
+            <p>&copy; 2025 Sistema de Cobros Municipal.</p>
+            <p>Todos los derechos reservados.</p>
+        </footer>
+        <script src="/public/Componentes/Nav.js" defer></script>
     </main>
 
 </body>
+
 </html>

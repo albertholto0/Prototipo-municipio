@@ -55,6 +55,7 @@
 .card.gestion-seccion { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionSeccion.jpg');}
 .card.gestion-concepto { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionConcepto.jpg');}
 .card.gestion-recibos { background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionRecibos.jpg');}
+.card.subcuentas { background-image: url('/public/Assets/ImagenesCatalogo/imagen-subcuentas.jpg');}
 
 .card::before {
     content: '';
