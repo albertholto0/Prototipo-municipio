@@ -1,8 +1,8 @@
 const EstimuloFiscal = require("../models/gestionEstimuloFiscalModel");
 
-// Controlador para gestionar establecimientos
+// Controlador para gestionar estimulos fiscales
 
-exports.getAllEstablecimientos = async (req, res) => {
+exports.getAllEstimuloFiscal = async (req, res) => {
   try {
     const estimulosFiscales = await EstimuloFiscal.getAll();
     res.json(estimulosFiscales);
