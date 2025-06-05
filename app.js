@@ -23,7 +23,7 @@ app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
-app.use("/api/cobrar", cobrar);
+// app.use("/api/cobrar", cobrar);
 // Agregar más rutas para otros módulos
 
 // Manejo de errores
