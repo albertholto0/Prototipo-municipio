@@ -214,11 +214,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       cuentas.forEach(cuenta => {
         const fila = document.createElement('tr');
+        if (cuenta.estado == 1) {
+          cuenta.estado = 'Activo';
+        }
+        else if (cuenta.estado == 0) {
+          cuenta.estado = 'Inactivo';
+        }
 
         fila.innerHTML = `
           <td>${cuenta.clave_cuenta_contable}</td>
           <td>${cuenta.nombre_cuentaContable}</td>
-          <td>${cuenta.descripcion}</td>
+          <td>${cuenta.estado}</td>
           <td>
             <button class="action-btn edit" title="Editar">
                 <img src="/public/Assets/editor.png" class="action-icon">
