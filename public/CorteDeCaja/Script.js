@@ -1,6 +1,36 @@
 // Datos de ejemplo para movimientos de caja (simulando una base de datos)
 const cortesDeCaja = {
     // Corte de caja de hoy
+    '2025-05-26': {
+        encargado: "Eden Mendoza",
+        movimientos: [
+            { fp: '006', clave: 'CLAVE-547', concepto: 'Agua potable', tipoPago: 'Efectivo', cantidad: 2, importe: 128.00 },
+            { fp: '007', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '005', clave: 'CLAVE-321', concepto: 'Multa', tipoPago: 'Efectivo', cantidad: 1, importe: 500.00 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '002', clave: 'CLAVE-456', concepto: 'Agua', tipoPago: 'Transferencia', cantidad: 1, importe: 350.50 },
+            { fp: '003', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 }
+        ],
+        cerrado: false,
+        horaCierre: null
+    },
+
+    '2025-05-18': {
+        encargado: "Eden Mendoza",
+        movimientos: [
+            { fp: '006', clave: 'CLAVE-547', concepto: 'Agua potable', tipoPago: 'Efectivo', cantidad: 2, importe: 128.00 },
+            { fp: '007', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '005', clave: 'CLAVE-321', concepto: 'Multa', tipoPago: 'Efectivo', cantidad: 1, importe: 500.00 },
+            { fp: '001', clave: 'CLAVE-123', concepto: 'Predial', tipoPago: 'Efectivo', cantidad: 1, importe: 1250.00 },
+            { fp: '002', clave: 'CLAVE-456', concepto: 'Agua', tipoPago: 'Transferencia', cantidad: 1, importe: 350.50 },
+            { fp: '003', clave: 'CLAVE-789', concepto: 'Alcantarillado', tipoPago: 'Tarjeta', cantidad: 1, importe: 180.75 }
+        ],
+        cerrado: false,
+        horaCierre: null
+    },
+
     '2025-04-25': {
         encargado: "Kevin Diaz",
         movimientos: [
@@ -12,7 +42,7 @@ const cortesDeCaja = {
         cerrado: false,
         horaCierre: null
     },
-    // Corte de hoy
+
     '2025-04-02': {
         encargado: "Amelia Lopez",
         movimientos: [
@@ -43,7 +73,6 @@ const cortesDeCaja = {
         cerrado: true,
         horaCierre: '19:15 PM'
     }
-    
 };
 
 // Variables de estado
@@ -51,6 +80,8 @@ let currentPage = 1;
 const rowsPerPage = 10;
 let corteActual = null;
 let fechaSeleccionada = null;
+let montoInicial = 0;
+let cierreAutomaticoProgramado = false;
 
 // Elementos del DOM
 const elements = {
@@ -67,7 +98,6 @@ const elements = {
     totalGeneral: document.getElementById('totalGeneral'),
     movementsTable: document.querySelector('#movementsTable tbody'),
     paginationContainer: document.querySelector('.pagination'),
-    btnImprimirCorte: document.getElementById('btnImprimirCorte'),
     btnCerrarCorte: document.getElementById('btnCerrarCorte')
 };
 
@@ -77,35 +107,61 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date().toISOString().split('T')[0];
     elements.selectorFecha.value = today;
     fechaSeleccionada = today;
-    
+
     // Cargar corte del día actual
     cargarCorte(today);
-    
+
+    // Inicializar eventos de los inputs para calcular total
+    document.querySelectorAll("#formCorteCaja input").forEach(input => {
+        input.addEventListener("input", calcularTotal);
+    });
+
     // Event listeners
     elements.btnBuscarCorte.addEventListener('click', buscarCortePorFecha);
     elements.btnHoy.addEventListener('click', cargarCorteHoy);
-    elements.btnImprimirCorte.addEventListener('click', () => { 
-        window.print(); 
-
-    });
-
-
-        // Ocultar botones antes de imprimir y restaurar después
-    window.onbeforeprint = () => {
-        elements.btnImprimirCorte.style.display    = 'none';
-        elements.btnCerrarCorte.style.display      = 'none';
-        elements.btnBuscarCorte.style.display      = 'none';
-        elements.btnHoy.style.display              = 'none';
-    };
-    
-    window.onafterprint = () => {
-        elements.btnImprimirCorte.style.display    = '';
-        elements.btnCerrarCorte.style.display      = '';
-        elements.btnBuscarCorte.style.display      = '';
-        elements.btnHoy.style.display              = '';
-    };
-   
 });
+    // Ocultar botones antes de imprimir y restaurar después
+    window.onbeforeprint = () => {
+        if (elements.btnCerrarCorte) elements.btnCerrarCorte.style.display = 'none';
+        elements.btnBuscarCorte.style.display = 'none';
+        elements.btnHoy.style.display = 'none';
+    };
+
+    window.onafterprint = () => {
+        if (elements.btnCerrarCorte) elements.btnCerrarCorte.style.display = '';
+        elements.btnBuscarCorte.style.display = '';
+        elements.btnHoy.style.display = '';
+    };
+
+
+// Función para programar el cierre automático
+function programarCierreAutomatico() {
+    if (cierreAutomaticoProgramado) return;
+    
+    const ahora = new Date();
+    const horaCierre = new Date();
+    horaCierre.setHours(23, 50, 0, 0); // 11:50 PM
+    
+    // Si ya pasó la hora de hoy, programar para mañana
+    if (ahora >= horaCierre) {
+        horaCierre.setDate(horaCierre.getDate() + 1);
+    }
+    
+    const tiempoRestante = horaCierre - ahora;
+    
+    setTimeout(() => {
+        if (!corteActual?.cerrado && fechaSeleccionada === new Date().toISOString().split('T')[0]) {
+            abrirModalCorte();
+            Swal.fire({
+                icon: 'info',
+                title: 'Cierre Automático',
+                text: 'Es hora de realizar el cierre de caja automático'
+            });
+        }
+    }, tiempoRestante);
+    
+    cierreAutomaticoProgramado = true;
+}
 
 // Formatear fecha como DD/MM/AAAA
 function formatDate(dateString) {
@@ -114,17 +170,62 @@ function formatDate(dateString) {
 }
 
 // Cargar corte de hoy
-function cargarCorteHoy() {
-    const today = new Date().toISOString().split('T')[0];
-    elements.selectorFecha.value = today;
-    cargarCorte(today);
+function cargarCorte(fecha) {
+    currentPage = 1;
+    fechaSeleccionada = fecha;
+    corteActual = cortesDeCaja[fecha];
+
+    if (!corteActual) {
+        mostrarCorteVacio();
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se encontró corte de caja para la fecha seleccionada'
+        });
+        return;
+    }
+
+    // Actualizar información general
+    elements.encargadoCaja.textContent = corteActual.encargado || '--';
+    elements.fechaActual.textContent = formatDate(fecha);
+    elements.horaCierre.textContent = corteActual.horaCierre || '--:-- --';
+    elements.totalMovimientos.textContent = corteActual.movimientos?.length || 0;
+
+    // Calcular totales
+    const totalEfectivo = corteActual.movimientos
+        ?.filter(m => m.tipoPago === 'Efectivo')
+        ?.reduce((sum, m) => sum + (m.importe || 0), 0) || 0;
+
+    const totalTransferencias = corteActual.movimientos
+        ?.filter(m => m.tipoPago === 'Transferencia')
+        ?.reduce((sum, m) => sum + (m.importe || 0), 0) || 0;
+
+    const totalTarjetas = corteActual.movimientos
+        ?.filter(m => m.tipoPago === 'Tarjeta')
+        ?.reduce((sum, m) => sum + (m.importe || 0), 0) || 0;
+
+    const totalGeneral = totalEfectivo + totalTransferencias + totalTarjetas;
+
+    // Actualizar totales
+    elements.totalEfectivo.textContent = formatCurrency(totalEfectivo);
+    elements.totalTransferencias.textContent = formatCurrency(totalTransferencias);
+    elements.totalTarjetas.textContent = formatCurrency(totalTarjetas);
+    elements.totalGeneral.textContent = formatCurrency(totalGeneral);
+
+    // Renderizar la tabla de movimientos
+    renderizarTablaMovimientos();
+    renderPagination();
 }
 
 // Buscar corte por fecha seleccionada
 function buscarCortePorFecha() {
     const fechaSeleccionada = elements.selectorFecha.value;
     if (!fechaSeleccionada) {
-        alert('Por favor seleccione una fecha');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Por favor seleccione una fecha'
+        });
         return;
     }
     cargarCorte(fechaSeleccionada);
@@ -135,7 +236,7 @@ function cargarCorte(fecha) {
     currentPage = 1;
     fechaSeleccionada = fecha;
     corteActual = cortesDeCaja[fecha];
-    
+
     if (!corteActual) {
         // Si no hay corte para esa fecha, mostrar vacío
         mostrarCorteVacio();
@@ -143,8 +244,7 @@ function cargarCorte(fecha) {
             icon: 'error',
             title: 'Error',
             text: 'No se encontró corte de caja para la fecha seleccionada'
-          });
-          
+        });
         return;
     }
 
@@ -153,93 +253,100 @@ function cargarCorte(fecha) {
     elements.fechaActual.textContent = formatDate(fecha);
     elements.horaCierre.textContent = corteActual.horaCierre || '--:-- --';
     elements.totalMovimientos.textContent = corteActual.movimientos.length;
-    
+
     // Calcular totales
     const totalEfectivo = corteActual.movimientos
         .filter(m => m.tipoPago === 'Efectivo')
         .reduce((sum, m) => sum + m.importe, 0);
-    
+
     const totalTransferencias = corteActual.movimientos
         .filter(m => m.tipoPago === 'Transferencia')
         .reduce((sum, m) => sum + m.importe, 0);
-    
+
     const totalTarjetas = corteActual.movimientos
         .filter(m => m.tipoPago === 'Tarjeta')
         .reduce((sum, m) => sum + m.importe, 0);
-    
+
     const totalGeneral = totalEfectivo + totalTransferencias + totalTarjetas;
-    
+
     // Actualizar totales
     elements.totalEfectivo.textContent = formatCurrency(totalEfectivo);
     elements.totalTransferencias.textContent = formatCurrency(totalTransferencias);
     elements.totalTarjetas.textContent = formatCurrency(totalTarjetas);
     elements.totalGeneral.textContent = formatCurrency(totalGeneral);
-    
+
     // Habilitar/deshabilitar botones según si el corte está cerrado
     const esCorteDeHoy = fecha === new Date().toISOString().split('T')[0];
-    
+
     if (corteActual.cerrado) {
-        elements.btnImprimirCorte.disabled = false;
-        elements.btnCerrarCorte.disabled = true;
+        if (elements.btnCerrarCorte) {
+            elements.btnCerrarCorte.disabled = true;
+            elements.btnCerrarCorte.style.display = 'none';
+        }
+    } else if (esCorteDeHoy) {
+        if (elements.btnCerrarCorte) {
+            elements.btnCerrarCorte.disabled = false;
+            elements.btnCerrarCorte.style.display = '';
+        }
+        programarCierreAutomatico();
     } else {
-        elements.btnImprimirCorte.disabled = true;
-        elements.btnCerrarCorte.disabled = !esCorteDeHoy;
+        if (elements.btnCerrarCorte) {
+            elements.btnCerrarCorte.disabled = true;
+            elements.btnCerrarCorte.style.display = 'none';
+        }
     }
-    
-    // Renderizar movimientos
-    renderMovementsTable();
+
+    // Renderizar la tabla de movimientos
+    renderizarTablaMovimientos();
+    renderPagination();
 }
 
-// Mostrar corte vacío
 function mostrarCorteVacio() {
     elements.encargadoCaja.textContent = '--';
-    elements.fechaActual.textContent = formatDate(fechaSeleccionada);
+    elements.fechaActual.textContent = '--/--/----';
     elements.horaCierre.textContent = '--:-- --';
     elements.totalMovimientos.textContent = '0';
-    elements.totalEfectivo.textContent = '$0.00';
-    elements.totalTransferencias.textContent = '$0.00';
-    elements.totalTarjetas.textContent = '$0.00';
-    elements.totalGeneral.textContent = '$0.00';
+    elements.totalEfectivo.textContent = formatCurrency(0);
+    elements.totalTransferencias.textContent = formatCurrency(0);
+    elements.totalTarjetas.textContent = formatCurrency(0);
+    elements.totalGeneral.textContent = formatCurrency(0);
     elements.movementsTable.innerHTML = '';
     elements.paginationContainer.innerHTML = '';
-    elements.btnImprimirCorte.disabled = true;
-    elements.btnCerrarCorte.disabled = true;
+    if (elements.btnCerrarCorte) {
+        elements.btnCerrarCorte.disabled = true;
+        elements.btnCerrarCorte.style.display = 'none';
+    }
 }
 
-// Formatear moneda
-function formatCurrency(amount) {
-    return '$' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function formatCurrency(value) {
+    return `$${value.toFixed(2)}`;
 }
 
 // Renderizar tabla de movimientos
-function renderMovementsTable() {
+function renderizarTablaMovimientos() {
     if (!corteActual) {
         elements.movementsTable.innerHTML = '';
-        elements.paginationContainer.innerHTML = '';
         return;
     }
-    
+
     elements.movementsTable.innerHTML = '';
-    
+
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const paginatedData = corteActual.movimientos.slice(start, end);
-    
+
     paginatedData.forEach(movimiento => {
-        const row = `
-            <tr>
-                <td>${movimiento.fp}</td>
-                <td>${movimiento.clave}</td>
-                <td>${movimiento.concepto}</td>
-                <td>${movimiento.tipoPago}</td>
-                <td>${movimiento.cantidad}</td>
-                <td>${formatCurrency(movimiento.importe)}</td>
-            </tr>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${movimiento.fp}</td>
+            <td>${movimiento.clave}</td>
+            <td>${movimiento.concepto}</td>
+            <td>${movimiento.tipoPago}</td>
+            <td>${movimiento.cantidad}</td>
+            <td>${formatCurrency(movimiento.importe)}</td>
         `;
-        elements.movementsTable.insertAdjacentHTML('beforeend', row);
+        elements.movementsTable.appendChild(row);
     });
-    
-    renderPagination();
 }
 
 // Renderizar paginación
@@ -248,14 +355,14 @@ function renderPagination() {
         elements.paginationContainer.innerHTML = '';
         return;
     }
-    
+
     const totalPages = Math.ceil(corteActual.movimientos.length / rowsPerPage);
-    
+
     if (totalPages <= 1) {
         elements.paginationContainer.innerHTML = '';
         return;
     }
-    
+
     let paginationHTML = `
         <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
             « Anterior
@@ -292,50 +399,296 @@ function renderPagination() {
             Siguiente »
         </button>
     `;
-    
+
     elements.paginationContainer.innerHTML = paginationHTML;
 }
 
 // Cambiar página
-window.changePage = function(page) {
+window.changePage = function (page) {
+    if (page < 1 || page > Math.ceil(corteActual.movimientos.length / rowsPerPage)) return;
     currentPage = page;
-    renderMovementsTable();
+    renderizarTablaMovimientos();
+    renderPagination();
 };
 
-// Cerrar caja
-elements.btnCerrarCorte.addEventListener('click', () => {
-    Swal.fire({
-      title: '¿Estás seguro que deseas cerrar la caja?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Cerrar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const now = new Date();
-        const horaCierre = now.toLocaleTimeString('es-MX', { 
-          hour: '2-digit', 
-          minute: '2-digit' 
+// Funciones para el modal de corte
+function abrirModalCorte() {
+    document.getElementById("modalCorte").style.display = "block";
+}
+
+function cerrarModalCorte() {
+    document.getElementById("modalCorte").style.display = "none";
+}
+
+function calcularTotal() {
+    const monedas = [
+        { id: 'm_050', valor: 0.5 },
+        { id: 'm_1', valor: 1 },
+        { id: 'm_2', valor: 2 },
+        { id: 'm_5', valor: 5 },
+        { id: 'm_10', valor: 10 },
+    ];
+
+    const billetes = [
+        { id: 'b_20', valor: 20 },
+        { id: 'b_50', valor: 50 },
+        { id: 'b_100', valor: 100 },
+        { id: 'b_200', valor: 200 },
+        { id: 'b_500', valor: 500 },
+        { id: 'b_1000', valor: 1000 },
+    ];
+
+    let total = 0;
+
+    monedas.forEach(m => {
+        const cantidad = parseInt(document.getElementById(m.id).value) || 0;
+        total += cantidad * m.valor;
+    });
+
+    billetes.forEach(b => {
+        const cantidad = parseInt(document.getElementById(b.id).value) || 0;
+        total += cantidad * b.valor;
+    });
+
+    document.getElementById("totalCorte").textContent = total.toFixed(2);
+}
+
+// Recalcular total cada vez que cambia un campo
+document.querySelectorAll("#formCorteCaja input").forEach(input => {
+    input.addEventListener("input", calcularTotal);
+});
+
+// Función para guardar el corte (actualizada)
+document.getElementById("formCorteCaja").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    // Calcular total basado en los inputs
+    const total = calcularTotal();
+    
+    // Validación mejorada
+    if (isNaN(total) || total <= 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error en el corte',
+            html: `
+                <div style="text-align:left">
+                    <p>El total debe ser mayor que cero</p>
+                    <p>Por favor verifica:</p>
+                    <ul>
+                        <li>Que hayas ingresado al menos una moneda/billete</li>
+                        <li>Que las cantidades sean números válidos</li>
+                    </ul>
+                </div>
+            `,
+            confirmButtonText: 'Entendido'
         });
-  
-        // Actualizar en la "base de datos"
+        return;
+    }
+
+    // Actualizar estado del corte
+    const now = new Date();
+    const horaCierre = now.toLocaleTimeString('es-MX', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    if (cortesDeCaja[fechaSeleccionada]) {
         cortesDeCaja[fechaSeleccionada].cerrado = true;
         cortesDeCaja[fechaSeleccionada].horaCierre = horaCierre;
-  
-        // Actualizar UI
-        elements.horaCierre.textContent = horaCierre;
-        elements.btnCerrarCorte.disabled = true;
-        elements.btnImprimirCorte.disabled = false;
-  
+        
+        // Generar PDF antes de mostrar la confirmación
+        generarPDFDeclaracion();
+        
+        // Mostrar confirmación
         Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Caja cerrada correctamente'
+            icon: 'success',
+            title: 'Corte guardado exitosamente',
+            html: `
+                <div style="text-align:center">
+                    <p>El corte de caja ha sido registrado</p>
+                    <p>Total declarado: <strong>$${total.toFixed(2)}</strong></p>
+                    <p>Hora de cierre: <strong>${horaCierre}</strong></p>
+                </div>
+            `,
+            confirmButtonText: 'Aceptar',
+            willClose: () => {
+                // Limpiar y cerrar
+                this.reset();
+                document.getElementById("totalCorte").textContent = "0.00";
+                cerrarModalCorte();
+                // Forzar recarga de los datos
+                cargarCorte(fechaSeleccionada);
+            }
         });
-      }
-    });
-  });
-  
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se encontró el corte de caja para la fecha seleccionada'
+        });
+    }
+});
+// Función para calcular el total (actualizada)
+function calcularTotal() {
+    const denominaciones = [
+        { id: 'm_050', valor: 0.5 },
+        { id: 'm_1', valor: 1 },
+        { id: 'm_2', valor: 2 },
+        { id: 'm_5', valor: 5 },
+        { id: 'm_10', valor: 10 },
+        { id: 'b_20', valor: 20 },
+        { id: 'b_50', valor: 50 },
+        { id: 'b_100', valor: 100 },
+        { id: 'b_200', valor: 200 },
+        { id: 'b_500', valor: 500 },
+        { id: 'b_1000', valor: 1000 }
+    ];
 
+    let total = 0;
+    denominaciones.forEach(d => {
+        const input = document.getElementById(d.id);
+        if (input) {
+            const cantidad = parseInt(input.value) || 0;
+            total += cantidad * d.valor;
+        }
+    });
+
+    const totalElement = document.getElementById("totalCorte");
+    if (totalElement) {
+        totalElement.textContent = total.toFixed(2);
+    }
+    
+    return total;
+}
+
+// Función para generar PDF de declaración (actualizada)
+function generarPDFDeclaracion() {
+    // Verificar que jsPDF esté cargado
+    if (typeof jsPDF === 'undefined') {
+        console.error('jsPDF no está cargado correctamente');
+        return;
+    }
+
+    const doc = new jsPDF();
+    
+    // Configuración
+    doc.setFont("helvetica");
+    doc.setTextColor(40);
+    
+    // Encabezado
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("DECLARACIÓN DE CORTE DE CAJA", 105, 20, { align: "center" });
+    doc.text("Municipio de Ixtlán", 105, 27, { align: "center" });
+    
+    // Información básica
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Fecha: ${elements.fechaActual.textContent}`, 20, 45);
+    doc.text(`Encargado: ${elements.encargadoCaja.textContent}`, 20, 55);
+    
+    const now = new Date();
+    doc.text(`Hora de cierre: ${now.toLocaleTimeString('es-MX', {hour: '2-digit', minute: '2-digit', hour12: true})}`, 20, 65);
+    
+    // Sección de monedas
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("MONEDAS", 20, 80);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    
+    const monedas = [
+        { id: 'm_050', label: '$0.50' },
+        { id: 'm_1', label: '$1.00' },
+        { id: 'm_2', label: '$2.00' },
+        { id: 'm_5', label: '$5.00' },
+        { id: 'm_10', label: '$10.00' }
+    ];
+    
+    let y = 90;
+    monedas.forEach(moneda => {
+        const cantidad = document.getElementById(moneda.id)?.value || "0";
+        doc.text(`${moneda.label}: ${cantidad}`, 20, y);
+        y += 7;
+    });
+    
+    // Sección de billetes
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("BILLETES", 20, y + 10);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    y += 17;
+    
+    const billetes = [
+        { id: 'b_20', label: '$20' },
+        { id: 'b_50', label: '$50' },
+        { id: 'b_100', label: '$100' },
+        { id: 'b_200', label: '$200' },
+        { id: 'b_500', label: '$500' },
+        { id: 'b_1000', label: '$1000' }
+    ];
+    
+    billetes.forEach(billete => {
+        const cantidad = document.getElementById(billete.id)?.value || "0";
+        doc.text(`${billete.label}: ${cantidad}`, 20, y);
+        y += 7;
+    });
+    
+    // Total
+    const total = calcularTotal();
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text(`TOTAL DECLARADO: $${total.toFixed(2)}`, 20, y + 15);
+    
+    // Firma
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("_________________________", 20, y + 30);
+    doc.text("Firma del encargado", 20, y + 37);
+    
+    // Guardar PDF automáticamente
+    const nombreArchivo = `Corte_Caja_${fechaSeleccionada}_${now.getHours()}${now.getMinutes()}.pdf`;
+    doc.save(nombreArchivo);
+}
+
+// Función para renderizar tabla de movimientos (actualizada)
+function renderizarTablaMovimientos() {
+    if (!corteActual || !corteActual.movimientos) {
+        elements.movementsTable.innerHTML = '<tr><td colspan="6">No hay movimientos registrados</td></tr>';
+        return;
+    }
+
+    elements.movementsTable.innerHTML = '';
+    
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = corteActual.movimientos.slice(start, end);
+
+    paginatedData.forEach(movimiento => {
+        if (!movimiento || !movimiento.fp) return;
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${movimiento.fp || ''}</td>
+            <td>${movimiento.clave || ''}</td>
+            <td>${movimiento.concepto || ''}</td>
+            <td>${movimiento.tipoPago || ''}</td>
+            <td>${movimiento.cantidad || ''}</td>
+            <td>${movimiento.importe ? formatCurrency(movimiento.importe) : ''}</td>
+        `;
+        elements.movementsTable.appendChild(row);
+    });
+}
+// Función para abrir modal de declaración (si existe)
+function abrirModalDeclaracion() {
+    const modal = document.getElementById("modalDeclaracion");
+    if (modal) {
+        modal.style.display = "block";
+        document.getElementById("montoInicial").value = "";
+        document.getElementById("declaracionCajero").value = "";
+    }
+}

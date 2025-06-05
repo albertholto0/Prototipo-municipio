@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url(/Assets/ImagenesInicioSesion/fondo_inicioSesion.jpg);
+    background-image: url(/public/Assets/ImagenesInicioSesion/fondo_inicioSesion.jpg);
     background-color: #f5f5f5;
     margin: 0;
     min-height: 100vh;

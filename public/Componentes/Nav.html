@@ -8,10 +8,18 @@
     </head>
     <body>
         <nav class="menu-buttons">
-            <button onclick="location.href='/public/Inicio/pantalla_Principal.html'">Inicio</button>
+            <button onclick="location.href='/public/Inicio/pantallaPrincipal.html'">Inicio</button>
             <button onclick="location.href='/public/Cobrar/cobrar.html'">Cobrar</button>
             <button onclick="location.href='/public/GestionContribuyentes/gestion_contribuyentes.html'">Contribuyentes</button>
             <button onclick="location.href='/public/Catalogos/menu-catalogos.html'">Catálogos</button>
+            <span class="user-icon" id="userIcon">
+                <img src="/public/Assets/usuario.png" alt="Usuario" style="width:32px; height:32px; border-radius:50%;">
+                <div class="user-dropdown" id="userDropdown" style="display:none;">
+                    <button id="userInfoBtn">Información del usuario</button>
+                    <button id="settingsBtn">Configuración</button>
+                    <button id="logoutBtn">Cerrar sesión</button>
+                </div>
+            </span>
         </nav>    
     </body>
 </html>
