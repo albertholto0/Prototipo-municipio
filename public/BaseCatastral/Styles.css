@@ -5,8 +5,7 @@
   padding: 0;
   /* Modelo de caja más intuitivo */
   box-sizing: border-box;
-  /* Fuente principal de la aplicación */
-  font-family: "Poppins", sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 
 /* Contenedor principal centrado con máximo ancho */
@@ -79,22 +78,27 @@
   padding: 0;
   background: none !important;
   cursor: pointer;
-  margin-right: 12px; /* Más espacio entre iconos */
+  margin-right: 12px;
+  /* Más espacio entre iconos */
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  width: 44px; /* Tamaño fijo para el área clickeable */
-  height: 44px; /* Tamaño fijo para el área clickeable */
+  width: 44px;
+  /* Tamaño fijo para el área clickeable */
+  height: 44px;
+  /* Tamaño fijo para el área clickeable */
 }
 
 .action-icon {
-  width: 32px; /* Tamaño aumentado respecto a la versión anterior */
+  width: 32px;
+  /* Tamaño aumentado respecto a la versión anterior */
   height: 32px;
   object-fit: contain;
   transition: all 0.2s ease;
-  padding: 6px; /* Espacio interno para mejor tactil */
+  padding: 6px;
+  /* Espacio interno para mejor tactil */
 }
 
 /* Variante editar (color naranja) */
@@ -197,7 +201,8 @@
 /* ===== BOTONES PRINCIPALES ===== */
 .form-actions {
   display: flex;
-  justify-content: flex-end; /* Alinea todo a la derecha */
+  justify-content: flex-end;
+  /* Alinea todo a la derecha */
   gap: 1rem;
   margin-top: 2rem;
   width: 100%;
@@ -387,6 +392,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -397,6 +403,7 @@
     transform: translateY(-50px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -444,21 +451,26 @@
   padding: 20px;
   position: relative;
   max-height: 80vh;
-  overflow-y: auto; /* Permitir scroll */
+  overflow-y: auto;
+  /* Permitir scroll */
 }
 
 .form-container {
   max-height: 70vh;
-  overflow-y: scroll; /* Scroll para el formulario */
+  overflow-y: scroll;
+  /* Scroll para el formulario */
 }
 
 .form-container::-webkit-scrollbar {
-  width: 0; /* Oculta el scroll en navegadores basados en WebKit */
+  width: 0;
+  /* Oculta el scroll en navegadores basados en WebKit */
 }
 
 .form-container {
-  scrollbar-width: none; /* Oculta el scroll en Firefox */
+  scrollbar-width: none;
+  /* Oculta el scroll en Firefox */
 }
+
 #viewModalOverlay .modal-content {
   background: #fbfefc;
   border-radius: 14px;
@@ -476,6 +488,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

@@ -12,28 +12,31 @@ header {
     gap: 15px;
 }
 
-.logo-left img, .logo-right img {
+.logo-left img,
+.logo-right img {
     height: 90px;
 }
 
 .title {
     display: flex;
     align-items: center;
-    margin-left: 25px; /* Le agregué esta linea para hacer que el titulo tenga más separación de la imagen*/
+    margin-left: 25px;
+    /* Le agregué esta linea para hacer que el titulo tenga más separación de la imagen*/
 }
 
 .title h1 {
-    font-family: 'DM Sans', sans-serif;
     font-size: clamp(0.5rem, 5vw, 1.5rem);
     margin: 0;
     color: black;
-    line-height: 1.2; /* Reset para control manual */
+    line-height: 1.2;
+    /* Reset para control manual */
     align-content: flex-start;
 }
 
 .menu-buttons {
     display: flex;
-    gap: 30px; /* Mejor que márgenes individuales */
+    gap: 30px;
+    /* Mejor que márgenes individuales */
 }
 
 .menu-buttons button {
@@ -43,7 +46,8 @@ header {
     padding: 10px 25px;
     cursor: pointer;
     font-size: 16px;
-    transition: all 0.3s ease; /* Suaviza efectos hover */
+    transition: all 0.3s ease;
+    /* Suaviza efectos hover */
 }
 
 .menu-buttons button:hover {
@@ -64,7 +68,7 @@ header {
 
 .user-icon:hover img {
     transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
 }
@@ -102,7 +106,7 @@ header {
 .user-dropdown button:hover {
     background-color: #f5f5f5;
     color: #2e7d32;
-    border-radius: 0; 
+    border-radius: 0;
 }
 
 .user-dropdown button::before {
@@ -115,7 +119,7 @@ header {
 }
 
 #userInfoBtn:hover {
-    color: #2e7d32; 
+    color: #2e7d32;
 }
 
 #logoutBtn:hover {
@@ -129,7 +133,8 @@ header {
 
 #logoutBtn::before {
     background-image: url(/public/Assets/salir.svg);
-    transition: background-image 0.2s ease; /* Agregamos transición para suavizar el cambio */
+    transition: background-image 0.2s ease;
+    /* Agregamos transición para suavizar el cambio */
 }
 
 #logoutBtn:hover::before {
@@ -139,7 +144,8 @@ header {
 /* Estilo para el botón de configuración */
 
 #settingsBtn:hover {
-    color: #1976d2; /* Azul */
+    color: #1976d2;
+    /* Azul */
     background-color: #f5f5f5;
 }
 
