@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cuentas Contables</title>
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <div class="logo-left">
+                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </div>
+            <div class="title">
+                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+            </div>
+        </div>
+        <div class="menu-buttons" id="nav-placeholder">
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="main-container">
+        <div class="title-section">
+            <h2>Gestión de Cuentas Contables</h2>
+            <hr class="title-line">
+        </div>
+
+        <!-- Sección de búsqueda -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar" />
+            <button class="btn-agregar" id="btnOpenModal">Agregar</button>
+        </div>
+
+        <!-- Tabla -->
+        <table id="accountsTable">
+            <thead>
+                <tr>
+                    <th>Clave Cuenta Contable</th>
+                    <th>Clave Subcuenta</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Se llenará dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+        <div class="pagination-container">
+            <div class="pagination"></div>
+        </div>
+    </main>
+
+    <!-- Modal para el formulario -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <span class="btn-close" id="btnCloseModal">&times;</span>
+            <div class="form-container" id="formContainer">
+                <h3 class="text-center" id="formTitle">Registrar Subcuenta Contable</h3>
+                <form id="accountForm">
+                    <div class="form-group">
+                        <label for="numeroCuenta">Clave Cuenta</label>
+                        <input type="text" id="numeroCuenta" name="numeroCuenta" placeholder="Ej. 1000000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numeroSubcuenta">Clave Subcuenta</label>
+                        <input type="text" id="numeroSubcuenta" name="numeroSubcuenta" placeholder="Ej. 1100000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ej. Caja General" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                        <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Módulo 5: Gestión de Subcuentas Contables</p>
+    </footer>
+
+    <script src="/public/Componentes/Nav.js"></script>
+    <script src="java_gestionCuentasContables.js" defer></script>
+</body>
+
+</html>
