@@ -1,4 +1,3 @@
-
 // Variables de estado globales
 let isEditing = false; // Bandera para modo edición
 let currentIndex = null; // Índice del elemento siendo editado
@@ -43,8 +42,9 @@ function renderPagination(totalItems) {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
 
   let paginationHTML = `
-        <button class="pagination-btn" onclick="changePage(${currentPage - 1
-    })" ${currentPage === 1 ? "disabled" : ""}>
+        <button class="pagination-btn" onclick="changePage(${
+          currentPage - 1
+        })" ${currentPage === 1 ? "disabled" : ""}>
             « Anterior
         </button>
     `;
@@ -84,8 +84,9 @@ function renderPagination(totalItems) {
   }
 
   paginationHTML += `
-        <button class="pagination-btn" onclick="changePage(${currentPage + 1
-    })" ${currentPage === totalPages ? "disabled" : ""}>
+        <button class="pagination-btn" onclick="changePage(${
+          currentPage + 1
+        })" ${currentPage === totalPages ? "disabled" : ""}>
             Siguiente »
         </button>
     `;
@@ -200,25 +201,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cargarCuentasContables = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/cuentasContables');
+      const response = await fetch(
+        "http://localhost:5000/api/cuentasContables"
+      );
       if (!response.ok) {
         throw new Error(`Error HTTP! estado: ${response.status}`);
       }
       const cuentas = await response.json();
 
-      tablaBody.innerHTML = '';
+      tablaBody.innerHTML = "";
       if (cuentas.length === 0) {
-        tablaBody.innerHTML = '<tr><td colspan="4">No hay cuentas contables registradas</td></tr>';
+        tablaBody.innerHTML =
+          '<tr><td colspan="4">No hay cuentas contables registradas</td></tr>';
         return;
       }
 
-      cuentas.forEach(cuenta => {
-        const fila = document.createElement('tr');
+      cuentas.forEach((cuenta) => {
+        const fila = document.createElement("tr");
         if (cuenta.estado == 1) {
-          cuenta.estado = 'Activo';
-        }
-        else if (cuenta.estado == 0) {
-          cuenta.estado = 'Inactivo';
+          cuenta.estado = "Activo";
+        } else if (cuenta.estado == 0) {
+          cuenta.estado = "Inactivo";
         }
 
         fila.innerHTML = `
@@ -236,16 +239,15 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         tablaBody.appendChild(fila);
-      })
+      });
     } catch (error) {
-      console.error('Error al cargar cuentas contables:', error);
-      tablaBody.innerHTML = '<tr><td colspan="4">Error al cargar los datos :( </td></tr>';
-
+      console.error("Error al cargar cuentas contables:", error);
+      tablaBody.innerHTML =
+        '<tr><td colspan="4">Error al cargar los datos :( </td></tr>';
     }
-  }
+  };
 
   cargarCuentasContables();
-
 });
 
 // Elementos del modal
