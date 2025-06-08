@@ -50,7 +50,7 @@ const setupEventListeners = () => {
 
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
-      window.location.href = '/public/ConfiguracionSistemas/index.html';
+      window.location.href = '/public/ConfiguracionSistemas/configuracion.html';
     });
   }
 
