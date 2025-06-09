@@ -9,6 +9,13 @@ html {
     height: 100%;
 }
 
+/* Para mantener el footer siempre abajo */
+body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
 .background-image {
     background-image: url('/public/Assets/fondo_Ixtlán.jpg');
     background-size: cover;
@@ -48,4 +55,13 @@ h1 {
 
 .slogan {
     font-size: 1em;
+}
+
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background: #34495e;
+    color: white;
+    margin-top: 2.5rem;
+    font-size: 0.9em;
 }
