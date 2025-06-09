@@ -38,24 +38,60 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       tablaBody.appendChild(fila);
     });
-    renderPagination(page, data);
+    renderPagination(subconceptosFiltrados.length);
   };
 
-  const renderPagination = (page, data = subconceptosFiltrados) => {
-    const totalPages = Math.ceil(data.length / ItemsPorPagina);
-    paginationContainer.innerHTML = '';
-    if (totalPages <= 1) return;
+  /**
+  * Renderiza los controles de paginación.
+  * @param {number} totalItems - Total de elementos a paginar.
+  */
+  function renderPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / ItemsPorPagina);
+    let paginationHTML = `
+        <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+            « Anterior
+        </button>
+    `;
 
-    for (let i = 1; i <= totalPages; i++) {
-      const btn = document.createElement('button');
-      btn.textContent = i;
-      btn.className = 'pagination-btn' + (i === page ? ' active' : '');
-      btn.addEventListener('click', () => {
-        currentPage = i;
-        renderTable(currentPage, data);
-      });
-      paginationContainer.appendChild(btn);
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+
+    if (startPage > 1) {
+      paginationHTML += `
+            <button class="pagination-btn" onclick="changePage(1)">1</button>
+            ${startPage > 2 ? '<span>...</span>' : ''}
+        `;
     }
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationHTML += `
+            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
+                ${i}
+            </button>
+        `;
+    }
+
+    if (endPage < totalPages) {
+      paginationHTML += `
+            ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
+            <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
+        `;
+    }
+
+    paginationHTML += `
+        <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+            Siguiente »
+        </button>
+    `;
+    paginationContainer.innerHTML = paginationHTML;
+  }
+
+  // Cambia de página y renderiza la tabla
+  window.changePage = function(page) {
+    const totalPages = Math.ceil(subconceptosFiltrados.length / ItemsPorPagina);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTable(currentPage, subconceptosFiltrados);
   };
 
   const cargarSubconceptos = async () => {
