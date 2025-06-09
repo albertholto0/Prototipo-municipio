@@ -134,5 +134,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Llenar select de clave_seccion desde la base de datos
+  async function cargarSecciones() {
+    try {
+      const response = await fetch('http://localhost:5000/api/secciones');
+      if (!response.ok) throw new Error('No se pudieron cargar las secciones');
+      const secciones = await response.json();
+      const select = document.getElementById('clave_seccion');
+      select.innerHTML = '<option value="">Selecciona una sección</option>';
+      secciones.forEach(sec => {
+        const option = document.createElement('option');
+        option.value = sec.clave_seccion;
+        option.textContent = sec.clave_seccion + (sec.nombre_seccion ? ' - ' + sec.nombre_seccion : '');
+        select.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error al cargar secciones:', error);
+    }
+  }
+
+  cargarSecciones();
   cargarConceptos();
 });
