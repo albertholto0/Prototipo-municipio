@@ -1,20 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tablaBody = document.getElementById('conceptsTableBody');
   const paginationContainer = document.getElementById('pagination');
+  const searchInput = document.getElementById('searchInput');
   const ItemsPorPagina = 10;
   let conceptos = [];
+  let conceptosFiltrados = [];
   let currentPage = 1;
 
-  const renderTable = (page = 1) => {
+  const renderTable = (page = 1, data = conceptosFiltrados) => {
     tablaBody.innerHTML = '';
-    if (conceptos.length === 0) {
+    if (data.length === 0) {
       tablaBody.innerHTML = '<tr><td colspan="7">No hay conceptos registrados</td></tr>';
       paginationContainer.innerHTML = '';
       return;
     }
     const start = (page - 1) * ItemsPorPagina;
     const end = start + ItemsPorPagina;
-    const pageItems = conceptos.slice(start, end);
+    const pageItems = data.slice(start, end);
 
     pageItems.forEach(concepto => {
       const fila = document.createElement('tr');
@@ -36,11 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       tablaBody.appendChild(fila);
     });
-    renderPagination(page);
+    renderPagination(page, data);
   };
 
-  const renderPagination = (page) => {
-    const totalPages = Math.ceil(conceptos.length / ItemsPorPagina);
+  const renderPagination = (page, data = conceptosFiltrados) => {
+    const totalPages = Math.ceil(data.length / ItemsPorPagina);
     paginationContainer.innerHTML = '';
     if (totalPages <= 1) return;
 
@@ -50,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.className = 'pagination-btn' + (i === page ? ' active' : '');
       btn.addEventListener('click', () => {
         currentPage = i;
-        renderTable(currentPage);
+        renderTable(currentPage, data);
       });
       paginationContainer.appendChild(btn);
     }
@@ -61,14 +63,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('http://localhost:5000/api/conceptos');
       if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
       conceptos = await response.json();
+      conceptosFiltrados = [...conceptos];
       currentPage = 1;
-      renderTable(currentPage);
+      renderTable(currentPage, conceptosFiltrados);
     } catch (error) {
       console.error('Error al cargar conceptos:', error);
       tablaBody.innerHTML = '<tr><td colspan="7">Error al cargar los datos :/ </td></tr>';
       paginationContainer.innerHTML = '';
     }
   };
+
+  // Búsqueda por clave_seccion, clave_concepto y descripcion
+  searchInput.addEventListener('input', () => {
+    const valor = searchInput.value.trim().toLowerCase();
+    conceptosFiltrados = conceptos.filter(concepto =>
+      concepto.clave_seccion.toString().includes(valor) ||
+      concepto.clave_concepto.toString().includes(valor) ||
+      (concepto.descripcion && concepto.descripcion.toLowerCase().includes(valor))
+    );
+    currentPage = 1;
+    renderTable(currentPage, conceptosFiltrados);
+  });
 
   document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
     document.getElementById('conceptForm').reset();
@@ -85,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const conceptoData = {
       clave_concepto: parseInt(document.getElementById('clave_concepto').value),
       clave_seccion: parseInt(document.getElementById('clave_seccion').value),
+      nombre_conceptos: document.getElementById('nombre_conceptos').value,
       descripcion: document.getElementById('descripcion').value,
       tipo_servicio: document.getElementById('tipo_servicio').value,
       cuota: parseFloat(document.getElementById('cuota').value),
