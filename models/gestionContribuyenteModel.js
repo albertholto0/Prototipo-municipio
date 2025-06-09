@@ -11,9 +11,8 @@ class Contribuyente {
           direccion,
           barrio,
           localidad,
-          numero_telefono,
-          tipo_contribuyente
-        FROM contribuyentes
+          telefono
+        FROM contribuyente
       `);
       return rows;
     } catch (err) {
