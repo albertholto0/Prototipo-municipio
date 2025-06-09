@@ -50,13 +50,13 @@ const setupEventListeners = () => {
 
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
-      window.location.href = '/public/ConfiguracionSistemas/configuracion.html';
+      alert('Este botón abrirá la configuración del usuario.');
     });
   }
 
   if (infoBtn) {
     infoBtn.addEventListener('click', () => {
-      alert('Ya mero queda no se me agüiten :)');
+      alert('Este botón mostrará la información del usuario.');
     });
   }
 
