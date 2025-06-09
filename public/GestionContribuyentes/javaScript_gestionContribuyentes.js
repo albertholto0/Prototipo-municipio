@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${contribuyente.nombre_completo || 'N/A'}</td>
           <td>${contribuyente.rfc || 'N/A'}</td>
           <td>${contribuyente.direccion || ''}, ${contribuyente.barrio || ''}, ${contribuyente.localidad || ''}</td>
-          <td>${contribuyente.numero_telefono || 'N/A'}</td>
+          <td>${contribuyente.telefono || 'N/A'}</td>
           <td>
             <button class="action-btn edit" title="Editar">
                 <img src="/public/Assets/editor.png" class="action-icon">
