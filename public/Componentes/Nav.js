@@ -2,7 +2,7 @@
 const injectStyles = () => {
   const link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href = "/Componentes/Nav.css"; // Ajusta la ruta según tu estructura
+  link.href = "/Componentes/Nav.css";
   document.head.appendChild(link);
 };
 
@@ -50,13 +50,13 @@ const setupEventListeners = () => {
 
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
-      window.location.href = '/public/ConfiguracionSistemas/index.html';
+      alert('Este botón abrirá la configuración del usuario.');
     });
   }
 
   if (infoBtn) {
     infoBtn.addEventListener('click', () => {
-      alert('Ya mero queda no se me agüiten :)');
+      alert('Este botón mostrará la información del usuario.');
     });
   }
 

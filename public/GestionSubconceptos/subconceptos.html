@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Conceptos</title>
-    <link rel="stylesheet" href="style_conceptos.css">
+    <title>Gestión de Subconceptos</title>
+    <link rel="stylesheet" href="style_subconceptos.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
 </head>
 
@@ -14,32 +14,30 @@
     
     <div class="main-container">
         <div class="title-section">
-            <h2>Gestión de Conceptos</h2>
+            <h2>Gestión de Subconceptos</h2>
             <hr class="title-line">
         </div>
         <div class="button-container">
-            <input type="text" id="searchInput" placeholder="Buscar por usuario o nombre" />
-            <button class="btn-register" id="btnAgregarConcepto">Agregar</button>
+            <input type="text" id="searchInput" placeholder="Buscar por clave, sección o descripción" />
+            <button class="btn-register" id="btnAgregarSubconcepto">Agregar</button>
         </div>
-        <div id="modalConcepto" class="modal">
+        <div id="modalSubconcepto" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 id="modalTitle">Agregar Concepto</h2>
-                    <!-- <span class="close-modal"
-                        onclick="document.getElementById('modalConcepto').style.display='none'">&times;</span> -->
+                    <h2 id="modalTitle">Agregar Subconcepto</h2>
                 </div>
-                <form class="concept-form" id="conceptForm">
+                <form class="subconcept-form" id="subconceptForm">
                     <div class="form-group">
                         <label for="clave_seccion">Clave Sección</label>
                         <input type="number" id="clave_seccion" min="1" required>
                     </div>
                     <div class="form-group">
-                        <label for="clave_concepto">Clave Concepto (Número único)</label>
-                        <input type="number" id="clave_concepto" min="1" required>
+                        <label for="clave_subconcepto">Clave Subconcepto (Número único)</label>
+                        <input type="number" id="clave_subconcepto" min="1" required>
                     </div>
                     <div class="form-group">
-                        <label for="nombre_conceptos">Nombre del Concepto (max 100 caracteres)</label>
-                        <input type="text" id="nombre_conceptos" maxlength="100" required>
+                        <label for="nombre_subconceptos">Nombre del Subconcepto (max 100 caracteres)</label>
+                        <input type="text" id="nombre_subconceptos" maxlength="100" required>
                     </div>
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
@@ -75,11 +73,11 @@
             </div>
         </div>
         <div class="table-container">
-            <table class="concepts-table">
+            <table class="subconcepts-table">
                 <thead>
                     <tr>
                         <th>Clave</th>
-                        <th>Clave seccion</th>
+                        <th>Clave Concepto</th>
                         <th>Descripción</th>
                         <th>Tipo de servicio</th>
                         <th>Cuota</th>
@@ -87,7 +85,7 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="conceptsTableBody">
+                <tbody id="subconceptsTableBody">
                     <!-- Datos se cargarán dinámicamente -->
                 </tbody>
             </table>

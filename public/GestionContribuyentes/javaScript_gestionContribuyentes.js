@@ -1,3 +1,18 @@
+// Mapeo de elementos del DOM
+const elements = {
+    tableBody: document.querySelector("#accountsTable tbody"),
+    searchInput: document.getElementById("searchInput"),
+    form: document.getElementById("accountForm"),
+    btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
+    btnCancel: document.getElementById("btnCancel"),
+    formTitle: document.getElementById("formTitle"),
+    paginationContainer: document.querySelector(".pagination"),
+    modalOverlay: document.getElementById('modalOverlay'),
+    btnOpenModal: document.getElementById('btnOpenModal'),
+    btnCloseModal: document.getElementById('btnCloseModal')
+};
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const tablaBody = document.querySelector('#accountsTable tbody');
 
@@ -47,4 +62,20 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   cargarContribuyentes();
+
+  elements.btnOpenModal.addEventListener('click', () => {
+    openModal();
+  });
+
+  elements.btnCancel.addEventListener("click", closeModal);
 });
+
+// Funciones del modal
+function openModal() {
+  elements.modalOverlay.style.display = 'flex'; // Cambiado a flex para mejor centrado
+}
+
+function closeModal() {
+    elements.modalOverlay.style.display = 'none';
+    resetForm();
+}
