@@ -10,6 +10,7 @@ const usuariosRoutes = require("./routes/gestionUsuariosRoute");
 const conceptoRoutes = require("./routes/gestionConceptoRoute");
 const cobrar = require("./routes/cobrarRoute");
 const subcuentas = require("./routes/gestionSubcuentasContablesRoute");
+const subconceptos = require("./routes/gestionSubconceptoRoute");
 const app = express();
 
 // Middleware
@@ -25,6 +26,7 @@ app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
 app.use("/api/subcuentasContables", subcuentas);
+app.use("/api/subconceptos", subconceptos);
 // app.use("/api/cobrar", cobrar);
 
 // Manejo de errores

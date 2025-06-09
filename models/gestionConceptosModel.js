@@ -4,7 +4,7 @@ class Conceptos {
     static async getAll() {
         try {
             const [rows] = await db.query(
-                'SELECT clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio FROM conceptos');
+                'SELECT clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad FROM conceptos');
             return rows;
         } catch (err) {
             console.error('Error en la consulta:', err);
@@ -12,11 +12,11 @@ class Conceptos {
         }
     }
 
-    static async create(clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio) {
+    static async create(clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio, cuota, periodicidad) {
         try {
             const [result] = await db.query(
-                'INSERT INTO conceptos (clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio) VALUES (?, ?, ?, ?, ?)',
-                [clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio]
+                'INSERT INTO conceptos (clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad) VALUES (?, ?, ?, ?, ?)',
+                [clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio, cuota, periodicidad]
             );
             return result.insertId;
         } catch (err) {
