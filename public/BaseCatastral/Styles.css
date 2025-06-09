@@ -357,17 +357,17 @@
 
 .btn-close {
   position: absolute;
-  right: 25px;
+  right: 35px;
   top: 15px;
   cursor: pointer;
   font-size: 28px;
-  color: #7f8c8d;
+  color: #ffffff;
   transition: all 0.3s;
 }
 
 .btn-close:hover {
   color: #e74c3c;
-  transform: scale(1.1);
+  transform: scale(1.5);
 }
 
 /* Animaciones */
