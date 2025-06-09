@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tablaBody = document.getElementById('conceptsTableBody');
   const paginationContainer = document.getElementById('pagination');
-  const ItemsPorPagina = 5;
+  const ItemsPorPagina = 10;
   let conceptos = [];
   let currentPage = 1;
 
@@ -19,12 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
     pageItems.forEach(concepto => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
-        <td class="hidden">${concepto.id}</td>
         <td>${concepto.clave_concepto}</td>
         <td>${concepto.clave_seccion}</td>
-        <td>${concepto.nombre_conceptos}</td>
         <td>${concepto.descripcion}</td>
         <td>${concepto.tipo_servicio}</td>
+        <td>${concepto.cuota}</td>
+        <td>${concepto.periodicidad}</td>
         <td>
           <button class="action-btn modify" onclick="openModifyModal(${concepto.id})">
             <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
@@ -85,9 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const conceptoData = {
       clave_concepto: parseInt(document.getElementById('clave_concepto').value),
       clave_seccion: parseInt(document.getElementById('clave_seccion').value),
-      nombre_conceptos: document.getElementById('nombre_conceptos').value,
       descripcion: document.getElementById('descripcion').value,
-      tipo_servicio: document.getElementById('tipo_servicio').value
+      tipo_servicio: document.getElementById('tipo_servicio').value,
+      cuota: parseFloat(document.getElementById('cuota').value),
+      periodicidad: document.getElementById('periodicidad').value
     };
 
     try {
