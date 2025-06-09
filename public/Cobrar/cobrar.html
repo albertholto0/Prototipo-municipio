@@ -5,6 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro de cobro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/public/Componentes/Nav.css">
   <link rel="stylesheet" href="/public/Cobrar/estilos_cobro.css">
 </head>
@@ -65,14 +69,14 @@
           </div>
           <div class="form-group">
             <label for="domicilio">Domicilio:</label>
-            <input type="text" id="domicilio" name="domicilio" readonly> 
+            <input type="text" id="domicilio" name="domicilio" readonly>
             <!-- La etiqueta input se llenará automaticamente cuando se seleccione el contribuyente  -->
           </div>
         </div>
 
         <!-- Cuenta Contable que abarca 3 columnas -->
         <div class="form-group full-width">
-          <label for="cuentaContable">Cuenta Contable:</label>
+          <label for="cuentaContable">Motivo de Pago:</label>
           <select id="cuentaContable" name="cuentaContable" required>
             <option value="100000">100000 - Impuestos </option>
             <option value="110000">110000 - Impuestos sobre los ingresos</option>
@@ -102,10 +106,8 @@
             <label for="formaPago">Forma de Pago:</label>
             <select id="formaPago" name="formaPago" required>
               <option value="EFECTIVO">Efectivo</option>
-              <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
-              <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
               <option value="TRANSFERENCIA">Transferencia</option>
-              <option value="CHEQUE">Cheque</option>
+              <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
             </select>
           </div>
         </div>
@@ -126,10 +128,6 @@
         <!-- Cuarta fila: Subtotal, Descuento y Total -->
         <div class="form-row-3cols">
           <div class="form-group">
-            <label for="subtotal">Subtotal:</label>
-            <input type="text" id="subtotal" name="subtotal" required>
-          </div>
-          <div class="form-group">
             <label for="descuento">Descuento:</label>
             <select id="descuento" name="descuento" required>
               <option value="0">0%</option>
@@ -146,21 +144,16 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="total">Total:</label>
-            <input type="text" id="total" name="total" readonly>
+            <label for="subtotal">Subtotal:</label>
+            <input type="text" id="subtotal" name="subtotal" required>
           </div>
         </div>
 
         <!-- Quinta fila: Motivo Descuento y Total en Letra -->
         <div class="form-row-2cols">
           <div class="form-group">
-            <label for="motivoDescuento">Motivo Descuento:</label>
-            <select id="motivoDescuento" name="motivoDescuento" required>
-              <option value="No Aplica"> No Aplica </option>
-              <option value="Ciudadano Cumplido"> Ciudadano Cumplido </option>
-              <option value="Adulto mayor"> Adulto Mayor </option>
-              <option value="Discapacidad"> Discapacidad </option>
-            </select>
+            <label for="total">Total:</label>
+            <input type="text" id="total" name="total" readonly>
           </div>
           <div class="form-group">
             <label for="cantidadLetra">Total en Letra:</label>
@@ -178,7 +171,7 @@
   </main>
 
   <footer class="footer">
-    <p>© 2025 Ixtlán - Módulo 3: Generación de Recibos</p>
+    <p>© 2025 Ixtlán - Generación de Recibos</p>
   </footer>
 
   <script src="/public/Cobrar/javaScript_cobros.js" defer></script>
