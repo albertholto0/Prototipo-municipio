@@ -1,26 +1,70 @@
-// Inicializar el folio del recibo
-document.addEventListener('DOMContentLoaded', () => {
-    let folio = sessionStorage.getItem('ultimoFolio') || 1;
-    folio = parseInt(folio) + 1;
-    sessionStorage.setItem('ultimoFolio', folio);
-    document.getElementById('folio').value = `REC-${folio.toString().padStart(4, '0')}`;
-});
-
-// Configurar la fecha y el ejercicio fiscal
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Configurar la fecha y el ejercicio fiscal
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
-
     document.getElementById('fecha').value = `${yyyy}-${mm}-${dd}`;
     document.getElementById('ejercicioFiscal').value = `${yyyy}`;
-});
 
-// Convertir subtotal a letras y mostrar en el campo correspondiente
-document.getElementById('subtotal').addEventListener('input', function () {
-    const numero = parseFloat(this.value.replace(/,/g, '')) || 0;
-    document.getElementById('cantidadLetra').value = capitalizarTodasPalabras(numeroALetras(numero));
+    // Lógica para la apertura de caja
+    const modalApertura = document.getElementById('modalAperturaCaja');
+    const btnConfirmar = document.getElementById('btnConfirmarApertura');
+    if (!localStorage.getItem('cajaAbierta')) {
+        modalApertura.style.display = 'flex';
+        document.getElementById('receiptForm').style.opacity = '0.5';
+    }
+    btnConfirmar.addEventListener('click', () => {
+        const monto = parseFloat(document.getElementById('montoInicialCaja').value);
+        if (monto >= 0) {
+            localStorage.setItem('cajaAbierta', true);
+            localStorage.setItem('montoInicial', monto);
+            modalApertura.style.display = 'none';
+            document.getElementById('receiptForm').style.opacity = '1';
+        } else {
+            alert('Ingrese una cantidad correcta por favor');
+        }
+    });
+
+    // Cargar contribuyentes dinámicamente y configurar evento de cambio
+    try {
+        const response = await fetch('http://localhost:5000/api/contribuyentes');
+        const responseCuentasContables = await fetch('http://localhost:5000/api/cuentasContables');
+        const contribuyentes = await response.json();
+        const cuentasContables = await responseCuentasContables.json();
+        const contribuyenteSelect = document.getElementById('contribuyente');
+        const domicilioInput = document.getElementById('domicilio');
+        const cuentaContableSelect = document.getElementById('cuentaContable');
+        const contribuyenteMap = new Map();
+
+        contribuyentes.forEach(contribuyente => {
+            const option = document.createElement('option');
+            option.value = contribuyente.nombre_completo;
+            option.textContent = contribuyente.nombre_completo;
+            contribuyenteMap.set(contribuyente.nombre_completo, contribuyente.direccion);
+            contribuyenteSelect.appendChild(option);
+        });
+
+        cuentasContables.forEach(cuenta => {
+            const option = document.createElement('option');
+            option.value = cuenta.clave_cuenta_contable + " - " + cuenta.nombre_cuentaContable;
+            option.textContent = cuenta.clave_cuenta_contable + " - " + cuenta.nombre_cuentaContable;
+            cuentaContableSelect.appendChild(option);
+        });
+
+        contribuyenteSelect.addEventListener('change', () => {
+            const selectedContribuyente = contribuyenteSelect.value;
+            domicilioInput.value = contribuyenteMap.get(selectedContribuyente) || '';
+        });
+    } catch (error) {
+        console.error('Error al cargar los contribuyentes:', error);
+    }
+
+    // Convertir subtotal a letras y mostrar en el campo correspondiente
+    document.getElementById('subtotal').addEventListener('input', function () {
+        const numero = parseFloat(this.value.replace(/,/g, '')) || 0;
+        document.getElementById('cantidadLetra').value = capitalizarTodasPalabras(numeroALetras(numero));
+    });
 });
 
 // Función para capitalizar la primera letra de cada palabra
@@ -82,59 +126,3 @@ function numeroALetras(numero) {
 
     return resultado.trim() + (numero === 1 ? ' peso mexicano' : ' pesos mexicanos');
 }
-
-// Lógica para la apertura de caja
-document.addEventListener('DOMContentLoaded', () => {
-    const modalApertura = document.getElementById('modalAperturaCaja');
-    const btnConfirmar = document.getElementById('btnConfirmarApertura');
-
-    if (!localStorage.getItem('cajaAbierta')) {
-        modalApertura.style.display = 'flex';
-        document.getElementById('receiptForm').style.opacity = '0.5';
-    }
-
-    btnConfirmar.addEventListener('click', () => {
-        const monto = parseFloat(document.getElementById('montoInicialCaja').value);
-        if (monto >= 0) {
-            localStorage.setItem('cajaAbierta', true);
-            localStorage.setItem('montoInicial', monto);
-            modalApertura.style.display = 'none';
-            document.getElementById('receiptForm').style.opacity = '1';
-        } else {
-            alert('Ingrese una cantidad correcta por favor');
-        }
-    });
-});
-
-// Cargar contribuyentes dinámicamente y configurar evento de cambio
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await fetch('http://localhost:5000/api/contribuyentes');
-        const contribuyentes = await response.json();
-
-        const contribuyenteSelect = document.getElementById('contribuyente');
-        const domicilioInput = document.getElementById('domicilio');
-
-        // Crear un mapa para relacionar contribuyentes con sus domicilios
-        const contribuyenteMap = new Map();
-
-        contribuyentes.forEach(contribuyente => {
-            const option = document.createElement('option');
-            option.value = contribuyente.nombre_completo;
-            option.textContent = contribuyente.nombre_completo;
-
-            // Guardar la relación entre el contribuyente y su domicilio
-            contribuyenteMap.set(contribuyente.nombre_completo, contribuyente.direccion);
-
-            contribuyenteSelect.appendChild(option);
-        });
-
-        // Evento para actualizar el domicilio al seleccionar un contribuyente
-        contribuyenteSelect.addEventListener('change', () => {
-            const selectedContribuyente = contribuyenteSelect.value;
-            domicilioInput.value = contribuyenteMap.get(selectedContribuyente) || '';
-        });
-    } catch (error) {
-        console.error('Error al cargar los contribuyentes:', error);
-    }
-});
