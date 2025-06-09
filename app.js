@@ -25,6 +25,8 @@ app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
 app.use("/api/configuracion", configuracionRouter);
+app.use("/api/configuracion", configuracionRouter);
+
 // app.use("/api/cobrar", cobrar);
 // Agregar más rutas para otros módulos
 
