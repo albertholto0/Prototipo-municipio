@@ -88,6 +88,10 @@
     background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionConcepto.jpg');
 }
 
+.card.gestion-subconceptos {
+    background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionSubconceptos.jpg');
+}
+
 .card.gestion-recibos {
     background-image: url('/public/Assets/ImagenesCatalogo/imagen-gestionRecibos.jpg');
 }
