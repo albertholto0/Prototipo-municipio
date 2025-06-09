@@ -134,5 +134,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  async function cargarConceptos() {
+    try {
+      const response = await fetch('http://localhost:5000/api/conceptos');
+      if (!response.ok) throw new Error('No se pudieron cargar los conceptos');
+      const conceptos = await response.json();
+      const datalist = document.getElementById('listaConceptos');
+      datalist.innerHTML = '';
+      conceptos.forEach(concepto => {
+        // Puedes mostrar clave y descripción para mejor experiencia
+        const option = document.createElement('option');
+        option.value = concepto.clave_concepto;
+        option.label = concepto.descripcion ? `${concepto.clave_concepto} - ${concepto.descripcion}` : concepto.clave_concepto;
+        datalist.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error al cargar conceptos:', error);
+    }
+  }
+
+  // Llama a la función al cargar la página
+  cargarConceptos();
   cargarSubconceptos();
 });

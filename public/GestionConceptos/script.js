@@ -140,12 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('http://localhost:5000/api/secciones');
       if (!response.ok) throw new Error('No se pudieron cargar las secciones');
       const secciones = await response.json();
-      const select = document.getElementById('clave_seccion');
-      select.innerHTML = '<option value="">Selecciona una sección</option>';
+      const select = document.getElementById('listaSeccion');
+      select.innerHTML = '';
       secciones.forEach(sec => {
         const option = document.createElement('option');
         option.value = sec.clave_seccion;
-        option.textContent = sec.clave_seccion + (sec.nombre_seccion ? ' - ' + sec.nombre_seccion : '');
+        option.label = sec.nombre_seccion ? `${sec.clave_seccion} - ${sec.nombre_seccion}` : sec.clave_seccion;
         select.appendChild(option);
       });
     } catch (error) {
