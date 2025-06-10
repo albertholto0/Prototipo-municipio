@@ -8,4 +8,7 @@ router.get('/', contribuyenteController.getAllContribuyentes);
 // Registrar un nuevo contribuyente
 router.post('/', contribuyenteController.setContribuyente);
 
+// Actualizar un contribuyente
+router.put('/:id', contribuyenteController.putContribuyente);
+
 module.exports = router;
