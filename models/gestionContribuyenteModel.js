@@ -34,8 +34,8 @@ class Contribuyente {
   static async setContribuyente(nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) {
         try {
             const [result] = await db.query(
-                'INSERT INTO contribuyente (nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                [nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc]
+                'INSERT INTO contribuyente (nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, copia_credencial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, "/home/imagenes/contribuyentes_ine"]
             );
             return result.insertId;
         } catch (err) {
