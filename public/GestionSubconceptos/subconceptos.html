@@ -28,8 +28,11 @@
                 </div>
                 <form class="subconcept-form" id="subconceptForm">
                     <div class="form-group">
-                        <label for="clave_seccion">Clave Sección</label>
-                        <input type="number" id="clave_seccion" min="1" required>
+                        <label for="clave_concepto">Clave Concepto</label>
+                        <input type="text" id="clave_concepto" list="listaConceptos" autocomplete="off" required>
+                        <datalist id="listaConceptos">
+                            <!-- Opciones se llenan dinámicamente -->
+                        </datalist>
                     </div>
                     <div class="form-group">
                         <label for="clave_subconcepto">Clave Subconcepto (Número único)</label>

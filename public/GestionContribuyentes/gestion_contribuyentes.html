@@ -45,7 +45,7 @@
             <div class="pagination"></div>
         </div>
 
-        <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-overlay" id="modalOverlay"> 
             <div class="modal-content">
                 <div class="form-container" id="formContainer">
                     <h3 class="text-center" id="formTitle">Agregar Contribuyente</h3>
@@ -59,12 +59,16 @@
                                 <label>Apellido Paterno:</label>
                                 <input type="text" id="apellido_paterno" placeholder="Ej. Díaz" required>
                             </div>
+                            <div class="form-group">
+                                <label>Apellido Materno:</label>
+                                <input type="text" id="apellido_materno" placeholder="Ej. López" required>
+                            </div>
                         </div>
 
                         <div class="form-inline">
                             <div class="form-group">
-                                <label>Apellido Materno:</label>
-                                <input type="text" id="apellido_materno" placeholder="Ej. López" required>
+                                <label>Fecha de Nacimiento:</label>
+                                <input type="date" id="fecha_nacimiento" required>
                             </div>
                             <div class="form-group">
                                 <label>RFC:</label>
@@ -73,40 +77,44 @@
                         </div>
 
                         <div class="form-inline">
-                            <div class="form-inline">
-                                <div class="form-group">
-                                    <label>Calle:</label>
-                                    <input type="text" id="calle" placeholder="Ej. Calle Constitución" required>
-                                </div>
+
+                            <div class="form-group">
+                                <label>Calle:</label>
+                                <input type="text" id="calle" placeholder="Ej. Constitución" required>
                             </div>
-                          
+
                             <div class="form-group">
                                 <label>Número de calle:</label>
                                 <input type="text" id="num_calle" placeholder="Ej. 12" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Barrio:</label>
+                                <input type="text" id="barrio" placeholder="Ej. San Francisco" required>
                             </div>
                         </div>
 
                         <div class="form-inline">
                             <div class="form-group">
-                                <label>Colonia:</label>
-                                <input type="text" id="colonia" placeholder="Ej. San Francisco" required>
+                                <label>Localidad:</label>
+                                <input type="text" id="localidad" placeholder="Ej. Ixtlán de Juárez" required>
                             </div>
+
+                            <div class="form-group">
+                                <label>Código Postal</label>
+                                <input type="text" id="codigo_postal" placeholder="Ej. 68725" required>
+                            </div>
+
                             <div class="form-group">
                                 <label>Teléfono:</label>
                                 <input type="text" id="telefono" placeholder="Ej. 951 580 1224" required>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label>Número de cuenta:</label>
-                            <input type="text" id="num_cuenta" placeholder="Ej. 00001" required>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
-                            <button type="submit" id="btnAddOrUpdate">Agregar</button>
-                        </div>
                     </form>
+                    <div class="form-actions">
+                        <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                        <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                    </div>
                 </div>
             </div>
         </div>

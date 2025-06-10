@@ -11,9 +11,8 @@ class Contribuyente {
           direccion,
           barrio,
           localidad,
-          numero_telefono,
-          tipo_contribuyente
-        FROM contribuyentes
+          telefono
+        FROM contribuyente
       `);
       return rows;
     } catch (err) {
@@ -31,6 +30,18 @@ class Contribuyente {
       throw new Error('Error al obtener el contribuyente');
     }
   }
+
+  static async setContribuyente(nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) {
+        try {
+            const [result] = await db.query(
+                'INSERT INTO contribuyente (nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc]
+            );
+            return result.insertId;
+        } catch (err) {
+            console.error('Error al crear usuario:', err);
+        }
+    }
 }
 
 module.exports = Contribuyente;
