@@ -11,6 +11,7 @@ const elements = {
   btnOpenModal: document.getElementById('btnOpenModal'),
   btnCloseModal: document.getElementById('btnCloseModal')
 };
+let editId = null;
 
 // Cargar contribuyentes y renderizar tabla
 async function cargarContribuyentes() {
@@ -34,7 +35,7 @@ async function cargarContribuyentes() {
         <td>${contribuyente.direccion || ''}, ${contribuyente.barrio || ''}, ${contribuyente.localidad || ''}</td>
         <td>${contribuyente.telefono || 'N/A'}</td>
         <td>
-          <button class="action-btn edit" title="Editar">
+          <button class="action-btn edit" data-id="${contribuyente.id}" title="Editar">
               <img src="/public/Assets/editor.png" class="action-icon">
           </button>
           <button class="action-btn delete" title="Eliminar">
@@ -43,6 +44,27 @@ async function cargarContribuyentes() {
         </td>
       `;
       elements.tableBody.appendChild(fila);
+    });
+
+    // Listeners del boton de editar
+    document.querySelectorAll('.action-btn.edit').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        editId = btn.getAttribute('data-id');
+        // Obtener datos del contribuyente, usando fetch
+        const response = await fetch(`http://localhost:5000/api/contribuyentes/${editId}`);
+        const data = await response.json();
+        // Llena el formulario
+        document.getElementById('nombre').value = data.nombre_completo;
+        document.getElementById('fecha_nacimiento').value = data.fecha_nacimiento;
+        document.getElementById('rfc').value = data.rfc;
+        document.getElementById('telefono').value = data.telefono;
+        document.getElementById('calle').value = data.direccion;
+        document.getElementById('barrio').value = data.barrio;
+        document.getElementById('localidad').value = data.localidad;
+        document.getElementById('codigo_postal').value = data.codigo_postal;
+        // Abre el modal
+        openModal();
+      });
     });
   } catch (error) {
     console.error('Error al cargar contribuyentes:', error);
