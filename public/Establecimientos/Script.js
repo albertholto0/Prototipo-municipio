@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cargarEstablecimientos = async () => {
     try {
-      // URL de la API local
       const response = await fetch(
         "http://localhost:5000/api/establecimientos"
       );
@@ -24,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       establecimientos.forEach((est) => {
         const fila = document.createElement("tr");
-
         fila.innerHTML = `
           <td>${est.nombre_establecimiento || "N/A"}</td>
           <td>${est.direccion || ""} ${est.barrio || ""} ${
@@ -34,8 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${est.fecha_apertura || "N/A"}</td>
           <td>${est.giro_negocio || "N/A"}</td>
           <td>${est.nombre_contribuyente || "N/A"}</td>
+          <td class="actions">
+            <button class="action-btn edit">Editar</button>
+            <button class="action-btn delete">Eliminar</button>
+          </td>
         `;
-
         tablaBody.appendChild(fila);
       });
     } catch (error) {

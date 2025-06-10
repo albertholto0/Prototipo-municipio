@@ -9,7 +9,8 @@
   </head>
 
   <body>
-    <div id="nav-placeholder"></div> <!--NavBar-->
+    <div id="nav-placeholder"></div>
+    <!--NavBar-->
 
     <main class="main-container">
       <div class="title-section">
@@ -26,24 +27,34 @@
         <button class="btn-agregar" id="btnOpenModal">Agregar</button>
       </div>
 
-      <table id="accountsTable">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Código postal</th>
-            <th>Fecha apertura</th>
-            <th>Giro negocio</th>
-            <th>contribuyente</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+      <div class="table-container">
+        <table id="accountsTable">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Dirección</th>
+              <th>Código postal</th>
+              <th>Fecha apertura</th>
+              <th>Giro negocio</th>
+              <th>contribuyente</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
 
       <div class="pagination-container">
         <div class="pagination"></div>
       </div>
     </main>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
+      <button type="submit" class="btn-primary" id="btnAddOrUpdate">
+        Agregar
+      </button>
+    </div>
 
     <footer class="footer">
       <p>© 2025 Ixtlán - Módulo 2: Gestión de Contribuyentes</p>
