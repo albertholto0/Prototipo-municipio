@@ -5,8 +5,8 @@ require('dotenv').config();
 // Configuración de MySQL con soporte para promesas
 const pool = mysql.createPool({
   host: 'localhost',
-  user: 'root',
-  password: 'root',
+  user: 'yael',
+  password: 'Yael123!',
   database: 'db_municipio',
   waitForConnections: true,
   connectionLimit: 10,

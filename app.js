@@ -10,6 +10,7 @@ const usuariosRoutes = require("./routes/gestionUsuariosRoute");
 const conceptoRoutes = require("./routes/gestionConceptoRoute");
 const cobrar = require("./routes/cobrarRoute");
 const app = express();
+const gestionEjerciccioFiscalRoute=require("./routes/gestionEjerciccioFiscalRoute");
 
 // // Middleware
 app.use(cors());
@@ -24,6 +25,7 @@ app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
 app.use("/api/cobrar", cobrar);
+app.use("/api/EjercicioFiscal",gestionEjerciccioFiscalRoute );
 // Agregar más rutas para otros módulos
 
 // Manejo de errores
