@@ -16,18 +16,19 @@ router.get('/', async (req, res) => {
 // Ruta para registrar un nuevo concepto
 router.post('/', async (req, res) => {
     try {
-        const { clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio } = req.body;
+        const { clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad } = req.body;
         
-        if (!clave_concepto || !clave_seccion || !nombre_conceptos || !descripcion || !tipo_servicio) {
+        if (!clave_concepto || !clave_seccion || !descripcion || !tipo_servicio || !cuota || !periodicidad) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
 
         const conceptoId = await Conceptos.create(
             clave_concepto,
             clave_seccion,
-            nombre_conceptos,
             descripcion,
-            tipo_servicio
+            tipo_servicio,
+            cuota,
+            periodicidad
         );
         
         res.status(201).json({ 

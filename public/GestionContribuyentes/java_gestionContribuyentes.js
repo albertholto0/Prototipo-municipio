@@ -3,63 +3,6 @@ let isEditing = false;
 let currentIndex = null;
 let currentPage = 1;
 const rowsPerPage = 10;
-let contribuyentes = [
-    {
-        nombre: "Juan",
-        apellido_paterno: "Pérez",
-        apellido_materno: "Gómez",
-        rfc: "PEGJ800101AB05",
-        calle: "Av. Independencia",
-        num_calle: "123",
-        colonia: "La Asunción",
-        telefono: "9511234567",
-        num_cuenta: "00001"
-    },
-    {
-        nombre: "María",
-        apellido_paterno: "López",
-        apellido_materno: "Martínez",
-        rfc: "LOMM850202DEF",
-        calle: "Calle Reforma",
-        num_calle: "456",
-        colonia: "San Pedro",
-        telefono: "9517654321",
-        num_cuenta: "00002"
-    },
-    {
-        nombre: "Alberto",
-        apellido_paterno: "Barbosa",
-        apellido_materno: "Martínez",
-        rfc: "MABA159865JFIG",
-        calle: "Calle La Luciernaga",
-        num_calle: "S/N",
-        colonia: "San Francisco",
-        telefono: "9517685821",
-        num_cuenta: "00003"
-    },
-    {
-        nombre: "Luis",
-        apellido_paterno: "López",
-        apellido_materno: "Hernández",
-        rfc: "HELL150465CR90",
-        calle: "Calle Constitución",
-        num_calle: "12",
-        colonia: "San Francisco",
-        telefono: "9515801224",
-        num_cuenta: "00004"
-    },
-    {
-        nombre: "Sergio Elias",
-        apellido_paterno: "Robles",
-        apellido_materno: "Ignacio",
-        rfc: "ROIS250404US03",
-        calle: "Calle Independencia",
-        num_calle: "2",
-        colonia: "La Soledad",
-        telefono: "9514220042",
-        num_cuenta: "00005"
-    }
-];
 
 // Mapeo de elementos del DOM
 const elements = {

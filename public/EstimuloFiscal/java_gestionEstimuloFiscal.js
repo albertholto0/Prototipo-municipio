@@ -1,12 +1,17 @@
-// Datos de ejemplo
-let estimulosFiscales = [
-    {
-        nombre_contribucion: "Descuento a adultos mayores",
-        porcentaje_descuento: 50,
-        caracteristicas: "Aplicable a contribuyentes mayores de 60 años",
-        requisitos: "1. Identificación oficial"
+// Función para cargar los datos de los estímulos fiscales
+const cargarEsimuloFiscal = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/api/estimulos_fiscales');
+        if (!response.ok) {
+            throw new Error(`Error HTTP! estado: ${response.status}`);
+        }
+        estimulosFiscales = await response.json(); // Almacena las secciones en la variable global
+        renderTable(estimulosFiscales); // Renderiza la tabla con todas las secciones
+    } catch (error) {
+        console.error('Error al cargar las secciones:', error);
+        elements.tableBody.innerHTML = '<tr><td colspan="6">Error al cargar los datos :( </td></tr>';
     }
-];
+};
 
 // Variables globales
 let isEditing = false;
@@ -66,14 +71,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     </td>
                     <td class="actions">
                         <button class="action-btn edit" onclick="editEstimulo(${start + index})">
-                            <img src="/Assets/editor.png" alt="Editar">
+                            <img src="/public/Assets/editor.png" alt="Editar">
                         </button>
                         <button class="action-btn delete" onclick="deleteEstimulo(${start + index})">
-                            <img src="/Assets/eliminar.png" alt="Eliminar">
+                            <img src="/public/Assets/eliminar.png" alt="Eliminar">
                         </button>
-                        <button class="action-btn view" onclick="viewEstimulo(${start + index})">
-                            <img src="/Assets/visualizar.png" alt="Ver">
-                        </button>
+                    
                     </td>
                 </tr>
             `;

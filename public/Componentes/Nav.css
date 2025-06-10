@@ -12,28 +12,33 @@ header {
     gap: 15px;
 }
 
-.logo-left img, .logo-right img {
+.logo-left img,
+.logo-right img {
     height: 90px;
+    width: 90px;
+    object-fit: contain;
 }
 
 .title {
     display: flex;
     align-items: center;
-    margin-left: 25px; /* Le agregué esta linea para hacer que el titulo tenga más separación de la imagen*/
+    margin-left: 25px;
+    /* Le agregué esta linea para hacer que el titulo tenga más separación de la imagen*/
 }
 
 .title h1 {
-    font-family: 'DM Sans', sans-serif;
     font-size: clamp(0.5rem, 5vw, 1.5rem);
     margin: 0;
     color: black;
-    line-height: 1.2; /* Reset para control manual */
+    line-height: 1.2;
+    /* Reset para control manual */
     align-content: flex-start;
 }
 
 .menu-buttons {
     display: flex;
-    gap: 30px; /* Mejor que márgenes individuales */
+    gap: 30px;
+    /* Mejor que márgenes individuales */
 }
 
 .menu-buttons button {
@@ -43,11 +48,109 @@ header {
     padding: 10px 25px;
     cursor: pointer;
     font-size: 16px;
-    transition: all 0.3s ease; /* Suaviza efectos hover */
+    transition: all 0.3s ease;
+    /* Suaviza efectos hover */
 }
 
 .menu-buttons button:hover {
     background-color: green;
     color: white;
     border-radius: 20px;
+}
+
+/* Estilo para el icono de usuario */
+
+.user-icon {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    position: relative;
+}
+
+.user-icon:hover img {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+/* Estilo mejorado para el dropdown de usuario */
+.user-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+    border: 1px solid #e0e0e0;
+}
+
+.user-dropdown button {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-dropdown button:hover {
+    background-color: #f5f5f5;
+    color: #2e7d32;
+    border-radius: 0;
+}
+
+.user-dropdown button::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#userInfoBtn:hover {
+    color: #2e7d32;
+}
+
+#logoutBtn:hover {
+    background-color: #d32f2f;
+    color: #f5f5f5;
+}
+
+#userInfoBtn::before {
+    background-image: url(/public/Assets/usuario.svg);
+}
+
+#logoutBtn::before {
+    background-image: url(/public/Assets/salir.svg);
+    transition: background-image 0.2s ease;
+    /* Agregamos transición para suavizar el cambio */
+}
+
+#logoutBtn:hover::before {
+    background-image: url(/public/Assets/salir_claro.svg);
+}
+
+/* Estilo para el botón de configuración */
+
+#settingsBtn:hover {
+    color: #1976d2;
+    /* Azul */
+    background-color: #f5f5f5;
+}
+
+#settingsBtn::before {
+    background-image: url('/public/Assets/configuracion.svg');
 }

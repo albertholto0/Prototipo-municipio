@@ -1,18 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sistema de Cobros Municipal</title>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <nav class="menu-buttons">
-            <button onclick="location.href='/public/Inicio/pantallaPrincipal.html'">Inicio</button>
-            <button onclick="location.href='/public/Cobrar/cobrar.html'">Cobrar</button>
-            <button onclick="location.href='/public/GestionContribuyentes/gestion_contribuyentes.html'">Contribuyentes</button>
-            <button onclick="location.href='/public/Catalogos/menu-catalogos.html'">Catálogos</button>
-        </nav>    
-    </body>
-</html>
+<header>
+    <!-- Parte izquierda: Logo y título -->
+    <div class="header-left">
+        <div class="logo-left">
+            <a href="/public/Inicio/pantallaPrincipal.html">
+                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
+            </a>
+        </div>
+        <div class="title">
+            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+        </div>
+    </div>
 
+    <!-- Menú de navegación (NavBar) -->
+    <nav class="menu-buttons">
+        <button onclick="location.href='/public/Cobrar/cobrar.html'">Cobrar</button>
+        <button onclick="location.href='/public/CorteDeCaja/CorteDeCaja.html'">Corte de Caja</button>
+        <button
+            onclick="location.href='/public/GestionContribuyentes/gestion_contribuyentes.html'">Contribuyentes</button>
+        <button onclick="location.href='/public/Catalogos/menu-catalogos.html'">Catálogos</button>
+        <span class="user-icon" id="userIcon">
+            <img src="/public/Assets/usuario.png" alt="Usuario" style="width:32px; height:32px; border-radius:50%;">
+            <div class="user-dropdown" id="userDropdown" style="display:none;">
+                <button id="userInfoBtn">Información del usuario</button>
+                <button id="settingsBtn">Editar perfil</button>
+                <button id="logoutBtn">Cerrar sesión</button>
+            </div>
+        </span>
+    </nav>
+</header>

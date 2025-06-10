@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     res.json(establecimientos);
   } catch (err) {
     console.error("Error al obtener establecimientos:", err);
-    res.status(500).json({ error: "Error al obtener establecimientos" });
+    res.status(500).json({ error: "Error   al obtener establecimientos" });
   }
 });
 

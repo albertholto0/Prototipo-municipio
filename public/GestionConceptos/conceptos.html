@@ -10,17 +10,8 @@
 </head>
 
 <body>
-    <header>
-        <div class="header-left">
-            <div class="logo-left">
-                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-            </div>
-            <div class="title">
-                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-            </div>
-        </div>
-        <div class="menu-buttons" id="nav-placeholder"></div>
-    </header>
+    <div id="nav-placeholder"></div> <!--NavBar-->
+    
     <div class="main-container">
         <div class="title-section">
             <h2>Gestión de Conceptos</h2>
@@ -39,8 +30,11 @@
                 </div>
                 <form class="concept-form" id="conceptForm">
                     <div class="form-group">
-                        <label for="clave_seccion">Clave Sección</label>
-                        <input type="number" id="clave_seccion" min="1" required>
+                        <label for="clave_seccion">Clave Seccion</label>
+                        <input type="text" id="clave_seccion" list="listaSeccion" autocomplete="off" required>
+                        <datalist id="listaSeccion">
+                            <!-- Opciones se llenan dinámicamente -->
+                        </datalist>
                     </div>
                     <div class="form-group">
                         <label for="clave_concepto">Clave Concepto (Número único)</label>
@@ -87,12 +81,12 @@
             <table class="concepts-table">
                 <thead>
                     <tr>
-                        <th class="hidden">ID</th> <!-- Ocultar columna ID -->
                         <th>Clave</th>
                         <th>Clave seccion</th>
-                        <th>Concepto</th>
                         <th>Descripción</th>
                         <th>Tipo de servicio</th>
+                        <th>Cuota</th>
+                        <th>Periodicidad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>

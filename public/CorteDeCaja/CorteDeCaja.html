@@ -1,48 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corte de caja</title>
-    <link rel="stylesheet" href="/Componentes/Nav.css">
     <link rel="stylesheet" href="Styles.css">
     <script src="Script.js" defer></script>
-    <script src="/Componentes/Nav.js" defer></script>
+    <script src="/public/Componentes/Nav.js" defer></script>
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
 </head>
 
 <body>
-    <header>
-        <div class="header-left"> <!-- Contenedor flex nuevo -->
-            <div class="logo-left">
-                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-            </div>
-            <div class="title">
-                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-            </div>
-        </div>
-        <div class="no-print" class="menu-buttons"   id="nav-placeholder">
-        </div>
-    </header>
+    <div id="nav-placeholder"></div> <!--NavBar-->
 
     <main class="main-container">
         <div class="title-section">
             <h2>Corte de caja</h2>
             <hr class="title-line">
         </div>
-        
-        
+
+
         <!-- Selector de fecha en una sola línea -->
-        <div class="date-controls" >
-            <div class="search-container"  class="no-print" >
-                <label for="selectorFecha" class="no-print">Buscar corte:</label>
+        <div class="date-controls">
+            <div class="search-container">
+                <label for="selectorFecha">Buscar corte:</label>
                 <input type="date" id="selectorFecha" name="selectorFecha">
-                <button class="btn-search"  id="btnBuscarCorte">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                <button class="btn-search" id="btnBuscarCorte">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                     </svg>
                 </button>
                 <button class="btn-today" id="btnHoy">
-                    
+
                     Hoy
                 </button>
             </div>
@@ -90,10 +82,119 @@
         </div>
 
         <!-- Controles de caja -->
-        <div class="date-controls">
-            <button class="btn-agregar" id="btnImprimirCorte"   class="no-print" disabled>Imprimir Corte</button>
-            <button class="btn-cancel"  class="no-print" id="btnCerrarCorte">Cerrar Caja</button>
+        <!-- Botón para abrir el modal -->
+        <button class="btn-cancel" onclick="abrirModalCorte()">Realizar Corte de Caja</button>
+
+        <!-- Modal de Corte de Caja -->
+        <div id="modalCorte" class="modal" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 style="margin-top: 20px; font-weight: bold; color: #333; text-align: center;">Declaración de
+                            Corte de Caja</h2>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formCorteCaja">
+
+
+                            <!-- Tabla de Billetes -->
+                            <h4 style="margin-top: 20px; font-weight: bold; color: #333; text-align: center;">Monedas
+                            </h4><br>
+
+                            <table style="width: 100%; margin-bottom: 12px; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 6px;"><label for="m_050"
+                                            style="font-weight: bold;">$0.50:</label>
+                                    </td>
+                                    <td style="padding: 6px;"><input type="number" id="m_050" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                    <td style="padding: 6px;"><label for="m_1"
+                                            style="font-weight: bold;">$1.00:</label>
+                                    </td>
+                                    <td style="padding: 6px;"><input type="number" id="m_1" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                    <td style="padding: 6px;"><label for="m_2"
+                                            style="font-weight: bold;">$2.00:</label></td>
+                                    <td style="padding: 6px;"><input type="number" id="m_2" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 6px;"><label for="m_5"
+                                            style="font-weight: bold;">$5.00:</label></td>
+                                    <td style="padding: 6px;"><input type="number" id="m_5" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                    <td style="padding: 6px;"><label for="m_10"
+                                            style="font-weight: bold;">$10.00:</label></td>
+                                    <td style="padding: 6px;"><input type="number" id="m_10" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                            <h4 style="margin-top: 20px; font-weight: bold; color: #333; text-align: center;">Billetes
+                            </h4><br>
+
+                            <table style="width: 100%; margin-bottom: 12px; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 6px;"><label for="b_20" style="font-weight: bold;">$20:</label>
+                                    </td>
+                                    <td style="padding: 6px;"><input type="number" id="b_20" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                    <td style="padding: 6px;"><label for="b_50" style="font-weight: bold;">$50:</label>
+                                    </td>
+                                    <td style="padding: 6px;"><input type="number" id="b_50" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                    <td style="padding: 6px;"><label for="b_100"
+                                            style="font-weight: bold;">$100:</label></td>
+                                    <td style="padding: 6px;"><input type="number" id="b_100" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 6px;"><label for="b_200"
+                                            style="font-weight: bold;">$200:</label></td>
+                                    <td style="padding: 6px;"><input type="number" id="b_200" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                    <td style="padding: 6px;"><label for="b_500"
+                                            style="font-weight: bold;">$500:</label></td>
+                                    <td style="padding: 6px;"><input type="number" id="b_500" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                    <td style="padding: 6px;"><label for="b_1000"
+                                            style="font-weight: bold;">$1000:</label></td>
+                                    <td style="padding: 6px;"><input type="number" id="b_1000" min="0" value="0"
+                                            style="width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                    </td>
+                                </tr>
+                            </table><br>
+
+                            <div class="form-group">
+                                <strong>Total: $<span id="totalCorte">0.00</span></strong><br>
+                            </div>
+
+                            <div class="modal-footer"
+                                style="display: flex; justify-content: center; gap: 20px; align-items: center;">
+                                <button type="submit" class="btn-agregar">Guardar Corte</button>
+                                <button type="button" class="btn-cancel" onclick="cerrarModalCorte()">Cancelar</button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
+
 
         <!-- Tabla de movimientos -->
         <div class="table-container">
@@ -113,7 +214,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
@@ -123,17 +224,9 @@
         <p>© 2025 Ixtlán - Módulo 4: Corte de caja</p>
     </footer>
 
-    <script>
-        fetch('/Componentes/Nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </body>
 

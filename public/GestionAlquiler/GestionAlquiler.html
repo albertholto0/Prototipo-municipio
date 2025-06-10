@@ -6,24 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de Alquiler</title>
     <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
-    <script src="alquilerJScript.js"></script>
-    <script src="/Componentes/Nav.js" defer></script>
-
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
 </head>
 
 <body>
-    <header>
-        <div class="header-left"> <!-- Contenedor flex nuevo -->
-            <div class="logo-left">
-                <img src="/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-            </div>
-            <div class="title">
-                <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-            </div>
-        </div>
-        <div class="menu-buttons" id="nav-placeholder">
-        </div>
-    </header>
+    <div id="nav-placeholder"></div> <!--NavBar-->
 
     <!-- Contenido principal -->
     <main class="main-container">
@@ -44,11 +31,12 @@
             <table id="accountsTable">
                 <thead>
                     <tr>
-                        <th>Descripción</th>
                         <th>Fecha de Inicio</th>
                         <th>Fecha de Cierre</th>
-                        <th>Estado del Alquiler </th>
+                        <th>Descripción</th>
                         <th>Contribuyente</th>
+                        <th>Monto Total</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,6 +116,9 @@
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
     </footer>
+
+    <script src="PruebaAlquiler.js"></script>
+    <script src="/public/Componentes/Nav.js" defer></script>
 </body>
 
 </html>

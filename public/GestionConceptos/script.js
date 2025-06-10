@@ -1,30 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tablaBody = document.getElementById('conceptsTableBody');
   const paginationContainer = document.getElementById('pagination');
+  const searchInput = document.getElementById('searchInput');
   const ItemsPorPagina = 5;
   let conceptos = [];
+  let conceptosFiltrados = [];
   let currentPage = 1;
 
-  const renderTable = (page = 1) => {
+  const renderTable = (page = 1, data = conceptosFiltrados) => {
     tablaBody.innerHTML = '';
-    if (conceptos.length === 0) {
+    if (data.length === 0) {
       tablaBody.innerHTML = '<tr><td colspan="7">No hay conceptos registrados</td></tr>';
       paginationContainer.innerHTML = '';
       return;
     }
     const start = (page - 1) * ItemsPorPagina;
     const end = start + ItemsPorPagina;
-    const pageItems = conceptos.slice(start, end);
+    const pageItems = data.slice(start, end);
 
     pageItems.forEach(concepto => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
-        <td class="hidden">${concepto.id}</td>
         <td>${concepto.clave_concepto}</td>
         <td>${concepto.clave_seccion}</td>
-        <td>${concepto.nombre_conceptos}</td>
         <td>${concepto.descripcion}</td>
         <td>${concepto.tipo_servicio}</td>
+        <td>${concepto.cuota}</td>
+        <td>${concepto.periodicidad}</td>
         <td>
           <button class="action-btn modify" onclick="openModifyModal(${concepto.id})">
             <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
@@ -36,24 +38,60 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       tablaBody.appendChild(fila);
     });
-    renderPagination(page);
+    renderPagination(data.length);
   };
 
-  const renderPagination = (page) => {
-    const totalPages = Math.ceil(conceptos.length / ItemsPorPagina);
-    paginationContainer.innerHTML = '';
-    if (totalPages <= 1) return;
+  /**
+  * Renderiza los controles de paginación.
+  * @param {number} totalItems - Total de elementos a paginar.
+  */
+  function renderPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / ItemsPorPagina);
+    let paginationHTML = `
+        <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+            « Anterior
+        </button>
+    `;
 
-    for (let i = 1; i <= totalPages; i++) {
-      const btn = document.createElement('button');
-      btn.textContent = i;
-      btn.className = 'pagination-btn' + (i === page ? ' active' : '');
-      btn.addEventListener('click', () => {
-        currentPage = i;
-        renderTable(currentPage);
-      });
-      paginationContainer.appendChild(btn);
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+
+    if (startPage > 1) {
+      paginationHTML += `
+            <button class="pagination-btn" onclick="changePage(1)">1</button>
+            ${startPage > 2 ? '<span>...</span>' : ''}
+        `;
     }
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationHTML += `
+            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
+                ${i}
+            </button>
+        `;
+    }
+
+    if (endPage < totalPages) {
+      paginationHTML += `
+            ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
+            <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
+        `;
+    }
+
+    paginationHTML += `
+        <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+            Siguiente »
+        </button>
+    `;
+    paginationContainer.innerHTML = paginationHTML;
+  }
+
+  // Cambia de página y renderiza la tabla
+  window.changePage = function(page) {
+    const totalPages = Math.ceil(conceptosFiltrados.length / ItemsPorPagina);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTable(currentPage, conceptosFiltrados);
   };
 
   const cargarConceptos = async () => {
@@ -61,14 +99,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('http://localhost:5000/api/conceptos');
       if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
       conceptos = await response.json();
+      conceptosFiltrados = [...conceptos];
       currentPage = 1;
-      renderTable(currentPage);
+      renderTable(currentPage, conceptosFiltrados);
     } catch (error) {
       console.error('Error al cargar conceptos:', error);
       tablaBody.innerHTML = '<tr><td colspan="7">Error al cargar los datos :/ </td></tr>';
       paginationContainer.innerHTML = '';
     }
   };
+
+  // Búsqueda por clave_seccion, clave_concepto y descripcion
+  searchInput.addEventListener('input', () => {
+    const valor = searchInput.value.trim().toLowerCase();
+    conceptosFiltrados = conceptos.filter(concepto =>
+      concepto.clave_seccion.toString().includes(valor) ||
+      concepto.clave_concepto.toString().includes(valor) ||
+      (concepto.descripcion && concepto.descripcion.toLowerCase().includes(valor))
+    );
+    currentPage = 1;
+    renderTable(currentPage, conceptosFiltrados);
+  });
 
   document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
     document.getElementById('conceptForm').reset();
@@ -87,7 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
       clave_seccion: parseInt(document.getElementById('clave_seccion').value),
       nombre_conceptos: document.getElementById('nombre_conceptos').value,
       descripcion: document.getElementById('descripcion').value,
-      tipo_servicio: document.getElementById('tipo_servicio').value
+      tipo_servicio: document.getElementById('tipo_servicio').value,
+      cuota: parseFloat(document.getElementById('cuota').value),
+      periodicidad: document.getElementById('periodicidad').value
     };
 
     try {
@@ -117,5 +170,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Llenar select de clave_seccion desde la base de datos
+  async function cargarSecciones() {
+    try {
+      const response = await fetch('http://localhost:5000/api/secciones');
+      if (!response.ok) throw new Error('No se pudieron cargar las secciones');
+      const secciones = await response.json();
+      const select = document.getElementById('listaSeccion');
+      select.innerHTML = '';
+      secciones.forEach(sec => {
+        const option = document.createElement('option');
+        option.value = sec.clave_seccion;
+        option.label = sec.nombre_seccion ? `${sec.clave_seccion} - ${sec.nombre_seccion}` : sec.clave_seccion;
+        select.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error al cargar secciones:', error);
+    }
+  }
+
+  cargarSecciones();
   cargarConceptos();
 });

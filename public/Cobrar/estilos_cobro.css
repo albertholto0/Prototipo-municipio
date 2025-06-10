@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 
 body {
@@ -45,7 +45,6 @@ body {
   font-size: 1.8rem;
   color: #2c3e50;
   margin-bottom: 0.5rem;
-  font-weight: 600;
 }
 
 .title-line {

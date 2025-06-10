@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Subconceptos</title>
+    <link rel="stylesheet" href="style_subconceptos.css">
+    <link rel="stylesheet" href="/public/Componentes/Nav.css">
+</head>
+
+<body>
+    <div id="nav-placeholder"></div> <!--NavBar-->
+    
+    <div class="main-container">
+        <div class="title-section">
+            <h2>Gestión de Subconceptos</h2>
+            <hr class="title-line">
+        </div>
+        <div class="button-container">
+            <input type="text" id="searchInput" placeholder="Buscar por clave, sección o descripción" />
+            <button class="btn-register" id="btnAgregarSubconcepto">Agregar</button>
+        </div>
+        <div id="modalSubconcepto" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Agregar Subconcepto</h2>
+                </div>
+                <form class="subconcept-form" id="subconceptForm">
+                    <div class="form-group">
+                        <label for="clave_concepto">Clave Concepto</label>
+                        <input type="text" id="clave_concepto" list="listaConceptos" autocomplete="off" required>
+                        <datalist id="listaConceptos">
+                            <!-- Opciones se llenan dinámicamente -->
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="clave_subconcepto">Clave Subconcepto (Número único)</label>
+                        <input type="number" id="clave_subconcepto" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre_subconceptos">Nombre del Subconcepto (max 100 caracteres)</label>
+                        <input type="text" id="nombre_subconceptos" maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea id="descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_servicio">Tipo de Servicio (max 30 caracteres)</label>
+                        <input type="text" id="tipo_servicio" maxlength="30" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-btn" id="btnCancelarModal">Cancelar</button>
+                        <button type="submit" class="register-btn">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title-section">
+                    <h2>Confirmar eliminación</h2>
+                </div>
+                <form id="deleteConceptForm">
+                    <input type="hidden" id="deleteConceptId">
+                    <div class="form-group">
+                        <label for="deletePassword">Contraseña de administrador:</label>
+                        <input type="password" id="deletePassword" required>
+                    </div>
+                    <div class="form-buttons-delete">
+                        <button type="button" class="cancel-btn-delete">Cancelar</button>
+                        <button type="submit" class="delete-btn-delete">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="subconcepts-table">
+                <thead>
+                    <tr>
+                        <th>Clave</th>
+                        <th>Clave Concepto</th>
+                        <th>Descripción</th>
+                        <th>Tipo de servicio</th>
+                        <th>Cuota</th>
+                        <th>Periodicidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="subconceptsTableBody">
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-container">
+            <div id="pagination" class="pagination"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Ixtlán - Gestión de Conceptos</p>
+    </footer>
+
+    <!-- <script src="conceptos_script.js"></script> -->
+    <script src="script.js"></script>
+    <script>
+        fetch('/public/Componentes/Nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar el nav:', error));
+    </script>
+</body>
+
+</html>
