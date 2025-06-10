@@ -78,7 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = {
       nombre: document.getElementById('nombre').value,
       apellido_paterno: document.getElementById('apellido_paterno').value,
-      apellido_materno: document.getElementById('apellido_materno').value
+      apellido_materno: document.getElementById('apellido_materno').value,
+      fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
+      rfc: document.getElementById('rfc').value,
+      calle: document.getElementById('calle').value,
+      num_calle: document.getElementById('num_calle').value,
+      barrio: document.getElementById('barrio').value,
+      localidad: document.getElementById('localidad').value,
+      codigo_postal: document.getElementById('codigo_postal').value,
+      telefono: document.getElementById('telefono').value,
     };
 
     try {
