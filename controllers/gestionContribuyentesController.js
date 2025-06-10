@@ -12,7 +12,9 @@ exports.getAllContribuyentes = async (req, res) => {
 
 exports.setContribuyente = async (req, res) => {
   try {
-    const { nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc } = req.body;
+    const { nombre,apellido_paterno, apellido_materno, fecha_nacimiento, rfc, calle, num_calle, barrio, localidad, codigo_postal, telefono} = req.body;
+    const nombre_completo = `${nombre} ${apellido_paterno} ${apellido_materno}`.trim();
+    const direccion = `${calle} ${num_calle}`.trim(); // Concatenar calle y número de calle
 
     if (!nombre_completo || !telefono || !direccion || !barrio || !localidad || !codigo_postal || !rfc) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
