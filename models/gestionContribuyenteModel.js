@@ -21,21 +21,21 @@ class Contribuyente {
     }
   }
 
-  static async getById(id) {
+  static async deleteContribuyente(id) {
     try {
-      const [rows] = await db.query('SELECT * FROM contribuyentes WHERE id = ?', [id]);
+      const [rows] = await db.query('DELETE FROM contribuyente WHERE id = ?', [id]);
       return rows[0];
     } catch (err) {
       console.error('Error en la consulta:', err);
-      throw new Error('Error al obtener el contribuyente');
+      throw new Error('Error al eliminar el contribuyente');
     }
   }
 
   static async setContribuyente(nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) {
         try {
             const [result] = await db.query(
-                'INSERT INTO contribuyente (nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                [nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc]
+                'INSERT INTO contribuyente (nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, copia_credencial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, "/home/imagenes/contribuyentes_ine"]
             );
             return result.insertId;
         } catch (err) {
