@@ -1,12 +1,13 @@
 const EstimuloFiscal = require("../models/gestionEstimuloFiscalModel");
 
-// Controlador para gestionar estimulos fiscales
-
 exports.getAllEstimuloFiscal = async (req, res) => {
   try {
-    const estimulosFiscales = await EstimuloFiscal.getAll();
-    res.json(estimulosFiscales);
+    const estimuloFiscal = await EstimuloFiscal.getAll();
+    res.json(estimuloFiscal);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error en controlador:", error);  // Log adicional
+    res.status(500).json({ 
+      message: error.message || "Error interno del servidor" 
+    });
   }
 };

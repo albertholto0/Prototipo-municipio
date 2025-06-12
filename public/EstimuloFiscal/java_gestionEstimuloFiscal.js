@@ -1,18 +1,43 @@
-// Función para cargar los datos de los estímulos fiscales
-const cargarEsimuloFiscal = async () => {
-    try {
-        const response = await fetch('http://localhost:5000/api/estimulos_fiscales');
-        if (!response.ok) {
-            throw new Error(`Error HTTP! estado: ${response.status}`);
-        }
-        estimulosFiscales = await response.json(); // Almacena las secciones en la variable global
-        renderTable(estimulosFiscales); // Renderiza la tabla con todas las secciones
-    } catch (error) {
-        console.error('Error al cargar las secciones:', error);
-        elements.tableBody.innerHTML = '<tr><td colspan="6">Error al cargar los datos :( </td></tr>';
-    }
-};
+document.addEventListener('DOMContentLoaded', () => {
+    const tablaBody = document.querySelector('#accountsTable tbody'); // O usa #tablaEstimulos si cambiaste el ID
 
+    const cargarEstimulos = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/estimuloFiscal');
+            if (!response.ok) throw new Error('Error al cargar datos');
+            const data = await response.json();
+            
+            // Limpia la tabla antes de agregar nuevos datos
+            tablaBody.innerHTML = '';
+
+            // Llena la tabla
+            data.forEach(est => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${est.nombre_contribucion || 'N/A'}</td>
+                    <td>${est.porcentaje_descuento || 'N/A'}%</td>
+                    <td>${est.caracteristicas || 'N/A'}</td>
+                    <td>${est.requisitos || 'N/A'}</td>
+                    <td>
+                        <button class="btn-editar" data-id="${est.id_estimulo_fiscal}">Editar
+                        
+                        </button>
+                        
+                        <button class="btn-eliminar" data-id="${est.id_estimulo_fiscal}">Eliminar</button>
+                    </td>
+                `;
+                tablaBody.appendChild(fila);
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            tablaBody.innerHTML = '<tr><td colspan="5">Error al cargar los datos</td></tr>';
+        }
+    };
+
+    cargarEstimulos(); // Ejecuta al cargar la página
+});
+
+/////
 // Variables globales
 let isEditing = false;
 let currentIndex = null;

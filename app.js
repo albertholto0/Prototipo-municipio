@@ -8,6 +8,7 @@ const cuentaContableRoutes = require('./routes/gestionCuentasContablesRoute');
 const conexionRouter = require("./routes/gestionConexionRoute");
 const usuariosRoutes = require("./routes/gestionUsuariosRoute");
 const conceptoRoutes = require("./routes/gestionConceptoRoute");
+const estimuloFiscalRoutes = require("./routes/gestionEstimuloFiscalRoute");
 const cobrar = require("./routes/cobrarRoute");
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
+app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
 // app.use("/api/cobrar", cobrar);
 // Agregar más rutas para otros módulos
 
