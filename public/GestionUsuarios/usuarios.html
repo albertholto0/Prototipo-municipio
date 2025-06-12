@@ -10,17 +10,7 @@
 </head>
 
 <body>
-    <header>
-    <div class="header-left">
-      <div class="logo-left">
-        <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-      </div>
-      <div class="title">
-        <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-      </div>
-    </div>
-    <div class="menu-buttons" id="nav-placeholder"></div>
-  </header>
+    <div id="nav-placeholder"></div> <!--NavBar-->
     <div class="main-container">
         <div class="title-section">
             <h2>Gestión de Usuarios</h2>
@@ -59,9 +49,9 @@
     </footer>
     <div id="userModal" class="modal">
         <div class="modal-content">
-             <div class="modal-title-section">
+            <div class="modal-title-section">
                 <h3 id="modalTitle">Agregar nuevo Usuario</h3>
-             </div>
+            </div>
             <form id="userForm" enctype="multipart/form-data">
                 <input type="hidden" id="userId">
                 <div class="form-group">
@@ -107,9 +97,9 @@
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <!-- <span class="close">&times;</span> -->
-             <div class="modal-title-section">
+            <div class="modal-title-section">
                 <h2>Confirmar eliminación</h2>
-             </div>
+            </div>
             <form id="deleteForm">
                 <input type="hidden" id="deleteUserId">
                 <div class="form-group">
@@ -124,15 +114,8 @@
         </div>
     </div>
 
-    <script>
-        fetch('/public/Componentes/Nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error al cargar el nav:', error));
-    </script>
-    <!-- <script src="usuarios_script.js"></script> -->
-     <script src="script.js"></script>
+    <script src="/public/Componentes/Nav.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>

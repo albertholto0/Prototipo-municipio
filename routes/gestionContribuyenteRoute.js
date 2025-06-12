@@ -1,17 +1,14 @@
-// filepath: /home/rafaeldiaz/Documentos/Sexto Semestre/Ingenieria de Software II/Prototipo-municipio/routes/gestionContribuyenteRoute.js
 const express = require('express');
-const Contribuyente = require('../models/gestionContribuyenteModel');
 const router = express.Router();
+const contribuyenteController = require('../controllers/gestionContribuyentesController');
 
-// Ruta para obtener todos los contribuyentes
-router.get('/', async (req, res) => {
-  try {
-    const contribuyentes = await Contribuyente.getAll();
-    res.json(contribuyentes);
-  } catch (err) {
-    console.error('Error al obtener contribuyentes:', err);
-    res.status(500).json({ error: 'Error al obtener contribuyentes' });
-  }
-});
+// Obtener todos los contribuyentes
+router.get('/', contribuyenteController.getAllContribuyentes);
+
+// Registrar un nuevo contribuyente
+router.post('/', contribuyenteController.setContribuyente);
+
+// Actualizar un contribuyente
+router.put('/:id', contribuyenteController.putContribuyente);
 
 module.exports = router;
