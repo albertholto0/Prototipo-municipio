@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('http://localhost:5000/api/contribuyentes');
         const responseCuentasContables = await fetch('http://localhost:5000/api/cuentasContables');
-        const responseEstimulosFiscales = await fetch('http://localhost:5000/api/estimulosFiscales');
+        const responseEstimulosFiscales = await fetch('http://localhost:5000/api/estimuloFiscal');
         const contribuyentes = await response.json();
         const cuentasContables = await responseCuentasContables.json();
         const estimulosFiscales = await responseEstimulosFiscales.json();
@@ -60,8 +60,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             cuentaContableSelect.appendChild(option);
         });
 
-        
-        
+        estimulosFiscales.forEach(estimulo => {
+            const option = document.createElement('option');
+            option.value = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
+            option.textContent = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
+            estimuloSelect.appendChild(option);
+        });        
     } catch (error) {
         console.error('Error al cargar los contribuyentes:', error);
     }
