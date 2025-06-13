@@ -12,11 +12,11 @@ class Conceptos {
         }
     }
 
-    static async create(clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio, cuota, periodicidad) {
+    static async create(clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad) {
         try {
             const [result] = await db.query(
-                'INSERT INTO conceptos (clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad) VALUES (?, ?, ?, ?, ?)',
-                [clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio, cuota, periodicidad]
+                'INSERT INTO conceptos (clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad) VALUES (?, ?, ?, ?, ?, ?)',
+                [clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad]
             );
             return result.insertId;
         } catch (err) {
@@ -24,7 +24,6 @@ class Conceptos {
             throw err;
         }
     }
-
 }
 
 module.exports = Conceptos;
