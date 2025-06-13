@@ -30,11 +30,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('http://localhost:5000/api/contribuyentes');
         const responseCuentasContables = await fetch('http://localhost:5000/api/cuentasContables');
+        const responseEstimulosFiscales = await fetch('http://localhost:5000/api/estimulosFiscales');
         const contribuyentes = await response.json();
         const cuentasContables = await responseCuentasContables.json();
+        const estimulosFiscales = await responseEstimulosFiscales.json();
         const contribuyenteSelect = document.getElementById('contribuyente');
         const domicilioInput = document.getElementById('domicilio');
         const cuentaContableSelect = document.getElementById('cuentaContable');
+        const estimuloSelect = document.getElementById('descuento');
         const contribuyenteMap = new Map();
 
         contribuyentes.forEach(contribuyente => {
@@ -45,6 +48,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             contribuyenteSelect.appendChild(option);
         });
 
+        contribuyenteSelect.addEventListener('change', () => {
+            const selectedContribuyente = contribuyenteSelect.value;
+            domicilioInput.value = contribuyenteMap.get(selectedContribuyente) || '';
+        });
+
         cuentasContables.forEach(cuenta => {
             const option = document.createElement('option');
             option.value = cuenta.clave_cuenta_contable + " - " + cuenta.nombre_cuentaContable;
@@ -52,10 +60,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             cuentaContableSelect.appendChild(option);
         });
 
-        contribuyenteSelect.addEventListener('change', () => {
-            const selectedContribuyente = contribuyenteSelect.value;
-            domicilioInput.value = contribuyenteMap.get(selectedContribuyente) || '';
-        });
+        
+        
     } catch (error) {
         console.error('Error al cargar los contribuyentes:', error);
     }
