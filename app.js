@@ -8,7 +8,11 @@ const cuentaContableRoutes = require("./routes/gestionCuentasContablesRoute");
 const conexionRouter = require("./routes/gestionConexionRoute");
 const usuariosRoutes = require("./routes/gestionUsuariosRoute");
 const conceptoRoutes = require("./routes/gestionConceptoRoute");
+<<<<<<< HEAD
 const configuracionRouter = require("./routes/gestionConfiguracionRoute");
+=======
+const estimuloFiscalRoutes = require("./routes/gestionEstimuloFiscalRoute");
+>>>>>>> main
 const cobrar = require("./routes/cobrarRoute");
 const subcuentas = require("./routes/gestionSubcuentasContablesRoute");
 const subconceptos = require("./routes/gestionSubconceptoRoute");
@@ -26,7 +30,11 @@ app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
+<<<<<<< HEAD
 app.use("/api/configuracion", configuracionRouter);
+=======
+app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
+>>>>>>> main
 app.use("/api/subcuentasContables", subcuentas);
 app.use("/api/subconceptos", subconceptos);
 
