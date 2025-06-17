@@ -34,12 +34,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const contribuyentes = await response.json();
         const cuentasContables = await responseCuentasContables.json();
         const estimulosFiscales = await responseEstimulosFiscales.json();
+        console.log(estimulosFiscales); 
         const contribuyenteSelect = document.getElementById('contribuyente');
         const domicilioInput = document.getElementById('domicilio');
         const cuentaContableSelect = document.getElementById('cuentaContable');
         const estimuloSelect = document.getElementById('descuento');
         const estimuloAdicionalSelect = document.getElementById('descuentoAdicional');
         const contribuyenteMap = new Map();
+
+        /* Filtrar estimulos */
+        const estimulosNormales = estimulosFiscales.filter(e => e.tipo_descuento === "normal");
+        const estimulosAdicionales = estimulosFiscales.filter(e => e.tipo_descuento === "adicional");
+
 
         contribuyentes.forEach(contribuyente => {
             const option = document.createElement('option');
@@ -61,13 +67,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             cuentaContableSelect.appendChild(option);
         });
 
-        estimulosFiscales.forEach(estimulo => {
+        estimulosNormales.forEach(estimulo => {
             const option = document.createElement('option');
             option.value = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
             option.textContent = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
             estimuloSelect.appendChild(option);
-            estimuloAdicionalSelect.appendChild(option.cloneNode(true));
-        });        
+        });
+
+        estimulosAdicionales.forEach(estimulo => {
+            const option = document.createElement('option');
+            option.value = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
+            option.textContent = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
+            estimuloAdicionalSelect.appendChild(option);
+        });
     } catch (error) {
         console.error('Error al cargar los contribuyentes:', error);
     }
