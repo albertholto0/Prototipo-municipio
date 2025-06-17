@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const domicilioInput = document.getElementById('domicilio');
         const cuentaContableSelect = document.getElementById('cuentaContable');
         const estimuloSelect = document.getElementById('descuento');
+        const estimuloAdicionalSelect = document.getElementById('descuentoAdicional');
         const contribuyenteMap = new Map();
 
         contribuyentes.forEach(contribuyente => {
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.value = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
             option.textContent = estimulo.porcentaje_descuento + "% - " + estimulo.resumen_caracteristicas;
             estimuloSelect.appendChild(option);
+            estimuloAdicionalSelect.appendChild(option.cloneNode(true));
         });        
     } catch (error) {
         console.error('Error al cargar los contribuyentes:', error);
