@@ -29,13 +29,10 @@ app.use("/api/conceptos", conceptoRoutes);
 app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
 app.use("/api/subcuentasContables", subcuentas);
 app.use("/api/subconceptos", subconceptos);
-<<<<<<< HEAD
 app.use("/api/cobrar", cobrar);
-=======
 app.use("/api/corteCaja", corteCajaRouter);
 
 // app.use("/api/cobrar", cobrar);
->>>>>>> dd085a29da8240ea48b5da8f47218ddd084f3a30
 
 // Manejo de errores
 app.use((err, req, res, next) => {
