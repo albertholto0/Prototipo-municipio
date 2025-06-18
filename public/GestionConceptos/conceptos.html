@@ -21,19 +21,17 @@
             <input type="text" id="searchInput" placeholder="Buscar por usuario o nombre" />
             <button class="btn-register" id="btnAgregarConcepto">Agregar</button>
         </div>
-        <div id="modalConcepto" class="modal">
+        <!-- Modal para Agregar (existente) -->
+        <div id="modalAgregarConcepto" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 id="modalTitle">Agregar Concepto</h2>
-                    <!-- <span class="close-modal"
-                        onclick="document.getElementById('modalConcepto').style.display='none'">&times;</span> -->
+                    <h2>Agregar Concepto</h2>
                 </div>
-                <form class="concept-form" id="conceptForm">
+                <form class="concept-form" id="agregarConceptForm">
                     <div class="form-group">
                         <label for="clave_seccion">Clave Seccion</label>
                         <input type="text" id="clave_seccion" list="listaSeccion" autocomplete="off" required>
                         <datalist id="listaSeccion">
-                            <!-- Opciones se llenan dinámicamente -->
                         </datalist>
                     </div>
                     <div class="form-group">
@@ -59,6 +57,44 @@
                     <div class="form-buttons">
                         <button type="button" class="cancel-btn" id="btnCancelarModal">Cancelar</button>
                         <button type="submit" class="register-btn">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal para Editar (nuevo) -->
+        <div id="modalEditarConcepto" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Editar Concepto</h2>
+                </div>
+                <form class="concept-form" id="editarConceptForm">
+                    <div class="form-group">
+                        <label for="edit_clave_seccion">Clave Sección</label>
+                        <input type="text" id="edit_clave_seccion" list="listaSeccion" autocomplete="off" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_clave_concepto">Clave Concepto</label>
+                        <input type="number" id="edit_clave_concepto" min="1" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_descripcion">Descripción</label>
+                        <textarea id="edit_descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_tipo_servicio">Tipo de Servicio</label>
+                        <input type="text" id="edit_tipo_servicio" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_cuota">Cuota</label>
+                        <input type="text" id="edit_cuota" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_periodicidad">Periodicidad</label>
+                        <input type="text" id="edit_periodicidad" maxlength="30" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-btn" id="btnCancelarEditar">Cancelar</button>
+                        <button type="submit" class="register-btn">Guardar Cambios</button>
                     </div>
                 </form>
             </div>

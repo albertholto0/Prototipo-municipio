@@ -24,6 +24,18 @@ class Conceptos {
             throw err;
         }
     }
+
+    static async update(clave_concepto, descripcion, tipo_servicio, cuota, periodicidad) {
+        try {
+            await db.query(
+                'UPDATE conceptos SET descripcion = ?, tipo_servicio = ?, cuota = ?, periodicidad = ? WHERE clave_concepto = ?',
+                [descripcion, tipo_servicio, cuota, periodicidad, clave_concepto]
+            );
+        } catch (err) {
+            console.error('Error al actualizar concepto:', err);
+            throw err;
+        }
+    }
 }
 
 module.exports = Conceptos;
