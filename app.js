@@ -29,6 +29,7 @@ app.use("/api/conceptos", conceptoRoutes);
 app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
 app.use("/api/subcuentasContables", subcuentas);
 app.use("/api/subconceptos", subconceptos);
+app.use("/api/cobrar", cobrar);
 app.use("/api/corteCaja", corteCajaRouter);
 
 // app.use("/api/cobrar", cobrar);

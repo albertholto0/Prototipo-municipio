@@ -64,7 +64,7 @@ const renderTable = (data) => {
         fila.innerHTML = `
             <td>${seccion.clave_subcuenta || 'N/A'}</td>
             <td>${seccion.clave_seccion || 'N/A'}</td>
-            <td>${seccion.nombre_seccion || ''}</td>
+            <td>${seccion.descripcion || ''}</td>
             <td>
                 <button class="action-btn edit" title="Editar">
                     <img src="/public/Assets/editor.png" class="action-icon">

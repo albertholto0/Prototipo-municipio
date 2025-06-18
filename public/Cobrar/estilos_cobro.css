@@ -216,6 +216,20 @@ body {
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
 }
 
+#selects-anidados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Espacio entre selects */
+  margin-bottom: 10px;
+  align-items: flex-end;
+}
+
+.select-anidado {
+  min-width: 180px;
+  margin-bottom: 8px;
+  /* Puedes agregar más estilos si lo deseas */
+}
+
 /* ===== FOOTER ===== */
 .footer {
   text-align: center;
