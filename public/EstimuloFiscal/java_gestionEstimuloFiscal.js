@@ -321,3 +321,4 @@ function aplicarEstilosATabla() {
 
 // Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", aplicarEstilosATabla);
+
