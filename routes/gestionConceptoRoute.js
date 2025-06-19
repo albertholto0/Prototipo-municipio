@@ -50,13 +50,14 @@ router.post('/', async (req, res) => {
 router.put('/:clave_concepto', async (req, res) => {
     try {
         const { clave_concepto } = req.params;
-        const { descripcion, tipo_servicio, cuota, periodicidad } = req.body;
-        
-        if (!descripcion || !tipo_servicio || !cuota || !periodicidad) {
+        const { clave_seccion, descripcion, tipo_servicio, cuota, periodicidad } = req.body;
+
+        if (!clave_seccion || !descripcion || !tipo_servicio || !cuota || !periodicidad) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
 
         await Conceptos.update(
+            clave_seccion,
             clave_concepto,
             descripcion,
             tipo_servicio,

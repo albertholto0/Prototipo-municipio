@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     pageItems.forEach(subconcepto => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
+      <td>${subconcepto.clave_concepto}</td>
         <td>${subconcepto.clave_subconcepto}</td>
-        <td>${subconcepto.clave_concepto}</td>
         <td>${subconcepto.descripcion}</td>
         <td>${subconcepto.tipo_servicio}</td>
         <td>${subconcepto.cuota}</td>
@@ -178,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const datalist = document.getElementById('listaConceptos');
       datalist.innerHTML = '';
       conceptos.forEach(concepto => {
-        // Puedes mostrar clave y descripción para mejor experiencia
         const option = document.createElement('option');
         option.value = concepto.clave_concepto;
         option.label = concepto.descripcion ? `${concepto.clave_concepto} - ${concepto.descripcion}` : concepto.clave_concepto;

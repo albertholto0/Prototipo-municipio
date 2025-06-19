@@ -47,14 +47,15 @@ exports.createConcepto = async (req, res) => {
 exports.updateConcepto = async (req, res) => {
   try {
     const { id } = req.params;
-    const { descripcion, tipo_servicio, cuota, periodicidad } = req.body;
+    const { clave_seccion, descripcion, tipo_servicio, cuota, periodicidad } = req.body;
 
-    if (!descripcion || !tipo_servicio || !cuota || !periodicidad) {
+    if (!clave_seccion || !descripcion || !tipo_servicio || !cuota || !periodicidad) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 
     await Conceptos.update(
       id,
+      clave_seccion,
       descripcion,
       tipo_servicio,
       cuota,

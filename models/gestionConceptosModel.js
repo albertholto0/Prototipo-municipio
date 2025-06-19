@@ -25,11 +25,11 @@ class Conceptos {
         }
     }
 
-    static async update(clave_concepto, descripcion, tipo_servicio, cuota, periodicidad) {
+    static async update(clave_seccion, clave_concepto, descripcion, tipo_servicio, cuota, periodicidad) {
         try {
             await db.query(
-                'UPDATE conceptos SET descripcion = ?, tipo_servicio = ?, cuota = ?, periodicidad = ? WHERE clave_concepto = ?',
-                [descripcion, tipo_servicio, cuota, periodicidad, clave_concepto]
+                'UPDATE conceptos SET clave_seccion = ?, descripcion = ?, tipo_servicio = ?, cuota = ?, periodicidad = ? WHERE clave_concepto = ?',
+                [clave_seccion, descripcion, tipo_servicio, cuota, periodicidad, clave_concepto]
             );
         } catch (err) {
             console.error('Error al actualizar concepto:', err);

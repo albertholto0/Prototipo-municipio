@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     pageItems.forEach(concepto => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
+      <td>${concepto.clave_seccion}</td>
         <td>${concepto.clave_concepto}</td>
-        <td>${concepto.clave_seccion}</td>
         <td>${concepto.descripcion}</td>
         <td>${concepto.tipo_servicio}</td>
         <td>${concepto.cuota}</td>
@@ -191,6 +191,7 @@ document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
     
     const conceptoData = {
         clave_concepto: parseInt(document.getElementById('edit_clave_concepto').value),
+        clave_seccion: document.getElementById('edit_clave_seccion').value,
         descripcion: document.getElementById('edit_descripcion').value,
         tipo_servicio: document.getElementById('edit_tipo_servicio').value,
         cuota: parseFloat(document.getElementById('edit_cuota').value),
@@ -202,6 +203,7 @@ document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                clave_seccion: conceptoData.clave_seccion,
                 descripcion: conceptoData.descripcion,
                 tipo_servicio: conceptoData.tipo_servicio,
                 cuota: conceptoData.cuota,
