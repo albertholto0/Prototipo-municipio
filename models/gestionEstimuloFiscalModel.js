@@ -7,8 +7,8 @@ class EstimuloFiscal {
         SELECT  
           id_estimulo_fiscal,       
           nombre_contribucion,       
-          porcentaje_descuento,
           caracteristicas,
+          porcentaje_descuento,
           requisitos,
           resumen_caracteristicas,   
           tipo_descuento            
