@@ -1,11 +1,10 @@
-const EjercicioFiscal = require('../models/gestionEjercicioFiscalModel');
+const EjercicioFiscalModel = require('../models/gestionEjercicioFiscalModel');
 
-exports.getAllCuentasContables = async (req, res) => {
-    try{
-        const EjercicioFiscal = await EjercicioFiscal.getAll();
-        res.json(EjercicioFiscal);
+exports.getAllEjerciciosFiscales = async (req, res) => {
+    try {
+        const ejercicios = await EjercicioFiscalModel.getAll();
+        res.json(ejercicios);
     } catch (error) {
         res.status(500).json({ message: error.message });
-
     }
 }

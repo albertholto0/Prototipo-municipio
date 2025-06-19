@@ -16,6 +16,7 @@ const corteCajaRouter = require("./routes/gestionCorteCajaRoute");
 const gestionEjerciccioFiscalRoute = require("./routes/gestionEjerciccioFiscalRoute");
 
 const app = express();
+const gestionEjerciccioFiscalRoute = require('./routes/gestionEjercicioFiscalRoute');
 
 // Middleware
 app.use(cors());
@@ -29,12 +30,12 @@ app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
-app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
+app.use("/api/cobrar", cobrar);
+app.use("/api/EjercicioFiscal",gestionEjerciccioFiscalRoute );
+// Agregar más rutas para otros módulos
 app.use("/api/subcuentasContables", subcuentas);
 app.use("/api/subconceptos", subconceptos);
-app.use("/api/cobrar", cobrar);
-app.use("/api/corteCaja", corteCajaRouter);
-app.use("/api/EjercicioFiscal", gestionEjerciccioFiscalRoute);
+// app.use("/api/cobrar", cobrar);
 
 // Manejo de errores
 app.use((err, req, res, next) => {

@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
     <link rel="stylesheet" href="/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="StylesE.css">
-    <script src="Script.js" defer></script>
+    <!-- <script src="Script.js" defer></script> -->
+    <script src="gestionEjercicioFiscal.js" defer></script>
     <script src="/Componentes/Nav.js" defer></script>
 </head>
 
@@ -44,41 +45,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Datos de ejemplo (se llenará dinámicamente con JavaScript) -->
-                    <tr>
-                        <td>2024</td>
-                        <td>01/01/2024</td>
-                        <td>31/12/2024</td>
-                        <td><span class="estado-badge activo">Activo</span></td>
-                        <td>$5,000,000.00</td>
-                        <td>$1,250,000.00</td>
-                        <td>Ejercicio fiscal del año 2024</td>
-                        <td class="action-buttons">
-                            <button class="action-btn edit" title="Editar">
-                                <img src="/public/Assets/editor.png" class="action-icon">
-                            </button>
-                            <button class="action-btn delete" title="Eliminar">
-                                <img src="/public/Assets/eliminar.png" class="action-icon">
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2023</td>
-                        <td>01/01/2023</td>
-                        <td>31/12/2023</td>
-                        <td><span class="estado-badge finalizado">Finalizado</span></td>
-                        <td>$4,800,000.00</td>
-                        <td>$4,750,000.00</td>
-                        <td>Ejercicio fiscal del año 2023</td>
-                        <td class="action-buttons">
-                            <button class="action-btn edit" title="Editar">
-                                <img src="/public/Assets/editor.png" class="action-icon">
-                            </button>
-                            <button class="action-btn delete" title="Eliminar">
-                                <img src="/public/Assets/eliminar.png" class="action-icon">
-                            </button>
-                        </td>
-                    </tr>
+                    <!-- Datos reales se cargarán dinámicamente con JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -153,3 +120,5 @@
             .catch(error => console.error('Error al cargar el nav:', error));
     </script>
 </body>
+
+</html>

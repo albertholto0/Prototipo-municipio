@@ -1,31 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const tablaBody = document.querySelector('#accountsTable tbody');
+  const tablaBody = document.querySelector('#fiscalTable tbody');
 
   const cargarEjercicioFiscal = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/EjercicioFiscal');
+      const response = await fetch('/api/EjercicioFiscal');
 
       if (!response.ok) {
-        throw new Error(`Error HTTP! estado: ${response.status}`);
+        const errorText = await response.text(); // Para obtener el error detallado del servidor
+        console.error('Respuesta del servidor con error:', errorText);
+        throw new Error(`HTTP ${response.status} - ${errorText}`);
       }
 
       const ejercicios = await response.json();
       tablaBody.innerHTML = '';
 
-      if (ejercicios.length === 0) {
-        tablaBody.innerHTML = '<tr><td colspan="10">No hay ejercicios fiscales registrados</td></tr>';
+      if (!Array.isArray(ejercicios) || ejercicios.length === 0) {
+        tablaBody.innerHTML = '<tr><td colspan="8">No hay ejercicios fiscales registrados</td></tr>';
         return;
       }
 
       ejercicios.forEach(ejercicio => {
         const fila = document.createElement('tr');
 
+        // Validar y formatear fechas
+        const fechaInicio = ejercicio.fecha_inicio
+          ? new Date(ejercicio.fecha_inicio).toLocaleDateString()
+          : 'N/A';
+
+        const fechaFin = ejercicio.fecha_fin
+          ? new Date(ejercicio.fecha_fin).toLocaleDateString()
+          : 'N/A';
+
         fila.innerHTML = `
-          <td>${ejercicio.id_ejercicio}</td>
-          <td>${ejercicio.anio}</td>
-          <td>${ejercicio.fecha_inicio}</td>
-          <td>${ejercicio.fecha_fin}</td>
-          <td>${ejercicio.estado}</td>
+          <td>${ejercicio.anio ?? 'N/A'}</td>
+          <td>${fechaInicio}</td>
+          <td>${fechaFin}</td>
+          <td>${ejercicio.estado ?? 'N/A'}</td>
           <td>${ejercicio.proyeccion_ingreso ?? 'N/A'}</td>
           <td>${ejercicio.ingreso_recaudado ?? 'N/A'}</td>
           <td>${ejercicio.observaciones ?? ''}</td>
@@ -44,9 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (error) {
       console.error('Error al cargar Ejercicio Fiscal:', error);
-      tablaBody.innerHTML = '<tr><td colspan="11">Error al cargar los datos :( </td></tr>';
+      tablaBody.innerHTML = '<tr><td colspan="8">Error al cargar los datos</td></tr>';
     }
   };
 
-  cargarEjercicioFiscal(); // Llamada correcta aquí
+  cargarEjercicioFiscal();
 });
