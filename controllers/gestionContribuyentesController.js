@@ -82,3 +82,13 @@ exports.putContribuyente = async (req, res) => {
     });
   }
 }
+
+exports.deleteContribuyente = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Contribuyente.deleteContribuyente(id);
+    res.status(200).json({ success: true, message: 'Contribuyente eliminado' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Error al eliminar contribuyente' });
+  }
+};
