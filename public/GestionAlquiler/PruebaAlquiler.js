@@ -72,22 +72,16 @@ function renderTable(data) {
   const paginatedData = data.slice(start, end);
 
   // Genera las filas de la tabla con paginación
-  paginatedData.forEach((base, index) => {
+  paginatedData.forEach((alquiler, index) => {
     const row = `
         <tr>
           <td>${alquiler.fecha_inicio}</td>
           <td>${alquiler.fecha_fin}</td>
-          <td>${alquiler.numero_viajes}</td>
-          <td>${alquiler.kilometros_recorridos}</td>
-          <td>${alquiler.horometro_inicio}</td>
-          <td>${alquiler.horometro_fin}</td>
           <td>${alquiler.tipo_trabajo}</td>
           <td>${alquiler.concepto}</td>
-          <td>${alquiler.tarifa_base}</td>
           <td>${alquiler.monto_total}</td>
-          <td>${alquiler.id_recibo}</td>
           <td>
-              <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
+          <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
             <img src="/public/Assets/editor.png" class="action-icon">
           </button>
           <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
@@ -161,16 +155,16 @@ elements.btnCancel.addEventListener("click", closeModal);
 // Búsqueda en tiempo real
 elements.searchInput.addEventListener("input", () => {
   currentPage = 1;
-  renderTable(filteredBases());
+  renderTable(filteredAlquileres());
 });
 
 /* === FUNCIONES AUXILIARES === */
 
 /**
-* Filtra las bases según el término de búsqueda.
+* Filtralos alquileres según el término de búsqueda.
 * @returns {Array} Datos filtrados.
 */
-function filteredBases() {
+function filteredAlquileres() {
   const term = elements.searchInput.value.toLowerCase();
   return GestionAlquileres.filter(alquiler =>
     alquiler.fecha_inicio.toLowerCase().includes(term) ||
@@ -273,6 +267,25 @@ function resetForm() {
 /* === INICIALIZACIÓN === */
 document.addEventListener("DOMContentLoaded", () => {
   renderTable(GestionAlquileres);
+
+  // --- MODAL DE INFORMACIÓN ---
+  const viewModalElements = {
+    viewModalOverlay: document.getElementById('viewModalOverlay'),
+    btnCloseViewModal: document.getElementById('btnCloseViewModal')
+  };
+
+  function openViewModal() {
+    viewModalElements.viewModalOverlay.style.display = 'block';
+  }
+
+  function closeViewModal() {
+    viewModalElements.viewModalOverlay.style.display = 'none';
+  }
+
+  viewModalElements.btnCloseViewModal.addEventListener('click', closeViewModal);
+
+  // Haz accesible openViewModal desde window
+  window.openViewModal = openViewModal;
 });
 
 // Elementos del modal
@@ -292,7 +305,7 @@ function closeModal() {
   resetForm();
 }
 
-// Abrir modal para nueva base catastral
+// Abrir modal para nuevo alquiler
 modalElements.btnOpenModal.addEventListener('click', () => {
   resetForm();
   openModal();
@@ -301,9 +314,9 @@ modalElements.btnOpenModal.addEventListener('click', () => {
 // Cerrar modal con botón X
 modalElements.btnCloseModal.addEventListener('click', closeModal);
 
-// Función para ver la información completa de una base catastral y abrir el modal de "Ver información"
+// Función para ver la información completa de un alquiler y abrir el modal de "Ver información"
 window.viewAccount = function (index) {
-  const base = GestionAlquileres[index];
+  const alquiler = GestionAlquileres[index];
   const infoContent = document.getElementById("infoContent");
   infoContent.innerHTML = `
     <p><strong>Fecha de Inicio:</strong> ${alquiler.fecha_inicio}</p>
@@ -318,40 +331,23 @@ window.viewAccount = function (index) {
     <p><strong>Monto Total:</strong> ${alquiler.monto_total}</p>
     <p><strong>ID Recibo:</strong> ${alquiler.id_recibo}</p>
     `;
-  openViewModal();
+  window.openViewModal();
+
+  // Efecto ripple
+  document.querySelectorAll('#infoContent p').forEach(item => {
+    item.addEventListener('click', function (e) {
+      let ripple = document.createElement('div');
+      ripple.className = 'ripple-effect';
+      const rect = this.getBoundingClientRect();
+      ripple.style.left = (e.clientX - rect.left - 5) + 'px';
+      ripple.style.top = (e.clientY - rect.top - 5) + 'px';
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
 };
-
-// Manejo del modal de "Ver información"
-const viewModalElements = {
-  viewModalOverlay: document.getElementById('viewModalOverlay'),
-  btnCloseViewModal: document.getElementById('btnCloseViewModal')
-};
-
-function openViewModal() {
-  viewModalElements.viewModalOverlay.style.display = 'block';
-}
-
-function closeViewModal() {
-  viewModalElements.viewModalOverlay.style.display = 'none';
-}
-
-viewModalElements.btnCloseViewModal.addEventListener('click', closeViewModal);
 
 // Inicialización: renderiza la tabla al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
   renderTable(GestionAlquileres);
-});
-
-elements.form.addEventListener("submit", handleSubmit);
-
-document.querySelectorAll('#infoContent p').forEach(item => {
-  item.addEventListener('click', function (e) {
-    let ripple = document.createElement('div');
-    ripple.className = 'ripple-effect';
-    const rect = this.getBoundingClientRect();
-    ripple.style.left = (e.clientX - rect.left - 5) + 'px';
-    ripple.style.top = (e.clientY - rect.top - 5) + 'px';
-    this.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
-  });
 });
