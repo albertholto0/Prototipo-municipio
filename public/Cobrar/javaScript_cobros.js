@@ -58,17 +58,20 @@ function numeroALetras(numero) {
     return resultado.trim() + (numero === 1 ? ' peso mexicano' : ' pesos mexicanos');
 }
 
-// Activar/desactivar input dependiendo del otro motivo de pago
-function desactivarInput() {
-    const otroMotivo = document.getElementById('otroMotivo');
-    const input = document.getElementById('clave');
-    if (!otroMotivo || !input) return;
-    if (otroMotivo.value === 'cuentaAlquiler' || otroMotivo.value === 'cuentaEstablecimiento') {
-        input.disabled = true;
-        input.value = '';
-    } else {
-        input.disabled = false;
+function limpiarSelectsAnidadosYResetear() {
+    // Elimina todos los selects de nivel 2 a 5
+    for (let i = 2; i <= 5; i++) {
+        const sel = document.getElementById('select-nivel-' + i);
+        if (sel) sel.remove();
     }
+    // Deja el select de nivel 1 con valor vacío si existe
+    const selectNivel1 = document.getElementById('select-nivel-1');
+    if (selectNivel1) selectNivel1.value = '';
+}
+
+const otroMotivo = document.getElementById('otroMotivo');
+if (otroMotivo) {
+    otroMotivo.addEventListener('focus', limpiarSelectsAnidadosYResetear);
 }
 
 // Cargar selects anidados dinámicamente
@@ -91,7 +94,6 @@ async function cargarSelect(url, label, nivel, onChange) {
         select.className = 'select-anidado';
         select.innerHTML = `<option value="">Seleccione ${label}</option>`;
         datos.forEach(d => {
-            // Ajusta los nombres de las propiedades según tu API
             const value = d.clave_cuenta_contable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
             const text = d.nombre_cuentaContable || d.nombre_subcuentas || d.descripcion || d.nombre || d.descripcion || d.nombre;
             select.innerHTML += `<option value="${value}">${value} - ${text}</option>`;
@@ -169,18 +171,52 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Contribuyentes
         const contribuyenteSelect = document.getElementById('contribuyente');
         const domicilioInput = document.getElementById('domicilio');
+        const otroMotivoSelect = document.getElementById('otroMotivo'); // <-- Agrega esto aquí
+        const claveInput = document.getElementById('clave');
         const contribuyenteMap = new Map();
         if (contribuyenteSelect && domicilioInput) {
             contribuyentes.forEach(contribuyente => {
                 const option = document.createElement('option');
-                option.value = contribuyente.nombre_completo;
+                option.value = contribuyente.id_contribuyente;
                 option.textContent = contribuyente.nombre_completo;
-                contribuyenteMap.set(contribuyente.nombre_completo, contribuyente.direccion);
+                contribuyenteMap.set(contribuyente.id_contribuyente, contribuyente.direccion);
                 contribuyenteSelect.appendChild(option);
             });
-            contribuyenteSelect.addEventListener('change', () => {
-                const selected = contribuyenteSelect.value;
-                domicilioInput.value = contribuyenteMap.get(selected) || '';
+
+            let cuentaConexionActual = '';
+
+            contribuyenteSelect.addEventListener('change', async () => {
+                const selectedId = contribuyenteSelect.value;
+                domicilioInput.value = contribuyenteMap.get(Number(selectedId)) || ''; // Convierte el ID a número
+
+                // MOSTRAR LA CUENTA EN EL INPUT "clave"
+                // Solo busca si hay un ID válido
+                if (selectedId && selectedId !== "undefined") {
+                    try {
+                        const res = await fetch(`http://localhost:5000/api/cobrar/conexiones/${selectedId}`);
+                        const data = await res.json();
+                        cuentaConexionActual = data.length > 0 ? data[0].cuenta : '';
+                    } catch (e) {
+                        cuentaConexionActual = '';
+                    }
+                } else {
+                    cuentaConexionActual = '';
+                }
+                // Actualiza el input según el motivo seleccionado
+                if (otroMotivoSelect.value === 'cuentaConexion') {
+                    claveInput.value = cuentaConexionActual;
+                } else {
+                    claveInput.value = '';
+                }
+            });
+
+            // Al cambiar el motivo, muestra o limpia la cuenta
+            otroMotivoSelect.addEventListener('change', () => {
+                if (otroMotivoSelect.value === 'cuentaConexion') {
+                    claveInput.value = cuentaConexionActual;
+                } else {
+                    claveInput.value = '';
+                }
             });
         }
 

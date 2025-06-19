@@ -12,11 +12,11 @@ class Conceptos {
         }
     }
 
-    static async create(clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio, cuota, periodicidad) {
+    static async create(clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad) {
         try {
             const [result] = await db.query(
-                'INSERT INTO conceptos (clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad) VALUES (?, ?, ?, ?, ?)',
-                [clave_concepto, clave_seccion, nombre_conceptos, descripcion, tipo_servicio, cuota, periodicidad]
+                'INSERT INTO conceptos (clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad) VALUES (?, ?, ?, ?, ?, ?)',
+                [clave_concepto, clave_seccion, descripcion, tipo_servicio, cuota, periodicidad]
             );
             return result.insertId;
         } catch (err) {
@@ -25,6 +25,17 @@ class Conceptos {
         }
     }
 
+    static async update(clave_seccion, clave_concepto, descripcion, tipo_servicio, cuota, periodicidad) {
+        try {
+            await db.query(
+                'UPDATE conceptos SET clave_seccion = ?, descripcion = ?, tipo_servicio = ?, cuota = ?, periodicidad = ? WHERE clave_concepto = ?',
+                [clave_seccion, descripcion, tipo_servicio, cuota, periodicidad, clave_concepto]
+            );
+        } catch (err) {
+            console.error('Error al actualizar concepto:', err);
+            throw err;
+        }
+    }
 }
 
 module.exports = Conceptos;

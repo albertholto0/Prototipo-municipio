@@ -7,5 +7,6 @@ router.get('/subcuentas/:cuentaId', controller.getSubcuentas);
 router.get('/secciones/:subcuentaId', controller.getSecciones);
 router.get('/conceptos/:seccionId', controller.getConceptos);
 router.get('/subconceptos/:conceptoId', controller.getSubconceptos);
+router.get('/conexiones/:contribuyenteId', controller.getConexiones);
 
 module.exports = router;

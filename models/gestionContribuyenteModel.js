@@ -5,7 +5,8 @@ class Contribuyente {
   static async getAll() {
     try {
       const [rows] = await db.query(`
-        SELECT 
+        SELECT
+          id_contribuyente,
           nombre_completo,
           rfc,
           direccion,

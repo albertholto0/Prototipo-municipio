@@ -25,6 +25,45 @@ class Subconceptos {
             throw err;
         }
     }
+
+    static async getById(clave_subconcepto) {
+        try {
+            const [rows] = await db.query(
+                'SELECT * FROM subconceptos WHERE clave_subconcepto = ?',
+                [clave_subconcepto]
+            );
+            return rows[0];
+        } catch (err) {
+            console.error('Error al obtener subconcepto:', err);
+            throw new Error('Error al obtener subconcepto');
+        }
+    }
+
+    static async update(clave_subconcepto_actual, nueva_clave_subconcepto, nueva_clave_concepto, descripcion, tipo_servicio, cuota, periodicidad) {
+        try {
+            const [result] = await db.query(
+                'UPDATE subconceptos SET clave_subconcepto = ?, clave_concepto = ?, descripcion = ?, tipo_servicio = ?, cuota = ?, periodicidad = ? WHERE clave_subconcepto = ?',
+                [nueva_clave_subconcepto, nueva_clave_concepto, descripcion, tipo_servicio, cuota, periodicidad, clave_subconcepto_actual]
+            );
+            return result.affectedRows > 0;
+        } catch (err) {
+            console.error('Error al actualizar subconcepto:', err);
+            throw err;
+        }
+    }
+
+    static async delete(clave_subconcepto) {
+        try {
+            const [result] = await db.query(
+                'DELETE FROM subconceptos WHERE clave_subconcepto = ?',
+                [clave_subconcepto]
+            );
+            return result.affectedRows > 0;
+        } catch (err) {
+            console.error('Error al eliminar subconcepto:', err);
+            throw err;
+        }
+    }
 }
 
 module.exports = Subconceptos;
