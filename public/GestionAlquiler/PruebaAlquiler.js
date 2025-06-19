@@ -1,4 +1,6 @@
-// Datos iniciales de ejemplo para  la gestión de alquileres
+// =======================
+// Datos de ejemplo
+// =======================
 let GestionAlquileres = [
   {
     fecha_inicio: "2023-05-10",
@@ -28,11 +30,11 @@ let GestionAlquileres = [
   }
 ];
 
-// Variables de estado globales
-let isEditing = false;        // Bandera para modo edición
-let currentIndex = null;      // Índice del elemento siendo editado
-let currentPage = 1;          // Página actual
-const rowsPerPage = 10;       // Filas por página
+// Variables de estado
+let isEditing = false;
+let currentIndex = null;
+let currentPage = 1;
+const rowsPerPage = 10;
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -52,35 +54,42 @@ const elements = {
   monto_total: document.getElementById("monto_total"),
   id_recibo: document.getElementById("id_recibo"),
 
-
   btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
   btnCancel: document.getElementById("btnCancel"),
   formTitle: document.getElementById("formTitle"),
   paginationContainer: document.querySelector(".pagination")
 };
 
-/* === FUNCIONES PRINCIPALES === */
+const modalElements = {
+  modalOverlay: document.getElementById('modalOverlay'),
+  btnOpenModal: document.getElementById('btnOpenModal'),
+  btnCloseModal: document.getElementById('btnCloseModal')
+};
 
-/**
-* Renderiza la tabla con los datos proporcionados.
-* @param {Array} data - Datos a mostrar en la tabla.
-*/
+const viewModalElements = {
+  viewModalOverlay: document.getElementById('viewModalOverlay'),
+  btnCloseViewModal: document.getElementById('btnCloseViewModal')
+};
+
+// =======================
+// Funciones principales
+// =======================
+
 function renderTable(data) {
   elements.tableBody.innerHTML = "";
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
   const paginatedData = data.slice(start, end);
 
-  // Genera las filas de la tabla con paginación
   paginatedData.forEach((alquiler, index) => {
     const row = `
-        <tr>
-          <td>${alquiler.fecha_inicio}</td>
-          <td>${alquiler.fecha_fin}</td>
-          <td>${alquiler.tipo_trabajo}</td>
-          <td>${alquiler.concepto}</td>
-          <td>${alquiler.monto_total}</td>
-          <td>
+      <tr>
+        <td>${alquiler.fecha_inicio}</td>
+        <td>${alquiler.fecha_fin}</td>
+        <td>${alquiler.tipo_trabajo}</td>
+        <td>${alquiler.concepto}</td>
+        <td>${alquiler.monto_total}</td>
+        <td>
           <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
             <img src="/public/Assets/editor.png" class="action-icon">
           </button>
@@ -99,71 +108,34 @@ function renderTable(data) {
   renderPagination(data.length);
 }
 
-/**
-* Renderiza los controles de paginación.
-* @param {number} totalItems - Total de elementos a paginar.
-*/
 function renderPagination(totalItems) {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
-  let paginationHTML = `
-        <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-            « Anterior
-        </button>
-    `;
+  let html = `
+    <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>« Anterior</button>
+  `;
 
   const startPage = Math.max(1, currentPage - 2);
   const endPage = Math.min(totalPages, currentPage + 2);
 
   if (startPage > 1) {
-    paginationHTML += `
-            <button class="pagination-btn" onclick="changePage(1)">1</button>
-            ${startPage > 2 ? '<span>...</span>' : ''}
-        `;
+    html += `<button class="pagination-btn" onclick="changePage(1)">1</button>`;
+    if (startPage > 2) html += `<span>...</span>`;
   }
 
   for (let i = startPage; i <= endPage; i++) {
-    paginationHTML += `
-            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
-                ${i}
-            </button>
-        `;
+    html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
   }
 
   if (endPage < totalPages) {
-    paginationHTML += `
-            ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
-            <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
-        `;
+    if (endPage < totalPages - 1) html += `<span>...</span>`;
+    html += `<button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
   }
 
-  paginationHTML += `
-        <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-            Siguiente »
-        </button>
-    `;
-  elements.paginationContainer.innerHTML = paginationHTML;
+  html += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente »</button>`;
+
+  elements.paginationContainer.innerHTML = html;
 }
 
-/* === MANEJADORES DE EVENTOS === */
-
-// Envío del formulario
-elements.form.addEventListener("submit", handleSubmit);
-
-// Botón cancelar
-elements.btnCancel.addEventListener("click", closeModal);
-
-// Búsqueda en tiempo real
-elements.searchInput.addEventListener("input", () => {
-  currentPage = 1;
-  renderTable(filteredAlquileres());
-});
-
-/* === FUNCIONES AUXILIARES === */
-
-/**
-* Filtralos alquileres según el término de búsqueda.
-* @returns {Array} Datos filtrados.
-*/
 function filteredAlquileres() {
   const term = elements.searchInput.value.toLowerCase();
   return GestionAlquileres.filter(alquiler =>
@@ -174,49 +146,38 @@ function filteredAlquileres() {
   );
 }
 
-/**
-* Maneja el envío del formulario (crear/actualizar).
-* @param {Event} e - Evento del formulario.
-*/
-function handleSubmit(e) {
-  e.preventDefault();
-  const alquiler = {
-    fecha_inicio: elements.fecha_inicio.value,
-    fecha_fin: elements.fecha_fin.value,
-    numero_viajes: Number(elements.numero_viajes.value),
-    kilometros_recorridos: Number(elements.kilometros_recorridos.value),
-    horometro_inicio: Number(elements.horometro_inicio.value),
-    horometro_fin: Number(elements.horometro_fin.value),
-    tipo_trabajo: elements.tipo_trabajo.value,
-    concepto: elements.concepto.value,
-    tarifa_base: Number(elements.tarifa_base.value),
-    monto_total: Number(elements.monto_total.value),
-    id_recibo: elements.id_recibo.value
-  };
-
-  if (isEditing) {
-    GestionAlquileres[currentIndex] = alquiler;
-  } else {
-    GestionAlquileres.push(alquiler);
-  }
-
-  closeModal();
-  renderTable(filteredAlquileres());
+// =======================
+// Modal de formulario
+// =======================
+function openModal() {
+  modalElements.modalOverlay.style.display = 'block';
+}
+function closeModal() {
+  modalElements.modalOverlay.style.display = 'none';
+  resetForm();
 }
 
-/**
-* Cambia a una página específica.
-* @param {number} page - Número de página a mostrar.
-*/
-window.changePage = function (page) {
-  currentPage = page;
-  renderTable(filteredAlquileres());
-};
+function resetForm() {
+  elements.form.reset();
+  isEditing = false;
+  currentIndex = null;
+  elements.formTitle.textContent = "Agregar Alquiler";
+  elements.btnAddOrUpdate.textContent = "Agregar";
+}
 
-/**
-* Inicia el modo edición para una base catastral.
-* @param {number} index - Índice de la base a editar.
-*/
+// =======================
+// Modal de información
+// =======================
+function openViewModal() {
+  viewModalElements.viewModalOverlay.style.display = 'block';
+}
+function closeViewModal() {
+  viewModalElements.viewModalOverlay.style.display = 'none';
+}
+
+// =======================
+// Funciones globales
+// =======================
 window.editAccount = function (index) {
   const alquiler = GestionAlquileres[index];
   elements.fecha_inicio.value = alquiler.fecha_inicio;
@@ -238,10 +199,6 @@ window.editAccount = function (index) {
   openModal();
 };
 
-/**
-* Elimina una base catastral después de confirmación.
-* @param {number} index - Índice de la base a eliminar.
-*/
 window.deleteAccount = function (index) {
   if (confirm("¿Confirmar eliminación?")) {
     GestionAlquileres.splice(index, 1);
@@ -253,68 +210,11 @@ window.deleteAccount = function (index) {
   }
 };
 
-/**
-* Reinicia el formulario a su estado inicial.
-*/
-function resetForm() {
-  elements.form.reset();
-  isEditing = false;
-  currentIndex = null;
-  elements.formTitle.textContent = "Registrar Alquiler";
-  elements.btnAddOrUpdate.textContent = "Agregar";
-}
-
-/* === INICIALIZACIÓN === */
-document.addEventListener("DOMContentLoaded", () => {
-  renderTable(GestionAlquileres);
-
-  // --- MODAL DE INFORMACIÓN ---
-  const viewModalElements = {
-    viewModalOverlay: document.getElementById('viewModalOverlay'),
-    btnCloseViewModal: document.getElementById('btnCloseViewModal')
-  };
-
-  function openViewModal() {
-    viewModalElements.viewModalOverlay.style.display = 'block';
-  }
-
-  function closeViewModal() {
-    viewModalElements.viewModalOverlay.style.display = 'none';
-  }
-
-  viewModalElements.btnCloseViewModal.addEventListener('click', closeViewModal);
-
-  // Haz accesible openViewModal desde window
-  window.openViewModal = openViewModal;
-});
-
-// Elementos del modal
-const modalElements = {
-  modalOverlay: document.getElementById('modalOverlay'),
-  btnOpenModal: document.getElementById('btnOpenModal'),
-  btnCloseModal: document.getElementById('btnCloseModal')
+window.changePage = function (page) {
+  currentPage = page;
+  renderTable(filteredAlquileres());
 };
 
-/* === FUNCIONES DEL MODAL === */
-function openModal() {
-  modalElements.modalOverlay.style.display = 'block';
-}
-
-function closeModal() {
-  modalElements.modalOverlay.style.display = 'none';
-  resetForm();
-}
-
-// Abrir modal para nuevo alquiler
-modalElements.btnOpenModal.addEventListener('click', () => {
-  resetForm();
-  openModal();
-});
-
-// Cerrar modal con botón X
-modalElements.btnCloseModal.addEventListener('click', closeModal);
-
-// Función para ver la información completa de un alquiler y abrir el modal de "Ver información"
 window.viewAccount = function (index) {
   const alquiler = GestionAlquileres[index];
   const infoContent = document.getElementById("infoContent");
@@ -330,24 +230,65 @@ window.viewAccount = function (index) {
     <p><strong>Tarifa Base:</strong> ${alquiler.tarifa_base}</p>
     <p><strong>Monto Total:</strong> ${alquiler.monto_total}</p>
     <p><strong>ID Recibo:</strong> ${alquiler.id_recibo}</p>
-    `;
-  window.openViewModal();
+  `;
+  openViewModal();
 
-  // Efecto ripple
   document.querySelectorAll('#infoContent p').forEach(item => {
     item.addEventListener('click', function (e) {
-      let ripple = document.createElement('div');
+      const ripple = document.createElement('div');
       ripple.className = 'ripple-effect';
       const rect = this.getBoundingClientRect();
-      ripple.style.left = (e.clientX - rect.left - 5) + 'px';
-      ripple.style.top = (e.clientY - rect.top - 5) + 'px';
+      ripple.style.left = `${e.clientX - rect.left - 5}px`;
+      ripple.style.top = `${e.clientY - rect.top - 5}px`;
       this.appendChild(ripple);
       setTimeout(() => ripple.remove(), 600);
     });
   });
 };
 
-// Inicialización: renderiza la tabla al cargar la página
+// =======================
+// Inicialización
+// =======================
 document.addEventListener("DOMContentLoaded", () => {
   renderTable(GestionAlquileres);
+
+  elements.searchInput.addEventListener("input", () => {
+    currentPage = 1;
+    renderTable(filteredAlquileres());
+  });
+
+  elements.form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const alquiler = {
+      fecha_inicio: elements.fecha_inicio.value,
+      fecha_fin: elements.fecha_fin.value,
+      numero_viajes: Number(elements.numero_viajes.value),
+      kilometros_recorridos: Number(elements.kilometros_recorridos.value),
+      horometro_inicio: Number(elements.horometro_inicio.value),
+      horometro_fin: Number(elements.horometro_fin.value),
+      tipo_trabajo: elements.tipo_trabajo.value,
+      concepto: elements.concepto.value,
+      tarifa_base: Number(elements.tarifa_base.value),
+      monto_total: Number(elements.monto_total.value),
+      id_recibo: elements.id_recibo.value
+    };
+
+    if (isEditing) {
+      GestionAlquileres[currentIndex] = alquiler;
+    } else {
+      GestionAlquileres.push(alquiler);
+    }
+
+    closeModal();
+    renderTable(filteredAlquileres());
+  });
+
+  elements.btnCancel.addEventListener("click", closeModal);
+  modalElements.btnOpenModal.addEventListener("click", () => {
+    resetForm();
+    openModal();
+  });
+  modalElements.btnCloseModal?.addEventListener("click", closeModal);
+  viewModalElements.btnCloseViewModal?.addEventListener("click", closeViewModal);
 });
