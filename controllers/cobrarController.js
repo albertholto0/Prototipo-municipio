@@ -21,4 +21,8 @@ module.exports = {
     const result = await Cobrar.getSubconceptos(req.params.conceptoId);
     res.json(result);
   },
+  getConexiones: async (req, res) => {
+    const result = await Cobrar.getConexiones(req.params.contribuyenteId);
+    res.json(result);
+  }
 };
