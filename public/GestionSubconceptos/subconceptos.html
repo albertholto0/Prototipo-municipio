@@ -39,16 +39,20 @@
                         <input type="number" id="clave_subconcepto" min="1" required>
                     </div>
                     <div class="form-group">
-                        <label for="nombre_subconceptos">Nombre del Subconcepto (max 100 caracteres)</label>
-                        <input type="text" id="nombre_subconceptos" maxlength="100" required>
-                    </div>
-                    <div class="form-group">
                         <label for="descripcion">Descripción</label>
                         <textarea id="descripcion" rows="3" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="tipo_servicio">Tipo de Servicio (max 30 caracteres)</label>
                         <input type="text" id="tipo_servicio" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cuota">Cuota</label>
+                        <input type="number" id="cuota" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodicidad">Periodicidad</label>
+                        <input type="text" id="periodicidad" required>
                     </div>
                     <div class="form-buttons">
                         <button type="button" class="cancel-btn" id="btnCancelarModal">Cancelar</button>
@@ -71,6 +75,47 @@
                     <div class="form-buttons-delete">
                         <button type="button" class="cancel-btn-delete">Cancelar</button>
                         <button type="submit" class="delete-btn-delete">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal para Editar Subconcepto -->
+        <div id="modalEditarSubconcepto" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Editar Subconcepto</h2>
+                </div>
+                <form class="subconcept-form" id="editarSubconceptForm">
+                    <div class="form-group">
+                        <label for="edit_clave_concepto">Clave Concepto</label>
+                        <input type="text" id="edit_clave_concepto" list="listaConceptos" autocomplete="off" required>
+                        <datalist id="listaConceptos">
+                            <!-- Opciones se llenan dinámicamente -->
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_clave_subconcepto">Clave Subconcepto</label>
+                        <input type="number" id="edit_clave_subconcepto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_descripcion">Descripción</label>
+                        <textarea id="edit_descripcion" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_tipo_servicio">Tipo de Servicio</label>
+                        <input type="text" id="edit_tipo_servicio" maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_cuota">Cuota</label>
+                        <input type="number" id="edit_cuota" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_periodicidad">Periodicidad</label>
+                        <input type="text" id="edit_periodicidad" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="cancel-btn" id="btnCancelarEditarSub">Cancelar</button>
+                        <button type="submit" class="register-btn">Guardar Cambios</button>
                     </div>
                 </form>
             </div>
