@@ -11,4 +11,6 @@ router.post('/', contribuyenteController.setContribuyente);
 // Actualizar un contribuyente
 router.put('/:id', contribuyenteController.putContribuyente);
 
+router.delete('/:id', contribuyenteController.deleteContribuyente);
+
 module.exports = router;
