@@ -1,80 +1,11 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    // Configurar la fecha y el ejercicio fiscal
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    document.getElementById('fecha').value = `${yyyy}-${mm}-${dd}`;
-    document.getElementById('ejercicioFiscal').value = `${yyyy}`;
-
-    // Lógica para la apertura de caja
-    const modalApertura = document.getElementById('modalAperturaCaja');
-    const btnConfirmar = document.getElementById('btnConfirmarApertura');
-    if (!localStorage.getItem('cajaAbierta')) {
-        modalApertura.style.display = 'flex';
-        document.getElementById('receiptForm').style.opacity = '0.5';
-    }
-    btnConfirmar.addEventListener('click', () => {
-        const monto = parseFloat(document.getElementById('montoInicialCaja').value);
-        if (monto >= 0) {
-            localStorage.setItem('cajaAbierta', true);
-            localStorage.setItem('montoInicial', monto);
-            modalApertura.style.display = 'none';
-            document.getElementById('receiptForm').style.opacity = '1';
-        } else {
-            alert('Ingrese una cantidad correcta por favor');
-        }
-    });
-
-    // Cargar contribuyentes dinámicamente y configurar evento de cambio
-    try {
-        const response = await fetch('http://localhost:5000/api/contribuyentes');
-        const responseCuentasContables = await fetch('http://localhost:5000/api/cuentasContables');
-        const contribuyentes = await response.json();
-        const cuentasContables = await responseCuentasContables.json();
-        const contribuyenteSelect = document.getElementById('contribuyente');
-        const domicilioInput = document.getElementById('domicilio');
-        const cuentaContableSelect = document.getElementById('cuentaContable');
-        const contribuyenteMap = new Map();
-
-        contribuyentes.forEach(contribuyente => {
-            const option = document.createElement('option');
-            option.value = contribuyente.nombre_completo;
-            option.textContent = contribuyente.nombre_completo;
-            contribuyenteMap.set(contribuyente.nombre_completo, contribuyente.direccion);
-            contribuyenteSelect.appendChild(option);
-        });
-
-        cuentasContables.forEach(cuenta => {
-            const option = document.createElement('option');
-            option.value = cuenta.clave_cuenta_contable + " - " + cuenta.nombre_cuentaContable;
-            option.textContent = cuenta.clave_cuenta_contable + " - " + cuenta.nombre_cuentaContable;
-            cuentaContableSelect.appendChild(option);
-        });
-
-        contribuyenteSelect.addEventListener('change', () => {
-            const selectedContribuyente = contribuyenteSelect.value;
-            domicilioInput.value = contribuyenteMap.get(selectedContribuyente) || '';
-        });
-    } catch (error) {
-        console.error('Error al cargar los contribuyentes:', error);
-    }
-
-    // Convertir subtotal a letras y mostrar en el campo correspondiente
-    document.getElementById('subtotal').addEventListener('input', function () {
-        const numero = parseFloat(this.value.replace(/,/g, '')) || 0;
-        document.getElementById('cantidadLetra').value = capitalizarTodasPalabras(numeroALetras(numero));
-    });
-});
-
-// Función para capitalizar la primera letra de cada palabra
+// Utilidad: Capitalizar la primera letra de cada palabra
 function capitalizarTodasPalabras(str) {
     return str.split(' ').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
 }
 
-// Función para convertir números a letras (soporta hasta millones)
+// Utilidad: Convertir números a letras (soporta hasta millones)
 function numeroALetras(numero) {
     const unidades = ['', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
     const decenas = ['diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis',
@@ -126,3 +57,214 @@ function numeroALetras(numero) {
 
     return resultado.trim() + (numero === 1 ? ' peso mexicano' : ' pesos mexicanos');
 }
+
+// Activar/desactivar input dependiendo del otro motivo de pago
+function desactivarInput() {
+    const otroMotivo = document.getElementById('otroMotivo');
+    const input = document.getElementById('clave');
+    if (!otroMotivo || !input) return;
+    if (otroMotivo.value === 'cuentaAlquiler' || otroMotivo.value === 'cuentaEstablecimiento') {
+        input.disabled = true;
+        input.value = '';
+    } else {
+        input.disabled = false;
+    }
+}
+
+// Cargar selects anidados dinámicamente
+async function cargarSelect(url, label, nivel, onChange) {
+    try {
+        const res = await fetch(url);
+        const datos = await res.json();
+
+        // Elimina selects de niveles inferiores
+        for (let i = nivel; i <= 5; i++) {
+            const sel = document.getElementById('select-nivel-' + i);
+            if (sel) sel.remove();
+        }
+
+        if (!datos.length) return;
+
+        const div = document.getElementById('selects-anidados');
+        const select = document.createElement('select');
+        select.id = 'select-nivel-' + nivel;
+        select.className = 'select-anidado';
+        select.innerHTML = `<option value="">Seleccione ${label}</option>`;
+        datos.forEach(d => {
+            // Ajusta los nombres de las propiedades según tu API
+            const value = d.clave_cuenta_contable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
+            const text = d.nombre_cuentaContable || d.nombre_subcuentas || d.descripcion || d.nombre || d.descripcion || d.nombre;
+            select.innerHTML += `<option value="${value}">${value} - ${text}</option>`;
+        });
+        div.appendChild(select);
+
+        if (onChange) select.addEventListener('change', onChange);
+    } catch (error) {
+        console.error(`Error al cargar ${label}:`, error);
+    }
+}
+
+// Inicialización principal
+document.addEventListener('DOMContentLoaded', async () => {
+    // Configurar fecha y ejercicio fiscal
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const fechaInput = document.getElementById('fecha');
+    const ejercicioFiscalInput = document.getElementById('ejercicioFiscal');
+    if (fechaInput) fechaInput.value = `${yyyy}-${mm}-${dd}`;
+    if (ejercicioFiscalInput) ejercicioFiscalInput.value = `${yyyy}`;
+
+    // Lógica para apertura de caja
+    const modalApertura = document.getElementById('modalAperturaCaja');
+    const btnConfirmar = document.getElementById('btnConfirmarApertura');
+    const receiptForm = document.getElementById('receiptForm');
+    if (modalApertura && btnConfirmar && receiptForm && !localStorage.getItem('cajaAbierta')) {
+        modalApertura.style.display = 'flex';
+        receiptForm.style.opacity = '0.5';
+        btnConfirmar.addEventListener('click', () => {
+            const monto = parseFloat(document.getElementById('montoInicialCaja').value);
+            if (monto >= 0) {
+                localStorage.setItem('cajaAbierta', true);
+                localStorage.setItem('montoInicial', monto);
+                modalApertura.style.display = 'none';
+                receiptForm.style.opacity = '1';
+            } else {
+                alert('Ingrese una cantidad correcta por favor');
+            }
+        });
+    }
+
+    // Desactivar selects mutuamente excluyentes
+    const cuentaContable = document.getElementById('cuentaContable');
+    const otroMotivo = document.getElementById('otroMotivo');
+    if (cuentaContable && otroMotivo) {
+        cuentaContable.addEventListener('focus', () => { otroMotivo.value = 'NO DISPONIBLE'; });
+        otroMotivo.addEventListener('focus', () => { cuentaContable.value = 'NO DISPONIBLE'; });
+        otroMotivo.addEventListener('change', desactivarInput);
+    }
+
+    // Descuentos adicionales solo disponibles en enero y febrero
+    const selectDescuento = document.getElementById("descuentoAdicional");
+    const fechaActual = new Date();
+    const mesActual = fechaActual.getMonth() + 1; // Enero = 1, Febrero = 2, etc.
+
+    // Verificar si el mes actual es enero (1) o febrero (2)
+    if (mesActual === 1 || mesActual === 2) {
+        selectDescuento.disabled = false; // Activar el select
+    } else {
+        selectDescuento.disabled = true; // Desactivar el select
+        selectDescuento.removeAttribute("required"); // Opcional: Quitar "required" si no está en Ene-Feb
+    }
+
+    // Cargar contribuyentes y descuentos
+    try {
+        const [contribuyentes, cuentasContables, estimulosFiscales] = await Promise.all([
+            fetch('http://localhost:5000/api/contribuyentes').then(r => r.json()),
+            fetch('http://localhost:5000/api/cuentasContables').then(r => r.json()),
+            fetch('http://localhost:5000/api/estimuloFiscal').then(r => r.json())
+        ]);
+
+        // Contribuyentes
+        const contribuyenteSelect = document.getElementById('contribuyente');
+        const domicilioInput = document.getElementById('domicilio');
+        const contribuyenteMap = new Map();
+        if (contribuyenteSelect && domicilioInput) {
+            contribuyentes.forEach(contribuyente => {
+                const option = document.createElement('option');
+                option.value = contribuyente.nombre_completo;
+                option.textContent = contribuyente.nombre_completo;
+                contribuyenteMap.set(contribuyente.nombre_completo, contribuyente.direccion);
+                contribuyenteSelect.appendChild(option);
+            });
+            contribuyenteSelect.addEventListener('change', () => {
+                const selected = contribuyenteSelect.value;
+                domicilioInput.value = contribuyenteMap.get(selected) || '';
+            });
+        }
+
+        // Descuentos
+        const estimuloSelect = document.getElementById('descuento');
+        const estimuloAdicionalSelect = document.getElementById('descuentoAdicional');
+        if (estimuloSelect && estimuloAdicionalSelect) {
+            const estimulosNormales = estimulosFiscales.filter(e => e.tipo_descuento === "normal");
+            const estimulosAdicionales = estimulosFiscales.filter(e => e.tipo_descuento === "adicional");
+            estimulosNormales.forEach(estimulo => {
+                const option = document.createElement('option');
+                option.value = `${estimulo.porcentaje_descuento}% - ${estimulo.resumen_caracteristicas}`;
+                option.textContent = option.value;
+                estimuloSelect.appendChild(option);
+            });
+            estimulosAdicionales.forEach(estimulo => {
+                const option = document.createElement('option');
+                option.value = `${estimulo.porcentaje_descuento}% - ${estimulo.resumen_caracteristicas}`;
+                option.textContent = option.value;
+                estimuloAdicionalSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error al cargar datos iniciales:', error);
+    }
+
+    // Total a letras
+    const totalInput = document.getElementById('total');
+    const cantidadLetraInput = document.getElementById('cantidadLetra');
+    if (totalInput && cantidadLetraInput) {
+        totalInput.addEventListener('input', function () {
+            const numero = parseFloat(this.value.replace(/,/g, '')) || 0;
+            cantidadLetraInput.value = capitalizarTodasPalabras(numeroALetras(numero));
+        });
+    }
+
+    // Selects anidados de cuentas contables
+    // Puedes ajustar los nombres de los campos según tu API
+    await cargarSelect('http://localhost:5000/api/cobrar/cuentas', 'Cuenta', 1, function () {
+        if (this.value) {
+            cargarSelect(`http://localhost:5000/api/cobrar/subcuentas/${this.value}`, 'Subcuenta', 2, function () {
+                if (this.value) {
+                    cargarSelect(`http://localhost:5000/api/cobrar/secciones/${this.value}`, 'Sección', 3, function () {
+                        if (this.value) {
+                            cargarSelect(`http://localhost:5000/api/cobrar/conceptos/${this.value}`, 'Concepto', 4, function () {
+                                if (this.value) {
+                                    cargarSelect(`http://localhost:5000/api/cobrar/subconceptos/${this.value}`, 'Subconcepto', 5);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
+
+function calcularTotal() {
+    const subtotalInput = document.getElementById('subtotal');
+    const descuentoSelect = document.getElementById('descuento');
+    const totalInput = document.getElementById('total');
+    const cantidadLetraInput = document.getElementById('cantidadLetra');
+
+    if (!subtotalInput || !descuentoSelect || !totalInput || !cantidadLetraInput) return;
+
+    // Obtén el subtotal como número
+    const subtotal = parseFloat(subtotalInput.value.replace(/,/g, '')) || 0;
+
+    // Obtén el porcentaje del descuento seleccionado (asumiendo formato "10% - ...")
+    let porcentaje = 0;
+    const selected = descuentoSelect.value;
+    if (selected) {
+        const match = selected.match(/^(\d+(?:\.\d+)?)%/);
+        if (match) porcentaje = parseFloat(match[1]);
+    }
+
+    // Calcula el total
+    const total = subtotal - (subtotal * porcentaje / 100);
+    totalInput.value = total.toFixed(2);
+
+    // Convierte el total a letras y lo muestra
+    cantidadLetraInput.value = capitalizarTodasPalabras(numeroALetras(total));
+}
+
+// Escucha cambios en subtotal y descuento
+document.getElementById('subtotal').addEventListener('input', calcularTotal);
+document.getElementById('descuento').addEventListener('change', calcularTotal);

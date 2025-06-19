@@ -1,16 +1,24 @@
 const Cobrar = require('../models/cobrarModel');
 
-class Cobrar {
-    static async getContribuyente(req, res) {
-        try {
-            const contribuyentes = await Cobrar.getContribuyente();
-            res.json(contribuyentes);
-        } catch (error) {
-            console.error('Error al obtener contribuyentes:', error);
-            res.status(500).json({ message: 'Error al obtener contribuyentes' });
-        }
-    }
-
-}
-
-module.exports = CobrarController;
+module.exports = {
+  getCuentas: async (req, res) => {
+    const result = await Cobrar.getCuentas();
+    res.json(result);
+  },
+  getSubcuentas: async (req, res) => {
+    const result = await Cobrar.getSubcuentas(req.params.cuentaId);
+    res.json(result);
+  },
+  getSecciones: async (req, res) => {
+    const result = await Cobrar.getSecciones(req.params.subcuentaId);
+    res.json(result);
+  },
+  getConceptos: async (req, res) => {
+    const result = await Cobrar.getConceptos(req.params.seccionId);
+    res.json(result);
+  },
+  getSubconceptos: async (req, res) => {
+    const result = await Cobrar.getSubconceptos(req.params.conceptoId);
+    res.json(result);
+  },
+};

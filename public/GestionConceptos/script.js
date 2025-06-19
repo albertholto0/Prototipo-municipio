@@ -135,8 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const conceptoData = {
       clave_concepto: parseInt(document.getElementById('clave_concepto').value),
-      clave_seccion: parseInt(document.getElementById('clave_seccion').value),
-      nombre_conceptos: document.getElementById('nombre_conceptos').value,
+      clave_seccion: document.getElementById('clave_seccion').value,
       descripcion: document.getElementById('descripcion').value,
       tipo_servicio: document.getElementById('tipo_servicio').value,
       cuota: parseFloat(document.getElementById('cuota').value),
