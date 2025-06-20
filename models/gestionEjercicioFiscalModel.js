@@ -1,25 +1,28 @@
 const db = require('../config/database');
 
 class EjercicioFiscal {
-    static async getAll(){
-        try {
-            const [rows] = await db.query(`
-              SELECT 
+// En gestionEjercicioFiscalModel.js
+static async getAll() {
+    try {
+        console.log('Intentando conectar a la base de datos...');
+        const [rows] = await db.query(`
+            SELECT 
                 id_ejercicio,
                 anio,
-                fecha_inicio,
-                fecha_fin,
+                DATE_FORMAT(fecha_inicio, '%Y-%m-%d') as fecha_inicio,
+                DATE_FORMAT(fecha_fin, '%Y-%m-%d') as fecha_fin,
                 estado,
-                proyeccion_ingreso,
-                ingreso_recaudado,
+                proyeccion_ingreso AS presupuesto_asignado,
+                ingreso_recaudado AS presupuesto_ejecutado,
                 observaciones
-              FROM ejercicios_fiscales;
-            `);
-            return rows;
-        } catch (err) {
-            console.error('Error en la consulta:', err);
-            throw new Error('Error al obtener ejercicios fiscales');
-        }
+            FROM ejercicios_fiscales;
+        `);
+        console.log('Consulta exitosa, resultados:', rows);
+        return rows;
+    } catch (err) {
+        console.error('Error completo en la consulta SQL:', err);
+        throw new Error('Error al obtener ejercicios fiscales');
     }
+}
 }
 module.exports = EjercicioFiscal;
