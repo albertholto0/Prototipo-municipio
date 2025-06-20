@@ -40,10 +40,16 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             return;
         }
 
+        let isAdministrador = false;
+
         // Validamos el rol del usuario
-        if (!user.rol_usuario || !user.rol_usuario.toLowerCase().includes('admin')) {
+        if (user.rol_usuario && user.rol_usuario.toLowerCase().includes('admin')) {
+            isAdministrador = true;
+            localStorage.setItem('usuarioActual', JSON.stringify(user));
+        } else {
+            isAdministrador = false;
+            localStorage.setItem('usuarioActual', JSON.stringify(user));
             mostrarError('No tienes permisos de administrador');
-            return;
         }
 
         // Si todo está bien, redirigimos al usuario a la pantalla principal
