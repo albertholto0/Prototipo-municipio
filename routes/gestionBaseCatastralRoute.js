@@ -13,3 +13,4 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Error al obtener registros de la base catastral' });
     }
 });
+module.exports = router;
