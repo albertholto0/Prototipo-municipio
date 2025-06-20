@@ -1,26 +1,3 @@
-// Datos iniciales de ejemplo para Ejercicios Fiscales
-let ejerciciosFiscales = [
-  {
-      id_ejercicio: 1,
-      anio: 2024,
-      fecha_inicio: "2024-01-01",
-      fecha_fin: "2024-12-31",
-      estado: "activo",
-      presupuesto_asignado: 5000000.00,
-      presupuesto_ejecutado: 1250000.00,
-      observaciones: "Ejercicio fiscal del año 2024"
-  },
-  {
-      id_ejercicio: 2,
-      anio: 2023,
-      fecha_inicio: "2023-01-01",
-      fecha_fin: "2023-12-31",
-      estado: "finalizado",
-      presupuesto_asignado: 4800000.00,
-      presupuesto_ejecutado: 4750000.00,
-      observaciones: "Ejercicio fiscal del año 2023"
-  }
-];
 
 // Variables de estado globales
 let isEditing = false;
@@ -318,9 +295,9 @@ function capitalizeFirstLetter(string) {
 }
 
 /* === INICIALIZACIÓN === */
-document.addEventListener("DOMContentLoaded", () => {
-  renderTable(ejerciciosFiscales);
-});
+//document.addEventListener("DOMContentLoaded", () => {
+  //renderTable(ejerciciosFiscales);
+//});
 
 // Elementos del modal
 const modalElements = {
