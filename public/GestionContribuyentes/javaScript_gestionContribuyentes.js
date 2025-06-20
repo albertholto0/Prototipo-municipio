@@ -39,9 +39,9 @@ function renderizarContribuyentes(lista) {
   lista.forEach(contribuyente => {
     const fila = document.createElement('tr');
     fila.innerHTML = `
-      <td>${contribuyente.nombre_completo || 'N/A'}</td>
+      <td>${contribuyente.nombre || 'N/A'} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}</td>
       <td>${contribuyente.rfc || 'N/A'}</td>
-      <td>${contribuyente.direccion || ''}, ${contribuyente.barrio || ''}, ${contribuyente.localidad || ''}</td>
+      <td>${contribuyente.direccion || ''} ${contribuyente.numero_calle}, ${contribuyente.barrio || ''}, ${contribuyente.localidad || ''}</td>
       <td>${contribuyente.telefono || 'N/A'}</td>
       <td>
         <button class="action-btn edit" data-id="${contribuyente.id_contribuyente}" title="Editar">
@@ -62,11 +62,16 @@ function renderizarContribuyentes(lista) {
       const response = await fetch(`http://localhost:5000/api/contribuyentes/${editId}`);
       const data = await response.json();
       // Llena el formulario
-      document.getElementById('nombre').value = data.nombre_completo;
-      document.getElementById('fecha_nacimiento').value = data.fecha_nacimiento;
+      document.getElementById('nombre').value = data.nombre;
+      document.getElementById('apellido_paterno').value = data.apellido_paterno;
+      document.getElementById('apellido_materno').value = data.apellido_materno;
+      const fecha = data.fecha_nacimiento ? data.fecha_nacimiento.split('T')[0] : ''; // Formatear fecha a YYYY-MM-DD
+      // Asignar fecha al input
+      document.getElementById('fecha_nacimiento').value = fecha;
       document.getElementById('rfc').value = data.rfc;
       document.getElementById('telefono').value = data.telefono;
       document.getElementById('calle').value = data.direccion;
+      document.getElementById('num_calle').value = data.numero_calle;
       document.getElementById('barrio').value = data.barrio;
       document.getElementById('localidad').value = data.localidad;
       document.getElementById('codigo_postal').value = data.codigo_postal;
@@ -101,6 +106,7 @@ function openModal() {
 function closeModal() {
   elements.modalOverlay.style.display = 'none';
   resetForm();
+  editId = null; // Limpia el editId al cerrar el modal
 }
 
 // Limpiar formulario
@@ -140,16 +146,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/contribuyentes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+      let response;
+      if (editId) {
+        // Editar (PUT)
+        response = await fetch(`http://localhost:5000/api/contribuyentes/${editId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } else {
+        // Nuevo (POST)
+        response = await fetch('http://localhost:5000/api/contribuyentes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      }
 
       if (!response.ok) throw new Error('Error al guardar');
 
       closeModal();
       cargarContribuyentes();
+      editId = null; // Limpia el editId después de guardar
     } catch (error) {
       alert('No se pudo guardar el contribuyente');
     }
