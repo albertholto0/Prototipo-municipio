@@ -455,6 +455,18 @@
   transform-origin: center;
 }
 
+#viewModalOverlay .modal-content {
+  background: #fbfefc !important;
+  border-radius: 14px !important;
+  padding: 35px 45px !important;
+  max-width: 740px !important;
+  width: 90% !important;
+  box-shadow: 0 8px 32px rgba(40, 167, 69, 0.1) !important;
+  border: 1px solid #e4f3e7 !important;
+  animation: modalEntrance 0.4s cubic-bezier(0.23, 1, 0.32, 1) !important;
+  transform-origin: center !important;
+}
+
 @keyframes modalEntrance {
   from {
     opacity: 0;
