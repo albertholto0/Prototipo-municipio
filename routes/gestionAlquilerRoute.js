@@ -1,3 +1,6 @@
+//Sergio Elias Robles Ignacio 
+// Gestion de Alquileres
+//Este Archivo es el encargado de manejar las rutas de los alquileres
 const express = require('express');
 const router = express.Router();
 const alquilerController = require('../controllers/gestionAlquilerController');

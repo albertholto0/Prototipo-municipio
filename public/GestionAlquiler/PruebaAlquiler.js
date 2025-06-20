@@ -1,34 +1,4 @@
-// =======================
-// Datos de ejemplo
-// =======================
-let GestionAlquileres = [
-  {
-    fecha_inicio: "2023-05-10",
-    fecha_fin: "2023-06-10",
-    numero_viajes: 5,
-    kilometros_recorridos: 120.5,
-    horometro_inicio: 100.0,
-    horometro_fin: 150.0,
-    tipo_trabajo: "Excavación",
-    concepto: "Obra pública",
-    tarifa_base: 500.0,
-    monto_total: 2500.0,
-    id_recibo: "REC123"
-  },
-  {
-    fecha_inicio: "2023-07-01",
-    fecha_fin: "2023-07-15",
-    numero_viajes: 3,
-    kilometros_recorridos: 80.0,
-    horometro_inicio: 200.0,
-    horometro_fin: 230.0,
-    tipo_trabajo: "Transporte",
-    concepto: "Materiales",
-    tarifa_base: 400.0,
-    monto_total: 1200.0,
-    id_recibo: "REC124"
-  }
-];
+// PruebaAlquiler.js
 
 let allAlquileres = []; // Variable global para almacenar todos los alquileres
 
@@ -192,6 +162,7 @@ function addRowListeners() {
       // Obtener datos del alquiler
       const alquiler = allAlquileres.find(a => a.id_alquiler == editId);
       if (!alquiler) return;
+
       document.getElementById('fecha_inicio').value = alquiler.fecha_inicio || '';
       document.getElementById('fecha_fin').value = alquiler.fecha_fin || '';
       document.getElementById('numero_viajes').value = alquiler.numero_viajes || '';

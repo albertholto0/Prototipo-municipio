@@ -14,6 +14,7 @@ const subcuentas = require("./routes/gestionSubcuentasContablesRoute");
 const corteCaja = require("./routes/gestionCorteCajaRoute");
 const subconceptosRoutes = require("./routes/gestionSubconceptoRoute");
 const corteCajaRouter = require("./routes/gestionCorteCajaRoute");
+const alquiler = require("./routes/gestionAlquilerRoute");
 const app = express();
 
 // Middleware
@@ -33,6 +34,7 @@ app.use("/api/subcuentasContables", subcuentas);
 app.use("/api/subconceptos", subconceptosRoutes);
 app.use("/api/cobrar", cobrar);
 app.use("/api/corteCaja", corteCaja);
+app.use("/api/alquileres", alquiler);
 
 // app.use("/api/cobrar", cobrar);
 
