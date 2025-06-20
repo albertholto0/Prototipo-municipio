@@ -103,12 +103,12 @@
 
 /* Variante editar (color naranja) */
 .action-btn.edit {
-  background-color: none;
+  background-color: transparent;
 }
 
 /* Variante eliminar (color rojo) */
 .action-btn.delete {
-  background-color: none;
+  background-color: red;
 }
 
 /* Efecto hover para botones */
@@ -134,9 +134,7 @@
 /* Efecto de círculo al hacer hover */
 .action-btn:hover .action-icon {
   transform: scale(1.1);
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 50%;
-  padding: 6px;
+
 }
 
 /* ===== FORMULARIO ===== */
