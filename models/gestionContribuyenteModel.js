@@ -5,7 +5,8 @@ class Contribuyente {
   static async getAll() {
     try {
       const [rows] = await db.query(`
-        SELECT 
+        SELECT
+          id_contribuyente,
           nombre_completo,
           rfc,
           direccion,
@@ -23,25 +24,23 @@ class Contribuyente {
 
   static async deleteContribuyente(id) {
     try {
-      const [rows] = await db.query('DELETE FROM contribuyente WHERE id = ?', [id]);
-      return rows[0];
+      await db.query('DELETE FROM contribuyente WHERE id_contribuyente = ?', [id]);
     } catch (err) {
-      console.error('Error en la consulta:', err);
       throw new Error('Error al eliminar el contribuyente');
     }
   }
 
-  static async setContribuyente(nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) {
-        try {
-            const [result] = await db.query(
-                'INSERT INTO contribuyente (nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, copia_credencial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [nombre_completo,fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, "/home/imagenes/contribuyentes_ine"]
-            );
-            return result.insertId;
-        } catch (err) {
-            console.error('Error al crear usuario:', err);
-        }
+  static async setContribuyente(nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc) {
+    try {
+      const [result] = await db.query(
+        'INSERT INTO contribuyente (nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, copia_credencial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [nombre_completo, fecha_nacimiento, telefono, direccion, barrio, localidad, codigo_postal, rfc, "/home/imagenes/contribuyentes_ine"]
+      );
+      return result.insertId;
+    } catch (err) {
+      console.error('Error al crear usuario:', err);
     }
+  }
 }
 
 module.exports = Contribuyente;
