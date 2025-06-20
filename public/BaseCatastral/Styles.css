@@ -92,9 +92,9 @@
 }
 
 .action-icon {
-  width: 32px;
+  width: 45px;
   /* Tamaño aumentado respecto a la versión anterior */
-  height: 32px;
+  height: 45px;
   object-fit: contain;
   transition: all 0.2s ease;
   padding: 6px;
@@ -108,7 +108,7 @@
 
 /* Variante eliminar (color rojo) */
 .action-btn.delete {
-  background-color: red;
+  background-color: transparent;
 }
 
 /* Efecto hover para botones */
@@ -121,14 +121,10 @@
   transform: translateY(0);
 }
 
-/* Estilo específico para editar */
-.action-btn.edit:hover .action-icon {
-  filter: brightness(0.9) sepia(1) hue-rotate(40deg) saturate(8);
-}
-
 /* Estilo específico para eliminar */
 .action-btn.delete:hover .action-icon {
-  filter: brightness(0.9) sepia(1) hue-rotate(340deg) saturate(8);
+    filter: brightness(0.9) sepia(1) hue-rotate(-50deg) saturate(8);
+
 }
 
 /* Efecto de círculo al hacer hover */
