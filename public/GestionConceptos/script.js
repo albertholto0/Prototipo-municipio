@@ -311,3 +311,7 @@ document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
   cargarSecciones();
   cargarConceptos();
 });
+
+document.querySelector('.cancel-btn-delete').addEventListener('click', () => {
+    document.getElementById('deleteModal').style.display = 'none';
+});
