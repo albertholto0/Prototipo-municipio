@@ -114,6 +114,14 @@ function resetForm() {
   elements.form.reset();
 }
 
+function normalizar(texto) {
+  return (texto || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Quita acentos
+    .trim();
+}
+
 // Evento principal
 document.addEventListener('DOMContentLoaded', () => {
   cargarContribuyentes();
@@ -121,10 +129,16 @@ document.addEventListener('DOMContentLoaded', () => {
   elements.btnOpenModal.addEventListener('click', openModal);
   elements.btnCancel.addEventListener('click', closeModal);
   elements.searchInput.addEventListener('input', () => {
-    const texto = elements.searchInput.value.toLowerCase();
-    const filtrados = allContribuyentes.filter(c =>
-      (c.nombre_completo || '').toLowerCase().includes(texto)
-    );
+    const texto = normalizar(elements.searchInput.value);
+    const filtrados = allContribuyentes.filter(c => {
+      const nombreCompleto = normalizar(
+        `${c.nombre || ''} ${c.apellido_paterno || ''} ${c.apellido_materno || ''}`
+      );
+      return nombreCompleto.includes(texto) ||
+        normalizar(c.nombre).includes(texto) ||
+        normalizar(c.apellido_paterno).includes(texto) ||
+        normalizar(c.apellido_materno).includes(texto);
+    });
     renderizarContribuyentes(filtrados);
   });
 
