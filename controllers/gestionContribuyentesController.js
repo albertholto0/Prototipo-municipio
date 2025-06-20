@@ -13,18 +13,19 @@ exports.getAllContribuyentes = async (req, res) => {
 exports.setContribuyente = async (req, res) => {
   try {
     const { nombre, apellido_paterno, apellido_materno, fecha_nacimiento, rfc, calle, num_calle, barrio, localidad, codigo_postal, telefono } = req.body;
-    const nombre_completo = `${nombre} ${apellido_paterno} ${apellido_materno}`.trim();
-    const direccion = `${calle} ${num_calle}`.trim(); // Concatenar calle y número de calle
 
-    if (!nombre_completo || !telefono || !direccion || !barrio || !localidad || !codigo_postal || !rfc) {
+    if (!nombre || !apellido_paterno || !apellido_materno || !fecha_nacimiento ||  !telefono || !calle || !num_calle || !barrio || !localidad || !codigo_postal || !rfc) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 
     const contribuyente = await Contribuyente.setContribuyente(
-      nombre_completo,
+      nombre,
+      apellido_paterno,
+      apellido_materno,
       fecha_nacimiento,
       telefono,
-      direccion,
+      calle,
+      num_calle,
       barrio,
       localidad,
       codigo_postal,
@@ -50,18 +51,19 @@ exports.putContribuyente = async (req, res) => {
   try {
     const { id } = req.params;
     const { nombre, apellido_paterno, apellido_materno, fecha_nacimiento, rfc, calle, num_calle, barrio, localidad, codigo_postal, telefono } = req.body;
-    const nombre_completo = `${nombre} ${apellido_paterno} ${apellido_materno}`.trim();
-    const direccion = `${calle} ${num_calle}`.trim(); // Concatenar calle y número de calle
 
-    if (!nombre_completo || !telefono || !direccion || !barrio || !localidad || !codigo_postal || !rfc) {
+    if (!nombre || !telefono || !calle || !barrio || !localidad || !codigo_postal || !rfc) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 
-    const actualizarContribuyente = await Contribuyente.updateContribuyente(id,
-      nombre_completo,
+    const actualizarContribuyente = await Contribuyente.putContribuyente(id,
+      nombre,
+      apellido_paterno,
+      apellido_materno,
       fecha_nacimiento,
       telefono,
-      direccion,
+      calle,
+      num_calle,
       barrio,
       localidad,
       codigo_postal,
@@ -82,3 +84,26 @@ exports.putContribuyente = async (req, res) => {
     });
   }
 }
+
+exports.deleteContribuyente = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Contribuyente.deleteContribuyente(id);
+    res.status(200).json({ success: true, message: 'Contribuyente eliminado' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Error al eliminar contribuyente' });
+  }
+};
+
+exports.getContribuyenteById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const contribuyente = await Contribuyente.getContribuyenteById(id);
+    if (!contribuyente) {
+      return res.status(404).json({ error: 'Contribuyente no encontrado' });
+    }
+    res.json(contribuyente);
+  } catch (error) {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};

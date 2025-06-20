@@ -52,6 +52,21 @@ class Cobrar {
             throw new Error('Error al obtener subconceptos');
         }
     }
+
+    static async getConexiones(contribuyenteId){
+        try {
+            const [rows] = await db.query(`
+                SELECT c.cuenta 
+                FROM conexiones c
+                JOIN contribuyente cc ON c.id_contribuyente = cc.id_contribuyente
+                WHERE cc.id_contribuyente = ?
+            `, [contribuyenteId]);
+            return rows;
+        } catch (err) {
+            console.error('Error en la consulta:', err);
+            throw new Error('Error al obtener conexiones');
+        }
+    }
 }
 
 module.exports = Cobrar;

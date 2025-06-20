@@ -7,6 +7,8 @@
     <title>Gestion de Alquiler</title>
     <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
+
+
 </head>
 
 <body>
@@ -31,12 +33,12 @@
             <table id="accountsTable">
                 <thead>
                     <tr>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha de Fin</th>
-                    <th>Número de Viajes</th>
-                    <th>Kilómetros Recorridos</th>
-                    <th>Horómetro Inicio</th>
-                    <th>Acciones</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Fecha de Fin</th>
+                        <th>Tipo de Trabajo</th>
+                        <th>Concepto</th>
+                        <th>Monto Total</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,11 +116,23 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Ver Información -->
+    <div class="modal-overlay" id="viewModalOverlay" style="display:none;">
+        <div class="modal-content">
+            <h3 class="text-center">Información del Alquiler</h3>
+            <div id="infoContent"></div>
+            <div class="form-actions">
+                <button type="button" id="btnCloseViewModal" class="btn-cancel">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
     </footer>
 
-    <script src="PruebaAlquiler.js"></script>
+    <script src="PruebaAlquiler.js" defer></script>
     <script src="/public/Componentes/Nav.js" defer></script>
 </body>
 
