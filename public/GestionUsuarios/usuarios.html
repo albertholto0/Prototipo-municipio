@@ -140,6 +140,56 @@
         </div>
     </div>
 
+    <!-- Modal para editar usuario -->
+    <div id="editUserModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="form-container">
+                <h3 class="text-center" id="editModalTitle">Editar Usuario</h3>
+                <form id="editUserForm" enctype="multipart/form-data">
+                    <input type="hidden" id="editUserId">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="editUserName">Nombre:</label>
+                            <input type="text" id="editUserName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editUserLastName">Apellido paterno:</label>
+                            <input type="text" id="editUserLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editUserSecondLastName">Apellido materno:</label>
+                            <input type="text" id="editUserSecondLastName" required>
+                        </div>
+                    </div>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="editUserUsername">Usuario:</label>
+                            <input type="text" id="editUserUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editUserPassword">Contraseña:</label>
+                            <input type="password" id="editUserPassword" placeholder="Dejar en blanco para no cambiar">
+                        </div>
+                    </div>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="editUserRole">Rol:</label>
+                            <select id="editUserRole" required>
+                                <option value="">Seleccione un rol</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="Cajero">Cajero</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn-add">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="/public/Componentes/Nav.js"></script>
     <script src="script.js"></script>
 </body>
