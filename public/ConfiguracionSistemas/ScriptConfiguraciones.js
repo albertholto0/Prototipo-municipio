@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const cargarConfiguracion = async () => {
     try {
-      // Llamada a tu API (ajusta el puerto si es necesario)
+      // Llamada a API
       const response = await fetch("http://localhost:5000/api/configuracion");
 
       if (!response.ok) {
@@ -25,10 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("rfc").value = config.rfc || "";
       document.getElementById("idCif").value = config.id_cif || "";
 
-      // Si quieres asignar un valor a "periodo", solo si lo tienes en la BD
-      if (config.periodo) {
+      /*if (config.periodo) {
         document.getElementById("periodo").value = config.periodo;
-      }
+      }*/
 
       // Si tienes ruta de imagen para logo o QR, puedes cargar vistas previas así:
       // document.getElementById("logoPreview").src = `/uploads/${config.logo}`;

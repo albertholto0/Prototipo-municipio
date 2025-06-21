@@ -7,6 +7,8 @@
     <title>Gestion de Alquiler</title>
     <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
+
+
 </head>
 
 <body>
@@ -32,9 +34,9 @@
                 <thead>
                     <tr>
                         <th>Fecha de Inicio</th>
-                        <th>Fecha de Cierre</th>
-                        <th>Descripción</th>
-                        <th>Contribuyente</th>
+                        <th>Fecha de Fin</th>
+                        <th>Tipo de Trabajo</th>
+                        <th>Concepto</th>
                         <th>Monto Total</th>
                         <th>Acciones</th>
                     </tr>
@@ -48,63 +50,68 @@
             <div class="pagination"></div>
         </div>
     </main>
-    <!-- Modal para el formulario -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
-            <!-- <span class="btn-close" id="btnCloseModal">&times;</span>-->
             <div class="form-container" id="formContainer">
                 <h3 class="text-center" id="formTitle">Agregar Alquiler</h3>
                 <form id="accountForm">
-
-                    <div class="form-group">
-                        <label for="descripcion">Descripción:</label>
-                        <input type="text" id="descripcion" name="descripcion" placeholder="Ej. Alquiler de local"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="ubicacion">Ubicación:</label>
-                        <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Centro comercial" required>
-                    </div>
                     <div class="form-inline">
                         <div class="form-group">
-                            <label for="fechaInicio">Fecha de Inicio:</label>
-                            <input type="date" id="fechaInicio" name="fechaInicio" required>
+                            <label for="fecha_inicio">Fecha de Inicio:</label>
+                            <input type="date" id="fecha_inicio" name="fecha_inicio" required>
                         </div>
                         <div class="form-group">
-                            <label for="fechaCierre">Fecha de Cierre:</label>
-                            <input type="date" id="fechaCierre" name="fechaCierre" required>
+                            <label for="fecha_fin">Fecha de Fin:</label>
+                            <input type="date" id="fecha_fin" name="fecha_fin" required>
                         </div>
                     </div>
                     <div class="form-inline">
                         <div class="form-group">
-                            <label for="montoFinal">Monto Final:</label>
-                            <input type="number" id="montoFinal" name="montoFinal" placeholder="Ej. 5000.00" step="0.01"
+                            <label for="numero_viajes">Número de Viajes:</label>
+                            <input type="number" id="numero_viajes" name="numero_viajes" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kilometros_recorridos">Kilómetros Recorridos:</label>
+                            <input type="number" id="kilometros_recorridos" name="kilometros_recorridos" step="0.01"
                                 required>
                         </div>
+                    </div>
+                    <div class="form-inline">
                         <div class="form-group">
-                            <label for="estadoAlquiler">Estado del Alquiler:</label>
-                            <select id="estadoAlquiler" name="estadoAlquiler" required>
-                                <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="Domestico">Activo</option>
-                                <option value="Comercial">Finalizado</option>
-                                <option value="Industrial">Pendiente</option>
-                            </select>
+                            <label for="horometro_inicio">Horómetro Inicio:</label>
+                            <input type="number" id="horometro_inicio" name="horometro_inicio" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="horometro_fin">Horómetro Fin:</label>
+                            <input type="number" id="horometro_fin" name="horometro_fin" step="0.01" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="idContribuyente">Contribuyente:</label>
-                        <select id="idContribuyente" name="Contribuyente" required>
-                            <option value="">Seleccione un contribuyente</option>
+                        <label for="tipo_trabajo">Tipo de Trabajo:</label>
+                        <select id="tipo_trabajo" name="tipo_trabajo" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="municipal">Municipal</option>
+                            <option value="particular">Particular</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="idConceptos">Concepto:</label>
-                        <select id="idConceptos" name="Conceptos" required>
-                            <option value="">Seleccione un concepto</option>
-                        </select>
+                        <label for="concepto">Concepto:</label>
+                        <input type="text" id="concepto" name="concepto" required>
                     </div>
-
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="tarifa_base">Tarifa Base:</label>
+                            <input type="number" id="tarifa_base" name="tarifa_base" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="monto_total">Monto Total:</label>
+                            <input type="number" id="monto_total" name="monto_total" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_recibo">ID Recibo:</label>
+                        <input type="text" id="id_recibo" name="id_recibo" required>
+                    </div>
                     <div class="form-actions">
                         <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
                         <button type="submit" id="btnAddOrUpdate">Agregar</button>
@@ -113,11 +120,23 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Ver Información -->
+    <div class="modal-overlay" id="viewModalOverlay" style="display:none;">
+        <div class="modal-content">
+            <h3 class="text-center">Información del Alquiler</h3>
+            <div id="infoContent"></div>
+            <div class="form-actions">
+                <button type="button" id="btnCloseViewModal" class="btn-cancel">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
     </footer>
 
-    <script src="PruebaAlquiler.js"></script>
+    <script src="PruebaAlquiler.js" defer></script>
     <script src="/public/Componentes/Nav.js" defer></script>
 </body>
 

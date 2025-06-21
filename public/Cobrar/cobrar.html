@@ -76,27 +76,26 @@
 
         <!-- Cuenta Contable que abarca 3 columnas -->
         <div class="form-group full-width">
-          <label for="cuentaContable">Motivo de Pago:</label>
-          <select id="cuentaContable" name="cuentaContable" required>
-            <!-- Aquí traeremos los datos de la BD -->
-          </select>
+          <div id="selects-anidados">
+            <label>Motivo de Pago:</label>
+            <!-- Aquí el JS insertará los selects anidados -->
+          </div>
         </div>
 
         <!-- Tercera fila: Referencia, Base Catastral y Forma de Pago -->
         <div class="form-row-3cols">
           <div class="form-group">
-            <label for="cuentaReferencia">Motivo de Pago:</label>
-            <select id="cuentaReferencia" name="cuentaReferencia" required>
-              <option value="cuentaReferencia">Cuenta Referencia</option>
-              <option value="cuentaConexion">Conexión</option>
+            <label for="otroMotivo">Otro Motivo:</label>
+            <select id="otroMotivo" name="otroMotivo">
               <option value="cuentaAlquiler">Alquiler</option>
               <option value="cuentaBaseCatastral">Base Catastral</option>
+              <option value="cuentaConexion">Conexión</option>
               <option value="cuentaEstablecimiento">Establecimiento</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="baseCatastral">Clave del Pago:</label>
-            <input type="text" id="baseCatastral" name="baseCatastral" required>
+            <label for="clave">Cuenta:</label>
+            <input type="text" id="clave" name="clave" readonly>
           </div>
           <div class="form-group">
             <label for="formaPago">Forma de Pago:</label>

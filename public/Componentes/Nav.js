@@ -2,7 +2,7 @@
 const injectStyles = () => {
   const link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href = "/Componentes/Nav.css";
+  link.href = "/public/Componentes/Nav.css";
   document.head.appendChild(link);
 };
 
