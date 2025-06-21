@@ -5,10 +5,15 @@ let currentPage = 1;
 
 //Este script se encarga de cargar los usuarios desde el servidor y mostrarlos en la tabla
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Variables principales ---
   const tablaBody = document.getElementById('users-table-body');
-  let usuarios = []; // Guardar todos los usuarios aquí
+  const paginationContainer = document.getElementById('pagination');
+  const searchInput = document.getElementById("searchInput");
+  const ItemsPorPagina = 5;
+  let currentPage = 1;
+  let usuarios = [];
 
-  // Mostrar usuarios con paginación
+  // --- Mostrar usuarios con paginación ---
   const mostrarUsuarios = (usuariosFiltrados, page = 1) => {
     tablaBody.innerHTML = '';
 
@@ -25,11 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pageItems.forEach(usuario => {
       const fila = document.createElement('tr');
       const esActivo = usuario.estado && usuario.estado.toLowerCase() === 'activo';
-      
-      // Aplica estilo de usuario inactivo si no está activo
-      if (!esActivo) {
-          fila.classList.add('inactive-user');
-      }
+      if (!esActivo) fila.classList.add('inactive-user');
 
       fila.innerHTML = `
           <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPagination(usuariosFiltrados, page);
   };
 
-  // Renderizar paginación
+  // --- Renderizar paginación ---
   const renderPagination = (usuariosFiltrados, page) => {
     const totalPages = Math.ceil(usuariosFiltrados.length / ItemsPorPagina);
     paginationContainer.innerHTML = '';
@@ -75,13 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Cargar usuarios desde el servidor
+  // --- Cargar usuarios desde el servidor ---
   const cargarUsuarios = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/usuarios');
-      if (!response.ok) {
-        throw new Error(`Error HTTP! estado: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
       usuarios = await response.json();
       mostrarUsuarios(usuarios, 1);
     } catch (error) {
@@ -91,28 +90,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Búsqueda
+  // --- Búsqueda ---
   searchInput.addEventListener('input', () => {
     const valor = searchInput.value.toLowerCase();
     const filtrados = usuarios.filter(usuario =>
-    (`${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`.toLowerCase().includes(valor) ||
-      usuario.usuario.toLowerCase().includes(valor))
+      (`${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}`.toLowerCase().includes(valor) ||
+        usuario.usuario.toLowerCase().includes(valor))
     );
     mostrarUsuarios(filtrados, 1);
   });
 
   cargarUsuarios();
-});
 
-document.addEventListener('DOMContentLoaded', () => {
+  // --- MODAL AGREGAR/EDITAR USUARIO ---
   const modal = document.getElementById('userModal');
   const registerBtn = document.getElementById('registerBtn');
   const userForm = document.getElementById('userForm');
-  const cancelBtn = document.querySelector('.cancel-btn');
+  // Cambiado: buscar el botón cancelar por clase btn-cancel dentro del modal
+  const cancelBtn = modal.querySelector('.btn-cancel');
 
   registerBtn.addEventListener('click', () => {
     userForm.reset();
     modal.style.display = 'block';
+    document.getElementById('modalTitle').textContent = 'Agregar nuevo Usuario';
   });
 
   cancelBtn.addEventListener('click', () => {
