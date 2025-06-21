@@ -21,19 +21,19 @@ document.addEventListener('DOMContentLoaded', () => {
     pageItems.forEach(subconcepto => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
-        <td>${subconcepto.clave_subconcepto}</td>
         <td>${subconcepto.clave_concepto}</td>
+        <td>${subconcepto.clave_subconcepto}</td>
         <td>${subconcepto.descripcion}</td>
         <td>${subconcepto.tipo_servicio}</td>
         <td>${subconcepto.cuota}</td>
         <td>${subconcepto.periodicidad}</td>
         <td>
-          <button class="action-btn modify" onclick="openModifyModal(${subconcepto.id})">
-            <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
-          </button>
-          <button class="action-btn delete" onclick="openDeleteModal(${subconcepto.id})">
-            <img src="/public/Assets/eliminar.png" alt="Eliminar" class="action-icon">
-          </button>
+            <button class="action-btn modify" onclick="openModifyModal(${subconcepto.clave_subconcepto})">
+                <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
+            </button>
+            <button class="action-btn delete" onclick="openDeleteModal(${subconcepto.clave_subconcepto})">
+                <img src="/public/Assets/eliminar.png" alt="Eliminar" class="action-icon">
+            </button>
         </td>
       `;
       tablaBody.appendChild(fila);
@@ -130,13 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modalSubconcepto').style.display = 'none';
   });
 
+  // Registra un nuevo subconcepto
   document.getElementById('subconceptForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const subconceptoData = {
       clave_subconcepto: parseInt(document.getElementById('clave_subconcepto').value),
       clave_concepto: parseInt(document.getElementById('clave_concepto').value),
-      nombre_subconceptos: document.getElementById('nombre_subconceptos').value,
       descripcion: document.getElementById('descripcion').value,
       tipo_servicio: document.getElementById('tipo_servicio').value,
       cuota: parseFloat(document.getElementById('cuota').value),
@@ -178,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const datalist = document.getElementById('listaConceptos');
       datalist.innerHTML = '';
       conceptos.forEach(concepto => {
-        // Puedes mostrar clave y descripción para mejor experiencia
         const option = document.createElement('option');
         option.value = concepto.clave_concepto;
         option.label = concepto.descripcion ? `${concepto.clave_concepto} - ${concepto.descripcion}` : concepto.clave_concepto;
@@ -192,4 +191,107 @@ document.addEventListener('DOMContentLoaded', () => {
   // Llama a la función al cargar la página
   cargarConceptos();
   cargarSubconceptos();
+
+  // Función para abrir el modal de edición permitiendo editar claves
+  window.openModifyModal = async function(clave_subconcepto) {
+    try {
+        const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto}`);
+        if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
+        const subconcepto = await response.json();
+
+        document.getElementById('edit_clave_concepto').value = subconcepto.clave_concepto;
+        document.getElementById('edit_clave_subconcepto').value = subconcepto.clave_subconcepto;
+        document.getElementById('edit_descripcion').value = subconcepto.descripcion;
+        document.getElementById('edit_tipo_servicio').value = subconcepto.tipo_servicio;
+        document.getElementById('edit_cuota').value = subconcepto.cuota;
+        document.getElementById('edit_periodicidad').value = subconcepto.periodicidad;
+
+        // Guardar la clave actual para usarla en la actualización
+        document.getElementById('editarSubconceptForm').dataset.clave_subconcepto_actual = clave_subconcepto;
+        
+        document.getElementById('modalEditarSubconcepto').style.display = 'block';
+    } catch (error) {
+        console.error('Error al cargar subconcepto:', error);
+        alert('Error al cargar subconcepto: ' + error.message);
+    }
+};
+
+  // Función para abrir el modal de eliminación
+  window.openDeleteModal = function(clave_subconcepto) {
+    document.getElementById('deleteConceptId').value = clave_subconcepto;
+    document.getElementById('deleteModal').style.display = 'block';
+  };
+
+  // Evento para el formulario de edición
+  document.getElementById('editarSubconceptForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const clave_subconcepto_actual = e.target.dataset.clave_subconcepto_actual;
+    const subconceptoData = {
+        nueva_clave_subconcepto: parseInt(document.getElementById('edit_clave_subconcepto').value),
+        nueva_clave_concepto: parseInt(document.getElementById('edit_clave_concepto').value),
+        descripcion: document.getElementById('edit_descripcion').value,
+        tipo_servicio: document.getElementById('edit_tipo_servicio').value,
+        cuota: parseFloat(document.getElementById('edit_cuota').value),
+        periodicidad: document.getElementById('edit_periodicidad').value
+    };
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto_actual}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(subconceptoData)
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) throw new Error(result.error || 'Error al actualizar subconcepto');
+        
+        alert(result.message || 'Subconcepto actualizado exitosamente');
+        document.getElementById('modalEditarSubconcepto').style.display = 'none';
+        cargarSubconceptos();
+    } catch (error) {
+        console.error('Error al actualizar subconcepto:', error);
+        alert('Error: ' + error.message);
+    }
+});
+
+  // Evento para el formulario de eliminación
+  document.getElementById('deleteConceptForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const clave_subconcepto = document.getElementById('deleteConceptId').value;
+    const password = document.getElementById('deletePassword').value;
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) throw new Error(result.error || 'Error al eliminar subconcepto');
+        
+        alert(result.message || 'Subconcepto eliminado exitosamente');
+        document.getElementById('deleteModal').style.display = 'none';
+        document.getElementById('deletePassword').value = '';
+        cargarSubconceptos();
+    } catch (error) {
+        console.error('Error al eliminar subconcepto:', error);
+        alert('Error: ' + error.message);
+    }
+});
+
+  // Botón para cancelar edición
+  document.getElementById('btnCancelarEditarSub').addEventListener('click', () => {
+    document.getElementById('modalEditarSubconcepto').style.display = 'none';
+});
+
+  // Botón para cancelar eliminación
+  document.querySelector('#deleteModal .cancel-btn-delete').addEventListener('click', () => {
+    document.getElementById('deleteModal').style.display = 'none';
+    document.getElementById('deletePassword').value = '';
+});
 });

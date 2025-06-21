@@ -7,7 +7,7 @@ class Seccion {
                 SELECT
                     clave_seccion,
                     clave_subcuenta, 
-                    nombre_seccion
+                    descripcion
                 FROM secciones
             `);
             return rows;

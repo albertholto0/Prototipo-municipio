@@ -15,6 +15,8 @@ const estimuloFiscalRoutes = require("./routes/gestionEstimuloFiscalRoute");
 const cobrar = require("./routes/cobrarRoute");
 const subcuentas = require("./routes/gestionSubcuentasContablesRoute");
 const subconceptos = require("./routes/gestionSubconceptoRoute");
+const corteCajaRouter = require("./routes/gestionCorteCajaRoute");
+const alquiler = require("./routes/gestionAlquilerRoute");
 const app = express();
 
 // Middleware
@@ -29,6 +31,7 @@ app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRouter);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
+<<<<<<< HEAD
 
 app.use("/api/configuracion", configuracionRouter);
 
@@ -36,6 +39,16 @@ app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
 
 app.use("/api/subcuentasContables", subcuentas);
 app.use("/api/subconceptos", subconceptos);
+=======
+app.use("/api/cobrar", cobrar);
+app.use("/api/EjercicioFiscal", gestionEjercicioFiscalRoute);
+// Agregar más rutas para otros módulos
+app.use("/api/subcuentasContables", subcuentas);
+app.use("/api/subconceptos", subconceptosRoutes);
+app.use("/api/cobrar", cobrar);
+app.use("/api/corteCaja", corteCaja);
+app.use("/api/alquileres", alquiler);
+>>>>>>> main
 
 // app.use("/api/cobrar", cobrar);
 
