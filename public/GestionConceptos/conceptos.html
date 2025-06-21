@@ -5,120 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Conceptos</title>
-    <link rel="stylesheet" href="style_conceptos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
 </head>
 
 <body>
     <div id="nav-placeholder"></div> <!--NavBar-->
-    
+
     <div class="main-container">
         <div class="title-section">
             <h2>Gestión de Conceptos</h2>
             <hr class="title-line">
         </div>
-        <div class="button-container">
+
+        <div class="search-container">
             <input type="text" id="searchInput" placeholder="Buscar por usuario o nombre" />
-            <button class="btn-register" id="btnAgregarConcepto">Agregar</button>
+            <button class="btn-agregar" id="btnAgregarConcepto">Agregar</button>
         </div>
-        <!-- Modal para Agregar (existente) -->
-        <div id="modalAgregarConcepto" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Agregar Concepto</h2>
-                </div>
-                <form class="concept-form" id="agregarConceptForm">
-                    <div class="form-group">
-                        <label for="clave_seccion">Clave Seccion</label>
-                        <input type="text" id="clave_seccion" list="listaSeccion" autocomplete="off" required>
-                        <datalist id="listaSeccion">
-                        </datalist>
-                    </div>
-                    <div class="form-group">
-                        <label for="clave_concepto">Clave Concepto (Número único)</label>
-                        <input type="number" id="clave_concepto" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="tipo_servicio">Tipo de Servicio</label>
-                        <input type="text" id="tipo_servicio" maxlength="30" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cuota">Cuota</label>
-                        <input type="text" id="cuota" maxlength="30" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="periodicidad">Periodicidad</label>
-                        <input type="text" id="periodicidad" maxlength="30" required>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="button" class="cancel-btn" id="btnCancelarModal">Cancelar</button>
-                        <button type="submit" class="register-btn">Registrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- Modal para Editar (nuevo) -->
-        <div id="modalEditarConcepto" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Editar Concepto</h2>
-                </div>
-                <form class="concept-form" id="editarConceptForm">
-                    <div class="form-group">
-                        <label for="edit_clave_seccion">Clave Sección</label>
-                        <input type="text" id="edit_clave_seccion" list="listaSeccion" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_clave_concepto">Clave Concepto</label>
-                        <input type="number" id="edit_clave_concepto" min="1" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_descripcion">Descripción</label>
-                        <textarea id="edit_descripcion" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_tipo_servicio">Tipo de Servicio</label>
-                        <input type="text" id="edit_tipo_servicio" maxlength="30" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_cuota">Cuota</label>
-                        <input type="text" id="edit_cuota" maxlength="30" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_periodicidad">Periodicidad</label>
-                        <input type="text" id="edit_periodicidad" maxlength="30" required>
-                    </div>
-                    <div class="form-buttons">
-                        <button type="button" class="cancel-btn" id="btnCancelarEditar">Cancelar</button>
-                        <button type="submit" class="register-btn">Guardar Cambios</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div id="deleteModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-title-section">
-                    <h2>Confirmar eliminación</h2>
-                </div>
-                <form id="deleteConceptForm">
-                    <input type="hidden" id="deleteConceptId">
-                    <div class="form-group">
-                        <label for="deletePassword">Contraseña de administrador:</label>
-                        <input type="password" id="deletePassword" required>
-                    </div>
-                    <div class="form-buttons-delete">
-                        <button type="button" class="cancel-btn-delete">Cancelar</button>
-                        <button type="submit" class="delete-btn-delete">Eliminar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+
         <div class="table-container">
-            <table class="concepts-table">
+            <table class="concepts-table" id="accountsTable">
                 <thead>
                     <tr>
                         <th>Clave seccion</th>
@@ -135,14 +45,131 @@
                 </tbody>
             </table>
         </div>
+
         <div class="pagination-container">
             <div id="pagination" class="pagination"></div>
+        </div>
+    </div>
+
+    <!-- Modal para Agregar -->
+    <div id="modalAgregarConcepto" class="modal-overlay">
+        <div class="modal-content">
+            <div class="form-container">
+                <h3 class="text-center">Agregar Concepto</h3>
+                <form class="concept-form" id="agregarConceptForm">
+                    <div class="form-group">
+                        <label for="clave_seccion">Clave Seccion</label>
+                        <input type="text" id="clave_seccion" list="listaSeccion" autocomplete="off" required>
+                        <datalist id="listaSeccion"></datalist>
+                    </div>
+
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="clave_concepto">Clave Concepto (Número único)</label>
+                            <input type="number" id="clave_concepto" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_servicio">Tipo de Servicio</label>
+                            <input type="text" id="tipo_servicio" maxlength="30" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea id="descripcion" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="cuota">Cuota</label>
+                            <input type="text" id="cuota" maxlength="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="periodicidad">Periodicidad</label>
+                            <input type="text" id="periodicidad" maxlength="30" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="btnCancelarModal">Cancelar</button>
+                        <button type="submit" class="btn-add">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar -->
+    <div id="modalEditarConcepto" class="modal-overlay">
+        <div class="modal-content">
+            <div class="form-container">
+                <h3 class="text-center">Editar Concepto</h3>
+                <form class="concept-form" id="editarConceptForm">
+                    <div class="form-group">
+                        <label for="edit_clave_seccion">Clave Sección</label>
+                        <input type="text" id="edit_clave_seccion" list="listaSeccion" autocomplete="off">
+                    </div>
+
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="edit_clave_concepto">Clave Concepto</label>
+                            <input type="number" id="edit_clave_concepto" min="1" required disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_tipo_servicio">Tipo de Servicio</label>
+                            <input type="text" id="edit_tipo_servicio" maxlength="30" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_descripcion">Descripción</label>
+                        <textarea id="edit_descripcion" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="edit_cuota">Cuota</label>
+                            <input type="text" id="edit_cuota" maxlength="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_periodicidad">Periodicidad</label>
+                            <input type="text" id="edit_periodicidad" maxlength="30" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="btnCancelarEditar">Cancelar</button>
+                        <button type="submit" class="btn-add">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Eliminar -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="form-container">
+                <h3 class="text-center">Confirmar eliminación</h3>
+                <form id="deleteConceptForm">
+                    <input type="hidden" id="deleteConceptId">
+                    <div class="form-group">
+                        <label for="deletePassword">Contraseña de administrador:</label>
+                        <input type="password" id="deletePassword" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel cancel-btn-delete">Cancelar</button>
+                        <button type="submit" class="btn-confirm-delete">Eliminar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <footer class="footer">
         <p>© 2025 Ixtlán - Gestión de Conceptos</p>
     </footer>
+
     <script src="/public/Componentes/Nav.js"></script>
     <script src="script.js"></script>
     <script>

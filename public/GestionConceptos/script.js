@@ -157,11 +157,26 @@ document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
     document.getElementById('modalEditarConcepto').style.display = 'block';
 };
 
-  // Función para abrir modal de eliminación
+  // Función para abrir modal de eliminación con verificación de subconceptos
   window.openDeleteModal = function(clave_concepto) {
-    document.getElementById('deleteConceptId').value = clave_concepto;
-    document.getElementById('deleteModal').style.display = 'block';
-  };
+    // Primero verificar si tiene subconceptos
+    fetch(`http://localhost:5000/api/conceptos/${clave_concepto}/has_subconceptos`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.hasSubconceptos) {
+                alert('Este concepto no puede eliminarse porque tiene subconceptos asociados.\n\nPor favor, elimina primero todos los subconceptos antes de intentar eliminar este concepto.');
+                return;
+            }
+            
+            // Si no tiene subconceptos, mostrar el modal de eliminación
+            document.getElementById('deleteConceptId').value = clave_concepto;
+            document.getElementById('deleteModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al verificar los subconceptos asociados');
+        });
+};
 
   // Manejar el envío del formulario de eliminación
   document.getElementById('deleteConceptForm').addEventListener('submit', async (e) => {
