@@ -1,20 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const establecimientoController = require("../controllers/gestionEstablecimientosController");
+const Establecimiento = require("../controllers/gestionEstablecimientosControllers");
 
 // Obtener todos los establecimientos
-router.get("/", establecimientoController.getAllEstablecimientos);
+router.get("/", Establecimiento.getAll);
 
 // Obtener un establecimiento por ID
-router.get("/:id", establecimientoController.getEstablecimientoById);
+router.get("/:id", Establecimiento.getEstablecimientoById);
 
 // Registrar un nuevo establecimiento
-router.post("/", establecimientoController.setEstablecimiento);
+router.post("/", Establecimiento.setEstablecimiento);
 
 // Actualizar un establecimiento
-router.put("/:id", establecimientoController.putEstablecimiento);
+router.put("/:id", Establecimiento.putEstablecimiento);
 
 // Eliminar un establecimiento
-router.delete("/:id", establecimientoController.deleteEstablecimiento);
+router.delete("/:id", Establecimiento.deleteEstablecimiento);
 
 module.exports = router;

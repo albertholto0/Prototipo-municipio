@@ -1,7 +1,7 @@
 const db = require("../config/database");
 
 class Establecimiento {
-  static async getAll() {
+  static async getAll(req, res) {
     try {
       const [rows] = await db.query(`
         SELECT 
@@ -15,40 +15,43 @@ class Establecimiento {
         FROM establecimientos e
         JOIN contribuyente c ON e.id_contribuyente = c.id_contribuyente
       `);
-      return rows;
+      res.json(rows);
     } catch (err) {
       console.error("Error al obtener establecimientos:", err);
-      throw new Error("Error al obtener establecimientos");
+      res.status(500).json({ error: "Error al obtener establecimientos" });
     }
   }
 
-  static async getEstablecimientoById(id) {
+  static async getEstablecimientoById(req, res) {
     try {
+      const { id } = req.params;
       const [rows] = await db.query(
         "SELECT * FROM establecimientos WHERE id_establecimiento = ?",
         [id]
       );
       if (rows.length === 0) {
-        throw new Error("Establecimiento no encontrado");
+        return res.status(404).json({ error: "Establecimiento no encontrado" });
       }
-      return rows[0];
+      res.json(rows[0]);
     } catch (err) {
       console.error("Error al obtener establecimiento:", err);
-      throw new Error("Error al obtener establecimiento");
+      res.status(500).json({ error: "Error al obtener establecimiento" });
     }
   }
 
-  static async setEstablecimiento(
-    nombre_establecimiento,
-    direccion,
-    barrio,
-    localidad,
-    codigo_postal,
-    fecha_apertura,
-    giro_negocio,
-    id_contribuyente
-  ) {
+  static async setEstablecimiento(req, res) {
     try {
+      const {
+        nombre_establecimiento,
+        direccion,
+        barrio,
+        localidad,
+        codigo_postal,
+        fecha_apertura,
+        giro_negocio,
+        id_contribuyente,
+      } = req.body;
+
       const [result] = await db.query(
         `
         INSERT INTO establecimientos 
@@ -66,37 +69,41 @@ class Establecimiento {
           id_contribuyente,
         ]
       );
-      return result.insertId;
+      res.status(201).json({ insertId: result.insertId });
     } catch (err) {
       console.error("Error al crear establecimiento:", err);
-      throw new Error("No se pudo crear el establecimiento");
+      res.status(500).json({ error: "No se pudo crear el establecimiento" });
     }
   }
 
-  static async deleteEstablecimiento(id) {
+  static async deleteEstablecimiento(req, res) {
     try {
+      const { id } = req.params;
       await db.query(
         "DELETE FROM establecimientos WHERE id_establecimiento = ?",
         [id]
       );
+      res.json({ message: "Establecimiento eliminado correctamente" });
     } catch (err) {
       console.error("Error al eliminar establecimiento:", err);
-      throw new Error("No se pudo eliminar el establecimiento");
+      res.status(500).json({ error: "No se pudo eliminar el establecimiento" });
     }
   }
 
-  static async putEstablecimiento(
-    id,
-    nombre_establecimiento,
-    direccion,
-    barrio,
-    localidad,
-    codigo_postal,
-    fecha_apertura,
-    giro_negocio,
-    id_contribuyente
-  ) {
+  static async putEstablecimiento(req, res) {
     try {
+      const { id } = req.params;
+      const {
+        nombre_establecimiento,
+        direccion,
+        barrio,
+        localidad,
+        codigo_postal,
+        fecha_apertura,
+        giro_negocio,
+        id_contribuyente,
+      } = req.body;
+
       const [result] = await db.query(
         `
         UPDATE establecimientos 
@@ -116,10 +123,16 @@ class Establecimiento {
           id,
         ]
       );
-      return result.affectedRows > 0;
+      if (result.affectedRows > 0) {
+        res.json({ message: "Establecimiento actualizado correctamente" });
+      } else {
+        res.status(404).json({ error: "Establecimiento no encontrado" });
+      }
     } catch (err) {
       console.error("Error al actualizar establecimiento:", err);
-      throw new Error("No se pudo actualizar el establecimiento");
+      res
+        .status(500)
+        .json({ error: "No se pudo actualizar el establecimiento" });
     }
   }
 }
