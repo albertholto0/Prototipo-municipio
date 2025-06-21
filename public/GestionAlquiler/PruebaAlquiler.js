@@ -163,8 +163,18 @@ function addRowListeners() {
       const alquiler = allAlquileres.find(a => a.id_alquiler == editId);
       if (!alquiler) return;
 
-      document.getElementById('fecha_inicio').value = alquiler.fecha_inicio || '';
-      document.getElementById('fecha_fin').value = alquiler.fecha_fin || '';
+      // Formatear fechas para el input tipo date o datetime-local
+      function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        // Si es datetime tipo '2024-06-21T12:00:00.000Z' o '2024-06-21 12:00:00'
+        const d = new Date(dateString);
+        if (isNaN(d)) return dateString.split('T')[0] || dateString.split(' ')[0];
+        // Para input type="date"
+        return d.toISOString().slice(0, 10);
+      }
+
+      document.getElementById('fecha_inicio').value = formatDateForInput(alquiler.fecha_inicio);
+      document.getElementById('fecha_fin').value = formatDateForInput(alquiler.fecha_fin);
       document.getElementById('numero_viajes').value = alquiler.numero_viajes || '';
       document.getElementById('kilometros_recorridos').value = alquiler.kilometros_recorridos || '';
       document.getElementById('horometro_inicio').value = alquiler.horometro_inicio || '';
