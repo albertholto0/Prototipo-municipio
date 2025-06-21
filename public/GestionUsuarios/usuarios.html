@@ -27,6 +27,21 @@
         transform: none !important;
         box-shadow: none !important;
     }
+
+    .btn-reset {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+
+    .btn-reset:hover {
+        background-color: #2980b9;
+    }
 </style>
 
 <body>
@@ -167,12 +182,6 @@
                             <input type="text" id="editUserUsername" required>
                         </div>
                         <div class="form-group">
-                            <label for="editUserPassword">Contraseña:</label>
-                            <input type="password" id="editUserPassword" placeholder="Dejar en blanco para no cambiar">
-                        </div>
-                    </div>
-                    <div class="form-inline">
-                        <div class="form-group">
                             <label for="editUserRole">Rol:</label>
                             <select id="editUserRole" required>
                                 <option value="">Seleccione un rol</option>
@@ -182,6 +191,7 @@
                         </div>
                     </div>
                     <div class="form-actions">
+                        <button type="button" class="btn-reset" id="resetPasswordBtn">Resetear Contraseña</button>
                         <button type="button" class="btn-cancel">Cancelar</button>
                         <button type="submit" class="btn-add">Guardar Cambios</button>
                     </div>

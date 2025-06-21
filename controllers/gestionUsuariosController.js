@@ -42,3 +42,66 @@ exports.createUsuario = async (req, res) => {
     });
   }
 };
+
+exports.updateUsuario = async (req, res) => {
+  try {
+    const { id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario } = req.body;
+
+    if (!id_usuario || !nombres || !usuario || !rol_usuario) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    }
+
+    const updated = await Usuarios.update(
+      id_usuario,
+      nombres,
+      apellido_paterno || '',
+      apellido_materno || '',
+      usuario,
+      rol_usuario
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ 
+      success: true,
+      message: 'Usuario actualizado exitosamente'
+    });
+
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Error interno del servidor' 
+    });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { id_usuario, newPassword } = req.body;
+
+    if (!id_usuario || !newPassword) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    }
+
+    const updated = await Usuarios.resetPassword(id_usuario, newPassword);
+
+    if (!updated) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ 
+      success: true,
+      message: 'Contraseña reseteada exitosamente'
+    });
+
+  } catch (error) {
+    console.error('Error al resetear contraseña:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Error interno del servidor' 
+    });
+  }
+};

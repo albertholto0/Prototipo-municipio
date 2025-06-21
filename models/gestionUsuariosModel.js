@@ -24,6 +24,45 @@ class Usuarios {
             console.error('Error al crear usuario:', err);
         }
     }
+
+    static async update(id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario) {
+        try {
+            const [result] = await db.query(
+                'UPDATE usuarios SET nombres = ?, apellido_paterno = ?, apellido_materno = ?, usuario = ?, rol_usuario = ? WHERE id_usuario = ?',
+                [nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, id_usuario]
+            );
+            return result.affectedRows > 0;
+        } catch (err) {
+            console.error('Error al actualizar usuario:', err);
+            throw err;
+        }
+    }
+
+    static async resetPassword(id_usuario, newPassword) {
+        try {
+            const [result] = await db.query(
+                'UPDATE usuarios SET password_usuario = ? WHERE id_usuario = ?',
+                [newPassword, id_usuario]
+            );
+            return result.affectedRows > 0;
+        } catch (err) {
+            console.error('Error al resetear contraseña:', err);
+            throw err;
+        }
+    }
+
+    static async getByUsername(usuario) {
+        try {
+            const [rows] = await db.query(
+                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario FROM usuarios WHERE usuario = ?',
+                [usuario]
+            );
+            return rows[0];
+        } catch (err) {
+            console.error('Error al obtener usuario:', err);
+            throw err;
+        }
+    }
 }
 
 module.exports = Usuarios;
