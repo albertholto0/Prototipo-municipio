@@ -48,21 +48,22 @@
     <!-- Modal para el formulario -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
-            <span class="btn-close" id="btnCloseModal">&times;</span>
             <div class="form-container" id="formContainer">
                 <h3 class="text-center" id="formTitle">Registrar Subcuenta Contable</h3>
                 <form id="accountForm">
                     <div class="form-group">
                         <label for="numeroCuenta">Clave Cuenta</label>
-                        <input type="text" id="numeroCuenta" name="numeroCuenta" placeholder="Ej. 1000000" required>
+                        <select id="clave_cuenta_contable" name="numeroCuenta" required>
+                            <!-- Opciones de cuentas contables se llenaran de la base de datos -->
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="numeroSubcuenta">Clave Subcuenta</label>
-                        <input type="text" id="numeroSubcuenta" name="numeroSubcuenta" placeholder="Ej. 1100000" required>
+                        <input type="text" id="clave_subcuenta" name="numeroSubcuenta" placeholder="Ej. 1100000" required>
                     </div>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" name="nombre" placeholder="Ej. Caja General" required>
+                        <input type="text" id="nombre_subcuentas" name="nombre" placeholder="Ej. Caja General" required>
                     </div>
                     <div class="form-actions">
                         <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
