@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Base Catastral</title>
   <link rel="stylesheet" href="Styles.css">
-  <link rel="stylesheet" href="/public/Componentes/Nav.css">
+  <link rel="stylesheet" href="../Componentes/Nav.css">
 </head>
 
 <body>
@@ -56,31 +56,41 @@
       <div class="form-container" id="formContainer">
         <h3 class="text-center" id="formTitle">Agregar Base Catastral</h3>
         <form id="accountForm">
-          <!-- Primera fila: Clave catastral y Base catastral -->
+          
+          <!-- Fila 1: Clave catastral y Propietario -->
           <div class="form-inline">
             <div class="form-group">
               <label for="claveCatastral">Clave catastral:</label>
               <input type="text" id="claveCatastral" name="claveCatastral" placeholder="Ej. CLAVE-123" required>
             </div>
             <div class="form-group">
-              <label for="baseCatastral">Base catastral:</label>
-              <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 1500 m²" required>
+              <label for="contribuyenteSelect">Propietario:</label>
+              <select id="contribuyenteSelect" name="contribuyenteSelect" required>
+                <option value="">-- selecciona propietario --</option>
+                <!-- Opciones inyectadas vía JS -->
+              </select>
             </div>
           </div>
 
-          <!-- Segunda fila: Nombre propietario (cada uno en su propia fila) -->
+          <!-- Fila 2: Base catastral -->
           <div class="form-group">
-            <label for="nombrePropietario">Nombre propietario:</label>
-            <input type="text" id="nombrePropietario" name="nombrePropietario" placeholder="Ej. Juan Pérez" required>
+            <label for="baseCatastral">Base catastral:</label>
+            <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 1500 m²" required>
           </div>
 
-          <!-- Tercera fila: Ubicación -->
-          <div class="form-group">
-            <label for="ubicacion">Ubicación:</label>
-            <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
+          <!-- Fila 3: Ubicación y Barrio -->
+          <div class="form-inline">
+            <div class="form-group">
+              <label for="ubicacion">Ubicación:</label>
+              <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
+            </div>
+            <div class="form-group">
+              <label for="barrio">Barrio:</label>
+              <input type="text" id="barrio" name="barrio" placeholder="Ej. Centro" required>
+            </div>
           </div>
 
-          <!-- Cuarta fila: Valor terreno y Valor construcción -->
+          <!-- Fila 4: Valor terreno y Valor construcción -->
           <div class="form-inline">
             <div class="form-group">
               <label for="valorTerreno">Valor terreno:</label>
@@ -92,7 +102,7 @@
             </div>
           </div>
 
-          <!-- Quinta fila: Impuesto calculado y Uso de suelo -->
+          <!-- Fila 5: Impuesto calculado y Uso de suelo -->
           <div class="form-inline">
             <div class="form-group">
               <label for="impuestoCalculado">Impuesto calculado:</label>
@@ -111,7 +121,7 @@
             </div>
           </div>
 
-          <!-- Sexta fila: Fecha avalúo y Historial avalúos -->
+          <!-- Fila 6: Fecha avalúo y Historial avalúos -->
           <div class="form-inline">
             <div class="form-group">
               <label for="fechaAvaluo">Fecha avalúo:</label>
@@ -123,7 +133,7 @@
             </div>
           </div>
 
-          <!-- Contenedor para botones alineados a la derecha -->
+          <!-- Botones -->
           <div class="form-actions">
             <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
             <button type="submit" id="btnAddOrUpdate">Agregar</button>
@@ -151,9 +161,9 @@
     <p>© 2025 Ixtlán - Módulo 5: Gestión de Base Catastral</p>
   </footer>
 
+  <!-- Scripts -->
   <script src="Script.js" defer></script>
   <script src="/public/Componentes/Nav.js" defer></script>
-
 </body>
 
 </html>
