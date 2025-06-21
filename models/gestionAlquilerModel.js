@@ -1,3 +1,5 @@
+// File: models/gestionAlquilerModel.js
+//Sergio Elias Robles Ignacio 
 const db = require('../config/database');
 
 class Alquiler {

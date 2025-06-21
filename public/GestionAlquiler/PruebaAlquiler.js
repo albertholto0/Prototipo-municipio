@@ -1,4 +1,5 @@
-// PruebaAlquiler.js
+// File: public/GestionAlquiler/PruebaAlquiler.js
+//Sergio Elias Robles Ignacio 
 
 let allAlquileres = []; // Variable global para almacenar todos los alquileres
 
