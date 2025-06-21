@@ -1,17 +1,20 @@
-// filepath: /routes/gestionEstablecimientoRoute.js
 const express = require("express");
-const Establecimiento = require("../models/gestionEstablecimientoModel");
 const router = express.Router();
+const Establecimiento = require("../controllers/gestionEstablecimientosControllers");
 
-// Ruta para obtener todos los establecimientos
-router.get("/", async (req, res) => {
-  try {
-    const establecimientos = await Establecimiento.getAll();
-    res.json(establecimientos);
-  } catch (err) {
-    console.error("Error al obtener establecimientos:", err);
-    res.status(500).json({ error: "Error   al obtener establecimientos" });
-  }
-});
+// Obtener todos los establecimientos
+router.get("/", Establecimiento.getAll);
+
+// Obtener un establecimiento por ID
+router.get("/:id", Establecimiento.getEstablecimientoById);
+
+// Registrar un nuevo establecimiento
+router.post("/", Establecimiento.setEstablecimiento);
+
+// Actualizar un establecimiento
+router.put("/:id", Establecimiento.putEstablecimiento);
+
+// Eliminar un establecimiento
+router.delete("/:id", Establecimiento.deleteEstablecimiento);
 
 module.exports = router;
