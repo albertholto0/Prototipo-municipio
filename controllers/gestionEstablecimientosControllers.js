@@ -51,9 +51,11 @@ exports.createEstablecimiento = async (req, res) => {
     };
 
     const resultado = await Establecimiento.create(nuevoEstablecimiento);
-    res
-      .status(201)
-      .json({ message: "Establecimiento creado", id: resultado.insertId });
+    res.status(500).json({
+      message: "No se pudo crear el establecimiento",
+      error: error.message,
+      details: error,
+    });
   } catch (error) {
     console.error("Error al insertar establecimiento:", error.message);
     console.error("Detalles completos:", error);
