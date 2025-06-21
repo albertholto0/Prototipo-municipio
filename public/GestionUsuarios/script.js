@@ -248,5 +248,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     renderPagination(usuariosFiltrados, page);
   };
+  // En script.js, agregar estas funciones
+  window.openDownModal = async (username) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/usuarios/${username}`);
+      if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
+
+      const user = await response.json();
+
+      if (confirm(`¿Estás seguro de dar de baja al usuario ${username}?`)) {
+        const toggleResponse = await fetch('http://localhost:5000/api/usuarios/toggle-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id_usuario: user.id_usuario })
+        });
+
+        const data = await toggleResponse.json();
+
+        if (!toggleResponse.ok) throw new Error(data.error || 'Error al cambiar estado');
+
+        alert('Estado del usuario actualizado exitosamente');
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error al cambiar estado del usuario:', error);
+      alert(error.message || 'Error al cambiar estado del usuario');
+    }
+  };
+
+  window.openUpModal = async (username) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/usuarios/${username}`);
+      if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
+
+      const user = await response.json();
+
+      if (confirm(`¿Estás seguro de dar de alta al usuario ${username}?`)) {
+        const toggleResponse = await fetch('http://localhost:5000/api/usuarios/toggle-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id_usuario: user.id_usuario })
+        });
+
+        const data = await toggleResponse.json();
+
+        if (!toggleResponse.ok) throw new Error(data.error || 'Error al cambiar estado');
+
+        alert('Estado del usuario actualizado exitosamente');
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error al cambiar estado del usuario:', error);
+      alert(error.message || 'Error al cambiar estado del usuario');
+    }
+  };
 }
 );

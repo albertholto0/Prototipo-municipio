@@ -63,6 +63,33 @@ class Usuarios {
             throw err;
         }
     }
+
+    // En gestionUsuariosModel.js, agregar este método a la clase Usuarios
+    static async toggleStatus(id_usuario) {
+        try {
+            // Primero obtenemos el estado actual
+            const [current] = await db.query(
+                'SELECT estado FROM usuarios WHERE id_usuario = ?',
+                [id_usuario]
+            );
+
+            if (current.length === 0) {
+                return false;
+            }
+
+            const nuevoEstado = current[0].estado === 'activo' ? 'inactivo' : 'activo';
+
+            const [result] = await db.query(
+                'UPDATE usuarios SET estado = ? WHERE id_usuario = ?',
+                [nuevoEstado, id_usuario]
+            );
+
+            return result.affectedRows > 0;
+        } catch (err) {
+            console.error('Error al cambiar estado del usuario:', err);
+            throw err;
+        }
+    }
 }
 
 module.exports = Usuarios;

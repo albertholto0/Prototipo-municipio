@@ -105,3 +105,32 @@ exports.resetPassword = async (req, res) => {
     });
   }
 };
+
+// Cambiar estado del usuario
+exports.toggleUsuarioStatus = async (req, res) => {
+  try {
+    const { id_usuario } = req.body;
+
+    if (!id_usuario) {
+      return res.status(400).json({ error: 'Falta el ID del usuario' });
+    }
+
+    const updated = await Usuarios.toggleStatus(id_usuario);
+
+    if (!updated) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ 
+      success: true,
+      message: 'Estado del usuario actualizado exitosamente'
+    });
+
+  } catch (error) {
+    console.error('Error al cambiar estado del usuario:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Error interno del servidor' 
+    });
+  }
+};

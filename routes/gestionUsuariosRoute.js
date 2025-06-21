@@ -84,4 +84,24 @@ router.post('/reset-password', async (req, res) => {
     }
 });
 
+// Cambiar estado del usuario (POST)
+router.post('/toggle-status', async (req, res) => {
+    try {
+        const { id_usuario } = req.body;
+        const updated = await Usuarios.toggleStatus(id_usuario);
+        
+        if (!updated) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+        
+        res.json({ 
+            mensaje: 'Estado del usuario actualizado exitosamente',
+            nuevoEstado: updated.nuevoEstado 
+        });
+    } catch (error) {
+        console.error('Error al cambiar estado del usuario:', error);
+        res.status(500).json({ error: 'Error al cambiar estado del usuario' });
+    }
+});
+
 module.exports = router;
