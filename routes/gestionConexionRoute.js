@@ -1,15 +1,20 @@
-const express =require('express');
-const Conexion =require('../models/gestionConexionModel');
-const router= express.Router();
-router.get('/', async(req, res)=>{
-    try{
-        const conexion =await Conexion.getAll();
-        res.json(conexion);
-    }
-    catch(error){
-        console.error('error al obtener conexion: ', error);
+const express = require('express');
+const router = express.Router();
+const conexionController = require('../controllers/gestionConexionController');
 
-    }
-});
+// Obtener todas las conexiones
+router.get('/', conexionController.getAllConexiones);
 
-module.exports= router;
+// Obtener una conexión por ID
+router.get('/:id', conexionController.getConexionById);
+
+// Registrar una nueva conexión
+router.post('/', conexionController.setConexion);
+
+// Actualizar una conexión existente
+router.put('/:id', conexionController.putConexion);
+
+// Eliminar una conexión
+router.delete('/:id', conexionController.deleteConexion);
+
+module.exports = router;
