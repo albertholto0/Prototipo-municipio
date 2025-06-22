@@ -65,19 +65,24 @@ function renderizarSubcuentas(lista) {
   document.querySelectorAll('.action-btn.edit').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       editId = btn.getAttribute('data-id');
-      // Obtener datos de la subcuenta, usando fetch
+      // Obtener datos de la subcuenta
       const response = await fetch(`http://localhost:5000/api/subcuentasContables/${editId}`);
       const data = await response.json();
-      // Llena el formulario
+
+      // Llenar el select y luego asignar el valor
+      await llenarSelectCuentasContables();
       document.getElementById('clave_cuenta_contable').value = data.clave_cuenta_contable;
+
+      // Llena el resto del formulario
       document.getElementById('clave_subcuenta').value = data.clave_subcuenta;
       document.getElementById('nombre_subcuentas').value = data.nombre_subcuentas;
       elements.formTitle.textContent = "Editar Subcuenta Contable";
       elements.btnAddOrUpdate.textContent = "Actualizar";
       // Abre el modal
-      openModal();
+      elements.modalOverlay.style.display = 'flex';
     });
   });
+  
   // Listeners del boton de eliminar
   document.querySelectorAll('.action-btn.delete').forEach(btn => {
     btn.addEventListener('click', async (e) => {
