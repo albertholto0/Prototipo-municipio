@@ -6,6 +6,32 @@ let currentPage = 1;               // Página actual
 const rowsPerPage = 10;            // Filas por página
 const API_BASE = "http://localhost:5000/api/cuentasContables";
 
+// — Función global para mostrar un Bootstrap Toast —
+function showToast(message, type = 'success') {
+  const icons = {
+    success: '<i class="bi bi-check-circle-fill me-2"></i>',
+    danger:  '<i class="bi bi-x-circle-fill me-2"></i>',
+    warning: '<i class="bi bi-exclamation-triangle-fill me-2"></i>',
+    info:    '<i class="bi bi-info-circle-fill me-2"></i>'
+  };
+  const toastId = `toast${Date.now()}`;
+  const html = `
+    <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          ${icons[type] || ''}${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+      </div>
+    </div>
+  `;
+  document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
+  const toastEl = document.getElementById(toastId);
+  const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });
+  bsToast.show();
+  toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+}
+
 // Mapeo de elementos del DOM
 const elements = {
   tableBody: document.querySelector("#accountsTable tbody"),
@@ -100,6 +126,7 @@ async function cargarCuentasContables() {
   } catch (err) {
     console.error("Error al cargar cuentas contables:", err);
     elements.tableBody.innerHTML = '<tr><td colspan="4">Error al cargar los datos :(</td></tr>';
+    showToast('Error al cargar las cuentas.', 'danger');
   }
 }
 
@@ -122,8 +149,13 @@ async function handleSubmit(e) {
     if (!res.ok) throw new Error(res.statusText);
     await cargarCuentasContables();
     closeModal();
+    showToast(
+      isEditing ? 'Cuenta actualizada con éxito' : 'Cuenta agregada con éxito',
+      'success'
+    );
   } catch (err) {
     console.error("Error guardando cuenta:", err);
+    showToast('No se pudo guardar la cuenta.', 'danger');
   }
 }
 
@@ -134,25 +166,11 @@ window.deleteAccount = async function(index) {
     const res = await fetch(`${API_BASE}/${id_cuentaContable}`, { method: "DELETE" });
     if (!res.ok) throw new Error(res.statusText);
     await cargarCuentasContables();
+    showToast('Cuenta eliminada con éxito', 'warning');
   } catch (err) {
     console.error("Error al eliminar cuenta:", err);
+    showToast('No se pudo eliminar la cuenta.', 'danger');
   }
-};
-
-window.editAccount = function(index) {
-  const cuenta = cuentasContables[index];
-  isEditing = true;
-  editingId = cuenta.id_cuentaContable;
-
-  openModal();  // Abrimos sin resetear en modo edición
-
-  elements.numeroCuenta.value = cuenta.clave_cuenta_contable;
-  elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
-  elements.estado.disabled = false;
-  elements.estado.value = cuenta.estado ? "true" : "false";
-
-  elements.formTitle.textContent = "Editar Cuenta Contable";
-  elements.btnAddOrUpdate.textContent = "Actualizar";
 };
 
 /* === MODAL Y EVENTOS === */
@@ -174,6 +192,22 @@ function closeModal() {
   editingId = null;
   elements.estado.disabled = false;
 }
+
+window.editAccount = function(index) {
+  const cuenta = cuentasContables[index];
+  isEditing = true;
+  editingId = cuenta.id_cuentaContable;
+
+  openModal();  // Abrimos sin resetear en modo edición
+
+  elements.numeroCuenta.value = cuenta.clave_cuenta_contable;
+  elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
+  elements.estado.disabled = false;
+  elements.estado.value = cuenta.estado ? "true" : "false";
+
+  elements.formTitle.textContent = "Editar Cuenta Contable";
+  elements.btnAddOrUpdate.textContent = "Actualizar";
+};
 
 elements.form.addEventListener("submit", handleSubmit);
 elements.btnCancel.addEventListener("click", e => {

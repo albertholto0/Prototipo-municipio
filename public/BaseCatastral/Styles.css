@@ -5,7 +5,7 @@
   padding: 0;
   /* Modelo de caja más intuitivo */
   box-sizing: border-box;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Contenedor principal centrado con máximo ancho */
@@ -78,13 +78,12 @@
   padding: 0;
   background: none !important;
   cursor: pointer;
-  margin-right: 12px;
+  margin-right: 8px;
   /* Más espacio entre iconos */
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
   width: 44px;
   /* Tamaño fijo para el área clickeable */
   height: 44px;
@@ -124,12 +123,6 @@
 /* Estilo específico para eliminar */
 .action-btn.delete:hover .action-icon {
     filter: brightness(0.9) sepia(1) hue-rotate(-50deg) saturate(8);
-
-}
-
-/* Efecto de círculo al hacer hover */
-.action-btn:hover .action-icon {
-  transform: scale(1.1);
 
 }
 
@@ -340,16 +333,39 @@
 .modal-overlay {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   animation: fadeIn 0.3s ease;
 }
 
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease;
+}
+
+/* Ajustes para el formulario dentro del modal */
+.modal-content .form-container {
+  margin-top: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+
+
 .btn-close {
   position: absolute;
-  right: 35px;
+  right: 25px;
   top: 15px;
   cursor: pointer;
   font-size: 28px;
@@ -359,7 +375,7 @@
 
 .btn-close:hover {
   color: #e74c3c;
-  transform: scale(1.5);
+  transform: scale(1.1);
 }
 
 /* Animaciones */
@@ -385,9 +401,12 @@
   }
 }
 
+
+
 /* ===== BOTÓN AGREGAR ===== */
 .btn-agregar {
-  background: #27ae60;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  /*background: #27ae60;*/
   color: #ffffff;
   border: 2px solid #27ae60;
   padding: 10px 25px;
@@ -409,20 +428,6 @@
   color: #000000;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-}
-
-.modal-content {
-  margin: 2% auto;
-  max-width: 900px;
-  border-radius: 15px;
-  padding: 30px;
-  position: relative;
-  height: auto;
-  max-height: 90vh;
-  overflow-y: auto;
-  animation: slideDown 0.3s ease;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 .form-container {
@@ -613,4 +618,31 @@
   transform: scale(0);
   animation: ripple 0.6s linear;
   pointer-events: none;
+}
+
+/* Contenedor de toasts (si necesitas más personalización) */
+/* ===== TOASTS ===== */
+.toast {
+  min-width: 250px;
+  max-width: 320px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.75rem 1rem;
+}
+
+.toast .toast-body {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toast .btn-close {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+/* Asegura que el z-index no se sobreponga al modal (z-index del modal: 1000+) */
+.toast-container {
+  z-index: 1060; /* Puedes ajustar si usas modales con z-index más alto */
 }
