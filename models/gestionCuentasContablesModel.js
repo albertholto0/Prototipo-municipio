@@ -11,5 +11,5 @@ class CuentasContables {
         }
     }
 }
-
+    
 module.exports = CuentasContables;
