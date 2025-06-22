@@ -22,7 +22,7 @@ const authController = {
 
       // Guardar datos relevantes en la sesión
       req.session.usuario = {
-        id: usuario.id,
+        id: usuario.id_usuario,
         nombre: usuario.nombre,
         rol: usuario.rol_usuario
       };
@@ -31,6 +31,7 @@ const authController = {
         success: true,
         usuario: {
           id: usuario.id,
+          id_usuario: usuario.id_usuario,
           nombre: usuario.nombre,
           rol: usuario.rol_usuario
         }

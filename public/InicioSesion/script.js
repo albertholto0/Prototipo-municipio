@@ -27,10 +27,26 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             return;
         }
 
-        // Guardar datos del usuario en localStorage
-        localStorage.setItem('usuarioActual', JSON.stringify(data.usuario));
-        
-        
+        // Depuración - verifica qué recibes realmente
+        console.log('Respuesta completa del servidor:', data);
+
+        if (data.success && data.usuario) {
+            // Guarda TODOS los datos del usuario
+            const usuarioParaGuardar = {
+                id: data.usuario.id,
+                id_usuario: data.usuario.id_usuario,
+                nombre: data.usuario.nombre,
+                rol: data.usuario.rol
+            };
+
+            localStorage.setItem('usuarioActual', JSON.stringify(usuarioParaGuardar));
+
+            // Verifica lo guardado
+            console.log('Datos guardados en localStorage:',
+                JSON.parse(localStorage.getItem('usuarioActual')));
+        }
+
+
         if (data.usuario.rol && data.usuario.rol.toLowerCase().includes('administrador')) {
             alert('Bienvenido administrador');
             window.location.href = '/public/Inicio/pantallaPrincipal.html';

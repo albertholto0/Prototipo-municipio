@@ -106,4 +106,19 @@ router.post('/toggle-status', async (req, res) => {
     }
 });
 
+// Obtener por ID de usuario (GET)
+router.get('/id/:id_usuario', async (req, res) => {
+    try {
+        const { id_usuario } = req.params;
+        const user = await Usuarios.getById(id_usuario);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error('Error al obtener usuario por ID:', error);
+        res.status(500).json({ error: 'Error al obtener usuario por ID' });
+    }
+});
+
 module.exports = router;

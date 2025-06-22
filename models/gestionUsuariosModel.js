@@ -116,6 +116,18 @@ class Usuarios {
 
 
     }
+    static async getById(id_usuario) {
+        try {
+            const [rows] = await db.query(
+                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, ultimo_acceso, estado FROM usuarios WHERE id_usuario = ?',
+                [id_usuario]
+            );
+            return rows[0];
+        } catch (err) {
+            console.error('Error al obtener usuario por ID:', err);
+            throw err;
+        }
+    }
 }
 
 module.exports = Usuarios;

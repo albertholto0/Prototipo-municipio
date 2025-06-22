@@ -27,4 +27,29 @@
             </div>
         </span>
     </nav>
+
+    <div id="navUserInfoModal" class="nav-user-modal">
+        <div class="nav-user-modal-container">
+            <div class="nav-user-modal-content">
+                <h3 class="nav-user-modal-title">Información del Usuario</h3>
+                <div class="nav-user-modal-flex">
+                    <div class="nav-user-modal-info">
+                        <p><strong>Nombre:</strong></p>
+                        <p><span id="navInfoUserName"></span></p>
+                        <p><strong>Usuario:</strong> <span id="navInfoUserUsername"></span></p>
+                        <p><strong>Rol:</strong> <span id="navInfoUserRole"></span></p>
+                        <p><strong>Último acceso:</strong></p>
+                        <p><span id="navInfoUserLastAccess"></span></p>
+                        <p><strong>Estado:</strong> <span id="navInfoUserStatus"></span></p>
+                    </div>
+                    <div class="nav-user-modal-photo">
+                        <img id="navInfoUserPhoto" src="/public/Assets/FotosPerfilUsuarios/default.png"
+                            alt="Foto de perfil">
+                    </div>
+                </div>
+                <button class="nav-user-modal-close"
+                    onclick="document.getElementById('navUserInfoModal').style.display='none'">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </header>
