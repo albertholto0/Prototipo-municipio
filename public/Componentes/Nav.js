@@ -21,7 +21,6 @@ const injectHTML = async () => {
   }
 };
 
-
 // Función para configurar todos los event listeners
 const setupEventListeners = () => {
   // Manejar el dropdown del usuario
@@ -50,13 +49,13 @@ const setupEventListeners = () => {
 
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
-      alert('Este botón abrirá la configuración del usuario.');
+      window.abrirModalConfiguracionUsuario();
     });
   }
 
   if (infoBtn) {
     infoBtn.addEventListener('click', () => {
-      alert('Este botón mostrará la información del usuario.');
+        window.abrirModalInfoUsuario();
     });
   }
 
@@ -67,8 +66,25 @@ const setupEventListeners = () => {
   }
 };
 
+const injectModals = async () => {
+  try {
+    const response = await fetch("/public/Componentes/modals_usuarios.html");
+    const html = await response.text();
+    document.body.insertAdjacentHTML('beforeend', html);
+  } catch (error) {
+    console.error("Error cargando los modales:", error);
+  }
+};
+
+
+
 // Inicializar todo
 document.addEventListener("DOMContentLoaded", () => {
   injectStyles();
   injectHTML();
+  injectModals().then(() => {
+    const script = document.createElement('script');
+    script.src = '/public/Componentes/modals_usuarios.js';
+    document.body.appendChild(script);
+  });
 });
