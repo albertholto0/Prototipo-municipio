@@ -6,5 +6,5 @@ function obtenerUsuarioActual() {
 // Funcion para verificar el rol del usuario
 function esAdministrador() {
     const usuario = obtenerUsuarioActual();
-    return usuario && usuario.rol_usuario && usuario.rol_usuario.toLowerCase().includes('admin');
+    return (usuario && usuario.rol && usuario.rol.toLowerCase().includes('admin'));
 }
