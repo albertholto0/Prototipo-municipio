@@ -1,10 +1,11 @@
+const API_BASE = "http://localhost:5000/api/cuentasContables";
+
 // Variables de estado globales
 let isEditing = false;             // Modo edición
 let editingId = null;              // ID de la cuenta en edición
 let cuentasContables = [];         // Datos del servidor
 let currentPage = 1;               // Página actual
 const rowsPerPage = 10;            // Filas por página
-const API_BASE = "http://localhost:5000/api/cuentasContables";
 
 // — Función global para mostrar un Bootstrap Toast —
 function showToast(message, type = 'success') {
