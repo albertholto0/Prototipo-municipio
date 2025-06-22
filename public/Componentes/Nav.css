@@ -154,3 +154,9 @@ header {
 #settingsBtn::before {
     background-image: url('/public/Assets/configuracion.svg');
 }
+
+#userImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
