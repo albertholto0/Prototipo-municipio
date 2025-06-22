@@ -26,6 +26,7 @@ function showToast(message, type = 'success') {
       </div>
     </div>
   `;
+  
   document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
   const toastEl = document.getElementById(toastId);
   const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });

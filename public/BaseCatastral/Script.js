@@ -11,6 +11,33 @@ defaults = {
   rowsPerPage: 10
 };
 
+// — Función global para mostrar un Bootstrap Toast —
+function showToast(message, type = 'success') {
+  const icons = {
+    success: '<i class="bi bi-check-circle-fill me-2"></i>',
+    danger: '<i class="bi bi-x-circle-fill me-2"></i>',
+    warning: '<i class="bi bi-exclamation-triangle-fill me-2"></i>',
+    info: '<i class="bi bi-info-circle-fill me-2"></i>'
+  };
+  const toastId = `toast${Date.now()}`;
+  const html = `
+    <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          ${icons[type] || ''}${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
+  const toastEl = document.getElementById(toastId);
+  const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });
+  bsToast.show();
+  toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+}
+
 // Mapeo de elementos del DOM
 elems = {
   tableBody: document.querySelector('#accountsTable tbody'),
@@ -60,8 +87,14 @@ function formatDateToDMY(dateInput) {
 
 // — FUNCIONES API —
 async function fetchBases() {
-  const res = await fetch(API_BASE);
-  defaults.bases = await res.json();
+  try {
+    const res = await fetch(API_BASE);
+    if (!res.ok) throw new Error(res.statusText);
+    defaults.bases = await res.json();
+  } catch (err) {
+    console.error(err);
+    showToast('Error al cargar las bases catastrales', 'danger');
+  }
 }
 async function fetchContribuyentes() {
   const res = await fetch(API_CONTRIB);
@@ -71,7 +104,7 @@ async function fetchContribuyentes() {
 async function createBase(data) {
   const res = await fetch(API_BASE, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
   return res.json();
@@ -79,7 +112,7 @@ async function createBase(data) {
 async function updateBase(id, data) {
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
   return res.json();
@@ -119,15 +152,15 @@ function renderTable(data) {
 }
 function renderPagination(total) {
   const pages = Math.ceil(total / defaults.rowsPerPage);
-  let html = `<button class="pagination-btn" onclick="changePage(${defaults.currentPage-1})" ${defaults.currentPage===1?'disabled':''}>« Anterior</button>`;
+  let html = `<button class="pagination-btn" onclick="changePage(${defaults.currentPage - 1})" ${defaults.currentPage === 1 ? 'disabled' : ''}>« Anterior</button>`;
   const startPage = Math.max(1, defaults.currentPage - 2);
   const endPage = Math.min(pages, defaults.currentPage + 2);
-  if (startPage > 1) html += `<button class="pagination-btn" onclick="changePage(1)">1</button>${startPage>2?'<span>...</span>':''}`;
+  if (startPage > 1) html += `<button class="pagination-btn" onclick="changePage(1)">1</button>${startPage > 2 ? '<span>...</span>' : ''}`;
   for (let p = startPage; p <= endPage; p++) {
-    html += `<button class="pagination-btn ${p===defaults.currentPage?'active':''}" onclick="changePage(${p})">${p}</button>`;
+    html += `<button class="pagination-btn ${p === defaults.currentPage ? 'active' : ''}" onclick="changePage(${p})">${p}</button>`;
   }
-  if (endPage < pages) html += `${endPage<pages-1?'<span>...</span>':''}<button class="pagination-btn" onclick="changePage(${pages})">${pages}</button>`;
-  html += `<button class="pagination-btn" onclick="changePage(${defaults.currentPage+1})" ${defaults.currentPage===pages?'disabled':''}>Siguiente »</button>`;
+  if (endPage < pages) html += `${endPage < pages - 1 ? '<span>...</span>' : ''}<button class="pagination-btn" onclick="changePage(${pages})">${pages}</button>`;
+  html += `<button class="pagination-btn" onclick="changePage(${defaults.currentPage + 1})" ${defaults.currentPage === pages ? 'disabled' : ''}>Siguiente »</button>`;
   elems.pagination.innerHTML = html;
 }
 
@@ -135,7 +168,7 @@ function renderPagination(total) {
 function filtered() {
   const term = elems.searchInput.value.toLowerCase();
   return defaults.bases.filter(b => {
-    const prop = defaults.contribuyentes.find(c => c.id_contribuyente===b.id_contribuyente)?.nombre.toLowerCase() || '';
+    const prop = defaults.contribuyentes.find(c => c.id_contribuyente === b.id_contribuyente)?.nombre.toLowerCase() || '';
     return b.cuenta.toLowerCase().includes(term) || prop.includes(term);
   });
 }
@@ -161,8 +194,10 @@ async function handleSubmit(e) {
 
   if (defaults.isEditing) {
     await updateBase(defaults.editingId, payload);
+    showToast('Base catastral actualizada exitosamente', 'success');
   } else {
     await createBase(payload);
+    showToast('Base catastral agregada exitosamente', 'success');
   }
   await refresh();
   closeModal();
@@ -178,8 +213,14 @@ elems.searchInput.addEventListener('input', () => {
 // — FUNCIONES GLOBALES —
 window.deleteAccount = async idx => {
   if (confirm('¿Confirmar eliminación?')) {
-    await deleteBase(filtered()[idx].id_base_catastral);
-    await refresh();
+    try {
+      await deleteBase(filtered()[idx].id_base_catastral);
+      await refresh();
+      showToast('Base catastral eliminada', 'warning');
+    } catch (err) {
+      console.error(err);
+      showToast('Error al eliminar la base catastral', 'danger');
+    }
   }
 };
 
