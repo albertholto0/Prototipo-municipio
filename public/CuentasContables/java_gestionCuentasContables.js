@@ -26,7 +26,7 @@ function showToast(message, type = 'success') {
       </div>
     </div>
   `;
-  
+
   document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
   const toastEl = document.getElementById(toastId);
   const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });
@@ -145,6 +145,7 @@ async function handleSubmit(e) {
     body: JSON.stringify(payload)
   };
   const url = isEditing ? `${API_BASE}/${editingId}` : API_BASE;
+  const fueEdicion = isEditing; // guardar antes de cerrar el modal
 
   try {
     const res = await fetch(url, opts);
@@ -152,7 +153,7 @@ async function handleSubmit(e) {
     await cargarCuentasContables();
     closeModal();
     showToast(
-      isEditing ? 'Cuenta actualizada con éxito' : 'Cuenta agregada con éxito',
+      fueEdicion ? 'Cuenta actualizada con éxito' : 'Cuenta agregada con éxito',
       'success'
     );
   } catch (err) {
