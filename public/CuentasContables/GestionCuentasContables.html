@@ -2,30 +2,27 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Cuentas Contables</title>
-    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
-    <link rel="stylesheet" href="/public/Componentes/Nav.css">
+    <link rel="stylesheet" href="/public/BaseCatastral/Styles.css" />
+    <link rel="stylesheet" href="/public/Componentes/Nav.css" />
 </head>
 
 <body>
-    <div id="nav-placeholder"></div> <!--NavBar-->
+    <div id="nav-placeholder"></div>
 
-    <!-- Contenido principal -->
     <main class="main-container">
         <div class="title-section">
             <h2>Gestión de Cuentas Contables</h2>
-            <hr class="title-line">
+            <hr class="title-line" />
         </div>
 
-        <!-- Sección de búsqueda -->
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Buscar" />
             <button class="btn-agregar" id="btnOpenModal">Agregar</button>
         </div>
 
-        <!-- Tabla -->
         <table id="accountsTable">
             <thead>
                 <tr>
@@ -35,16 +32,13 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Se llenará dinámicamente con JavaScript -->
-            </tbody>
+            <tbody></tbody>
         </table>
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
     </main>
 
-    <!-- Modal para el formulario -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <span class="btn-close" id="btnCloseModal">&times;</span>
@@ -53,34 +47,23 @@
                 <form id="accountForm">
                     <div class="form-group">
                         <label for="numeroCuenta">Número de cuenta:</label>
-                        <input type="text" id="numeroCuenta" name="numeroCuenta" placeholder="Ej. 1000-01" required>
+                        <input type="text" id="numeroCuenta" name="numeroCuenta" placeholder="Ej. 1000-01" required />
                     </div>
                     <div class="form-group">
-                        <label for="descripcion">Descripción:</label>
-                        <input type="text" id="descripcion" name="descripcion" placeholder="Ej. Caja General" required>
+                        <label for="nombreCuenta">Nombre de la cuenta:</label>
+                        <input type="text" id="nombreCuenta" name="nombreCuenta" placeholder="Derechos" required />
                     </div>
                     <div class="form-group">
-                        <label for="seccion">Sección:</label>
-                        <select id="seccion" name="seccion" required>
-                            <option value="">Selecciona una sección</option>
-                            <option value="1">Sección 1</option>
-                            <option value="2">Sección 2</option>
-                            <option value="3">Sección 3</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="ejercicio">Ejercicio:</label>
-                        <select id="ejercicio" name="ejercicio" required>
-                            <option value="">Selecciona un ejercicio</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
+                        <label for="estado">Estado:</label>
+                        <select id="estado" name="estado">
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
                         </select>
                     </div>
                     <div class="form-actions">
                         <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
                         <button type="submit" id="btnAddOrUpdate">Agregar</button>
-                      </div>
+                    </div>
                 </form>
             </div>
         </div>

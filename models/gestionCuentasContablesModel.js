@@ -4,7 +4,7 @@ class CuentasContables {
   static async getAll() {
     try {
       const [rows] = await db.query(
-        'SELECT id_cuentasContables, clave_cuenta_contable, nombre_cuentaContable, estado FROM cuentas_contables'
+        'SELECT id_cuentaContable, clave_cuenta_contable, nombre_cuentaContable, estado FROM cuentas_contables'
       );
       return rows;
     } catch (err) {
@@ -22,7 +22,7 @@ class CuentasContables {
         [clave_cuenta_contable, nombre_cuentaContable, estado]
       );
       return {
-        id_cuentasContables: result.insertId,
+        id_cuentaContable: result.insertId,
         clave_cuenta_contable,
         nombre_cuentaContable,
         estado,
@@ -39,10 +39,10 @@ class CuentasContables {
       await db.query(
         `UPDATE cuentas_contables
          SET clave_cuenta_contable = ?, nombre_cuentaContable = ?, estado = ?
-         WHERE id_cuentasContables = ?`,
+         WHERE id_cuentaContable = ?`,
         [clave_cuenta_contable, nombre_cuentaContable, estado, id]
       );
-      return { id_cuentasContables: id, ...cuenta };
+      return { id_cuentaContable: id, ...cuenta };
     } catch (err) {
       console.error('Error al actualizar cuenta contable:', err);
       throw new Error('Error al actualizar cuenta contable');
@@ -51,8 +51,8 @@ class CuentasContables {
 
   static async delete(id) {
     try {
-      await db.query('DELETE FROM cuentas_contables WHERE id_cuentasContables = ?', [id]);
-      return { id_cuentasContables: id };
+      await db.query('DELETE FROM cuentas_contables WHERE id_cuentaContable = ?', [id]);
+      return { id_cuentaContable: id };
     } catch (err) {
       console.error('Error al eliminar cuenta contable:', err);
       throw new Error('Error al eliminar cuenta contable');
