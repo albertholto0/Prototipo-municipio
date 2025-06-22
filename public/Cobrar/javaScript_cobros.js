@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const [contribuyentes, cuentasContables, estimulosFiscales] = await Promise.all([
             fetch('http://localhost:5000/api/contribuyentes').then(r => r.json()),
             fetch('http://localhost:5000/api/cuentasContables').then(r => r.json()),
-            fetch('http://localhost:5000/api/estimuloFiscal').then(r => r.json())
+            fetch('http://localhost:5000/api/estimulosFiscales').then(r => r.json())
         ]);
 
         // Contribuyentes
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             contribuyentes.forEach(contribuyente => {
                 const option = document.createElement('option');
                 option.value = contribuyente.id_contribuyente;
-                option.textContent = contribuyente.nombre_completo;
+                option.textContent = `${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}`;
                 contribuyenteMap.set(contribuyente.id_contribuyente, contribuyente.direccion);
                 contribuyenteSelect.appendChild(option);
             });

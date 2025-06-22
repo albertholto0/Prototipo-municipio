@@ -154,3 +154,113 @@ header {
 #settingsBtn::before {
     background-image: url('/public/Assets/configuracion.svg');
 }
+
+#userImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+/* Estilos específicos para el modal de información del usuario en el Nav */
+.nav-user-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.nav-user-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.nav-user-modal-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: navModalAppear 0.3s ease-out;
+}
+
+@keyframes navModalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-user-modal-flex {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-user-modal-info {
+  flex: 2;
+}
+
+.nav-user-modal-photo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+#navInfoUserPhoto {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e0e0e0;
+}
+
+.nav-user-modal-close {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 20px auto 0;
+  width: auto;
+  min-width: 120px;
+}
+
+.nav-user-modal-close:hover {
+  background-color: #d32f2f;
+}
+
+.nav-user-modal-info p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.nav-user-modal-info p strong {
+  display: inline-block;
+  width: 120px;
+  color: #555;
+}
+
+.nav-user-modal-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}

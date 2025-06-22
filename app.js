@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require('express-session');
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const baseCatastralRoutes = require('./routes/gestionBaseCatastralRoute');
@@ -17,12 +18,20 @@ const subcuentasRoutes = require("./routes/gestionSubcuentasContablesRoute");
 const subconceptoRoutes = require("./routes/gestionSubconceptoRoute");
 const alquilerRoutes = require("./routes/gestionAlquilerRoute");
 const ejercicioFiscalRoutes = require("./routes/gestionEjercicioFiscalRoute");
+const inicioSesionRoutes = require("./routes/inicioSesionRoute");
+const historialAccesosRoutes = require("./routes/gestionHistorialAccesosRoute");
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(session({
+  secret: 'abc',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 // Rutas
 app.use('/api/baseCatastral', baseCatastralRoutes);
@@ -41,6 +50,8 @@ app.use("/api/subcuentasContables", subcuentasRoutes);
 app.use("/api/subconceptos", subconceptoRoutes);
 app.use("/api/alquileres", alquilerRoutes);
 app.use("/api/EjercicioFiscal", ejercicioFiscalRoutes);
+app.use("/api/inicioSesion", inicioSesionRoutes);
+app.use("/api/historialAccesos", historialAccesosRoutes);
 
 app.get("/", (req, res) => {
   res.send("API funcionando correctamente");
