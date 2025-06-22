@@ -1,4 +1,3 @@
-// Script.js — Cliente para CRUD de Bases Catastrales y Contribuyentes
 const API_BASE = 'http://localhost:5000/api/baseCatastral';
 const API_CONTRIB = 'http://localhost:5000/api/contribuyentes';
 

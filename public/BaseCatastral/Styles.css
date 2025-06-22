@@ -3,9 +3,8 @@
 * {
   margin: 0;
   padding: 0;
-  /* Modelo de caja más intuitivo */
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Contenedor principal centrado con máximo ancho */
@@ -338,7 +337,7 @@
   width: 100%; 
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 1100;
   animation: fadeIn 0.3s ease;
 }
 
@@ -361,21 +360,22 @@
   padding: 0;
 }
 
-
-
-.btn-close {
+.modal-close-custom {
   position: absolute;
-  right: 25px;
   top: 15px;
+  right: 25px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  color: #8b8b8b;
   cursor: pointer;
-  font-size: 28px;
-  color: #ffffff;
   transition: all 0.3s;
+  z-index: 10;
 }
 
-.btn-close:hover {
+.modal-close-custom:hover {
   color: #e74c3c;
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 /* Animaciones */
@@ -644,5 +644,5 @@
 
 /* Asegura que el z-index no se sobreponga al modal (z-index del modal: 1000+) */
 .toast-container {
-  z-index: 1060; /* Puedes ajustar si usas modales con z-index más alto */
+  z-index: 900; /* Puedes ajustar si usas modales con z-index más alto */
 }
