@@ -13,7 +13,7 @@ exports.getUsuarios = async (req, res) => {
 
 exports.createUsuario = async (req, res) => {
   try {
-    const { nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario, foto_perfil } = req.body;
+    const { nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario,ultimo_acceso, foto_perfil } = req.body;
 
     if (!nombres || !usuario || !password || !rol_usuario) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
@@ -26,6 +26,7 @@ exports.createUsuario = async (req, res) => {
       usuario,
       password,
       rol_usuario,
+      ultimo_acceso,
       foto_perfil,
     );
 

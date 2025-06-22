@@ -5,7 +5,7 @@ class Usuarios {
     static async getAll() {
         try {
             const [rows] = await db.query(
-                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, password_usuario, rol_usuario, fecha_acceso, hora_acceso, estado, foto_perfil FROM usuarios');
+                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, password_usuario, rol_usuario, estado, ultimo_acceso, foto_perfil FROM usuarios');
             return rows;
         } catch (err) {
             console.error('Error en la consulta:', err);
@@ -64,7 +64,6 @@ class Usuarios {
         }
     }
 
-    // En gestionUsuariosModel.js, agregar este método a la clase Usuarios
     static async toggleStatus(id_usuario) {
         try {
             // Primero obtenemos el estado actual
@@ -89,6 +88,33 @@ class Usuarios {
             console.error('Error al cambiar estado del usuario:', err);
             throw err;
         }
+    }
+
+    static async autenticar(usuario, password) {
+        try {
+            const [rows] = await db.query(
+                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, estado FROM usuarios WHERE usuario = ? AND password_usuario = ?',
+                [usuario, password]
+            );
+
+            if (rows.length === 0) return null;
+            return rows[0];
+        } catch (err) {
+            console.error('Error en autenticación:', err);
+            throw err;
+        }
+    }
+
+    static async actualizarUltimoAcceso(id_usuario) {
+        const now = new Date();
+        const fechaHora = now.toISOString().slice(0, 19).replace('T', ' ');
+        await db.query(
+            'UPDATE usuarios SET ultimo_acceso = ? WHERE id_usuario = ?',
+            [fechaHora, id_usuario]
+        );
+
+
+
     }
 }
 

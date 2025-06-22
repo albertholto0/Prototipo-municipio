@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Modificar la función mostrarUsuarios para quitar el botón de resetear de la tabla
+  // Aquí se define la función para mostrar los usuarios en la tabla
   const mostrarUsuarios = (usuariosFiltrados, page = 1) => {
     tablaBody.innerHTML = '';
 
@@ -227,8 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
             <td>${usuario.usuario}</td>
             <td>${usuario.rol_usuario}</td>
-            <td>${usuario.fecha_acceso || 'null'}</td>
-            <td>${usuario.hora_acceso || 'null'}</td>
+            <td>${usuario.ultimo_acceso || 'null'}</td>
             <td>${usuario.estado}</td>
             <td id="action-buttons">
                 <button class="action-btn modify" onclick="openModifyModal('${usuario.usuario}')">

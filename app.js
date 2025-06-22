@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require('express-session');
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -17,12 +18,19 @@ const subcuentasRoutes = require("./routes/gestionSubcuentasContablesRoute");
 const subconceptoRoutes = require("./routes/gestionSubconceptoRoute");
 const alquilerRoutes = require("./routes/gestionAlquilerRoute");
 const ejercicioFiscalRoutes = require("./routes/gestionEjercicioFiscalRoute");
+const inicioSesionRoutes = require("./routes/inicioSesionRoute");
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(session({
+  secret: 'abc',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 // Rutas
 app.use("/api/contribuyentes", contribuyenteRoutes);
@@ -40,6 +48,7 @@ app.use("/api/subcuentasContables", subcuentasRoutes);
 app.use("/api/subconceptos", subconceptoRoutes);
 app.use("/api/alquileres", alquilerRoutes);
 app.use("/api/EjercicioFiscal", ejercicioFiscalRoutes);
+app.use("/api/inicioSesion", inicioSesionRoutes);
 
 // Manejo de errores
 app.use((err, req, res, next) => {

@@ -67,6 +67,9 @@ const setupEventListeners = () => {
 };
 
 const injectModals = async () => {
+  if (window.location.pathname.endsWith('inicio_sesion.html')) {
+    return;
+  }
   try {
     const response = await fetch("/public/Componentes/modals_usuarios.html");
     const html = await response.text();
