@@ -310,11 +310,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
 
       const user = await response.json();
-            
-      const responseHistorial = await fetch(`http://localhost:5000/api/historialAccesos/${user.id_usuario}`);
-      if (!responseHistorial.ok) throw new Error(`Error HTTP! estado: ${responseHistorial.status}`);
 
-      const historial = await responseHistorial.json();
+      let historial = {};
+      try {
+        const responseHistorial = await fetch(`http://localhost:5000/api/historialAccesos/${user.id_usuario}`);
+        if (responseHistorial.ok) {
+          historial = await responseHistorial.json();
+        }
+      } catch (e) {
+        console.error('Error al obtener historial de accesos. Tal vez y no haya:', e);
+      }
 
       const modal = document.getElementById('infoUserModal');
       document.getElementById('infoUserName').textContent = `${user.nombres} ${user.apellido_paterno} ${user.apellido_materno}`;
