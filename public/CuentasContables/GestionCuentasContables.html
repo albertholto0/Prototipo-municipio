@@ -26,18 +26,19 @@
             <input type="text" id="searchInput" placeholder="Buscar" />
             <button class="btn-agregar" id="btnOpenModal">Agregar</button>
         </div>
-
-        <table id="accountsTable">
-            <thead>
-                <tr>
-                    <th>Clave</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="table-container">
+            <table id="accountsTable">
+                <thead>
+                    <tr>
+                        <th>Clave</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
         <div class="pagination-container">
             <div class="pagination"></div>
         </div>
@@ -47,7 +48,7 @@
         <div class="modal-content">
             <span class="btn-close" id="btnCloseModal">&times;</span>
             <div class="form-container" id="formContainer">
-                <h3 class="text-center" id="formTitle">Registrar Cuenta Contable</h3>
+                <h3 class="text-center" id="formTitle">Agregar Cuenta Contable</h3>
                 <form id="accountForm">
                     <div class="form-group">
                         <label for="numeroCuenta">Número de cuenta:</label>
@@ -79,10 +80,9 @@
 
     <script src="/public/Componentes/Nav.js"></script>
     <script src="java_gestionCuentasContables.js" defer></script>
-    
+
     <!-- ================== TOASTS ================== -->
-<div id="liveToastContainer"
-     class="toast-container position-fixed bottom-0 end-0 p-3"
-     style="z-index: 1060;"></div></body>
+    <div id="liveToastContainer" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1060;"></div>
+</body>
 
 </html>
