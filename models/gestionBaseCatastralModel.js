@@ -16,28 +16,28 @@ class BaseCatastral {
 
   static async create(data) {
     const { cuenta, base_catastral, id_contribuyente, ubicacion, barrio,
-            valor_terreno, valor_construccion, impuesto_calculado, uso_suelo } = data;
+            impuesto_calculado, fecha_avaluo, historial_avaluos } = data;
     const [result] = await db.query(
       `INSERT INTO bases_catastrales 
         (cuenta, base_catastral, id_contribuyente, ubicacion, barrio,
-         valor_terreno, valor_construccion, impuesto_calculado, uso_suelo)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         impuesto_calculado, fecha_avaluo, historial_avaluos)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [cuenta, base_catastral, id_contribuyente, ubicacion, barrio,
-       valor_terreno, valor_construccion, impuesto_calculado, uso_suelo]
+       impuesto_calculado, fecha_avaluo, historial_avaluos]
     );
     return { id: result.insertId, ...data };
   }
 
   static async update(id, data) {
     const { cuenta, base_catastral, id_contribuyente, ubicacion, barrio,
-            valor_terreno, valor_construccion, impuesto_calculado, uso_suelo } = data;
+            impuesto_calculado, fecha_avaluo, historial_avaluos } = data;
     await db.query(
       `UPDATE bases_catastrales SET
          cuenta = ?, base_catastral = ?, id_contribuyente = ?, ubicacion = ?, barrio = ?,
-         valor_terreno = ?, valor_construccion = ?, impuesto_calculado = ?, uso_suelo = ?
+         impuesto_calculado = ?, fecha_avaluo = ?, historial_avaluos = ?
        WHERE id_base_catastral = ?`,
       [cuenta, base_catastral, id_contribuyente, ubicacion, barrio,
-       valor_terreno, valor_construccion, impuesto_calculado, uso_suelo, id]
+       impuesto_calculado, fecha_avaluo, historial_avaluos, id]
     );
     return { id, ...data };
   }
@@ -47,7 +47,6 @@ class BaseCatastral {
       'DELETE FROM bases_catastrales WHERE id_base_catastral = ?',
       [id]
     );
-    return;
   }
 }
 

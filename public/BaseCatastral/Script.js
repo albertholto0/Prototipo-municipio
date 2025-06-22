@@ -1,6 +1,7 @@
 // Script.js — Cliente para CRUD de Bases Catastrales y Contribuyentes
 const API_BASE = 'http://localhost:5000/api/baseCatastral';
 const API_CONTRIB = 'http://localhost:5000/api/contribuyentes';
+
 // Estado global
 defaults = {
   bases: [],
@@ -36,6 +37,28 @@ elems = {
   formTitle: document.getElementById('formTitle')
 };
 
+// Funciones de formato de fechas
+
+// Convierte fecha para input type="date" (YYYY-MM-DD)
+function formatDateToInput(dateInput) {
+  if (!dateInput) return '';
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// Convierte fecha ISO o Date a formato dd/mm/yyyy para mostrar
+function formatDateToDMY(dateInput) {
+  if (!dateInput) return '';
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 // — FUNCIONES API —
 async function fetchBases() {
   const res = await fetch(API_BASE);
@@ -48,14 +71,16 @@ async function fetchContribuyentes() {
 }
 async function createBase(data) {
   const res = await fetch(API_BASE, {
-    method: 'POST', headers: {'Content-Type': 'application/json'},
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data)
   });
   return res.json();
 }
 async function updateBase(id, data) {
   const res = await fetch(`${API_BASE}/${id}`, {
-    method: 'PUT', headers: {'Content-Type': 'application/json'},
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data)
   });
   return res.json();
@@ -130,60 +155,84 @@ async function handleSubmit(e) {
     base_catastral: parseFloat(elems.baseCatastral.value),
     ubicacion: elems.ubicacion.value,
     barrio: elems.barrio.value,
-    impuesto_calculado: parseFloat(elems.impuestoCalculado.value)
+    impuesto_calculado: parseFloat(elems.impuestoCalculado.value),
+    fecha_avaluo: elems.fechaAvaluo.value, // Ya en formato ISO (YYYY-MM-DD)
+    historial_avaluos: elems.historialAvaluos.value
   };
+
   if (defaults.isEditing) {
     await updateBase(defaults.editingId, payload);
   } else {
     await createBase(payload);
   }
-  await refresh(); closeModal();
+  await refresh();
+  closeModal();
 }
+
 elems.form.addEventListener('submit', handleSubmit);
 elems.btnCancel.addEventListener('click', closeModal);
-elems.searchInput.addEventListener('input', () => { defaults.currentPage=1; renderTable(filtered()); });
+elems.searchInput.addEventListener('input', () => {
+  defaults.currentPage = 1;
+  renderTable(filtered());
+});
 
+// — FUNCIONES GLOBALES —
 window.deleteAccount = async idx => {
   if (confirm('¿Confirmar eliminación?')) {
     await deleteBase(filtered()[idx].id_base_catastral);
     await refresh();
   }
 };
+
 window.editAccount = idx => {
   const b = filtered()[idx];
-  defaults.isEditing = true; defaults.editingId = b.id_base_catastral;
+  defaults.isEditing = true;
+  defaults.editingId = b.id_base_catastral;
   elems.claveCatastral.value = b.cuenta;
   elems.contribSelect.value = b.id_contribuyente;
   elems.baseCatastral.value = b.base_catastral;
   elems.ubicacion.value = b.ubicacion;
   elems.barrio.value = b.barrio;
   elems.impuestoCalculado.value = b.impuesto_calculado;
+  elems.fechaAvaluo.value = formatDateToInput(b.fecha_avaluo); // Formato para input date
+  elems.historialAvaluos.value = b.historial_avaluos;
   elems.formTitle.textContent = 'Editar Base Catastral';
   elems.btnAddOrUpdate.textContent = 'Actualizar';
   openModal();
 };
 
-// — VISUALIZAR INFO —
 window.viewAccount = idx => {
   const b = filtered()[idx];
   elems.infoContent.innerHTML = `
     <p><strong>Clave Catastral:</strong> ${b.cuenta}</p>
-    <p><strong>Propietario:</strong> ${defaults.contribuyentes.find(c=>c.id_contribuyente===b.id_contribuyente)?.nombre}</p>
+    <p><strong>Propietario:</strong> ${defaults.contribuyentes.find(c => c.id_contribuyente === b.id_contribuyente)?.nombre}</p>
     <p><strong>Ubicación:</strong> ${b.ubicacion}</p>
     <p><strong>Barrio:</strong> ${b.barrio}</p>
     <p><strong>Base Catastral:</strong> ${b.base_catastral}</p>
     <p><strong>Impuesto Calculado:</strong> ${b.impuesto_calculado}</p>
+    <p><strong>Fecha de Avalúo:</strong> ${formatDateToDMY(b.fecha_avaluo) || 'N/A'}</p>
+    <p><strong>Historial de Avalúos:</strong> ${b.historial_avaluos || 'N/A'}</p>
   `;
   openViewModal();
 };
-elems.btnCloseViewModal.addEventListener('click', () => elems.viewModalOverlay.style.display='none');
+
+elems.btnCloseViewModal.addEventListener('click', () => elems.viewModalOverlay.style.display = 'none');
 
 // — MODALES —
-function openModal() { elems.modalOverlay.style.display = 'block'; }
-function closeModal() { elems.modalOverlay.style.display = 'none';
-  defaults.isEditing=false; defaults.editingId=null; elems.form.reset(); elems.formTitle.textContent='Agregar Base Catastral'; elems.btnAddOrUpdate.textContent='Agregar';
+function openModal() {
+  elems.modalOverlay.style.display = 'block';
 }
-function openViewModal() { elems.viewModalOverlay.style.display = 'block'; }
+function closeModal() {
+  elems.modalOverlay.style.display = 'none';
+  defaults.isEditing = false;
+  defaults.editingId = null;
+  elems.form.reset();
+  elems.formTitle.textContent = 'Agregar Base Catastral';
+  elems.btnAddOrUpdate.textContent = 'Agregar';
+}
+function openViewModal() {
+  elems.viewModalOverlay.style.display = 'block';
+}
 
 // — CONSTRUIR SELECT —
 function populateContribSelect() {
