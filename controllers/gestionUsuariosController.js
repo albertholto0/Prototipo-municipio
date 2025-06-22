@@ -13,7 +13,7 @@ exports.getUsuarios = async (req, res) => {
 
 exports.createUsuario = async (req, res) => {
   try {
-    const { nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario } = req.body;
+    const { nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario, foto_perfil } = req.body;
 
     if (!nombres || !usuario || !password || !rol_usuario) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
@@ -25,7 +25,8 @@ exports.createUsuario = async (req, res) => {
       apellido_materno || '',
       usuario,
       password,
-      rol_usuario
+      rol_usuario,
+      foto_perfil,
     );
 
     res.status(201).json({
@@ -45,7 +46,7 @@ exports.createUsuario = async (req, res) => {
 
 exports.updateUsuario = async (req, res) => {
   try {
-    const { id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario } = req.body;
+    const { id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, foto_perfil } = req.body;
 
     if (!id_usuario || !nombres || !usuario || !rol_usuario) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
@@ -57,7 +58,8 @@ exports.updateUsuario = async (req, res) => {
       apellido_paterno || '',
       apellido_materno || '',
       usuario,
-      rol_usuario
+      rol_usuario,
+      foto_perfil
     );
 
     if (!updated) {

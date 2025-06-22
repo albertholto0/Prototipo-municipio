@@ -5,7 +5,7 @@ class Usuarios {
     static async getAll() {
         try {
             const [rows] = await db.query(
-                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, password_usuario, rol_usuario, fecha_acceso, hora_acceso, estado FROM usuarios');
+                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, password_usuario, rol_usuario, fecha_acceso, hora_acceso, estado, foto_perfil FROM usuarios');
             return rows;
         } catch (err) {
             console.error('Error en la consulta:', err);
@@ -13,11 +13,11 @@ class Usuarios {
         }
     }
 
-    static async create(nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario) {
+    static async create(nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario, foto_perfil) {
         try {
             const [result] = await db.query(
-                'INSERT INTO usuarios (nombres, apellido_paterno, apellido_materno, usuario, password_usuario, rol_usuario, estado) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                [nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario, 'activo']
+                'INSERT INTO usuarios (nombres, apellido_paterno, apellido_materno, usuario, password_usuario, rol_usuario, estado, foto_perfil) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario, 'activo', foto_perfil]
             );
             return result.insertId;
         } catch (err) {
@@ -25,11 +25,11 @@ class Usuarios {
         }
     }
 
-    static async update(id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario) {
+    static async update(id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, foto_perfil) {
         try {
             const [result] = await db.query(
-                'UPDATE usuarios SET nombres = ?, apellido_paterno = ?, apellido_materno = ?, usuario = ?, rol_usuario = ? WHERE id_usuario = ?',
-                [nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, id_usuario]
+                'UPDATE usuarios SET nombres = ?, apellido_paterno = ?, apellido_materno = ?, usuario = ?, rol_usuario = ?, foto_perfil = ? WHERE id_usuario = ?',
+                [nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, foto_perfil, id_usuario]
             );
             return result.affectedRows > 0;
         } catch (err) {
@@ -54,7 +54,7 @@ class Usuarios {
     static async getByUsername(usuario) {
         try {
             const [rows] = await db.query(
-                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario FROM usuarios WHERE usuario = ?',
+                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, foto_perfil FROM usuarios WHERE usuario = ?',
                 [usuario]
             );
             return rows[0];

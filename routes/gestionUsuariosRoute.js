@@ -16,14 +16,15 @@ router.get('/', async (req, res) => {
 // Registrar nuevo usuario (POST)
 router.post('/', async (req, res) => {
     try {
-        const { nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario } = req.body;
+        const { nombres, apellido_paterno, apellido_materno, usuario, password, rol_usuario, foto_perfil } = req.body;
         const userId = await Usuarios.create(
             nombres,
             apellido_paterno,
             apellido_materno,
             usuario,
             password,
-            rol_usuario
+            rol_usuario,
+            foto_perfil
         );
         res.status(201).json({ mensaje: 'Usuario registrado exitosamente', userId });
     } catch (error) {
@@ -50,14 +51,15 @@ router.get('/:usuario', async (req, res) => {
 // Actualizar usuario (PUT)
 router.put('/', async (req, res) => {
     try {
-        const { id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario } = req.body;
+        const { id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, foto_perfil } = req.body;
         const updated = await Usuarios.update(
             id_usuario,
             nombres,
             apellido_paterno,
             apellido_materno,
             usuario,
-            rol_usuario
+            rol_usuario,
+            foto_perfil
         );
         if (!updated) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
