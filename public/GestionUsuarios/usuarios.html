@@ -6,131 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios</title>
     <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
+    <link rel="stylesheet" href="/public/GestionUsuarios/Styles.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap"
         rel="stylesheet">
 </head>
-<style>
-    tr.inactive-user {
-        color: #999 !important;
-        font-style: italic;
-        background-color: #f5f5f5 !important;
-        transform: none !important;
-        box-shadow: none !important;
-    }
-
-    tr.inactive-user:hover {
-        background-color: #f5f5f5 !important;
-        color: #999 !important;
-        transform: none !important;
-        box-shadow: none !important;
-    }
-
-    .btn-reset {
-        background-color: #3498db;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-right: 10px;
-        font-size: 14px;
-        transition: background 0.2s;
-    }
-
-    .btn-reset:hover {
-        background-color: #2980b9;
-    }
-
-    /* --- Estilos para el modal de información del usuario --- */
-    #infoUserModal .modal-content {
-        width: 90%;
-        max-width: 600px;
-        padding: 0px 24px 24px 24px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        animation: fadeInModal 0.3s ease-in-out;
-    }
-
-    #infoUserModal .form-container {
-        margin-top: 0px;
-    }
-
-    #infoUserModal h3 {
-        margin: 0;
-        padding: 16px 0;
-        font-size: 1.5rem;
-        color: #333;
-        text-align: center;
-    }
-
-    #infoUserModal p {
-        margin: 8px 0;
-        font-size: 1rem;
-        color: #444;
-    }
-
-    #infoUserModal .btn-cancel {
-        margin-top: 18px;
-        background: #e74c3c;
-        color: #fff;
-        border: none;
-        padding: 8px 18px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 15px;
-        transition: background 0.2s;
-    }
-
-    #infoUserModal .btn-cancel:hover {
-        background: #c0392b;
-    }
-
-    .info-modal-flex {
-        display: flex;
-        align-items: flex-start;
-        gap: 32px;
-    }
-
-    #infoUserPhoto {
-        width: 130px;
-        height: 130px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #3498db;
-        box-shadow: 0 2px 8px rgba(52, 152, 219, 0.10);
-        background: #f4f8fb;
-        display: block;
-        margin: 0 auto;
-    }
-
-    @media (max-width: 600px) {
-        .info-modal-flex {
-            flex-direction: column;
-            align-items: center;
-            gap: 18px;
-        }
-
-        #infoUserPhoto {
-            margin-bottom: 12px;
-        }
-    }
-
-    @keyframes fadeInModal {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
 
 <body>
     <div id="nav-placeholder"></div> <!--NavBar-->
@@ -152,7 +34,7 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Usuario</th>
-                            <th>Rol de Usuario</th>                            
+                            <th>Rol de Usuario</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -296,17 +178,40 @@
                     <p><strong>Usuario:</strong> <span id="infoUserUsername"></span></p>
                     <p><strong>Rol:</strong> <span id="infoUserRole"></span></p>
                     <p><strong>Último acceso</strong>
-                        <p><i>Fecha: </i><span id="infoDateLastAccess"></span></p>
-                        <p><i>Hora: </i><span id="infoHourLastAccess"></span></p>
+                    <p><i>Fecha: </i><span id="infoDateLastAccess"></span></p>
+                    <p><i>Hora: </i><span id="infoHourLastAccess"></span></p>
                     </p>
+                    <button class="btn-info" onclick="verHistorialAccesos()">Ver Historial de Accesos</button>
                     <p><strong>Estado:</strong> <span id="infoUserStatus"></span></p>
-                    <button class="btn-cancel"
-                        onclick="document.getElementById('infoUserModal').style.display='none'">Cerrar</button>
                 </div>
                 <div>
                     <img id="infoUserPhoto" src="/public/Assets/FotosPerfilUsuarios/default.png" alt="Foto de perfil">
                 </div>
             </div>
+            <button class="btn-cancel"
+                onclick="document.getElementById('infoUserModal').style.display='none'">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal para ver historial de accesos -->
+    <div id="accessHistoryModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="accessHistoryUserName">Historial de Accesos</h3>
+            <div id="accessHistoryContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="accessHistoryTableBody">
+                        <!-- Filas de historial de accesos generadas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn-cancel"
+                onclick="document.getElementById('accessHistoryModal').style.display='none'">Cerrar</button>
         </div>
     </div>
 

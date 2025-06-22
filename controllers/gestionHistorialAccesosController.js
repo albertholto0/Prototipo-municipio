@@ -19,6 +19,16 @@ class GestionHistorialAccesosController {
             res.status(500).json({ error: 'Error al obtener historial' });
         }
     }
+
+    static async obtenerTodosLosHistorialesPorUsuario(req, res) {
+        try {
+            const { id } = req.params;
+            const historiales = await HistorialAccesos.getAllByIdUser(id);
+            res.json(historiales);
+        } catch (err) {
+            res.status(500).json({ error: 'Error al obtener todos los historiales de accesos' });
+        }
+    }
 }
 
 module.exports = GestionHistorialAccesosController;

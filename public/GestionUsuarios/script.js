@@ -310,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
 
       const user = await response.json();
+      usuarioSeleccionadoId = user.id_usuario;
 
       let historial = {};
       try {
@@ -343,5 +344,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  window.verHistorialAccesos = async () => {
+    if (!usuarioSeleccionadoId) {
+      alert('No se ha seleccionado un usuario.');
+      return;
+    }
+    try {
+      
+      const response = await fetch(`http://localhost:5000/api/historialAccesos/all/${usuarioSeleccionadoId}`);
+      let historial = [];
+      if (response.ok) {
+        historial = await response.json();
+      } else if (response.status === 404) {
+        // Si no hay historial, simplemente deja historial como []
+      } else {
+        alert('No se pudo cargar el historial de accesos.');
+        return;
+      }
+
+      const tbody = document.getElementById('accessHistoryTableBody');
+      tbody.innerHTML = '';
+      if (Array.isArray(historial) && historial.length > 0) {
+        historial.forEach(item => {
+          const tr = document.createElement('tr');
+          const fecha = item.fecha_acceso ? new Date(item.fecha_acceso).toLocaleDateString('es-MX') : 'No disponible';
+          const hora = item.hora_acceso || 'No disponible';
+          tr.innerHTML = `<td>${fecha}</td><td>${hora}</td>`;
+          tbody.appendChild(tr);
+        });
+      } else {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="2">Sin registros</td>`;
+        tbody.appendChild(tr);
+      }
+
+      document.getElementById('accessHistoryModal').style.display = 'block';
+    } catch (error) {
+      alert('No se pudo cargar el historial de accesos.');
+    }
+  };
 }
 );
