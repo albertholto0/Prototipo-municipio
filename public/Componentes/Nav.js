@@ -66,28 +66,10 @@ const setupEventListeners = () => {
   }
 };
 
-const injectModals = async () => {
-  if (window.location.pathname.endsWith('inicio_sesion.html')) {
-    return;
-  }
-  try {
-    const response = await fetch("/public/Componentes/modals_usuarios.html");
-    const html = await response.text();
-    document.body.insertAdjacentHTML('beforeend', html);
-  } catch (error) {
-    console.error("Error cargando los modales:", error);
-  }
-};
-
 
 
 // Inicializar todo
 document.addEventListener("DOMContentLoaded", () => {
   injectStyles();
   injectHTML();
-  injectModals().then(() => {
-    const script = document.createElement('script');
-    script.src = '/public/Componentes/modals_usuarios.js';
-    document.body.appendChild(script);
-  });
 });
