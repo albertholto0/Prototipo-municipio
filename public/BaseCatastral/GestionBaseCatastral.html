@@ -35,7 +35,6 @@
             <th>Nombre propietario</th>
             <th>Ubicación</th>
             <th>Base catastral</th>
-            <th>Uso de suelo</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -56,8 +55,8 @@
       <div class="form-container" id="formContainer">
         <h3 class="text-center" id="formTitle">Agregar Base Catastral</h3>
         <form id="accountForm">
-          
-          <!-- Fila 1: Clave catastral y Propietario -->
+
+          <!-- Clave catastral y Propietario -->
           <div class="form-inline">
             <div class="form-group">
               <label for="claveCatastral">Clave catastral:</label>
@@ -67,30 +66,30 @@
               <label for="contribuyenteSelect">Propietario:</label>
               <select id="contribuyenteSelect" name="contribuyenteSelect" required>
                 <option value="">-- selecciona propietario --</option>
-                <!-- Opciones inyectadas vía JS -->
               </select>
             </div>
           </div>
 
-          <!-- Fila 2: Base catastral -->
-          <div class="form-group">
-            <label for="baseCatastral">Base catastral:</label>
-            <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 1500 m²" required>
-          </div>
-
-          <!-- Fila 3: Ubicación y Barrio -->
+          <!-- Base catastral -->
           <div class="form-inline">
             <div class="form-group">
-              <label for="ubicacion">Ubicación:</label>
-              <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
+              <label for="baseCatastral">Base catastral:</label>
+              <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 1500 m²" required>
             </div>
             <div class="form-group">
-              <label for="barrio">Barrio:</label>
-              <input type="text" id="barrio" name="barrio" placeholder="Ej. Centro" required>
+              <label for="impuestoCalculado">Impuesto calculado:</label>
+              <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" required>
             </div>
           </div>
 
-          <!-- Fila 4: Valor terreno y Valor construcción -->
+          <!-- Ubicación -->
+          <div class="form-group">
+            <label for="ubicacion">Ubicación:</label>
+            <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
+          </div>
+
+
+          <!-- Fila 4: Valor terreno y Valor construcción 
           <div class="form-inline">
             <div class="form-group">
               <label for="valorTerreno">Valor terreno:</label>
@@ -101,13 +100,20 @@
               <input type="number" id="valorConstruccion" name="valorConstruccion" placeholder="Ej. 75000" required>
             </div>
           </div>
+          -->
 
-          <!-- Fila 5: Impuesto calculado y Uso de suelo -->
+          <!--  Impuesto calculado y Uso de suelo -->
           <div class="form-inline">
             <div class="form-group">
-              <label for="impuestoCalculado">Impuesto calculado:</label>
-              <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" required>
+              <label for="barrio">Barrio:</label>
+              <input type="text" id="barrio" name="barrio" placeholder="Ej. Centro" required>
             </div>
+            <div class="form-group">
+              <label for="fechaAvaluo">Fecha avalúo:</label>
+              <input type="date" id="fechaAvaluo" name="fechaAvaluo" required>
+            </div>
+          </div>
+          <!-- 
             <div class="form-group">
               <label for="usoSuelo">Uso de suelo:</label>
               <select id="usoSuelo" name="usoSuelo" required>
@@ -119,14 +125,10 @@
                 <option value="otro">Otro</option>
               </select>
             </div>
-          </div>
+            -->
 
           <!-- Fila 6: Fecha avalúo y Historial avalúos -->
           <div class="form-inline">
-            <div class="form-group">
-              <label for="fechaAvaluo">Fecha avalúo:</label>
-              <input type="date" id="fechaAvaluo" name="fechaAvaluo" required>
-            </div>
             <div class="form-group">
               <label for="historialAvaluos">Historial avalúos:</label>
               <input type="text" id="historialAvaluos" name="historialAvaluos" placeholder="Ej. 2021,2022" required>

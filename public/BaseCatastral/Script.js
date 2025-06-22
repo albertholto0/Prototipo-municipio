@@ -21,12 +21,9 @@ elems = {
   baseCatastral: document.getElementById('baseCatastral'),
   ubicacion: document.getElementById('ubicacion'),
   barrio: document.getElementById('barrio'),
-  valorTerreno: document.getElementById('valorTerreno'),
-  valorConstruccion: document.getElementById('valorConstruccion'),
   impuestoCalculado: document.getElementById('impuestoCalculado'),
   fechaAvaluo: document.getElementById('fechaAvaluo'),
   historialAvaluos: document.getElementById('historialAvaluos'),
-  usoSuelo: document.getElementById('usoSuelo'),
   btnAddOrUpdate: document.getElementById('btnAddOrUpdate'),
   btnCancel: document.getElementById('btnCancel'),
   pagination: document.querySelector('.pagination'),
@@ -80,7 +77,6 @@ function renderTable(data) {
         <td>${prop}</td>
         <td>${b.ubicacion}</td>
         <td>${b.base_catastral}</td>
-        <td>${b.uso_suelo}</td>
         <td>
           <button class="action-btn edit" onclick="editAccount(${start + i})" title="Editar">
             <img src="/public/Assets/editor.png" class="action-icon">
@@ -134,10 +130,7 @@ async function handleSubmit(e) {
     base_catastral: parseFloat(elems.baseCatastral.value),
     ubicacion: elems.ubicacion.value,
     barrio: elems.barrio.value,
-    valor_terreno: parseFloat(elems.valorTerreno.value),
-    valor_construccion: parseFloat(elems.valorConstruccion.value),
-    impuesto_calculado: parseFloat(elems.impuestoCalculado.value),
-    uso_suelo: elems.usoSuelo.value
+    impuesto_calculado: parseFloat(elems.impuestoCalculado.value)
   };
   if (defaults.isEditing) {
     await updateBase(defaults.editingId, payload);
@@ -164,10 +157,7 @@ window.editAccount = idx => {
   elems.baseCatastral.value = b.base_catastral;
   elems.ubicacion.value = b.ubicacion;
   elems.barrio.value = b.barrio;
-  elems.valorTerreno.value = b.valor_terreno;
-  elems.valorConstruccion.value = b.valor_construccion;
   elems.impuestoCalculado.value = b.impuesto_calculado;
-  elems.usoSuelo.value = b.uso_suelo;
   elems.formTitle.textContent = 'Editar Base Catastral';
   elems.btnAddOrUpdate.textContent = 'Actualizar';
   openModal();
@@ -182,10 +172,7 @@ window.viewAccount = idx => {
     <p><strong>Ubicación:</strong> ${b.ubicacion}</p>
     <p><strong>Barrio:</strong> ${b.barrio}</p>
     <p><strong>Base Catastral:</strong> ${b.base_catastral}</p>
-    <p><strong>Valor Terreno:</strong> ${b.valor_terreno}</p>
-    <p><strong>Valor Construcción:</strong> ${b.valor_construccion}</p>
     <p><strong>Impuesto Calculado:</strong> ${b.impuesto_calculado}</p>
-    <p><strong>Uso de Suelo:</strong> ${b.uso_suelo}</p>
   `;
   openViewModal();
 };

@@ -42,6 +42,10 @@ app.use("/api/subconceptos", subconceptoRoutes);
 app.use("/api/alquileres", alquilerRoutes);
 app.use("/api/EjercicioFiscal", ejercicioFiscalRoutes);
 
+app.get("/", (req, res) => {
+  res.send("API funcionando correctamente");
+});
+
 // Manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
