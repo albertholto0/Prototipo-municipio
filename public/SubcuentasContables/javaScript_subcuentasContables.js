@@ -82,7 +82,7 @@ function renderizarSubcuentas(lista) {
       elements.modalOverlay.style.display = 'flex';
     });
   });
-  
+
   // Listeners del boton de eliminar
   document.querySelectorAll('.action-btn.delete').forEach(btn => {
     btn.addEventListener('click', async (e) => {
@@ -90,7 +90,7 @@ function renderizarSubcuentas(lista) {
       if (confirm("¿Estás seguro de que deseas eliminar esta subcuenta contable?")) {
         try {
           const response = await fetch(`http://localhost:5000/api/subcuentasContables/${claveSubcuenta}`, {
-            method: 'PUT' // Cambiar a PUT para actualizar el estado
+            method: 'DELETE' // No elimina, solo cambia el estado
           });
           if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
           // Recargar subcuentas contables
