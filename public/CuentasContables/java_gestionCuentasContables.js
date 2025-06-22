@@ -57,27 +57,27 @@ function renderTable(data) {
 
 function renderPagination(totalItems) {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
-  let html = `<button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage===1?"disabled":""}>« Anterior</button>`;
+  let html = `<button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>« Anterior</button>`;
   const startPage = Math.max(1, currentPage - 2);
   const endPage = Math.min(totalPages, currentPage + 2);
 
   if (startPage > 1) {
-    html += `<button class="pagination-btn" onclick="changePage(1)">1</button>${startPage>2?'<span>...</span>':''}`;
+    html += `<button class="pagination-btn" onclick="changePage(1)">1</button>${startPage > 2 ? '<span>...</span>' : ''}`;
   }
   for (let p = startPage; p <= endPage; p++) {
-    html += `<button class="pagination-btn ${p===currentPage?"active":""}" onclick="changePage(${p})">${p}</button>`;
+    html += `<button class="pagination-btn ${p === currentPage ? "active" : ""}" onclick="changePage(${p})">${p}</button>`;
   }
   if (endPage < totalPages) {
-    html += `${endPage<totalPages-1?'<span>...</span>':''}<button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
+    html += `${endPage < totalPages - 1 ? '<span>...</span>' : ''}<button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
   }
-  html += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage===totalPages?"disabled":""}>Siguiente »</button>`;
+  html += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? "disabled" : ""}>Siguiente »</button>`;
 
   elements.paginationContainer.innerHTML = html;
 }
 
 window.changePage = function(page) {
   const filtered = filteredAccounts();
-  currentPage = Math.max(1, Math.min(page, Math.ceil(filtered.length/rowsPerPage)));
+  currentPage = Math.max(1, Math.min(page, Math.ceil(filtered.length / rowsPerPage)));
   renderTable(filtered);
 };
 
@@ -144,21 +144,22 @@ window.editAccount = function(index) {
   isEditing = true;
   editingId = cuenta.id_cuentaContable;
 
+  openModal();  // Abrimos sin resetear en modo edición
+
   elements.numeroCuenta.value = cuenta.clave_cuenta_contable;
   elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
-  elements.estado.value = cuenta.estado ? "true" : "false";
   elements.estado.disabled = false;
+  elements.estado.value = cuenta.estado ? "true" : "false";
 
   elements.formTitle.textContent = "Editar Cuenta Contable";
   elements.btnAddOrUpdate.textContent = "Actualizar";
-  openModal();
 };
 
 /* === MODAL Y EVENTOS === */
 
 function openModal() {
-  elements.form.reset();
   if (!isEditing) {
+    elements.form.reset();
     elements.formTitle.textContent = "Agregar Cuenta Contable";
     elements.btnAddOrUpdate.textContent = "Agregar";
     elements.estado.value = "true";
