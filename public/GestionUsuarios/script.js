@@ -227,11 +227,13 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${usuario.nombres} ${usuario.apellido_paterno} ${usuario.apellido_materno}</td>
             <td>${usuario.usuario}</td>
             <td>${usuario.rol_usuario}</td>
-            <td>${usuario.ultimo_acceso || 'null'}</td>
             <td>${usuario.estado}</td>
             <td id="action-buttons">
                 <button class="action-btn modify" onclick="openModifyModal('${usuario.usuario}')">
                     <img src="/public/Assets/editor.png" alt="Modificar" class="action-icon">
+                </button>
+               <button class="action-btn info" onclick="openInfoModal('${usuario.usuario}')">
+                    <img src="/public/Assets/information.png" alt="Info" class="action-icon">
                 </button>
                 ${esActivo
           ? `<button class="action-btn down" onclick="openDownModal('${usuario.usuario}')">
@@ -301,5 +303,40 @@ document.addEventListener('DOMContentLoaded', () => {
       alert(error.message || 'Error al cambiar estado del usuario');
     }
   };
+  // Función para abrir el modal de información del usuario
+  window.openInfoModal = async (username) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/usuarios/${username}`);
+      if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
+
+      const user = await response.json();
+            
+      const responseHistorial = await fetch(`http://localhost:5000/api/historialAccesos/${user.id_usuario}`);
+      if (!responseHistorial.ok) throw new Error(`Error HTTP! estado: ${responseHistorial.status}`);
+
+      const historial = await responseHistorial.json();
+
+      const modal = document.getElementById('infoUserModal');
+      document.getElementById('infoUserName').textContent = `${user.nombres} ${user.apellido_paterno} ${user.apellido_materno}`;
+      document.getElementById('infoUserUsername').textContent = user.usuario;
+      document.getElementById('infoUserRole').textContent = user.rol_usuario;
+
+      let fechaSolo = 'No disponible';
+      if (historial.fecha_acceso) {
+        const fecha = new Date(historial.fecha_acceso);
+        fechaSolo = fecha.toLocaleDateString('es-MX');
+      }
+      document.getElementById('infoDateLastAccess').textContent = fechaSolo;
+
+      document.getElementById('infoHourLastAccess').textContent = historial.hora_acceso || 'No disponible';
+      document.getElementById('infoUserStatus').textContent = user.estado;
+
+      modal.style.display = 'block';
+    } catch (error) {
+      console.error('Error al cargar datos del usuario:', error);
+      alert('Error al cargar datos del usuario');
+    }
+  }
+
 }
 );

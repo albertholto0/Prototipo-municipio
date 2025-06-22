@@ -54,7 +54,7 @@ class Usuarios {
     static async getByUsername(usuario) {
         try {
             const [rows] = await db.query(
-                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, foto_perfil FROM usuarios WHERE usuario = ?',
+                'SELECT id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, ultimo_acceso, estado FROM usuarios WHERE usuario = ?',
                 [usuario]
             );
             return rows[0];

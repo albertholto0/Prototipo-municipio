@@ -37,10 +37,98 @@
         cursor: pointer;
         margin-right: 10px;
         font-size: 14px;
+        transition: background 0.2s;
     }
 
     .btn-reset:hover {
         background-color: #2980b9;
+    }
+
+    /* --- Estilos para el modal de información del usuario --- */
+    #infoUserModal .modal-content {
+        width: 90%;
+        max-width: 600px;
+        padding: 0px 24px 24px 24px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        animation: fadeInModal 0.3s ease-in-out;
+    }
+
+    #infoUserModal .form-container {
+        margin-top: 0px;
+    }
+
+    #infoUserModal h3 {
+        margin: 0;
+        padding: 16px 0;
+        font-size: 1.5rem;
+        color: #333;
+        text-align: center;
+    }
+
+    #infoUserModal p {
+        margin: 8px 0;
+        font-size: 1rem;
+        color: #444;
+    }
+
+    #infoUserModal .btn-cancel {
+        margin-top: 18px;
+        background: #e74c3c;
+        color: #fff;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 15px;
+        transition: background 0.2s;
+    }
+
+    #infoUserModal .btn-cancel:hover {
+        background: #c0392b;
+    }
+
+    .info-modal-flex {
+        display: flex;
+        align-items: flex-start;
+        gap: 32px;
+    }
+
+    #infoUserPhoto {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #3498db;
+        box-shadow: 0 2px 8px rgba(52, 152, 219, 0.10);
+        background: #f4f8fb;
+        display: block;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+        .info-modal-flex {
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        #infoUserPhoto {
+            margin-bottom: 12px;
+        }
+    }
+
+    @keyframes fadeInModal {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
@@ -64,8 +152,7 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Usuario</th>
-                            <th>Rol de Usuario</th>
-                            <th>Ultimo acceso</th>
+                            <th>Rol de Usuario</th>                            
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -195,6 +282,30 @@
                         <button type="submit" class="btn-add">Guardar Cambios</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal para ver la informacion del usuario-->
+    <div id="infoUserModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Información del Usuario</h3>
+            <div class="form-container info-modal-flex">
+                <div>
+                    <p><strong>Nombre:</strong> <span id="infoUserName"></span></p>
+                    <p><strong>Usuario:</strong> <span id="infoUserUsername"></span></p>
+                    <p><strong>Rol:</strong> <span id="infoUserRole"></span></p>
+                    <p><strong>Último acceso</strong>
+                        <p><i>Fecha: </i><span id="infoDateLastAccess"></span></p>
+                        <p><i>Hora: </i><span id="infoHourLastAccess"></span></p>
+                    </p>
+                    <p><strong>Estado:</strong> <span id="infoUserStatus"></span></p>
+                    <button class="btn-cancel"
+                        onclick="document.getElementById('infoUserModal').style.display='none'">Cerrar</button>
+                </div>
+                <div>
+                    <img id="infoUserPhoto" src="/public/Assets/FotosPerfilUsuarios/default.png" alt="Foto de perfil">
+                </div>
             </div>
         </div>
     </div>

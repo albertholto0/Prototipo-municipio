@@ -18,6 +18,8 @@ const authController = {
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }
 
+       await Usuario.actualizarUltimoAcceso(usuario.id_usuario); 
+
       // Guardar datos relevantes en la sesión
       req.session.usuario = {
         id: usuario.id,
