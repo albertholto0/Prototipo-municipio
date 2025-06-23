@@ -136,13 +136,13 @@
 
 /* Clase para permitir deslizar el formulario en el modal si es necesario */
 .modal-form-scroll {
-  max-height: 70vh;
+  max-height: 75vh;
   overflow-y: auto;
 }
 
 /* Grupos de elementos del formulario */
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 /* Etiquetas de formulario */
@@ -190,7 +190,7 @@
   justify-content: flex-end;
   /* Alinea todo a la derecha */
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 0;
   width: 100%;
 }
 
@@ -331,7 +331,9 @@
 /* ===== ESTILOS DEL MODAL ===== */
 .modal-overlay {
   display: none;
-  position: fixed;
+  position: fixed;  
+    align-items: center;
+  justify-content: center;
   top: 0; 
   left: 0;
   width: 100%; 
@@ -343,14 +345,23 @@
 
 .modal-content {
   background-color: white;
-  margin: 5% auto;
+  margin: 2% auto;
   padding: 20px;
   width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
   max-width: 600px;
   border-radius: 10px;
   position: relative;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
   animation: slideDown 0.3s ease;
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 /* Ajustes para el formulario dentro del modal */
@@ -431,11 +442,6 @@
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
 }
 
-.form-container {
-  max-height: 80vh;
-  overflow-y: scroll;
-  /* Scroll para el formulario */
-}
 
 .form-container::-webkit-scrollbar {
   width: 0;
