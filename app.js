@@ -39,7 +39,7 @@ app.use("/api/contribuyentes", contribuyenteRoutes);
 app.use("/api/establecimientos", establecimientoRoutes);
 app.use("/api/secciones", seccionesRoutes);
 app.use("/api/cuentasContables", cuentaContableRoutes);
-app.use("/api/conexion", conexionRoutes);
+app.use("/api/conexiones", conexionRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
 app.use("/api/configuracion", configuracionRoutes);
