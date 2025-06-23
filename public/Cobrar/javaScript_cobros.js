@@ -78,6 +78,31 @@ if (otroMotivo) {
     otroMotivo.addEventListener('focus', limpiarSelectsAnidadosYResetear);
 }
 
+const btnCancelar = document.getElementById('btnCancelarRecibo');
+if (btnCancelar) {
+    btnCancelar.addEventListener('click', function () {
+        const form = document.getElementById('receiptForm');
+        // Guarda los valores actuales
+        const fechaInput = document.getElementById('fecha');
+        const ejercicioFiscalInput = document.getElementById('ejercicioFiscal');
+        const fechaValue = fechaInput ? fechaInput.value : '';
+        const ejercicioFiscalValue = ejercicioFiscalInput ? ejercicioFiscalInput.value : '';
+
+        if (form) {
+            form.reset();
+        }
+
+        limpiarSelectsAnidadosYResetear();
+
+        const cantidadLetraInput = document.getElementById('cantidadLetra');
+        if (cantidadLetraInput) cantidadLetraInput.value = '';
+
+        // Restaura los valores guardados
+        if (fechaInput) fechaInput.value = fechaValue;
+        if (ejercicioFiscalInput) ejercicioFiscalInput.value = ejercicioFiscalValue;
+    });
+}
+
 // Cargar selects anidados dinámicamente
 async function cargarSelect(url, label, nivel, onChange) {
     try {
@@ -177,9 +202,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Cargar contribuyentes y descuentos
     try {
         const [contribuyentes, cuentasContables, estimulosFiscales] = await Promise.all([
-            fetch('http://localhost:5000/api/contribuyentes').then(r => r.json()),
-            fetch('http://localhost:5000/api/cuentasContables').then(r => r.json()),
-            fetch('http://localhost:5000/api/estimulosFiscales').then(r => r.json())
+            fetch('http://localhost:5000/api/contribuyentes', { cache: "no-store" }).then(r => r.json()),
+            fetch('http://localhost:5000/api/cuentasContables', { cache: "no-store" }).then(r => r.json()),
+            fetch('http://localhost:5000/api/estimuloFiscal', { cache: "no-store" }).then(r => r.json()),
         ]);
 
         // Contribuyentes
@@ -266,7 +291,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 option.textContent = option.value;
                 estimuloAdicionalSelect.appendChild(option);
             });
+            if (estimuloSelect && estimuloAdicionalSelect) {
+                // ...llenado de opciones...
+                estimuloSelect.addEventListener('change', calcularTotal);
+                document.getElementById('subtotal').addEventListener('input', calcularTotal);
+                calcularTotal(); // Para que se calcule el total al inicio si ya hay valores
+            }
         }
+
     } catch (error) {
         console.error('Error al cargar datos iniciales:', error);
     }
@@ -388,11 +420,11 @@ function calcularTotal() {
     // Obtén el subtotal como número
     const subtotal = parseFloat(subtotalInput.value.replace(/,/g, '')) || 0;
 
-    // Obtén el porcentaje del descuento seleccionado (asumiendo formato "10% - ...")
+    // Obtén el porcentaje del descuento seleccionado del texto del option
     let porcentaje = 0;
-    const selected = descuentoSelect.value;
-    if (selected) {
-        const match = selected.match(/^(\d+(?:\.\d+)?)%/);
+    const selectedOption = descuentoSelect.options[descuentoSelect.selectedIndex];
+    if (selectedOption) {
+        const match = selectedOption.textContent.match(/^(\d+(?:\.\d+)?)%/);
         if (match) porcentaje = parseFloat(match[1]);
     }
 
@@ -403,7 +435,3 @@ function calcularTotal() {
     // Convierte el total a letras y lo muestra
     cantidadLetraInput.value = capitalizarTodasPalabras(numeroALetras(total));
 }
-
-// Escucha cambios en subtotal y descuento
-document.getElementById('subtotal').addEventListener('input', calcularTotal);
-document.getElementById('descuento').addEventListener('change', calcularTotal);

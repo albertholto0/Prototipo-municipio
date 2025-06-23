@@ -6,7 +6,7 @@ class CuentasContables {
     try {
       const [rows] = await db.query(
         `SELECT
-           clave_cuenta,
+           clave_cuenta_contable,
            nombre_cuentaContable,
            estado
          FROM cuentas_contables`
