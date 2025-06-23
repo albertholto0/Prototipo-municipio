@@ -27,6 +27,9 @@ const createBase = async (req, res) => {
     res.status(201).json(nuevo);
   } catch (err) {
     console.error(err);
+    if (err.code === 'DUPLICATE_ACCOUNT') {
+      return res.status(400).json({ message: 'La clave catastral ya existe' });
+    }
     res.status(500).json({ message: 'Error al crear registro' });
   }
 };
