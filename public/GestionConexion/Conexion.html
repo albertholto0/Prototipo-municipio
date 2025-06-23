@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <th>Fecha de Conexión</th>
-                        <th>ID Contribuyente</th>
+                        <th>Contribuyente</th>
                         <th>Cuenta</th>
                         <th>Tipo</th>
                         <th>Uso</th>
@@ -61,8 +61,11 @@
                         <input type="date" id="fecha_conexion" name="fecha_conexion" required>
                     </div>
                     <div class="form-group">
-                        <label for="id_contribuyente">ID Contribuyente:</label>
-                        <input type="number" id="id_contribuyente" name="id_contribuyente" required>
+                        <label for="id_contribuyente">Contribuyente:</label>
+                        <select id="id_contribuyente" name="id_contribuyente" required>
+                            <option value="">Selecciona un contribuyente</option>
+                            <!-- Opciones se llenan con JS -->
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="cuenta">Cuenta:</label>

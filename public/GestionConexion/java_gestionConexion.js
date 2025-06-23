@@ -2,6 +2,7 @@
 // Sergio Elias Robles Ignacio
 
 let allConexiones = []; // Variable global para almacenar todas las conexiones
+let allContribuyentes = []; // Variable global para almacenar todos los contribuyentes
 
 // Variables de estado
 let editId = null;
@@ -56,9 +57,10 @@ function renderizarConexiones(lista) {
     const fila = document.createElement('tr');
     // Formatea la fecha para mostrar solo YYYY-MM-DD
     const fecha = conexion.fecha_conexion ? conexion.fecha_conexion.slice(0, 10) : '';
+    const nombreContribuyente = contribuyentesMap[conexion.id_contribuyente] || conexion.id_contribuyente || '';
     fila.innerHTML = `
       <td>${fecha}</td>
-      <td>${conexion.id_contribuyente || ''}</td>
+      <td>${nombreContribuyente}</td>
       <td>${conexion.cuenta || ''}</td>
       <td>${conexion.tipo || ''}</td>
       <td>${conexion.uso || ''}</td>
@@ -213,9 +215,10 @@ function addRowListeners() {
       if (!conexion) return;
       const infoContent = document.getElementById("infoContent");
       const fecha = conexion.fecha_conexion ? conexion.fecha_conexion.slice(0, 10) : '';
+      const nombreContribuyente = contribuyentesMap[conexion.id_contribuyente] || conexion.id_contribuyente || '';
       infoContent.innerHTML = `
         <p><strong>Fecha de Conexión:</strong> ${fecha}</p>
-        <p><strong>ID Contribuyente:</strong> ${conexion.id_contribuyente || ''}</p>
+        <p><strong>Contribuyente:</strong> ${nombreContribuyente}</p>
         <p><strong>Cuenta:</strong> ${conexion.cuenta || ''}</p>
         <p><strong>Tipo:</strong> ${conexion.tipo || ''}</p>
         <p><strong>Uso:</strong> ${conexion.uso || ''}</p>
@@ -228,10 +231,40 @@ function addRowListeners() {
 }
 
 // =======================
+// Cargar contribuyentes
+// =======================
+async function cargarContribuyentes() {
+  try {
+    const response = await fetch('http://localhost:5000/api/contribuyentes');
+    if (!response.ok) throw new Error('Error al cargar contribuyentes');
+    allContribuyentes = await response.json();
+    // Llenar el mapa de contribuyentes para su uso en la tabla
+    contribuyentesMap = {};
+    allContribuyentes.forEach(contribuyente => {
+      const nombreCompleto = `${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}`;
+      contribuyentesMap[contribuyente.id_contribuyente] = nombreCompleto;
+    });
+    // También llenar el select de contribuyentes en el formulario
+    const selectContribuyentes = document.getElementById('id_contribuyente');
+    selectContribuyentes.innerHTML = '';
+    allContribuyentes.forEach(contribuyente => {
+      const nombreCompleto = `${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}`;
+      const option = document.createElement('option');
+      option.value = contribuyente.id_contribuyente;
+      option.textContent = nombreCompleto;
+      selectContribuyentes.appendChild(option);
+    });
+  } catch (e) {
+    alert('No se pudieron cargar los contribuyentes');
+  }
+}
+
+// =======================
 // Inicialización
 // =======================
-document.addEventListener("DOMContentLoaded", () => {
-  cargarConexiones();
+document.addEventListener("DOMContentLoaded", async () => {
+  await cargarContribuyentes(); // Espera a que termine de cargar los contribuyentes
+  cargarConexiones();           // Luego carga las conexiones
 
   elements.searchInput.addEventListener("input", () => {
     currentPage = 1;
@@ -278,6 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!response.ok) throw new Error('Error al guardar');
       closeModal();
+      alert('¡Conexión guardada correctamente!');
       cargarConexiones();
     } catch (error) {
       alert('No se pudo guardar la conexión');
