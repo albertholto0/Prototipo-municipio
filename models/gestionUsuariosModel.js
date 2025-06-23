@@ -128,6 +128,18 @@ class Usuarios {
             throw err;
         }
     }
+    static async getPasswordById(id_usuario) {
+        try {
+            const [rows] = await db.query(
+                'SELECT password_usuario FROM usuarios WHERE id_usuario = ?',
+                [id_usuario]
+            );
+            return rows[0] ? rows[0].password_usuario : null;
+        } catch (err) {
+            console.error('Error al obtener contraseña por ID:', err);
+            throw err;
+        }
+    }
 }
 
 module.exports = Usuarios;

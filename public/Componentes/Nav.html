@@ -52,4 +52,44 @@
             </div>
         </div>
     </div>
+    <!--Modal para la configuracion del usuario-->
+    <div id="navUserConfModal" class="nav-user-modal">
+    <div class="nav-user-modal-container">
+        <div class="nav-user-modal-content">
+            <h3 class="nav-user-modal-title">Configuración del Usuario</h3>
+            
+            <!-- Paso 1: Verificación de contraseña -->
+            <div id="passwordVerificationStep">
+                <p>Por seguridad, ingresa tu contraseña actual para continuar:</p>
+                <input type="password" id="currentPassword" placeholder="Contraseña actual" required>
+                <button type="button" id="navVerifyPasswordBtn" class="btn-add">Verificar</button>
+                <button id="nav-user-modal-close" onclick="document.getElementById('navUserConfModal').style.display='none'">Cancelar</button>
+                <p id="passwordError" class="error-message" style="color: red; display: none;">Contraseña incorrecta</p>
+            </div>
+            
+            <!-- Paso 2: Formulario de edición (inicialmente oculto) -->
+            <form id="navUserConfForm" style="display: none;">
+                <label for="navUserConfName">Nombres:</label>
+                <input type="text" id="navUserConfName" name="name" required>
+
+                <label for="navUserConfLastName">Apellido Paterno:</label>
+                <input type="text" id="navUserConfLastName" name="lastName" required>
+
+                <label for="navUserConfSecondLastName">Apellido Materno:</label>
+                <input type="text" id="navUserConfSecondLastName" name="secondLastName" required>
+                
+                <label for="navUserConfUsername">Usuario:</label>
+                <input type="text" id="navUserConfUsername" name="username" required>
+                
+                <label for="navUserConfNewPassword">Nueva contraseña (opcional):</label>
+                <input type="password" id="navUserConfNewPassword" name="newPassword" placeholder="Dejar vacío para no cambiar">
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-add">Guardar Cambios</button>
+                    <button type="button" class="btn-cancel" onclick="document.getElementById('navUserConfModal').style.display='none'">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </header>

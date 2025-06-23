@@ -121,4 +121,25 @@ router.get('/id/:id_usuario', async (req, res) => {
     }
 });
 
+// Verificar contraseña (POST) usando getPasswordById
+router.post('/verify-password', async (req, res) => {
+    try {
+        const { id_usuario, password } = req.body;
+        const storedPassword = await Usuarios.getPasswordById(id_usuario);
+        
+        if (!storedPassword) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+        
+        if (storedPassword === password) {
+            res.json({ mensaje: 'Contraseña verificada correctamente' });
+        } else {
+            res.status(401).json({ error: 'Contraseña incorrecta' });
+        }
+    } catch (error) {
+        console.error('Error al verificar contraseña:', error);
+        res.status(500).json({ error: 'Error al verificar contraseña' });
+    }
+});
+
 module.exports = router;
