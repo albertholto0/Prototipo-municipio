@@ -2,6 +2,7 @@ const db = require("../config/database");
 
 class CorteCaja {
     static async getAll() {
+        
         try {
             const [rows] = await db.query(`
         SELECT
