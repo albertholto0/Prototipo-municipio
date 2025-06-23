@@ -1,241 +1,219 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Elementos del DOM
-    const tablaBody = document.getElementById('tablaEstimulos');
-    const form = document.getElementById('estimuloForm');
-    const btnAdd = document.getElementById('btnAddOrUpdate');
-    const btnCancel = document.getElementById('btnCancel');
-    const btnOpenModal = document.getElementById('btnOpenModal');
-    const searchInput = document.getElementById('searchInput');
-    const btnCloseModal = document.getElementById('btnCloseModal');
-    const btnCloseViewModal = document.getElementById('btnCloseViewModal');
-    const infoContent = document.getElementById('infoContent');
+const API_URL = 'http://localhost:5000/api/estimuloFiscal';
 
-    // Variables de estado
-    let isEditing = false;
-    let currentId = null;
+const tableBody = document.getElementById('tablaEstimulos');
+const form = document.getElementById('estimuloForm');
+const btnAddOrUpdate = document.getElementById('btnAddOrUpdate');
+const btnCancel = document.getElementById('btnCancel');
+const btnOpenModal = document.getElementById('btnOpenModal');
+const btnCloseModal = document.getElementById('btnCloseModal');
+const modalOverlay = document.getElementById('modalOverlay');
+const viewModalOverlay = document.getElementById('viewModalOverlay');
+const btnCloseViewModal = document.getElementById('btnCloseViewModal');
+const infoContent = document.getElementById('infoContent');
+const formTitle = document.getElementById('formTitle');
 
-    // Cargar estímulos al iniciar
-    cargarEstimulos();
+const inputNombre = document.getElementById('nombre_contribucion');
+const inputPorcentaje = document.getElementById('porcentaje');
+const inputCaracteristicas = document.getElementById('caracteristicas');
+const inputRequisitos = document.getElementById('requisitos');
+const inputTipoDescuento = document.getElementById('tipo_descuento');
 
-    // Función para cargar datos
-    async function cargarEstimulos() {
-        try {
-            const response = await fetch('http://localhost:5000/api/estimuloFiscal');
-            if (!response.ok) throw new Error('Error al cargar datos');
-            const data = await response.json();
-            renderTable(data);
-        } catch (error) {
-            console.error('Error:', error);
-            tablaBody.innerHTML = '<tr><td colspan="5">Error al cargar los datos</td></tr>';
-        }
+let isEditing = false;
+let currentId = null;
+
+function openModal() {
+  modalOverlay.style.display = 'flex';
+  
+  const modal = document.querySelector('.modal-content');
+  if (modal) {
+    modal.style.height = 'auto'; // Reinicia altura para que se ajuste al contenido
+    modal.style.maxHeight = '65vh'; // Opcional: evita que se desborde en pantallas pequeñas
+    modal.scrollTop = 0; // Asegura que empiece desde arriba si hubo scroll
+  }
+}
+function closeModal() {
+  modalOverlay.style.display = 'none';
+  form.reset();
+  isEditing = false;
+  currentId = null;
+  btnAddOrUpdate.textContent = 'Agregar';
+  formTitle.textContent = 'Agregar Estímulo Fiscal';
+}
+
+function openViewModal() {
+  viewModalOverlay.style.display = 'block';
+}
+function closeViewModal() {
+  viewModalOverlay.style.display = 'none';
+  infoContent.innerHTML = '';
+}
+
+function showAlert(msg) {
+  alert(msg);
+}
+
+async function fetchEstimulos() {
+  try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error('Error al cargar datos');
+    const data = await res.json();
+    renderTable(data);
+  } catch (e) {
+    console.error(e);
+    tableBody.innerHTML = `<tr><td colspan="5">Error al cargar los datos</td></tr>`;
+  }
+}
+
+function renderTable(data) {
+  tableBody.innerHTML = '';
+  if (data.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="5">No hay estímulos fiscales</td></tr>`;
+    return;
+  }
+
+  data.forEach(est => {
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+      <td>${est.nombre_contribucion || ''}</td>
+      <td>${est.porcentaje_descuento || ''}%</td>
+      <td>${est.caracteristicas || ''}</td>
+      <td>${est.requisitos || ''}</td>
+      <td>${est.tipo_descuento || ''}</td> 
+      <td style="display:flex; gap:5px; justify-content:center;" >
+          <button class="action-btn edit" onclick="editEstimulo(${est.id_estimulo_fiscal})" title="Editar">
+            <img src="/public/Assets/editor.png" class="action-icon">
+          </button>
+          <button class="action-btn delete" onclick="deleteEstimulo(${est.id_estimulo_fiscal})" title="Eliminar">
+            <img src="/public/Assets/eliminar.png" class="action-icon">
+          </button>
+          <button class="action-btn view" onclick="viewEstimulo(${est.id_estimulo_fiscal})" title="Ver información">
+            <img src="/public/Assets/visualizar.png" class="action-icon">
+          </button>
+        </td>
+    `;
+
+    tableBody.appendChild(tr);
+  });
+}
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const payload = {
+    nombre_contribucion: inputNombre.value.trim(),
+    porcentaje_descuento: Number(inputPorcentaje.value),
+    caracteristicas: inputCaracteristicas.value.trim(),
+    requisitos: inputRequisitos.value.trim(),
+    tipo_descuento: inputTipoDescuento.value
+  };
+
+  if (!payload.nombre_contribucion) {
+    showAlert('El nombre de contribución es obligatorio');
+    return;
+  }
+
+  try {
+    let res;
+    if (isEditing) {
+      res = await fetch(`${API_URL}/${currentId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
     }
 
-    // Mostrar datos en la tabla
-    function renderTable(data) {
-        tablaBody.innerHTML = '';
-        
-        if (data.length === 0) {
-            tablaBody.innerHTML = '<tr><td colspan="5">No se encontraron estímulos</td></tr>';
-            return;
-        }
+    if (!res.ok) throw new Error('Error en la solicitud');
 
-        data.forEach(est => {
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
-                <td>${est.nombre_contribucion || 'N/A'}</td>
-                <td>${est.porcentaje_descuento || 'N/A'}%</td>
-                <td>${est.caracteristicas || 'N/A'}</td>
-                <td>${est.requisitos || 'N/A'}</td>
-                <td class="action-buttons">
-                    <button class="action-btn edit" onclick="editEstimulo(${est.id_estimulo_fiscal})" title="Editar">
-                        <img src="../Assets/editor.png" class="action-icon" width="40" height="40">
-                    </button>
-                    <button class="action-btn delete" onclick="confirmDelete(${est.id_estimulo_fiscal})" title="Eliminar">
-                        <img src="../Assets/eliminar.png" class="action-icon"width="80" height="80">
-                    </button>
-                    <button class="action-btn view" onclick="viewEstimulo(${est.id_estimulo_fiscal})" title="Ver detalles">
-                        <img src="../Assets/visualizar.png" class="action-icon" width="40" height="40">
-                    </button>
-                </td>
-            `;
-            tablaBody.appendChild(fila);
-        });
-    }
-
-    // Función de búsqueda
-    async function buscarEstimulos() {
-        const termino = searchInput.value.trim();
-        try {
-            const url = termino 
-                ? `http://localhost:5000/api/estimuloFiscal?search=${encodeURIComponent(termino)}`
-                : 'http://localhost:5000/api/estimuloFiscal';
-            
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Error en la búsqueda');
-            const data = await response.json();
-            renderTable(data);
-        } catch (error) {
-            console.error('Error:', error);
-            tablaBody.innerHTML = '<tr><td colspan="5">Error al buscar</td></tr>';
-        }
-    }
-
-    // Evento de búsqueda al presionar Enter
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') buscarEstimulos();
-    });
-
-    // Manejar el formulario (Agregar/Editar)
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = {
-            nombre_contribucion: document.getElementById('nombre_contribucion').value,
-            porcentaje_descuento: document.getElementById('porcentaje').value,
-            caracteristicas: document.getElementById('caracteristicas').value,
-            requisitos: document.getElementById('requisitos').value // Nota: El ID en tu HTML es 'requisitos' (con una 's')
-        };
-
-        try {
-            const url = isEditing 
-                ? `http://localhost:5000/api/estimuloFiscal/${currentId}`
-                : 'http://localhost:5000/api/estimuloFiscal';
-                
-            const method = isEditing ? 'PUT' : 'POST';
-            
-            const response = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-
-            if (!response.ok) throw new Error('Error al guardar');
-
-            closeModal();
-            cargarEstimulos();
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al procesar la solicitud');
-        }
-    });
-
-    // Editar estímulo
-    window.editEstimulo = async function(id) {
-        try {
-            const response = await fetch(`http://localhost:5000/api/estimuloFiscal/${id}`);
-            if (!response.ok) throw new Error('Error al cargar datos');
-            
-            const estimulo = await response.json();
-            
-            document.getElementById('nombre_contribucion').value = estimulo.nombre_contribucion;
-            document.getElementById('porcentaje').value = estimulo.porcentaje_descuento;
-            document.getElementById('caracteristicas').value = estimulo.caracteristicas;
-            document.getElementById('requisitos').value = estimulo.requisitos;
-            
-            isEditing = true;
-            currentId = id;
-            btnAdd.textContent = "Actualizar";
-            document.getElementById("formTitle").textContent = "Editar Estímulo Fiscal";
-            
-            openModal();
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al cargar el estímulo');
-        }
-    };
-
-    // Confirmar eliminación
-    window.confirmDelete = function(id) {
-        if (confirm("¿Está seguro de eliminar este estímulo fiscal?")) {
-            deleteEstimulo(id);
-        }
-    };
-
-    // Eliminar estímulo
-    async function deleteEstimulo(id) {
-        try {
-            const response = await fetch(`http://localhost:5000/api/estimuloFiscal/${id}`, {
-                method: 'DELETE'
-            });
-            
-            if (!response.ok) throw new Error('Error al eliminar');
-            
-            cargarEstimulos();
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al eliminar el estímulo');
-        }
-    }
-
-    // Ver detalles del estímulo
-    window.viewEstimulo = async function(id) {
-        try {
-            const response = await fetch(`http://localhost:5000/api/estimuloFiscal/${id}`);
-            if (!response.ok) throw new Error('Error al cargar datos');
-            
-            const estimulo = await response.json();
-            
-            infoContent.innerHTML = `
-                <p><strong>Nombre:</strong> ${estimulo.nombre_contribucion}</p>
-                <p><strong>Porcentaje de descuento:</strong> ${estimulo.porcentaje_descuento}%</p>
-                <p><strong>Características:</strong> ${estimulo.caracteristicas}</p>
-                <p><strong>Requisitos:</strong><br>${estimulo.requisitos.replace(/\n/g, '<br>')}</p>
-            `;
-
-            openViewModal();
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error al cargar los detalles');
-        }
-    };
-
-    // Funciones para manejar modales
-    function openModal() {
-        document.getElementById("modalOverlay").style.display = "flex";
-    }
-
-    function closeModal() {
-        document.getElementById("modalOverlay").style.display = "none";
-        form.reset();
-        isEditing = false;
-        currentId = null;
-        btnAdd.textContent = "Agregar";
-        document.getElementById("formTitle").textContent = "Agregar Estímulo Fiscal";
-    }
-
-    function openViewModal() {
-        document.getElementById("viewModalOverlay").style.display = "block";
-    }
-
-    function closeViewModal() {
-        document.getElementById("viewModalOverlay").style.display = "none";
-    }
-
-    // Event listeners
-    btnOpenModal.addEventListener('click', openModal);
-    btnCancel.addEventListener('click', closeModal);
-    btnCloseModal.addEventListener('click', closeModal);
-    btnCloseViewModal.addEventListener('click', closeViewModal);
-
-    // Aplicar estilos a la tabla después de cargar
-    setTimeout(aplicarEstilosATabla, 100);
+    showAlert(isEditing ? 'Estímulo actualizado' : 'Estímulo agregado');
+    closeModal();
+    fetchEstimulos();
+  } catch (err) {
+    console.error(err);
+    showAlert('Error al guardar estímulo');
+  }
 });
 
-function aplicarEstilosATabla() {
-    const celdas = document.querySelectorAll("#accountsTable td, #accountsTable th");
-    celdas.forEach(celda => {
-        celda.style.padding = "8px 12px";
-        celda.style.textAlign = "left";
-    });
+window.editEstimulo = async function(id) {
+  try {
+    const res = await fetch(`${API_URL}/${id}`);
+    if (!res.ok) throw new Error('No se encontró el estímulo');
+    const est = await res.json();
 
-    const filas = document.querySelectorAll("#accountsTable tr");
-    filas.forEach(fila => {
-        fila.style.height = "auto";
-    });
+    inputNombre.value = est.nombre_contribucion || '';
+    inputPorcentaje.value = est.porcentaje_descuento || 0;
+    inputCaracteristicas.value = est.caracteristicas || '';
+    inputRequisitos.value = est.requisitos || '';
+    inputTipoDescuento.value = est.tipo_descuento || '';
 
-    const iconos = document.querySelectorAll(".action-btn img");
-    iconos.forEach(icono => {
-        icono.style.width = "24px";
-        icono.style.height = "24px";
-    });
-}
+    isEditing = true;
+    currentId = id;
+    btnAddOrUpdate.textContent = 'Actualizar';
+    formTitle.textContent = 'Editar Estímulo Fiscal';
+    openModal();
+  } catch (err) {
+    console.error(err);
+    showAlert('Error al cargar estímulo para editar');
+  }
+};
+
+window.deleteEstimulo = async function(id) {
+  if (!confirm('¿Eliminar este estímulo fiscal?')) return;
+
+  try {
+    const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Error al eliminar');
+    showAlert('Estímulo eliminado');
+    fetchEstimulos();
+  } catch (err) {
+    console.error(err);
+    showAlert('Error al eliminar estímulo');
+  }
+};
+
+window.viewEstimulo = async function(id) {
+  try {
+    const res = await fetch(`${API_URL}/${id}`);
+    if (!res.ok) throw new Error('Error al cargar detalles');
+    const est = await res.json();
+
+    infoContent.innerHTML = `
+      <p><strong>Nombre:</strong> ${est.nombre_contribucion}</p>
+      <p><strong>Porcentaje de descuento:</strong> ${est.porcentaje_descuento}%</p>
+      <p><strong>Características:</strong> ${est.caracteristicas}</p>
+      <p><strong>Requisitos:</strong> ${est.requisitos.replace(/\n/g, '<br>')}</p>
+    `;
+
+    openViewModal();
+  } catch (err) {
+    console.error(err);
+    showAlert('Error al mostrar detalles');
+  }
+};
+
+btnOpenModal.addEventListener('click', () => {
+  form.reset();
+  openModal();
+});
+
+btnCancel.addEventListener('click', closeModal);
+btnCloseModal.addEventListener('click', closeModal);
+btnCloseViewModal.addEventListener('click', closeViewModal);
+
+window.addEventListener('DOMContentLoaded', fetchEstimulos);
+
+document.getElementById('searchInput').addEventListener('input', function (e) {
+  const term = e.target.value.toLowerCase();
+  const rows = tableBody.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(term) ? '' : 'none';
+  });
+});

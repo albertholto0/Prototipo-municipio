@@ -14,7 +14,6 @@ const configuracionRoutes = require("./routes/gestionConfiguracionRoute");
 const estimuloFiscalRoutes = require("./routes/gestionEstimuloFiscalRoute");
 const corteCajaRoutes = require("./routes/gestionCorteCajaRoute");
 const cobrarRoutes = require("./routes/cobrarRoute");
-const subcuentasRoutes = require("./routes/gestionSubcuentasContablesRoute");
 const subconceptoRoutes = require("./routes/gestionSubconceptoRoute");
 const alquilerRoutes = require("./routes/gestionAlquilerRoute");
 const ejercicioFiscalRoutes = require("./routes/gestionEjercicioFiscalRoute");
@@ -43,23 +42,12 @@ app.use("/api/conexion", conexionRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
 app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
-app.use("/api/subcuentasContables", subcuentas);
-//
-//  app.use("/api/subconceptos", subconceptos);
-//app.use("/api/corteCaja", corteCajaRouter);
-
-// app.use("/api/cobrar", cobrar);
-
 app.use("/api/configuracion", configuracionRoutes);
-app.use("/api/estimulosFiscales", estimuloFiscalRoutes);
 app.use("/api/corteCaja", corteCajaRoutes);
 app.use("/api/cobrar", cobrarRoutes);
-app.use("/api/subcuentasContables", subcuentasRoutes);
 app.use("/api/subconceptos", subconceptoRoutes);
 app.use("/api/alquileres", alquilerRoutes);
 app.use("/api/EjercicioFiscal", ejercicioFiscalRoutes);
-
-
 app.use("/api/inicioSesion", inicioSesionRoutes);
 app.use("/api/historialAccesos", historialAccesosRoutes);
 
