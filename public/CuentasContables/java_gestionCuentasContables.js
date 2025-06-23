@@ -1,11 +1,11 @@
 const API_BASE = "http://localhost:5000/api/cuentasContables";
 
 // Variables de estado globales
-let isEditing = false;             // Modo edición
-let editingId = null;              // ID de la cuenta en edición
-let cuentasContables = [];         // Datos del servidor
-let currentPage = 1;               // Página actual
-const rowsPerPage = 10;            // Filas por página
+let isEditing = false;             
+let editingId = null;              
+let cuentasContables = [];         
+let currentPage = 1;               
+const rowsPerPage = 10;            
 
 // — Función global para mostrar un Bootstrap Toast —
 function showToast(message, type = 'success') {
@@ -27,7 +27,8 @@ function showToast(message, type = 'success') {
     </div>
   `;
 
-  document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
+  document.getElementById('liveToastContainer')
+          .insertAdjacentHTML('beforeend', html);
   const toastEl = document.getElementById(toastId);
   const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });
   bsToast.show();
@@ -39,7 +40,6 @@ const elements = {
   tableBody: document.querySelector("#accountsTable tbody"),
   searchInput: document.getElementById("searchInput"),
   form: document.getElementById("accountForm"),
-  numeroCuenta: document.getElementById("numeroCuenta"),
   nombreCuenta: document.getElementById("nombreCuenta"),
   estado: document.getElementById("estado"),
   btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
@@ -65,7 +65,7 @@ function renderTable(data) {
       "beforeend",
       `
       <tr>
-        <td>${cuenta.clave_cuenta_contable}</td>
+        <td>${cuenta.clave_cuenta}</td>
         <td>${cuenta.nombre_cuentaContable}</td>
         <td>${estadoText}</td>
         <td>
@@ -112,7 +112,6 @@ window.changePage = function(page) {
 function filteredAccounts() {
   const term = elements.searchInput.value.toLowerCase();
   return cuentasContables.filter(c =>
-    c.clave_cuenta_contable.toString().includes(term) ||
     c.nombre_cuentaContable.toLowerCase().includes(term)
   );
 }
@@ -134,8 +133,9 @@ async function cargarCuentasContables() {
 
 async function handleSubmit(e) {
   e.preventDefault();
+
+  // Preparamos sólo nombre y estado
   const payload = {
-    clave_cuenta_contable: Number(elements.numeroCuenta.value),
     nombre_cuentaContable: elements.nombreCuenta.value,
     estado: elements.estado.value === "true"
   };
@@ -145,7 +145,7 @@ async function handleSubmit(e) {
     body: JSON.stringify(payload)
   };
   const url = isEditing ? `${API_BASE}/${editingId}` : API_BASE;
-  const fueEdicion = isEditing; // guardar antes de cerrar el modal
+  const fueEdicion = isEditing;
 
   try {
     const res = await fetch(url, opts);
@@ -163,10 +163,10 @@ async function handleSubmit(e) {
 }
 
 window.deleteAccount = async function(index) {
-  const { id_cuentaContable } = cuentasContables[index];
+  const { clave_cuenta } = cuentasContables[index];
   if (!confirm("¿Confirmar eliminación?")) return;
   try {
-    const res = await fetch(`${API_BASE}/${id_cuentaContable}`, { method: "DELETE" });
+    const res = await fetch(`${API_BASE}/${clave_cuenta}`, { method: "DELETE" });
     if (!res.ok) throw new Error(res.statusText);
     await cargarCuentasContables();
     showToast('Cuenta eliminada con éxito', 'warning');
@@ -184,7 +184,7 @@ function openModal() {
     elements.formTitle.textContent = "Agregar Cuenta Contable";
     elements.btnAddOrUpdate.textContent = "Agregar";
     elements.estado.value = "true";
-    elements.estado.disabled = true;
+    elements.estado.disabled = false;
   }
   elements.modalOverlay.style.display = "block";
 }
@@ -193,19 +193,16 @@ function closeModal() {
   elements.modalOverlay.style.display = "none";
   isEditing = false;
   editingId = null;
-  elements.estado.disabled = false;
 }
 
 window.editAccount = function(index) {
   const cuenta = cuentasContables[index];
   isEditing = true;
-  editingId = cuenta.id_cuentaContable;
+  editingId = cuenta.clave_cuenta;
 
-  openModal();  // Abrimos sin resetear en modo edición
+  openModal();
 
-  elements.numeroCuenta.value = cuenta.clave_cuenta_contable;
   elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
-  elements.estado.disabled = false;
   elements.estado.value = cuenta.estado ? "true" : "false";
 
   elements.formTitle.textContent = "Editar Cuenta Contable";
@@ -213,10 +210,7 @@ window.editAccount = function(index) {
 };
 
 elements.form.addEventListener("submit", handleSubmit);
-elements.btnCancel.addEventListener("click", e => {
-  e.preventDefault();
-  closeModal();
-});
+elements.btnCancel.addEventListener("click", e => { e.preventDefault(); closeModal(); });
 elements.searchInput.addEventListener("input", () => {
   currentPage = 1;
   renderTable(filteredAccounts());
