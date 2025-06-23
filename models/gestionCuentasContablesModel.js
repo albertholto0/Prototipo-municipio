@@ -3,7 +3,6 @@
 const db = require('../config/database');
 
 class CuentasContables {
-  /** Devuelve todas las cuentas con los nombres de campo que el front espera */
   static async getAll() {
     try {
       const [rows] = await db.query(

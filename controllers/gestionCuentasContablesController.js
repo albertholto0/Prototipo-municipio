@@ -16,7 +16,8 @@ exports.getCuentaById = async (req, res) => {
   const { id } = req.params;
   try {
     const cuentas = await CuentasContables.getAll();
-    const cuenta = cuentas.find(c => c.id_cuentaContable == id); 
+    // Ahora buscamos por clave_cuenta_contable
+    const cuenta = cuentas.find(c => String(c.clave_cuenta_contable) === id);
     if (cuenta) {
       res.json(cuenta);
     } else {
