@@ -39,7 +39,6 @@ const elements = {
   tableBody: document.querySelector("#accountsTable tbody"),
   searchInput: document.getElementById("searchInput"),
   form: document.getElementById("accountForm"),
-  // numeroCuenta: document.getElementById("numeroCuenta"), // ELIMINADO porque no existe en HTML
   nombreCuenta: document.getElementById("nombreCuenta"),
   estado: document.getElementById("estado"),
   btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
@@ -202,7 +201,6 @@ window.editAccount = function(index) {
 
   openModal();
 
-  // NO se asigna numeroCuenta porque no existe
   elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
   elements.estado.disabled = false;
   elements.estado.value = cuenta.estado ? "true" : "false";

@@ -14,7 +14,7 @@ exports.getAllCuentas = async (req, res) => {
 
 // Obtener una cuenta por su clave_cuenta
 exports.getCuentaById = async (req, res) => {
-  const { id } = req.params; // 'id' contendrá el valor de clave_cuenta
+  const { id } = req.params; 
   try {
     const cuentas = await CuentasContables.getAll();
     const cuenta = cuentas.find(c => String(c.clave_cuenta) === id);
@@ -40,7 +40,7 @@ exports.createCuenta = async (req, res) => {
   }
 };
 
-// Actualizar cuenta contable (por clave_cuenta)
+// Actualizar cuenta contable 
 exports.updateCuenta = async (req, res) => {
   const { id } = req.params;
   try {
@@ -53,7 +53,7 @@ exports.updateCuenta = async (req, res) => {
   }
 };
 
-// Eliminar cuenta contable (por clave_cuenta)
+// Eliminar cuenta contable
 exports.deleteCuenta = async (req, res) => {
   const { id } = req.params;
   try {
