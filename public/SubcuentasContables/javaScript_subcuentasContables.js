@@ -20,7 +20,11 @@ async function cargarSubcuentasContables() {
     if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
     allSubcuentas = await response.json(); // Guardar todas las subcuentas contables
 
-    renderizarSubcuentas(allSubcuentas); // Usar función para renderizar
+    // Filtrar solo las activas
+    const subcuentasActivas = allSubcuentas.filter(cuenta => cuenta.estado == 1);
+    
+    // Renderizar subcuentas activas
+    renderizarSubcuentas(subcuentasActivas);
 
   } catch (error) {
     console.error('Error al cargar subcuentas contables:', error);
@@ -59,8 +63,6 @@ function renderizarSubcuentas(lista) {
         `;
     elements.tableBody.appendChild(fila);
   });
-  // Listeners del boton agregar
-
   // Listeners del boton de editar
   document.querySelectorAll('.action-btn.edit').forEach(btn => {
     btn.addEventListener('click', async (e) => {
@@ -75,6 +77,7 @@ function renderizarSubcuentas(lista) {
 
       // Llena el resto del formulario
       document.getElementById('clave_subcuenta').value = data.clave_subcuenta;
+      document.getElementById('clave_subcuenta').disabled = true; // Deshabilita el campo al editar
       document.getElementById('nombre_subcuentas').value = data.nombre_subcuentas;
       elements.formTitle.textContent = "Editar Subcuenta Contable";
       elements.btnAddOrUpdate.textContent = "Actualizar";
@@ -108,6 +111,7 @@ function renderizarSubcuentas(lista) {
 function openModal() {
   elements.modalOverlay.style.display = 'flex';
   llenarSelectCuentasContables(); // Llenar el select cada vez que se abre el modal
+  document.getElementById('clave_subcuenta').disabled = false; // Habilita el campo al crear
 }
 
 function closeModal() {
