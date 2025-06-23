@@ -146,7 +146,6 @@ if (userConfForm) {
                     apellido_paterno,
                     apellido_materno,
                     usuario,
-                    rol_usuario: usuarioActual.rol_usuario,
                     foto_perfil: usuarioActual.foto_perfil || null
                 })
             });

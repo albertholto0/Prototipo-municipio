@@ -51,19 +51,29 @@ router.get('/:usuario', async (req, res) => {
 // Actualizar usuario (PUT)
 router.put('/', async (req, res) => {
     try {
-        const { id_usuario, nombres, apellido_paterno, apellido_materno, usuario, rol_usuario, foto_perfil } = req.body;
+        const { id_usuario, nombres, apellido_paterno, apellido_materno, usuario, foto_perfil } = req.body;
+        
+        const user = await Usuarios.getById(id_usuario);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        const rol_usuario = req.body.rol_usuario || user.rol_usuario;
+
         const updated = await Usuarios.update(
             id_usuario,
             nombres,
             apellido_paterno,
             apellido_materno,
             usuario,
-            rol_usuario,
+            rol_usuario, 
             foto_perfil
         );
+        
         if (!updated) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
+        
         res.json({ mensaje: 'Usuario actualizado exitosamente' });
     } catch (error) {
         console.error('Error al actualizar usuario:', error);

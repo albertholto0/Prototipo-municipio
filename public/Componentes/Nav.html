@@ -53,43 +53,62 @@
         </div>
     </div>
     <!--Modal para la configuracion del usuario-->
-    <div id="navUserConfModal" class="nav-user-modal">
-    <div class="nav-user-modal-container">
-        <div class="nav-user-modal-content">
-            <h3 class="nav-user-modal-title">Configuración del Usuario</h3>
-            
-            <!-- Paso 1: Verificación de contraseña -->
-            <div id="passwordVerificationStep">
-                <p>Por seguridad, ingresa tu contraseña actual para continuar:</p>
-                <input type="password" id="currentPassword" placeholder="Contraseña actual" required>
-                <button type="button" id="navVerifyPasswordBtn" class="btn-add">Verificar</button>
-                <button id="nav-user-modal-close" onclick="document.getElementById('navUserConfModal').style.display='none'">Cancelar</button>
-                <p id="passwordError" class="error-message" style="color: red; display: none;">Contraseña incorrecta</p>
-            </div>
-            
-            <!-- Paso 2: Formulario de edición (inicialmente oculto) -->
-            <form id="navUserConfForm" style="display: none;">
-                <label for="navUserConfName">Nombres:</label>
-                <input type="text" id="navUserConfName" name="name" required>
+    <div id="navUserConfModal" class="nav-config-modal">
+        <div class="nav-config-modal-container">
+            <div class="nav-config-modal-content">
+                <h3 class="nav-config-modal-title">Configuración del Usuario</h3>
 
-                <label for="navUserConfLastName">Apellido Paterno:</label>
-                <input type="text" id="navUserConfLastName" name="lastName" required>
-
-                <label for="navUserConfSecondLastName">Apellido Materno:</label>
-                <input type="text" id="navUserConfSecondLastName" name="secondLastName" required>
-                
-                <label for="navUserConfUsername">Usuario:</label>
-                <input type="text" id="navUserConfUsername" name="username" required>
-                
-                <label for="navUserConfNewPassword">Nueva contraseña (opcional):</label>
-                <input type="password" id="navUserConfNewPassword" name="newPassword" placeholder="Dejar vacío para no cambiar">
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn-add">Guardar Cambios</button>
-                    <button type="button" class="btn-cancel" onclick="document.getElementById('navUserConfModal').style.display='none'">Cancelar</button>
+                <!-- Paso 1: Verificación de contraseña -->
+                <div id="passwordVerificationStep" class="nav-config-step">
+                    <p class="nav-config-instruction">Por seguridad, ingresa tu contraseña actual para continuar:</p>
+                    <input type="password" id="currentPassword" class="nav-config-input" placeholder="Contraseña actual"
+                        required>
+                    <div class="nav-config-button-group">
+                        <button type="button" id="navVerifyPasswordBtn"
+                            class="nav-config-btn nav-config-btn-primary">Verificar</button>
+                        <button type="button" class="nav-config-btn nav-config-btn-secondary"
+                            onclick="document.getElementById('navUserConfModal').style.display='none'">Cancelar</button>
+                    </div>
+                    <p id="passwordError" class="nav-config-error">Contraseña incorrecta</p>
                 </div>
-            </form>
+
+                <!-- Paso 2: Formulario de edición -->
+                <form id="navUserConfForm" class="nav-config-form" style="display: none;">
+                    <div class="nav-config-form-group">
+                        <label for="navUserConfName" class="nav-config-label">Nombres:</label>
+                        <input type="text" id="navUserConfName" class="nav-config-input" name="name" required>
+                    </div>
+
+                    <div class="nav-config-form-group">
+                        <label for="navUserConfLastName" class="nav-config-label">Apellido Paterno:</label>
+                        <input type="text" id="navUserConfLastName" class="nav-config-input" name="lastName" required>
+                    </div>
+
+                    <div class="nav-config-form-group">
+                        <label for="navUserConfSecondLastName" class="nav-config-label">Apellido Materno:</label>
+                        <input type="text" id="navUserConfSecondLastName" class="nav-config-input" name="secondLastName"
+                            required>
+                    </div>
+
+                    <div class="nav-config-form-group">
+                        <label for="navUserConfUsername" class="nav-config-label">Usuario:</label>
+                        <input type="text" id="navUserConfUsername" class="nav-config-input" name="username" required>
+                    </div>
+
+                    <div class="nav-config-form-group">
+                        <label for="navUserConfNewPassword" class="nav-config-label">Nueva contraseña
+                            (opcional):</label>
+                        <input type="password" id="navUserConfNewPassword" class="nav-config-input" name="newPassword"
+                            placeholder="Dejar vacío para no cambiar">
+                    </div>
+
+                    <div class="nav-config-button-group">
+                        <button type="submit" class="nav-config-btn nav-config-btn-primary">Guardar Cambios</button>
+                        <button type="button" class="nav-config-btn nav-config-btn-secondary"
+                            onclick="document.getElementById('navUserConfModal').style.display='none'">Cancelar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </header>
