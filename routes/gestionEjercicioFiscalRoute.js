@@ -1,17 +1,20 @@
 const express = require('express');
-const EjercicioFiscal = require('../models/gestionEjercicioFiscalModel');
-
 const router = express.Router();
+const ejercicioFiscalController = require('../controllers/gestionEjercicioFiscalController');
 
-// Ruta para obtener todos los ejercicios fiscales
-router.get('/', async (req, res) => {
-  try {
-    const ejercicios = await EjercicioFiscal.getAll();  // Usar variable diferente
-    res.json(ejercicios);
-  } catch (err) {
-    console.error('Error al obtener los ejercicios fiscales:', err);
-    res.status(500).json({ error: 'Error al obtener los ejercicios fiscales' });
-  }
-});
+// Obtener todos los ejercicios fiscales
+router.get('/', ejercicioFiscalController.getAllEjercicios);
+
+// Obtener ejercicio fiscal por ID
+router.get('/:id', ejercicioFiscalController.getById);
+
+// Registrar nuevo ejercicio fiscal
+router.post('/', ejercicioFiscalController.createEjercicio);
+
+// Actualizar ejercicio fiscal
+router.put('/:id', ejercicioFiscalController.updateEjercicio);
+
+// Eliminar ejercicio fiscal
+router.delete('/:id', ejercicioFiscalController.deleteEjercicio);
 
 module.exports = router;
