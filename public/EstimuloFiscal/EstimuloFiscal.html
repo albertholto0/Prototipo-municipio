@@ -21,10 +21,8 @@
 
         <!-- Barra de búsqueda y botón agregar -->
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Buscar estímulo" class="search-input">
-            <button class="btn-agregar" id="btnOpenModal">
-                Agregar Estímulo
-            </button>
+            <input type="text" id="searchInput" placeholder="Buscar estímulo">
+            <button class="btn-agregar" id="btnOpenModal">Agregar Estímulo</button>
         </div>
 
         <!-- Tabla de estímulos -->
@@ -36,6 +34,7 @@
                         <th>% Descuento</th>
                         <th>Caracteristicas</th>
                         <th>Requisitos</th>
+                        <th>Tipo de descuento</th> 
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -50,12 +49,11 @@
         </div>
     </main>
 
-    <!-- Modal para agregar/editar (usando clases de Base Catastral) -->
-    <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-content" style="max-height: 90vh; max: width 90px; overflow-y: auto">
-            <span class="btn-close" id="btnCloseModal">&times;</span>
-            <div class="form-container">
-                
+    <!-- Modal para el formulario -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="form-container" id="formContainer">
+                <button id="btnCloseModal" class="modal-close-custom">×</button>
                 <h3 class="text-center" id="formTitle">Agregar Estímulo Fiscal</h3>
                 <form id="estimuloForm">
 
@@ -84,9 +82,18 @@
                         </div>
 
                     </div>
+                    <div class="form-group">
+                        <label for="tipo_descuento">Tipo de descuento:</label>
+                        <select id="tipo_descuento" class="form-input" required>
+                            <option value="">Selecciona...</option>
+                            <option value="normal">Normal</option>
+                            <option value="adicional">Adicional</option>
+                        </select>
+                    </div>
+
                     <div class="form-actions">
                         <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
-                        <button type="submit" class="btn-primary" id="btnAddOrUpdate">Agregar</button>
+                        <button type="submit" id="btnAddOrUpdate">Agregar</button>
                     </div>
                 </form>
             </div>
@@ -94,12 +101,12 @@
     </div>
 
     <!-- Modal para ver detalles -->
-    <div id="viewModalOverlay" class="modal-overlay">
+    <div class="modal-overlay" id="viewModalOverlay">
         <div class="modal-content">
-            <span class="modal-close" id="btnCloseViewModal">&times;</span>
-            <div id="viewContainer" class="view-container">
-                <h3>Detalles del Estímulo</h3>
-                <div id="infoContent" class="info-content"></div>
+            <button id="btnCloseViewModal" class="modal-close-custom">×</button>
+            <div id="viewContainer" class="form-container">
+                <h3 class="text-center">Información</h3>
+                <div id="infoContent"></div>
             </div>
         </div>
     </div>
@@ -110,6 +117,8 @@
 
     <script src="java_gestionEstimuloFiscal.js" defer></script>
     <script src="/public/Componentes/Nav.js" defer></script>
+    <!-- ================== TOASTS ================== -->
+    <div id="liveToastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
 </body>
 

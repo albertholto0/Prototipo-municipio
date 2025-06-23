@@ -1,16 +1,11 @@
 const express = require('express');
-const EstimuloFiscal = require('../models/gestionEstimuloFiscalModel');
 const router = express.Router();
+const ctrl = require('../controllers/gestionEstimuloFiscalController'); 
 
-// Ruta para obtener todos los contribuyentes
-router.get('/', async (req, res) => {
-  try {
-    const EstimulosFiscales = await EstimuloFiscal.getAll();
-    res.json(EstimulosFiscales);
-  } catch (err) {
-    console.error('Error al obtener Estimulos fiscales:', err);
-    res.status(500).json({ error: 'Error al obtener Estimulos fiscales' });
-  }
-});
+router.get('/', ctrl.getAllEstimuloFiscal);
+router.get('/:id', ctrl.getEstimuloFiscalById);
+router.post('/', ctrl.createEstimuloFiscal);
+router.put('/:id', ctrl.updateEstimuloFiscal);
+router.delete('/:id', ctrl.deleteEstimuloFiscal);
 
 module.exports = router;
