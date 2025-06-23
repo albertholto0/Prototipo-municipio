@@ -57,9 +57,12 @@ function renderizarAlquileres(lista) {
 
   paginatedData.forEach(alquiler => {
     const fila = document.createElement('tr');
+    const fechaInicio = alquiler.fecha_inicio ? alquiler.fecha_inicio.slice(0, 10) : '';
+    const fechaFin = alquiler.fecha_fin ? alquiler.fecha_fin.slice(0, 10) : '';
+
     fila.innerHTML = `
-      <td>${alquiler.fecha_inicio || ''}</td>
-      <td>${alquiler.fecha_fin || ''}</td>
+      <td>${fechaInicio}</td>
+      <td>${fechaFin}</td>
       <td>${alquiler.tipo_trabajo || ''}</td>
       <td>${alquiler.concepto || ''}</td>
       <td>${alquiler.monto_total || ''}</td>
@@ -118,10 +121,10 @@ window.changePage = function (page) {
 function filteredAlquileres() {
   const term = elements.searchInput.value.toLowerCase();
   return allAlquileres.filter(alquiler =>
-    (alquiler.fecha_inicio || '').toLowerCase().includes(term) ||
+    (alquiler.fecha_inicio && alquiler.fecha_inicio.slice(0, 10).includes(term)) ||
     (alquiler.tipo_trabajo || '').toLowerCase().includes(term) ||
     (alquiler.concepto || '').toLowerCase().includes(term) ||
-    (alquiler.id_recibo || '').toLowerCase().includes(term)
+    (alquiler.id_recibo && alquiler.id_recibo.toString().toLowerCase().includes(term))
   );
 }
 
@@ -173,9 +176,8 @@ function addRowListeners() {
         // Para input type="date"
         return d.toISOString().slice(0, 10);
       }
-
-      document.getElementById('fecha_inicio').value = formatDateForInput(alquiler.fecha_inicio);
-      document.getElementById('fecha_fin').value = formatDateForInput(alquiler.fecha_fin);
+      document.getElementById('fecha_inicio').value = alquiler.fecha_inicio ? alquiler.fecha_inicio.slice(0, 10) : '';
+      document.getElementById('fecha_fin').value = alquiler.fecha_fin ? alquiler.fecha_fin.slice(0, 10) : '';
       document.getElementById('numero_viajes').value = alquiler.numero_viajes || '';
       document.getElementById('kilometros_recorridos').value = alquiler.kilometros_recorridos || '';
       document.getElementById('horometro_inicio').value = alquiler.horometro_inicio || '';
@@ -214,9 +216,12 @@ function addRowListeners() {
       const alquiler = allAlquileres.find(a => a.id_alquiler == id);
       if (!alquiler) return;
       const infoContent = document.getElementById("infoContent");
+      const fechaInicio = alquiler.fecha_inicio ? alquiler.fecha_inicio.slice(0, 10) : '';
+      const fechaFin = alquiler.fecha_fin ? alquiler.fecha_fin.slice(0, 10) : '';
+
       infoContent.innerHTML = `
-        <p><strong>Fecha de Inicio:</strong> ${alquiler.fecha_inicio || ''}</p>
-        <p><strong>Fecha de Fin:</strong> ${alquiler.fecha_fin || ''}</p>
+        <p><strong>Fecha de Inicio:</strong> ${fechaInicio}</p>
+        <p><strong>Fecha de Fin:</strong> ${fechaFin}</p>
         <p><strong>Número de Viajes:</strong> ${alquiler.numero_viajes || ''}</p>
         <p><strong>Kilómetros Recorridos:</strong> ${alquiler.kilometros_recorridos || ''}</p>
         <p><strong>Horómetro Inicio:</strong> ${alquiler.horometro_inicio || ''}</p>
