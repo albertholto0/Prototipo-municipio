@@ -11,7 +11,7 @@
 
 /* Contenedor principal centrado con máximo ancho */
 .main-container {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 2rem auto;
   padding: 0 1.5rem;
 }
@@ -84,24 +84,30 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: auto; /* Ancho automático según el icono */
-  height: auto; /* Altura automática según el icono */
+  width: 44px;
+  /* Tamaño fijo para el área clickeable */
+  height: 44px;
+  /* Tamaño fijo para el área clickeable */
 }
 
 .action-icon {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  /* Tamaño aumentado respecto a la versión anterior */
+  height: 45px;
   object-fit: contain;
+  transition: all 0.2s ease;
+  padding: 6px;
+  /* Espacio interno para mejor tactil */
 }
 
 /* Variante editar (color naranja) */
 .action-btn.edit {
-  background-color: none;
+  background-color: transparent;
 }
 
 /* Variante eliminar (color rojo) */
 .action-btn.delete {
-  background-color: none;
+  background-color: transparent;
 }
 
 /* Efecto hover para botones */
@@ -110,8 +116,9 @@
   transform: translateY(-2px);
 }
 
+/* Estilo específico para eliminar */
 .action-btn.delete:hover .action-icon {
-  filter: brightness(0.8) sepia(100%) hue-rotate(310deg) saturate(500%);
+    filter: brightness(0.9) sepia(1) hue-rotate(-50deg) saturate(8);
 }
 
 /* ===== FORMULARIO ===== */
@@ -244,7 +251,7 @@
 #searchInput {
   width: 100%;
   height: 40px;
-  max-width: 250px;
+  max-width: 300px;
   padding: 12px 20px;
   border: 2px solid #ecf0f1;
   border-radius: 30px;
@@ -398,17 +405,37 @@
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
 }
 
-/* Ajuste para el contenedor de búsqueda */
-.search-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 2rem 0 1.5rem 0;
-}
+
 
 /* Ajuste para el input de búsqueda */
 #searchInput {
   width: 100%;
   max-width: 300px;
   margin-right: 1rem;
+}
+/* Contenedor de toasts (si necesitas más personalización) */
+/* ===== TOASTS ===== */
+.toast {
+  min-width: 250px;
+  max-width: 320px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.75rem 1rem;
+}
+
+.toast .toast-body {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toast .btn-close {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+/* Asegura que el z-index no se sobreponga al modal (z-index del modal: 1000+) */
+.toast-container {
+  z-index: 1060; /* Puedes ajustar si usas modales con z-index más alto */
 }

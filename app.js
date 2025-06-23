@@ -1,7 +1,8 @@
 const express = require("express");
+const session = require('express-session');
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const baseCatastralRoutes = require('./routes/gestionBaseCatastralRoute');
 const contribuyenteRoutes = require("./routes/gestionContribuyenteRoute");
 const establecimientoRoutes = require("./routes/gestionEstablecimientosRoute");
 const seccionesRoutes = require("./routes/gestionSeccionRoutes");
@@ -17,14 +18,23 @@ const subcuentasRoutes = require("./routes/gestionSubcuentasContablesRoute");
 const subconceptoRoutes = require("./routes/gestionSubconceptoRoute");
 const alquilerRoutes = require("./routes/gestionAlquilerRoute");
 const ejercicioFiscalRoutes = require("./routes/gestionEjercicioFiscalRoute");
+const inicioSesionRoutes = require("./routes/inicioSesionRoute");
+const historialAccesosRoutes = require("./routes/gestionHistorialAccesosRoute");
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(session({
+  secret: 'abc',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 // Rutas
+app.use('/api/baseCatastral', baseCatastralRoutes);
 app.use("/api/contribuyentes", contribuyenteRoutes);
 app.use("/api/establecimientos", establecimientoRoutes);
 app.use("/api/secciones", seccionesRoutes);
@@ -32,7 +42,6 @@ app.use("/api/cuentasContables", cuentaContableRoutes);
 app.use("/api/conexion", conexionRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
-<<<<<<< HEAD
 app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
 app.use("/api/subcuentasContables", subcuentas);
 //
@@ -40,7 +49,7 @@ app.use("/api/subcuentasContables", subcuentas);
 //app.use("/api/corteCaja", corteCajaRouter);
 
 // app.use("/api/cobrar", cobrar);
-=======
+
 app.use("/api/configuracion", configuracionRoutes);
 app.use("/api/estimulosFiscales", estimuloFiscalRoutes);
 app.use("/api/corteCaja", corteCajaRoutes);
@@ -49,7 +58,14 @@ app.use("/api/subcuentasContables", subcuentasRoutes);
 app.use("/api/subconceptos", subconceptoRoutes);
 app.use("/api/alquileres", alquilerRoutes);
 app.use("/api/EjercicioFiscal", ejercicioFiscalRoutes);
->>>>>>> e9ba32b4a7eb83dd31c502c8097b6ab981ae4653
+
+
+app.use("/api/inicioSesion", inicioSesionRoutes);
+app.use("/api/historialAccesos", historialAccesosRoutes);
+
+app.get("/", (req, res) => {
+  res.send("API funcionando correctamente");
+});
 
 // Manejo de errores
 app.use((err, req, res, next) => {

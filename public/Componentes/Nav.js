@@ -21,7 +21,6 @@ const injectHTML = async () => {
   }
 };
 
-
 // Función para configurar todos los event listeners
 const setupEventListeners = () => {
   // Manejar el dropdown del usuario
@@ -50,13 +49,53 @@ const setupEventListeners = () => {
 
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
-      alert('Este botón abrirá la configuración del usuario.');
+      window.abrirModalConfiguracionUsuario();
     });
   }
 
   if (infoBtn) {
-    infoBtn.addEventListener('click', () => {
-      alert('Este botón mostrará la información del usuario.');
+    infoBtn.addEventListener('click', async () => {
+      try {
+        const usuarioActual = JSON.parse(localStorage.getItem('usuarioActual'));
+        console.log('Usuario completo desde localStorage:', usuarioActual);
+
+        if (!usuarioActual || (!usuarioActual.id && !usuarioActual.id_usuario)) {
+          throw new Error('Datos de usuario incompletos');
+        }
+
+        // Usa id_usuario si existe, sino id
+        const userId = usuarioActual.id_usuario || usuarioActual.id;
+
+        const response = await fetch(`http://localhost:5000/api/usuarios/id/${userId}`);
+
+        if (!response.ok) throw new Error('Error al obtener usuario');
+
+        const user = await response.json();
+        console.log('Datos del usuario desde API:', user);
+
+        // Llenar el modal con los datos del usuario
+        const modal = document.getElementById('navUserInfoModal');
+        if (!modal) throw new Error('No se encontró el modal en el DOM');
+
+        // Asignar los valores a los elementos del modal
+        document.getElementById('navInfoUserName').textContent =
+          `${user.nombres || ''} ${user.apellido_paterno || ''} ${user.apellido_materno || ''}`.trim();
+        document.getElementById('navInfoUserUsername').textContent = user.usuario || 'N/A';
+        document.getElementById('navInfoUserRole').textContent = user.rol_usuario || 'N/A';
+        document.getElementById('navInfoUserLastAccess').textContent = user.ultimo_acceso || 'No disponible';
+        document.getElementById('navInfoUserStatus').textContent = user.estado || 'N/A';
+
+        // Si hay foto de perfil, actualizar la imagen
+        if (user.foto_perfil) {
+          document.getElementById('navInfoUserPhoto').src = user.foto_perfil;
+        }
+
+        // Mostrar el modal
+        modal.style.display = 'block';
+      } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+      }
     });
   }
 
@@ -66,6 +105,8 @@ const setupEventListeners = () => {
     });
   }
 };
+
+
 
 // Inicializar todo
 document.addEventListener("DOMContentLoaded", () => {

@@ -105,7 +105,6 @@ body {
   animation: slideDown 0.3s ease;
   overflow: auto;
   -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
 /* Ocultar scrollbar en modal-content */

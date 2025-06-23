@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const tablaBody = document.getElementById('subconceptsTableBody');
   const paginationContainer = document.getElementById('pagination');
   const searchInput = document.getElementById('searchInput');
-  const ItemsPorPagina = 10; // Número de subconceptos por página
+  const ItemsPorPagina = 5; // Número de subconceptos por página
   let subconceptos = [];
   let subconceptosFiltrados = [];
   let currentPage = 1;
@@ -284,14 +284,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-  // Botón para cancelar edición
-  document.getElementById('btnCancelarEditarSub').addEventListener('click', () => {
-    document.getElementById('modalEditarSubconcepto').style.display = 'none';
-});
+  // Botón cerrar (X) en todos los modales (si tienes .btn-close en algún modal)
+  document.querySelectorAll('.btn-close').forEach(btn => {
+      btn.addEventListener('click', function() {
+          this.closest('.modal-overlay').style.display = 'none';
+          // Limpia campos de contraseña si aplica
+          const pwd = this.closest('.modal-overlay').querySelector('input[type="password"]');
+          if (pwd) pwd.value = '';
+      });
+  });
 
-  // Botón para cancelar eliminación
-  document.querySelector('#deleteModal .cancel-btn-delete').addEventListener('click', () => {
-    document.getElementById('deleteModal').style.display = 'none';
-    document.getElementById('deletePassword').value = '';
-});
+  // Botón cancelar en modal agregar
+  const btnCancelarModal = document.getElementById('btnCancelarModal');
+  if (btnCancelarModal) {
+      btnCancelarModal.addEventListener('click', () => {
+          document.getElementById('modalSubconcepto').style.display = 'none';
+      });
+  }
+
+  // Botón cancelar en modal editar
+  const btnCancelarEditarSub = document.getElementById('btnCancelarEditarSub');
+  if (btnCancelarEditarSub) {
+      btnCancelarEditarSub.addEventListener('click', () => {
+          document.getElementById('modalEditarSubconcepto').style.display = 'none';
+      });
+  }
+
+  // Botón cancelar en modal eliminar (usa la primera coincidencia dentro del modal)
+  const btnCancelarEliminar = document.querySelector('#deleteModal .btn-cancel');
+  if (btnCancelarEliminar) {
+      btnCancelarEliminar.addEventListener('click', () => {
+          document.getElementById('deleteModal').style.display = 'none';
+          document.getElementById('deletePassword').value = '';
+      });
+  }
 });

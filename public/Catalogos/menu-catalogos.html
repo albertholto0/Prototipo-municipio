@@ -24,19 +24,19 @@
             <a href="/public/GestionRecibos/recibo.html" class="card gestion-recibos">
                 <h2>Gestión de Recibos</h2>
             </a>
-            <a href="/public/CuentasContables/GestionCuentasContables.html" class="card cuentas-contables">
+            <a href="/public/CuentasContables/GestionCuentasContables.html" class="card cuentas-contables solo-admin">
                 <h2>Cuentas Contables</h2>
             </a>
             <a href="/public/SubcuentasContables/subcuentasContables.html" class="card subcuentas">
                 <h2>Subcuentas Contables</h2>
             </a>
-            <a href="/public/GestionSeccion/gestion_seccion.html" class="card gestion-seccion">
+            <a href="/public/GestionSeccion/gestion_seccion.html" class="card gestion-seccion solo-admin">
                 <h2>Gestión de Sección</h2>
             </a>
-            <a href="/public/GestionConceptos/conceptos.html" class="card gestion-concepto">
+            <a href="/public/GestionConceptos/conceptos.html" class="card gestion-concepto solo-admin">
                 <h2>Gestión de Concepto</h2>
             </a>
-            <a href="/public/GestionSubconceptos/subconceptos.html" class="card gestion-subconceptos">
+            <a href="/public/GestionSubconceptos/subconceptos.html" class="card gestion-subconceptos solo-admin">
                 <h2>Gestión de Subconceptos</h2>
             </a>
             <a href="/public/GestionAlquiler/GestionAlquiler.html" class="card gestion-alquiler">
@@ -51,13 +51,13 @@
             <a href="/public/BaseCatastral/GestionBaseCatastral.html" class="card gestion-base">
                 <h2>Gestión de Base Catastral</h2>
             </a>
-            <a href="/public/EstimuloFiscal/EstimuloFiscal.html" class="card estimulo-fiscal">
+            <a href="/public/EstimuloFiscal/EstimuloFiscal.html" class="card estimulo-fiscal solo-admin">
                 <h2>Gestión de Estimulo Fiscal</h2>
             </a>
-            <a href="/public/GestiOndeEjercicioFiscal/GestionEjercicioFiscal.html" class="card ejercicio-fiscal">
+            <a href="/public/GestiOndeEjercicioFiscal/GestionEjercicioFiscal.html" class="card ejercicio-fiscal solo-admin">
                 <h2>Gestión del Ejercicio Fiscal</h2>
             </a>
-            <a href="/public/GestionUsuarios/usuarios.html" class="card gestion-usuarios">
+            <a href="/public/GestionUsuarios/usuarios.html" class="card gestion-usuarios solo-admin">
                 <h2>Gestión de Usuarios</h2>
             </a>
         </div>
@@ -67,6 +67,22 @@
             <p>Todos los derechos reservados.</p>
         </footer>
         <script src="/public/Componentes/Nav.js" defer></script>
+        <script src="/public/Componentes/usuario.js"></script>
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (esAdministrador()) {
+                // Mostrar los elementos solo para administrador
+                document.querySelectorAll('.solo-admin').forEach(el => {
+                    el.style.display = '';
+                });
+            } else {
+                // Ocultar los elementos solo para administrador
+                document.querySelectorAll('.solo-admin').forEach(el => {
+                    el.style.display = 'none';
+                });
+            }
+        });
+        </script>
     </main>
 
 </body>
