@@ -1,33 +1,32 @@
 // models/gestionCuentasContablesModel.js
+
 const db = require('../config/database');
 
 class CuentasContables {
   static async getAll() {
     try {
       const [rows] = await db.query(
-        `SELECT
-           clave_cuenta,
-           nombre_cuentaContable,
-           estado
-         FROM cuentas_contables`
+        'SELECT id_cuentaContable, clave_cuentaContable, nombre_cuentaContable, estado FROM cuentas_contables'
       );
       return rows;
     } catch (err) {
-      console.error('Error en la consulta getAll:', err);
+      console.error('Error en la consulta:', err);
       throw new Error('Error al obtener cuentas contables');
     }
   }
 
   static async create(cuenta) {
     try {
-      const { nombre_cuentaContable, estado = true } = cuenta;
+      // Aquí extraemos correctamente clave_cuentaContable
+      const { clave_cuentaContable, nombre_cuentaContable, estado = true } = cuenta;
       const [result] = await db.query(
-        `INSERT INTO cuentas_contables (nombre_cuentaContable, estado)
-         VALUES (?, ?)`,
-        [nombre_cuentaContable, estado]
+        `INSERT INTO cuentas_contables (clave_cuentaContable, nombre_cuentaContable, estado)
+         VALUES (?, ?, ?)`,
+        [clave_cuentaContable, nombre_cuentaContable, estado]
       );
       return {
-        clave_cuenta: result.insertId,
+        id_cuentaContable: result.insertId,
+        clave_cuentaContable,
         nombre_cuentaContable,
         estado,
       };
@@ -39,17 +38,18 @@ class CuentasContables {
 
   static async update(id, cuenta) {
     try {
-      const { nombre_cuentaContable, estado } = cuenta;
+      const { clave_cuentaContable, nombre_cuentaContable, estado } = cuenta;
       await db.query(
         `UPDATE cuentas_contables
-         SET nombre_cuentaContable = ?, estado = ?
-         WHERE clave_cuenta = ?`,
-        [nombre_cuentaContable, estado, id]
+         SET clave_cuentaContable = ?, nombre_cuentaContable = ?, estado = ?
+         WHERE id_cuentaContable = ?`,
+        [clave_cuentaContable, nombre_cuentaContable, estado, id]
       );
       return {
-        clave_cuenta: Number(id),
+        id_cuentaContable: Number(id),
+        clave_cuentaContable,
         nombre_cuentaContable,
-        estado,
+        estado
       };
     } catch (err) {
       console.error('Error al actualizar cuenta contable:', err);
@@ -60,10 +60,10 @@ class CuentasContables {
   static async delete(id) {
     try {
       await db.query(
-        `DELETE FROM cuentas_contables WHERE clave_cuenta = ?`,
+        'DELETE FROM cuentas_contables WHERE id_cuentaContable = ?',
         [id]
       );
-      return { clave_cuenta: Number(id) };
+      return { id_cuentaContable: Number(id) };
     } catch (err) {
       console.error('Error al eliminar cuenta contable:', err);
       throw new Error('Error al eliminar cuenta contable');

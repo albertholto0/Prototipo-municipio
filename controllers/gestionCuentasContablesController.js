@@ -1,4 +1,3 @@
-// controllers/gestionCuentasContablesController.js
 const CuentasContables = require('../models/gestionCuentasContablesModel');
 
 // Obtener todas las cuentas contables
@@ -12,16 +11,17 @@ exports.getAllCuentas = async (req, res) => {
   }
 };
 
-// Obtener una cuenta por su clave_cuenta
+// Obtener una cuenta por ID
 exports.getCuentaById = async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params;
   try {
-    const cuentas = await CuentasContables.getAll();
-    const cuenta = cuentas.find(c => String(c.clave_cuenta) === id);
-    if (!cuenta) {
-      return res.status(404).json({ error: 'Cuenta no encontrada' });
+    const cuentas = await CuentasContables.getAll(); 
+    const cuenta = cuentas.find(c => c.id_cuentaContable == id);
+    if (cuenta) {
+      res.json(cuenta);
+    } else {
+      res.status(404).json({ error: 'Cuenta no encontrada' });
     }
-    res.json(cuenta);
   } catch (err) {
     console.error('Error al buscar cuenta:', err);
     res.status(500).json({ error: 'Error al buscar cuenta contable' });
@@ -31,7 +31,6 @@ exports.getCuentaById = async (req, res) => {
 // Crear nueva cuenta contable
 exports.createCuenta = async (req, res) => {
   try {
-    // req.body debe tener { nombre_cuentaContable, estado }
     const nueva = await CuentasContables.create(req.body);
     res.status(201).json(nueva);
   } catch (err) {
@@ -40,11 +39,10 @@ exports.createCuenta = async (req, res) => {
   }
 };
 
-// Actualizar cuenta contable 
+// Actualizar cuenta contable
 exports.updateCuenta = async (req, res) => {
   const { id } = req.params;
   try {
-    // req.body debe tener { nombre_cuentaContable, estado }
     const actualizada = await CuentasContables.update(id, req.body);
     res.json(actualizada);
   } catch (err) {
@@ -57,8 +55,8 @@ exports.updateCuenta = async (req, res) => {
 exports.deleteCuenta = async (req, res) => {
   const { id } = req.params;
   try {
-    const resultado = await CuentasContables.delete(id);
-    res.json(resultado);
+    const result = await CuentasContables.delete(id);
+    res.json(result);
   } catch (err) {
     console.error('Error al eliminar cuenta:', err);
     res.status(500).json({ error: 'Error al eliminar cuenta contable' });

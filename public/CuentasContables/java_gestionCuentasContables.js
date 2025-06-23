@@ -1,11 +1,11 @@
 const API_BASE = "http://localhost:5000/api/cuentasContables";
 
 // Variables de estado globales
-let isEditing = false;
-let editingId = null;
-let cuentasContables = [];
-let currentPage = 1;
-const rowsPerPage = 10;
+let isEditing = false;             // Modo edición
+let editingId = null;              // ID de la cuenta en edición (id_cuentaContable)
+let cuentasContables = [];         // Datos del servidor
+let currentPage = 1;               // Página actual
+const rowsPerPage = 10;            // Filas por página
 
 // — Función global para mostrar un Bootstrap Toast —
 function showToast(message, type = 'success') {
@@ -26,11 +26,9 @@ function showToast(message, type = 'success') {
       </div>
     </div>
   `;
-
   document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
   const toastEl = document.getElementById(toastId);
-  const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });
-  bsToast.show();
+  new bootstrap.Toast(toastEl, { delay: 3000 }).show();
   toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
 }
 
@@ -39,6 +37,7 @@ const elements = {
   tableBody: document.querySelector("#accountsTable tbody"),
   searchInput: document.getElementById("searchInput"),
   form: document.getElementById("accountForm"),
+  numeroCuenta: document.getElementById("numeroCuenta"),     
   nombreCuenta: document.getElementById("nombreCuenta"),
   estado: document.getElementById("estado"),
   btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
@@ -64,7 +63,7 @@ function renderTable(data) {
       "beforeend",
       `
       <tr>
-        <td>${cuenta.clave_cuenta}</td>
+        <td>${cuenta.clave_cuentaContable}</td>
         <td>${cuenta.nombre_cuentaContable}</td>
         <td>${estadoText}</td>
         <td>
@@ -111,7 +110,7 @@ window.changePage = function(page) {
 function filteredAccounts() {
   const term = elements.searchInput.value.toLowerCase();
   return cuentasContables.filter(c =>
-    c.clave_cuenta.toString().includes(term) ||
+    String(c.clave_cuentaContable).includes(term) ||
     c.nombre_cuentaContable.toLowerCase().includes(term)
   );
 }
@@ -134,6 +133,7 @@ async function cargarCuentasContables() {
 async function handleSubmit(e) {
   e.preventDefault();
   const payload = {
+    clave_cuentaContable: Number(elements.numeroCuenta.value),
     nombre_cuentaContable: elements.nombreCuenta.value,
     estado: elements.estado.value === "true"
   };
@@ -143,15 +143,18 @@ async function handleSubmit(e) {
     body: JSON.stringify(payload)
   };
   const url = isEditing ? `${API_BASE}/${editingId}` : API_BASE;
-  const fueEdicion = isEditing;
+
+  const wasEditing = isEditing; // guardamos el estado antes de enviar
 
   try {
     const res = await fetch(url, opts);
     if (!res.ok) throw new Error(res.statusText);
+
     await cargarCuentasContables();
     closeModal();
+
     showToast(
-      fueEdicion ? 'Cuenta actualizada con éxito' : 'Cuenta agregada con éxito',
+      wasEditing ? 'Cuenta actualizada con éxito' : 'Cuenta agregada con éxito',
       'success'
     );
   } catch (err) {
@@ -161,10 +164,11 @@ async function handleSubmit(e) {
 }
 
 window.deleteAccount = async function(index) {
-  const { clave_cuenta } = cuentasContables[index];
+  // usamos id_cuentaContable para eliminar
+  const { id_cuentaContable } = cuentasContables[index];
   if (!confirm("¿Confirmar eliminación?")) return;
   try {
-    const res = await fetch(`${API_BASE}/${clave_cuenta}`, { method: "DELETE" });
+    const res = await fetch(`${API_BASE}/${id_cuentaContable}`, { method: "DELETE" });
     if (!res.ok) throw new Error(res.statusText);
     await cargarCuentasContables();
     showToast('Cuenta eliminada con éxito', 'warning');
@@ -197,10 +201,13 @@ function closeModal() {
 window.editAccount = function(index) {
   const cuenta = cuentasContables[index];
   isEditing = true;
-  editingId = cuenta.clave_cuenta;
+  // ** guardamos aquí el id_cuentaContable **
+  editingId = cuenta.id_cuentaContable;
 
   openModal();
 
+  // cargamos el formulario con los datos existentes:
+  elements.numeroCuenta.value = cuenta.clave_cuentaContable;
   elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
   elements.estado.disabled = false;
   elements.estado.value = cuenta.estado ? "true" : "false";
