@@ -1,11 +1,11 @@
 const API_BASE = "http://localhost:5000/api/cuentasContables";
 
 // Variables de estado globales
-let isEditing = false;             
-let editingId = null;              
-let cuentasContables = [];         
-let currentPage = 1;               
-const rowsPerPage = 10;            
+let isEditing = false;
+let editingId = null;
+let cuentasContables = [];
+let currentPage = 1;
+const rowsPerPage = 10;
 
 // — Función global para mostrar un Bootstrap Toast —
 function showToast(message, type = 'success') {
@@ -27,8 +27,7 @@ function showToast(message, type = 'success') {
     </div>
   `;
 
-  document.getElementById('liveToastContainer')
-          .insertAdjacentHTML('beforeend', html);
+  document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
   const toastEl = document.getElementById(toastId);
   const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });
   bsToast.show();
@@ -40,6 +39,7 @@ const elements = {
   tableBody: document.querySelector("#accountsTable tbody"),
   searchInput: document.getElementById("searchInput"),
   form: document.getElementById("accountForm"),
+  // numeroCuenta: document.getElementById("numeroCuenta"), // ELIMINADO porque no existe en HTML
   nombreCuenta: document.getElementById("nombreCuenta"),
   estado: document.getElementById("estado"),
   btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
@@ -112,6 +112,7 @@ window.changePage = function(page) {
 function filteredAccounts() {
   const term = elements.searchInput.value.toLowerCase();
   return cuentasContables.filter(c =>
+    c.clave_cuenta.toString().includes(term) ||
     c.nombre_cuentaContable.toLowerCase().includes(term)
   );
 }
@@ -133,8 +134,6 @@ async function cargarCuentasContables() {
 
 async function handleSubmit(e) {
   e.preventDefault();
-
-  // Preparamos sólo nombre y estado
   const payload = {
     nombre_cuentaContable: elements.nombreCuenta.value,
     estado: elements.estado.value === "true"
@@ -184,7 +183,7 @@ function openModal() {
     elements.formTitle.textContent = "Agregar Cuenta Contable";
     elements.btnAddOrUpdate.textContent = "Agregar";
     elements.estado.value = "true";
-    elements.estado.disabled = false;
+    elements.estado.disabled = true;
   }
   elements.modalOverlay.style.display = "block";
 }
@@ -193,6 +192,7 @@ function closeModal() {
   elements.modalOverlay.style.display = "none";
   isEditing = false;
   editingId = null;
+  elements.estado.disabled = false;
 }
 
 window.editAccount = function(index) {
@@ -202,7 +202,9 @@ window.editAccount = function(index) {
 
   openModal();
 
+  // NO se asigna numeroCuenta porque no existe
   elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
+  elements.estado.disabled = false;
   elements.estado.value = cuenta.estado ? "true" : "false";
 
   elements.formTitle.textContent = "Editar Cuenta Contable";
@@ -210,7 +212,10 @@ window.editAccount = function(index) {
 };
 
 elements.form.addEventListener("submit", handleSubmit);
-elements.btnCancel.addEventListener("click", e => { e.preventDefault(); closeModal(); });
+elements.btnCancel.addEventListener("click", e => {
+  e.preventDefault();
+  closeModal();
+});
 elements.searchInput.addEventListener("input", () => {
   currentPage = 1;
   renderTable(filteredAccounts());
