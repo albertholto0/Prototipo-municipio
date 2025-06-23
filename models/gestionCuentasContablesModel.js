@@ -4,7 +4,7 @@ class CuentasContables {
   static async getAll() {
     try {
       const [rows] = await db.query(
-        'SELECT id_cuentaContable, clave_cuenta_contable, nombre_cuentaContable, estado FROM cuentas_contables'
+        'SELECT clave_cuenta AS id_cuentaContable, nombre_cuentaContable, estado FROM cuentas_contables'
       );
       return rows;
     } catch (err) {
@@ -15,15 +15,14 @@ class CuentasContables {
 
   static async create(cuenta) {
     try {
-      const { clave_cuenta_contable, nombre_cuentaContable, estado = true } = cuenta;
+      const { nombre_cuentaContable, estado = true } = cuenta;
       const [result] = await db.query(
-        `INSERT INTO cuentas_contables (clave_cuenta_contable, nombre_cuentaContable, estado)
-         VALUES (?, ?, ?)`,
-        [clave_cuenta_contable, nombre_cuentaContable, estado]
+        `INSERT INTO cuentas_contables (nombre_cuentaContable, estado)
+         VALUES (?, ?)`,
+        [nombre_cuentaContable, estado]
       );
       return {
         id_cuentaContable: result.insertId,
-        clave_cuenta_contable,
         nombre_cuentaContable,
         estado,
       };
@@ -35,12 +34,12 @@ class CuentasContables {
 
   static async update(id, cuenta) {
     try {
-      const { clave_cuenta_contable, nombre_cuentaContable, estado } = cuenta;
+      const { nombre_cuentaContable, estado } = cuenta;
       await db.query(
         `UPDATE cuentas_contables
-         SET clave_cuenta_contable = ?, nombre_cuentaContable = ?, estado = ?
-         WHERE id_cuentaContable = ?`,
-        [clave_cuenta_contable, nombre_cuentaContable, estado, id]
+         SET nombre_cuentaContable = ?, estado = ?
+         WHERE clave_cuenta = ?`,
+        [nombre_cuentaContable, estado, id]
       );
       return { id_cuentaContable: id, ...cuenta };
     } catch (err) {
@@ -51,7 +50,7 @@ class CuentasContables {
 
   static async delete(id) {
     try {
-      await db.query('DELETE FROM cuentas_contables WHERE id_cuentaContable = ?', [id]);
+      await db.query('DELETE FROM cuentas_contables WHERE clave_cuenta = ?', [id]);
       return { id_cuentaContable: id };
     } catch (err) {
       console.error('Error al eliminar cuenta contable:', err);
