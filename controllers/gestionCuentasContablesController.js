@@ -15,8 +15,8 @@ exports.getAllCuentas = async (req, res) => {
 exports.getCuentaById = async (req, res) => {
   const { id } = req.params;
   try {
-    const cuentas = await CuentasContables.getAll(); // Solo tienes getAll(), puedes implementar getById si lo necesitas
-    const cuenta = cuentas.find(c => c.id_cuentasContables == id);
+    const cuentas = await CuentasContables.getAll();
+    const cuenta = cuentas.find(c => c.id_cuentaContable == id); 
     if (cuenta) {
       res.json(cuenta);
     } else {
