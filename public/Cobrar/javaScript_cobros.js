@@ -315,9 +315,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Selects anidados de cuentas contables
     // Puedes ajustar los nombres de los campos según tu API
-    await cargarSelect('http://localhost:5000/api/cobrar/cuentas', 'Cuenta', 1, function () {
+    await cargarSelect('http://localhost:5000/api/cobrar/cuentasContables', 'Cuenta', 1, function () {
         if (this.value) {
-            cargarSelect(`http://localhost:5000/api/cobrar/subcuentas/${this.value}`, 'Subcuenta', 2, function () {
+            cargarSelect(`http://localhost:5000/api/cobrar/subcuentasContables/${this.value}`, 'Subcuenta', 2, function () {
                 if (this.value) {
                     cargarSelect(`http://localhost:5000/api/cobrar/secciones/${this.value}`, 'Sección', 3, function () {
                         if (this.value) {
