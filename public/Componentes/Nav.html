@@ -1,30 +1,45 @@
 <header>
-    <!-- Parte izquierda: Logo y título -->
-    <div class="header-left">
-        <div class="logo-left">
-            <a href="/public/Inicio/pantallaPrincipal.html">
-                <img src="/public/Assets/logo_ixtlan.png" alt="Logo Ixtlán">
-            </a>
-        </div>
-        <div class="title">
-            <h1>SISTEMA DE COBROS MUNICIPAL</h1>
-        </div>
+  <!-- Parte izquierda: Logo y título -->
+  <div class="header-left">
+    <div class="logo-left">
+      <a href="/public/Inicio/pantallaPrincipal.html">
+        <img
+          src="/public/Assets/logo_ixtlan.png"
+          alt="Logo Ixtlán"
+          class="logo-image nav-logo"
+        />
+      </a>
     </div>
+    <div class="title">
+      <h1>SISTEMA DE COBROS MUNICIPAL</h1>
+    </div>
+  </div>
 
-    <!-- Menú de navegación (NavBar) -->
-    <nav class="menu-buttons">
-        <button onclick="location.href='/public/Cobrar/cobrar.html'">Cobrar</button>
-        <button onclick="location.href='/public/CorteDeCaja/CorteDeCaja.html'">Corte de Caja</button>
-        <button
-            onclick="location.href='/public/GestionContribuyentes/gestion_contribuyentes.html'">Contribuyentes</button>
-        <button onclick="location.href='/public/Catalogos/menu-catalogos.html'">Catálogos</button>
-        <span class="user-icon" id="userIcon">
-            <img src="/public/Assets/usuario.png" alt="Usuario" style="width:32px; height:32px; border-radius:50%;">
-            <div class="user-dropdown" id="userDropdown" style="display:none;">
-                <button id="userInfoBtn">Información del usuario</button>
-                <button id="settingsBtn">Editar perfil</button>
-                <button id="logoutBtn">Cerrar sesión</button>
-            </div>
-        </span>
-    </nav>
+  <!-- Menú de navegación (NavBar) -->
+  <nav class="menu-buttons">
+    <button onclick="location.href='/public/Cobrar/cobrar.html'">Cobrar</button>
+    <button onclick="location.href='/public/CorteDeCaja/CorteDeCaja.html'">
+      Corte de Caja
+    </button>
+    <button
+      onclick="location.href='/public/GestionContribuyentes/gestion_contribuyentes.html'"
+    >
+      Contribuyentes
+    </button>
+    <button onclick="location.href='/public/Catalogos/menu-catalogos.html'">
+      Catálogos
+    </button>
+    <span class="user-icon" id="userIcon">
+      <img
+        src="/public/Assets/usuario.png"
+        alt="Usuario"
+        style="width: 32px; height: 32px; border-radius: 50%"
+      />
+      <div class="user-dropdown" id="userDropdown" style="display: none">
+        <button id="userInfoBtn">Información del usuario</button>
+        <button id="settingsBtn">Editar perfil</button>
+        <button id="logoutBtn">Cerrar sesión</button>
+      </div>
+    </span>
+  </nav>
 </header>

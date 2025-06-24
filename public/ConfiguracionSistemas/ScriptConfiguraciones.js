@@ -1,42 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const cargarConfiguracion = async () => {
+  const configForm = document.getElementById("configForm");
+
+  configForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(configForm);
+
     try {
-      // Llamada a API
-      const response = await fetch("http://localhost:5000/api/configuracion");
+      const response = await fetch("http://localhost:5000/api/configuracion", {
+        method: "POST",
+        body: formData,
+      });
 
-      if (!response.ok) {
-        throw new Error(`Error HTTP! estado: ${response.status}`);
+      if (!response.ok) throw new Error("Error al guardar configuración");
+
+      const result = await response.json();
+      alert(result.message || "Configuración guardada correctamente");
+
+      // Notificar a otras pestañas que deben actualizar
+      if (typeof BroadcastChannel !== "undefined") {
+        const channel = new BroadcastChannel("logo_updates");
+        channel.postMessage({
+          type: "logo_update",
+          timestamp: Date.now(),
+        });
       }
 
-      const configuraciones = await response.json();
-
-      // Validamos que haya al menos una configuración
-      if (configuraciones.length === 0) {
-        console.warn("No hay configuraciones disponibles.");
-        return;
-      }
-
-      // Suponemos que solo hay una configuración que se debe mostrar
-      const config = configuraciones[0];
-
-      // Llenamos los campos del formulario con los datos
-      document.getElementById("dependencia").value = config.dependencia || "";
-      document.getElementById("lema").value = config.lema || "";
-      document.getElementById("rfc").value = config.rfc || "";
-      document.getElementById("idCif").value = config.id_cif || "";
-
-      /*if (config.periodo) {
-        document.getElementById("periodo").value = config.periodo;
-      }*/
-
-      // Si tienes ruta de imagen para logo o QR, puedes cargar vistas previas así:
-      // document.getElementById("logoPreview").src = `/uploads/${config.logo}`;
-      // document.getElementById("qrPreview").src = `/uploads/${config.codigo_qr}`;
+      updateLogoInCurrentTab();
     } catch (error) {
-      console.error("Error al cargar configuración:", error);
-      alert("No se pudo cargar la configuración del sistema.");
+      console.error("Error:", error);
+      alert("Error al guardar la configuración: " + error.message);
     }
+  });
+
+  const updateLogoInCurrentTab = () => {
+    const logos = document.querySelectorAll(".logo-image, .logo-left img");
+    logos.forEach((logo) => {
+      const newSrc = logo.src.split("?")[0] + "?t=" + Date.now();
+      logo.src = newSrc;
+    });
   };
 
-  cargarConfiguracion();
+  // Escuchar mensajes desde otras pestañas
+  if (typeof BroadcastChannel !== "undefined") {
+    const channel = new BroadcastChannel("logo_updates");
+    channel.addEventListener("message", (event) => {
+      if (event.data.type === "logo_update") {
+        updateLogoInCurrentTab();
+        window.location.reload(); // Recarga la página para mostrar lema y dependencia actualizados
+      }
+    });
+  }
 });
