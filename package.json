@@ -6,6 +6,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "gsap": "^3.13.0",
+    "multer": "^2.0.1",
     "mysql2": "^3.14.1",
     "numero-a-letras": "^1.0.6"
   },
