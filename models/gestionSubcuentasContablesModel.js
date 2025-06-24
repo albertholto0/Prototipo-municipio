@@ -1,83 +1,139 @@
+// models/gestionSubcuentasContablesModel.js
+
 const db = require('../config/database');
 
 class SubcuentasContables {
-    static async getAll() {
-        try {
-            // JOIN para obtener la clave_cuentaContable desde cuentas_contables
-            const [rows] = await db.query(`
-                SELECT 
-                    subcuentas_contables.clave_subcuenta, 
-                    cuentas_contables.clave_cuentaContable, 
-                    subcuentas_contables.nombre, 
-                    subcuentas_contables.estado 
-                FROM subcuentas_contables 
-                JOIN cuentas_contables 
-                ON subcuentas_contables.id_cuentaContable = cuentas_contables.id_cuentaContable
-            `);
-            return rows;
-        } catch (err) {
-            console.error('Error en la consulta:', err);
-            throw new Error('Error al obtener subcuentas contables');
-        }
+  /**
+   * Obtiene todas las subcuentas contables,
+   * junto con la clave de su cuenta principal.
+   */
+  static async getAll() {
+    try {
+      const [rows] = await db.query(`
+        SELECT 
+          sc.clave_subcuenta, 
+          cc.clave_cuentaContable, 
+          sc.nombre, 
+          sc.estado 
+        FROM subcuentas_contables AS sc
+        JOIN cuentas_contables AS cc
+          ON sc.id_cuentaContable = cc.id_cuentaContable
+      `);
+      return rows;
+    } catch (err) {
+      console.error('Error en getAll():', err);
+      throw new Error('Error al obtener subcuentas contables');
     }
+  }
 
-    static async deleteSubcuenta(clave_subcuenta) {
-        try {
-            await db.query('UPDATE subcuentas_contables SET estado = NOT estado WHERE clave_subcuenta = ?', [clave_subcuenta]);
-        } catch (err) {
-            console.error('Error al eliminar la subcuenta:', err);
-            throw new Error('Error al eliminar la subcuenta');
-        }
+  /**
+   * Crea una nueva subcuenta contable y la marca como activa (estado = 1).
+   * Captura errores de duplicado y de FK para devolver código específico.
+   */
+  static async setSucuenta(id_cuentaContable, clave_subcuenta, nombre) {
+    try {
+      const [result] = await db.query(
+        `INSERT INTO subcuentas_contables 
+           (id_cuentaContable, clave_subcuenta, nombre, estado)
+         VALUES (?, ?, ?, 1)`,
+        [id_cuentaContable, clave_subcuenta, nombre]
+      );
+      return result.insertId;
+    } catch (err) {
+      console.error('Error en setSucuenta():', err);
+      // clave_subcuenta duplicada
+      if (err.code === 'ER_DUP_ENTRY') {
+        const e = new Error('Ya existe una subcuenta con esa clave');
+        e.code = 'DUPLICATE_SUBCUENTA';
+        throw e;
+      }
+      // FK falla: id_cuentaContable no existe
+      if (err.code === 'ER_NO_REFERENCED_ROW_2' || err.code === 'ER_NO_REFERENCED_ROW') {
+        const e = new Error('La cuenta principal indicada no existe');
+        e.code = 'FK_CONSTRAINT';
+        throw e;
+      }
+      throw err;
     }
+  }
 
-    static async setSucuenta(id_cuentaContable, clave_subcuenta, nombre) {
-        try {
-            const [result] = await db.query(
-                'INSERT INTO subcuentas_contables (id_cuentaContable, clave_subcuenta, nombre, estado) VALUES (?, ?, ?, 1)',
-                [id_cuentaContable, clave_subcuenta, nombre]
-            );
-            return result.insertId;
-        } catch (err) {
-            console.error('Error al crear la subcuenta:', err);
-            throw new Error('Error al crear la subcuenta');
-        }
-    }
+  /**
+   * Obtiene una sola subcuenta por su clave.
+   */
+  static async getSubcuentaById(clave_subcuenta) {
+    try {
+      const [rows] = await db.query(`
+        SELECT 
+          sc.clave_subcuenta, 
+          cc.clave_cuentaContable, 
+          sc.nombre, 
+          sc.estado,
+          sc.id_cuentaContable
+        FROM subcuentas_contables AS sc
+        JOIN cuentas_contables AS cc
+          ON sc.id_cuentaContable = cc.id_cuentaContable
+        WHERE sc.clave_subcuenta = ?
+      `, [clave_subcuenta]);
 
-    static async getSubcuentaById(clave_subcuenta) {
-        try {
-            // JOIN para obtener la clave_cuentaContable
-            const [rows] = await db.query(`
-                SELECT 
-                    subcuentas_contables.clave_subcuenta, 
-                    cuentas_contables.clave_cuentaContable, 
-                    subcuentas_contables.nombre, 
-                    subcuentas_contables.estado,
-                    subcuentas_contables.id_cuentaContable
-                FROM subcuentas_contables
-                JOIN cuentas_contables ON subcuentas_contables.id_cuentaContable = cuentas_contables.id_cuentaContable
-                WHERE subcuentas_contables.clave_subcuenta = ?
-            `, [clave_subcuenta]);
-            if (rows.length === 0) {
-                throw new Error('Subcuenta no encontrada');
-            }
-            return rows[0];
-        } catch (err) {
-            console.error('Error al obtener la subcuenta:', err);
-            throw new Error('Error al obtener la subcuenta');
-        }
+      if (rows.length === 0) {
+        throw new Error('Subcuenta no encontrada');
+      }
+      return rows[0];
+    } catch (err) {
+      console.error('Error en getSubcuentaById():', err);
+      throw new Error('Error al obtener la subcuenta');
     }
+  }
 
-    static async putSubcuenta(clave_subcuenta, id_cuentaContable, nombre) {
-        try {
-            await db.query(
-                'UPDATE subcuentas_contables SET id_cuentaContable = ?, nombre = ? WHERE clave_subcuenta = ?',
-                [id_cuentaContable, nombre, clave_subcuenta]
-            );
-        } catch (err) {
-            console.error('Error al actualizar la subcuenta:', err);
-            throw new Error('Error al actualizar la subcuenta');
-        }
+  /**
+   * Actualiza la cuenta principal y el nombre de una subcuenta existente.
+   * No modifica el campo estado.
+   */
+  static async putSubcuenta(clave_subcuenta, id_cuentaContable, nombre) {
+    try {
+      await db.query(
+        `UPDATE subcuentas_contables
+         SET id_cuentaContable = ?, nombre = ?
+         WHERE clave_subcuenta = ?`,
+        [id_cuentaContable, nombre, clave_subcuenta]
+      );
+    } catch (err) {
+      console.error('Error en putSubcuenta():', err);
+      throw new Error('Error al actualizar la subcuenta');
     }
+  }
+
+  /**
+   * Alterna el estado activo (1) / inactivo (0) de la subcuenta.
+   * Devuelve el nuevo valor de estado.
+   */
+  static async toggleEstado(clave_subcuenta) {
+    try {
+      // 1) Leer estado actual
+      const [rows] = await db.query(
+        'SELECT estado FROM subcuentas_contables WHERE clave_subcuenta = ?',
+        [clave_subcuenta]
+      );
+      if (rows.length === 0) {
+        throw new Error('Subcuenta no encontrada');
+      }
+
+      // 2) Invertir el valor
+      const nuevo = rows[0].estado === 1 ? 0 : 1;
+
+      // 3) Guardar el nuevo estado
+      await db.query(
+        'UPDATE subcuentas_contables SET estado = ? WHERE clave_subcuenta = ?',
+        [nuevo, clave_subcuenta]
+      );
+
+      // 4) Devolver el nuevo estado
+      return nuevo;
+    } catch (err) {
+      console.error('Error en toggleEstado():', err);
+      throw err;
+    }
+  }
 }
 
 module.exports = SubcuentasContables;

@@ -29,7 +29,10 @@ module.exports = {
     const result = await Cobrar.getBaseCatastrales(req.params.contribuyenteId);
     res.json(result);
   },
-
+  getIdRecibo: async (req, res) => {
+    const ultimo_id = await Cobrar.getIdRecibo();
+    res.json({ ultimo_id });
+  },
   setRecibo: async (req, res) => {
     console.log('Datos recibidos:', req.body);
     try {

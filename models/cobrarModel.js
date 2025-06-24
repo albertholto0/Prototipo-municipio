@@ -83,7 +83,19 @@ class Cobrar {
         }
     }
 
-    static async setRecibo(folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuentaContable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion) { 
+    static async getIdRecibo() {
+        try {
+            const [rows] = await db.query(`
+            SELECT MAX(id_recibo) AS ultimo_id FROM recibos
+        `);
+            return rows[0].ultimo_id || 0; // Regresa el último id, sin sumar 1
+        } catch (err) {
+            console.error('Error en la consulta:', err);
+            throw new Error('Error al obtener folio');
+        }
+    }
+
+    static async setRecibo(folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuentaContable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion) {
         try {
             const [result] = await db.query(`
                 INSERT INTO recibos (folio, fecha_recibo, ejercicio_fiscal, ejercicio_periodo, id_contribuyente, id_cuenta_contable, id_subcuenta, id_seccion, id_concepto, id_subconcepto, id_estimulo_fiscal, monto_total, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion, estado_recibo, id_usuario)

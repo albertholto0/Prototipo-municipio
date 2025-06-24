@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Cambia de página y renderiza la tabla
-  window.changePage = function(page) {
+  window.changePage = function (page) {
     const totalPages = Math.ceil(subconceptosFiltrados.length / ItemsPorPagina);
     if (page < 1 || page > totalPages) return;
     currentPage = page;
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (!response.ok) throw new Error(result.error || 'Error al registrar subconcepto');
-      
+
       alert(result.message || 'Subconcepto registrado exitosamente');
       document.getElementById('modalSubconcepto').style.display = 'none';
       cargarSubconceptos();
@@ -193,129 +193,154 @@ document.addEventListener('DOMContentLoaded', () => {
   cargarSubconceptos();
 
   // Función para abrir el modal de edición permitiendo editar claves
-  window.openModifyModal = async function(clave_subconcepto) {
+  window.openModifyModal = async function (clave_subconcepto) {
     try {
-        const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto}`);
-        if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
-        const subconcepto = await response.json();
+      const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto}`);
+      if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
+      const subconcepto = await response.json();
 
-        document.getElementById('edit_clave_concepto').value = subconcepto.clave_concepto;
-        document.getElementById('edit_clave_subconcepto').value = subconcepto.clave_subconcepto;
-        document.getElementById('edit_descripcion').value = subconcepto.descripcion;
-        document.getElementById('edit_tipo_servicio').value = subconcepto.tipo_servicio;
-        document.getElementById('edit_cuota').value = subconcepto.cuota;
-        document.getElementById('edit_periodicidad').value = subconcepto.periodicidad;
+      document.getElementById('edit_clave_concepto').value = subconcepto.clave_concepto;
+      document.getElementById('edit_clave_subconcepto').value = subconcepto.clave_subconcepto;
+      document.getElementById('edit_descripcion').value = subconcepto.descripcion;
+      document.getElementById('edit_tipo_servicio').value = subconcepto.tipo_servicio;
+      document.getElementById('edit_cuota').value = subconcepto.cuota;
+      document.getElementById('edit_periodicidad').value = subconcepto.periodicidad;
 
-        // Guardar la clave actual para usarla en la actualización
-        document.getElementById('editarSubconceptForm').dataset.clave_subconcepto_actual = clave_subconcepto;
-        
-        document.getElementById('modalEditarSubconcepto').style.display = 'block';
+      // Guardar la clave actual para usarla en la actualización
+      document.getElementById('editarSubconceptForm').dataset.clave_subconcepto_actual = clave_subconcepto;
+
+      document.getElementById('modalEditarSubconcepto').style.display = 'block';
     } catch (error) {
-        console.error('Error al cargar subconcepto:', error);
-        alert('Error al cargar subconcepto: ' + error.message);
+      console.error('Error al cargar subconcepto:', error);
+      alert('Error al cargar subconcepto: ' + error.message);
     }
-};
-
-  // Función para abrir el modal de eliminación
-  window.openDeleteModal = function(clave_subconcepto) {
-    document.getElementById('deleteConceptId').value = clave_subconcepto;
-    document.getElementById('deleteModal').style.display = 'block';
   };
 
+  // // Función para abrir el modal de eliminación
+  // window.openDeleteModal = function(clave_subconcepto) {
+  //   document.getElementById('deleteConceptId').value = clave_subconcepto;
+  //   document.getElementById('deleteModal').style.display = 'block';
+  // };
+
   // Evento para el formulario de edición
+
   document.getElementById('editarSubconceptForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const clave_subconcepto_actual = e.target.dataset.clave_subconcepto_actual;
     const subconceptoData = {
-        nueva_clave_subconcepto: parseInt(document.getElementById('edit_clave_subconcepto').value),
-        nueva_clave_concepto: parseInt(document.getElementById('edit_clave_concepto').value),
-        descripcion: document.getElementById('edit_descripcion').value,
-        tipo_servicio: document.getElementById('edit_tipo_servicio').value,
-        cuota: parseFloat(document.getElementById('edit_cuota').value),
-        periodicidad: document.getElementById('edit_periodicidad').value
+      nueva_clave_subconcepto: parseInt(document.getElementById('edit_clave_subconcepto').value),
+      nueva_clave_concepto: parseInt(document.getElementById('edit_clave_concepto').value),
+      descripcion: document.getElementById('edit_descripcion').value,
+      tipo_servicio: document.getElementById('edit_tipo_servicio').value,
+      cuota: parseFloat(document.getElementById('edit_cuota').value),
+      periodicidad: document.getElementById('edit_periodicidad').value
     };
 
     try {
-        const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto_actual}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(subconceptoData)
-        });
+      const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto_actual}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(subconceptoData)
+      });
 
-        const result = await response.json();
-        
-        if (!response.ok) throw new Error(result.error || 'Error al actualizar subconcepto');
-        
-        alert(result.message || 'Subconcepto actualizado exitosamente');
-        document.getElementById('modalEditarSubconcepto').style.display = 'none';
-        cargarSubconceptos();
+      const result = await response.json();
+
+      if (!response.ok) throw new Error(result.error || 'Error al actualizar subconcepto');
+
+      alert(result.message || 'Subconcepto actualizado exitosamente');
+      document.getElementById('modalEditarSubconcepto').style.display = 'none';
+      cargarSubconceptos();
     } catch (error) {
-        console.error('Error al actualizar subconcepto:', error);
-        alert('Error: ' + error.message);
+      console.error('Error al actualizar subconcepto:', error);
+      alert('Error: ' + error.message);
     }
-});
+  });
 
   // Evento para el formulario de eliminación
-  document.getElementById('deleteConceptForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const clave_subconcepto = document.getElementById('deleteConceptId').value;
-    const password = document.getElementById('deletePassword').value;
+  //   document.getElementById('deleteConceptForm').addEventListener('submit', async (e) => {
+  //     e.preventDefault();
 
-    try {
-        const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password })
-        });
+  //     const clave_subconcepto = document.getElementById('deleteConceptId').value;
+  //     const password = document.getElementById('deletePassword').value;
 
-        const result = await response.json();
-        
-        if (!response.ok) throw new Error(result.error || 'Error al eliminar subconcepto');
-        
-        alert(result.message || 'Subconcepto eliminado exitosamente');
-        document.getElementById('deleteModal').style.display = 'none';
-        document.getElementById('deletePassword').value = '';
-        cargarSubconceptos();
-    } catch (error) {
-        console.error('Error al eliminar subconcepto:', error);
-        alert('Error: ' + error.message);
-    }
-});
+  //     try {
+  //         const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto}`, {
+  //             method: 'DELETE',
+  //             headers: { 'Content-Type': 'application/json' },
+  //             body: JSON.stringify({ password })
+  //         });
+
+  //         const result = await response.json();
+
+  //         if (!response.ok) throw new Error(result.error || 'Error al eliminar subconcepto');
+
+  //         alert(result.message || 'Subconcepto eliminado exitosamente');
+  //         document.getElementById('deleteModal').style.display = 'none';
+  //         document.getElementById('deletePassword').value = '';
+  //         cargarSubconceptos();
+  //     } catch (error) {
+  //         console.error('Error al eliminar subconcepto:', error);
+  //         alert('Error: ' + error.message);
+  //     }
+  // });
 
   // Botón cerrar (X) en todos los modales (si tienes .btn-close en algún modal)
   document.querySelectorAll('.btn-close').forEach(btn => {
-      btn.addEventListener('click', function() {
-          this.closest('.modal-overlay').style.display = 'none';
-          // Limpia campos de contraseña si aplica
-          const pwd = this.closest('.modal-overlay').querySelector('input[type="password"]');
-          if (pwd) pwd.value = '';
-      });
+    btn.addEventListener('click', function () {
+      this.closest('.modal-overlay').style.display = 'none';
+      // Limpia campos de contraseña si aplica
+      const pwd = this.closest('.modal-overlay').querySelector('input[type="password"]');
+      if (pwd) pwd.value = '';
+    });
   });
 
   // Botón cancelar en modal agregar
   const btnCancelarModal = document.getElementById('btnCancelarModal');
   if (btnCancelarModal) {
-      btnCancelarModal.addEventListener('click', () => {
-          document.getElementById('modalSubconcepto').style.display = 'none';
-      });
+    btnCancelarModal.addEventListener('click', () => {
+      document.getElementById('modalSubconcepto').style.display = 'none';
+    });
   }
 
   // Botón cancelar en modal editar
   const btnCancelarEditarSub = document.getElementById('btnCancelarEditarSub');
   if (btnCancelarEditarSub) {
-      btnCancelarEditarSub.addEventListener('click', () => {
-          document.getElementById('modalEditarSubconcepto').style.display = 'none';
-      });
+    btnCancelarEditarSub.addEventListener('click', () => {
+      document.getElementById('modalEditarSubconcepto').style.display = 'none';
+    });
   }
 
   // Botón cancelar en modal eliminar (usa la primera coincidencia dentro del modal)
   const btnCancelarEliminar = document.querySelector('#deleteModal .btn-cancel');
   if (btnCancelarEliminar) {
-      btnCancelarEliminar.addEventListener('click', () => {
-          document.getElementById('deleteModal').style.display = 'none';
-          document.getElementById('deletePassword').value = '';
+    btnCancelarEliminar.addEventListener('click', () => {
+      document.getElementById('deleteModal').style.display = 'none';
+      document.getElementById('deletePassword').value = '';
+    });
+  }
+
+  window.openDeleteModal = function (clave_subconcepto) {
+    if (confirm('¿Estás seguro de que deseas eliminar este subconcepto? Esta acción no se puede deshacer.')) {
+      eliminarSubconcepto(clave_subconcepto);
+    }
+  };
+
+  async function eliminarSubconcepto(clave_subconcepto) {
+    try {
+      const response = await fetch(`http://localhost:5000/api/subconceptos/${clave_subconcepto}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
       });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Error al eliminar subconcepto');
+
+      alert(result.message || 'Subconcepto eliminado exitosamente');
+      cargarSubconceptos();
+    } catch (error) {
+      console.error('Error al eliminar subconcepto:', error);
+      alert('Error: ' + error.message);
+    }
   }
 });
