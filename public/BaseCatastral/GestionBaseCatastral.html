@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
 <head>
   <meta charset="UTF-8">
@@ -7,6 +11,7 @@
   <title>Gestión de Base Catastral</title>
   <link rel="stylesheet" href="Styles.css">
   <link rel="stylesheet" href="/public/Componentes/Nav.css">
+
 </head>
 
 <body>
@@ -35,7 +40,6 @@
             <th>Nombre propietario</th>
             <th>Ubicación</th>
             <th>Base catastral</th>
-            <th>Uso de suelo</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -52,35 +56,45 @@
   <!-- Modal para el formulario -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
-      <span class="btn-close" id="btnCloseModal">&times;</span>
       <div class="form-container" id="formContainer">
+        <button id="btnCloseModal" class="modal-close-custom">×</button>
         <h3 class="text-center" id="formTitle">Agregar Base Catastral</h3>
         <form id="accountForm">
-          <!-- Primera fila: Clave catastral y Base catastral -->
+
+          <!-- Clave catastral y Propietario -->
           <div class="form-inline">
             <div class="form-group">
               <label for="claveCatastral">Clave catastral:</label>
               <input type="text" id="claveCatastral" name="claveCatastral" placeholder="Ej. CLAVE-123" required>
             </div>
             <div class="form-group">
-              <label for="baseCatastral">Base catastral:</label>
-              <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 1500 m²" required>
+              <label for="contribuyenteSelect">Propietario:</label>
+              <select id="contribuyenteSelect" name="contribuyenteSelect" required>
+                <option value="">-- selecciona propietario --</option>
+              </select>
             </div>
           </div>
 
-          <!-- Segunda fila: Nombre propietario (cada uno en su propia fila) -->
-          <div class="form-group">
-            <label for="nombrePropietario">Nombre propietario:</label>
-            <input type="text" id="nombrePropietario" name="nombrePropietario" placeholder="Ej. Juan Pérez" required>
+          <!-- Base catastral -->
+          <div class="form-inline">
+            <div class="form-group">
+              <label for="baseCatastral">Base catastral:</label>
+              <input type="text" id="baseCatastral" name="baseCatastral" placeholder="Ej. 1500 m²" required>
+            </div>
+            <div class="form-group">
+              <label for="impuestoCalculado">Impuesto calculado:</label>
+              <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" required>
+            </div>
           </div>
 
-          <!-- Tercera fila: Ubicación -->
+          <!-- Ubicación -->
           <div class="form-group">
             <label for="ubicacion">Ubicación:</label>
             <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
           </div>
 
-          <!-- Cuarta fila: Valor terreno y Valor construcción -->
+
+          <!-- Fila 4: Valor terreno y Valor construcción 
           <div class="form-inline">
             <div class="form-group">
               <label for="valorTerreno">Valor terreno:</label>
@@ -91,13 +105,20 @@
               <input type="number" id="valorConstruccion" name="valorConstruccion" placeholder="Ej. 75000" required>
             </div>
           </div>
+          -->
 
-          <!-- Quinta fila: Impuesto calculado y Uso de suelo -->
+          <!--  Impuesto calculado y Uso de suelo -->
           <div class="form-inline">
             <div class="form-group">
-              <label for="impuestoCalculado">Impuesto calculado:</label>
-              <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" required>
+              <label for="barrio">Barrio:</label>
+              <input type="text" id="barrio" name="barrio" placeholder="Ej. Centro" required>
             </div>
+            <div class="form-group">
+              <label for="fechaAvaluo">Fecha avalúo:</label>
+              <input type="date" id="fechaAvaluo" name="fechaAvaluo" required>
+            </div>
+          </div>
+          <!-- 
             <div class="form-group">
               <label for="usoSuelo">Uso de suelo:</label>
               <select id="usoSuelo" name="usoSuelo" required>
@@ -109,21 +130,17 @@
                 <option value="otro">Otro</option>
               </select>
             </div>
-          </div>
+            -->
 
-          <!-- Sexta fila: Fecha avalúo y Historial avalúos -->
+          <!-- Fila 6: Fecha avalúo y Historial avalúos -->
           <div class="form-inline">
-            <div class="form-group">
-              <label for="fechaAvaluo">Fecha avalúo:</label>
-              <input type="date" id="fechaAvaluo" name="fechaAvaluo" required>
-            </div>
             <div class="form-group">
               <label for="historialAvaluos">Historial avalúos:</label>
               <input type="text" id="historialAvaluos" name="historialAvaluos" placeholder="Ej. 2021,2022" required>
             </div>
           </div>
 
-          <!-- Contenedor para botones alineados a la derecha -->
+          <!-- Botones -->
           <div class="form-actions">
             <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
             <button type="submit" id="btnAddOrUpdate">Agregar</button>
@@ -136,7 +153,7 @@
   <!-- Modal para Ver Información Completa -->
   <div class="modal-overlay" id="viewModalOverlay">
     <div class="modal-content">
-      <span class="btn-close" id="btnCloseViewModal">&times;</span>
+      <button id="btnCloseViewModal" class="modal-close-custom">×</button>
       <div class="form-container" id="viewContainer">
         <h3 class="text-center">Información</h3>
         <div id="infoContent">
@@ -151,9 +168,11 @@
     <p>© 2025 Ixtlán - Módulo 5: Gestión de Base Catastral</p>
   </footer>
 
+  <!-- Scripts -->
   <script src="Script.js" defer></script>
   <script src="/public/Componentes/Nav.js" defer></script>
-
+  <!-- ================== TOASTS ================== -->
+  <div id="liveToastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </body>
 
 </html>

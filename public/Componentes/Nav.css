@@ -154,3 +154,290 @@ header {
 #settingsBtn::before {
     background-image: url('/public/Assets/configuracion.svg');
 }
+
+#userImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+/* Estilos específicos para el modal de información del usuario en el Nav */
+
+.nav-user-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.nav-user-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.nav-user-modal-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: navModalAppear 0.3s ease-out;
+}
+
+@keyframes navModalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-user-modal-flex {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-user-modal-info {
+  flex: 2;
+}
+
+.nav-user-modal-photo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+#navInfoUserPhoto {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e0e0e0;
+}
+
+.nav-user-modal-close {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 20px auto 0;
+  width: auto;
+  min-width: 120px;
+}
+
+.nav-user-modal-close:hover {
+  background-color: #d32f2f;
+}
+
+.nav-user-modal-info p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.nav-user-modal-info p strong {
+  display: inline-block;
+  width: 120px;
+  color: #555;
+}
+
+.nav-user-modal-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+/* Estilos para el modal de configuración del usuario en el Nav */
+
+.nav-config-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 2000; /* Mayor z-index que otros modales */
+  animation: navConfigFadeIn 0.3s ease-out;
+}
+
+@keyframes navConfigFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.nav-config-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.nav-config-modal-content {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  border: 1px solid #e0e0e0;
+}
+
+.nav-config-modal-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.nav-config-step {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-config-step input[type="password"] {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.nav-config-instruction {
+  color: #555;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.nav-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nav-config-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nav-config-label {
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.nav-config-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  background-color: #fff;
+}
+
+.nav-config-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+.nav-config-button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.nav-config-btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.nav-config-btn-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.nav-config-btn-primary:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-config-btn-secondary {
+  background-color: #f1f1f1;
+  color: #555;
+}
+
+.nav-config-btn-secondary:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-config-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Efecto de carga al enviar el formulario */
+.nav-config-form.saving button[type="submit"] {
+  position: relative;
+  pointer-events: none;
+}
+
+.nav-config-form.saving button[type="submit"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: navConfigSpin 1s linear infinite;
+}
+
+@keyframes navConfigSpin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}

@@ -24,5 +24,33 @@ module.exports = {
   getConexiones: async (req, res) => {
     const result = await Cobrar.getConexiones(req.params.contribuyenteId);
     res.json(result);
+  },
+  getBaseCatastrales: async (req, res) => {
+    const result = await Cobrar.getBaseCatastrales(req.params.contribuyenteId);
+    res.json(result);
+  },
+  getIdRecibo: async (req, res) => {
+    const ultimo_id = await Cobrar.getIdRecibo();
+    res.json({ ultimo_id });
+  },
+  setRecibo: async (req, res) => {
+    console.log('Datos recibidos:', req.body);
+    try {
+      const { folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuentaContable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion } = req.body;
+
+
+      const recibo = await Cobrar.setRecibo(folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuentaContable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion);
+      res.status(201).json({
+        success: true,
+        message: 'Recibo registrado exitosamente',
+        recibo
+      });
+    } catch (error) {
+      console.error('Error al registrar recibo:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Error interno del servidor'
+      });
+    }
   }
 };

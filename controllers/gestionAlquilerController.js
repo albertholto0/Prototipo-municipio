@@ -1,3 +1,5 @@
+// File: controllers/gestionAlquilerController.js
+//Sergio Elias Robles Ignacio 
 const Alquiler = require('../models/gestionAlquilerModel');
 
 // Obtener todos los alquileres

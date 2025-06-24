@@ -100,7 +100,7 @@ router.put('/:clave_subconcepto_actual', async (req, res) => {
 // Ruta para eliminar un subconcepto
 router.delete('/:clave_subconcepto', async (req, res) => {
     try {
-        const { password } = req.body;
+        //const { password } = req.body;
         
         const deleted = await Subconceptos.delete(req.params.clave_subconcepto);
         

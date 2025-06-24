@@ -1,34 +1,5 @@
-// =======================
-// Datos de ejemplo
-// =======================
-let GestionAlquileres = [
-  {
-    fecha_inicio: "2023-05-10",
-    fecha_fin: "2023-06-10",
-    numero_viajes: 5,
-    kilometros_recorridos: 120.5,
-    horometro_inicio: 100.0,
-    horometro_fin: 150.0,
-    tipo_trabajo: "Excavación",
-    concepto: "Obra pública",
-    tarifa_base: 500.0,
-    monto_total: 2500.0,
-    id_recibo: "REC123"
-  },
-  {
-    fecha_inicio: "2023-07-01",
-    fecha_fin: "2023-07-15",
-    numero_viajes: 3,
-    kilometros_recorridos: 80.0,
-    horometro_inicio: 200.0,
-    horometro_fin: 230.0,
-    tipo_trabajo: "Transporte",
-    concepto: "Materiales",
-    tarifa_base: 400.0,
-    monto_total: 1200.0,
-    id_recibo: "REC124"
-  }
-];
+// File: public/GestionAlquiler/PruebaAlquiler.js
+//Sergio Elias Robles Ignacio 
 
 let allAlquileres = []; // Variable global para almacenar todos los alquileres
 
@@ -86,9 +57,12 @@ function renderizarAlquileres(lista) {
 
   paginatedData.forEach(alquiler => {
     const fila = document.createElement('tr');
+    const fechaInicio = alquiler.fecha_inicio ? alquiler.fecha_inicio.slice(0, 10) : '';
+    const fechaFin = alquiler.fecha_fin ? alquiler.fecha_fin.slice(0, 10) : '';
+
     fila.innerHTML = `
-      <td>${alquiler.fecha_inicio || ''}</td>
-      <td>${alquiler.fecha_fin || ''}</td>
+      <td>${fechaInicio}</td>
+      <td>${fechaFin}</td>
       <td>${alquiler.tipo_trabajo || ''}</td>
       <td>${alquiler.concepto || ''}</td>
       <td>${alquiler.monto_total || ''}</td>
@@ -147,10 +121,10 @@ window.changePage = function (page) {
 function filteredAlquileres() {
   const term = elements.searchInput.value.toLowerCase();
   return allAlquileres.filter(alquiler =>
-    (alquiler.fecha_inicio || '').toLowerCase().includes(term) ||
+    (alquiler.fecha_inicio && alquiler.fecha_inicio.slice(0, 10).includes(term)) ||
     (alquiler.tipo_trabajo || '').toLowerCase().includes(term) ||
     (alquiler.concepto || '').toLowerCase().includes(term) ||
-    (alquiler.id_recibo || '').toLowerCase().includes(term)
+    (alquiler.id_recibo && alquiler.id_recibo.toString().toLowerCase().includes(term))
   );
 }
 
@@ -192,8 +166,18 @@ function addRowListeners() {
       // Obtener datos del alquiler
       const alquiler = allAlquileres.find(a => a.id_alquiler == editId);
       if (!alquiler) return;
-      document.getElementById('fecha_inicio').value = alquiler.fecha_inicio || '';
-      document.getElementById('fecha_fin').value = alquiler.fecha_fin || '';
+
+      // Formatear fechas para el input tipo date o datetime-local
+      function formatDateForInput(dateString) {
+        if (!dateString) return '';
+        // Si es datetime tipo '2024-06-21T12:00:00.000Z' o '2024-06-21 12:00:00'
+        const d = new Date(dateString);
+        if (isNaN(d)) return dateString.split('T')[0] || dateString.split(' ')[0];
+        // Para input type="date"
+        return d.toISOString().slice(0, 10);
+      }
+      document.getElementById('fecha_inicio').value = alquiler.fecha_inicio ? alquiler.fecha_inicio.slice(0, 10) : '';
+      document.getElementById('fecha_fin').value = alquiler.fecha_fin ? alquiler.fecha_fin.slice(0, 10) : '';
       document.getElementById('numero_viajes').value = alquiler.numero_viajes || '';
       document.getElementById('kilometros_recorridos').value = alquiler.kilometros_recorridos || '';
       document.getElementById('horometro_inicio').value = alquiler.horometro_inicio || '';
@@ -232,9 +216,12 @@ function addRowListeners() {
       const alquiler = allAlquileres.find(a => a.id_alquiler == id);
       if (!alquiler) return;
       const infoContent = document.getElementById("infoContent");
+      const fechaInicio = alquiler.fecha_inicio ? alquiler.fecha_inicio.slice(0, 10) : '';
+      const fechaFin = alquiler.fecha_fin ? alquiler.fecha_fin.slice(0, 10) : '';
+
       infoContent.innerHTML = `
-        <p><strong>Fecha de Inicio:</strong> ${alquiler.fecha_inicio || ''}</p>
-        <p><strong>Fecha de Fin:</strong> ${alquiler.fecha_fin || ''}</p>
+        <p><strong>Fecha de Inicio:</strong> ${fechaInicio}</p>
+        <p><strong>Fecha de Fin:</strong> ${fechaFin}</p>
         <p><strong>Número de Viajes:</strong> ${alquiler.numero_viajes || ''}</p>
         <p><strong>Kilómetros Recorridos:</strong> ${alquiler.kilometros_recorridos || ''}</p>
         <p><strong>Horómetro Inicio:</strong> ${alquiler.horometro_inicio || ''}</p>
@@ -261,14 +248,25 @@ document.addEventListener("DOMContentLoaded", () => {
     renderizarAlquileres(filteredAlquileres());
   });
 
-  elements.btnOpenModal.addEventListener('click', () => {
-    resetForm();
-    openModal();
-  });
+  // Solo agrega el listener si el botón existe
+  if (elements.btnOpenModal) {
+    elements.btnOpenModal.addEventListener('click', () => {
+      resetForm();
+      openModal();
+    });
+  }
 
-  elements.btnCancel.addEventListener("click", closeModal);
-  elements.btnCloseModal?.addEventListener("click", closeModal);
-  viewModalElements.btnCloseViewModal?.addEventListener("click", closeViewModal);
+  if (elements.btnCancel) {
+    elements.btnCancel.addEventListener("click", closeModal);
+  }
+
+  if (elements.btnCloseModal) {
+    elements.btnCloseModal.addEventListener("click", closeModal);
+  }
+
+  if (viewModalElements.btnCloseViewModal) {
+    viewModalElements.btnCloseViewModal.addEventListener("click", closeViewModal);
+  }
 
   elements.form.addEventListener("submit", async function (e) {
     e.preventDefault();

@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Cambia de página y renderiza la tabla
-  window.changePage = function(page) {
+  window.changePage = function (page) {
     const totalPages = Math.ceil(conceptosFiltrados.length / ItemsPorPagina);
     if (page < 1 || page > totalPages) return;
     currentPage = page;
@@ -122,10 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Botón Agregar abre modal de agregar
-document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
+  document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
     document.getElementById('agregarConceptForm').reset();
     document.getElementById('modalAgregarConcepto').style.display = 'block';
-});
+  });
 
   // Botón Cancelar en modal de agregar
   document.getElementById('btnCancelarModal').addEventListener('click', () => {
@@ -138,7 +138,7 @@ document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
   });
 
   // Modificar el modal de edición para permitir cambiar la clave concepto
-  window.openModifyModal = function(clave_concepto) {
+  window.openModifyModal = function (clave_concepto) {
     const concepto = conceptos.find(c => c.clave_concepto == clave_concepto);
     if (!concepto) return;
 
@@ -155,139 +155,190 @@ document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
     document.getElementById('edit_periodicidad').value = concepto.periodicidad;
 
     document.getElementById('modalEditarConcepto').style.display = 'block';
-};
-
-  // Función para abrir modal de eliminación
-  window.openDeleteModal = function(clave_concepto) {
-    document.getElementById('deleteConceptId').value = clave_concepto;
-    document.getElementById('deleteModal').style.display = 'block';
   };
 
-  // Manejar el envío del formulario de eliminación
-  document.getElementById('deleteConceptForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const clave_concepto = document.getElementById('deleteConceptId').value;
-    const password = document.getElementById('deletePassword').value;
-
-    try {
-        const response = await fetch(`http://localhost:5000/api/conceptos/${clave_concepto}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password })
-        });
-
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || 'Error al eliminar concepto');
-
-        alert('Concepto eliminado exitosamente');
-        document.getElementById('deleteModal').style.display = 'none';
-        document.getElementById('deletePassword').value = '';
-        cargarConceptos();
-    } catch (error) {
+  window.openDeleteModal = function (clave_concepto) {
+    // Primero verificar si tiene subconceptos
+    fetch(`http://localhost:5000/api/conceptos/${clave_concepto}/has_subconceptos`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.hasSubconceptos) {
+          alert('Este concepto no puede eliminarse porque tiene subconceptos asociados.\n\nPor favor, elimina primero todos los subconceptos antes de intentar eliminar este concepto.');
+          return;
+        }
+        // Confirmación antes de eliminar
+        if (confirm('¿Estás seguro de que deseas eliminar este concepto? Esta acción no se puede deshacer.')) {
+          eliminarConcepto(clave_concepto);
+        }
+      })
+      .catch(error => {
         console.error('Error:', error);
-        alert('Error: ' + error.message);
+        alert('Ocurrió un error al verificar los subconceptos asociados');
+      });
+  };
+
+  async function eliminarConcepto(clave_concepto) {
+    try {
+      const response = await fetch(`http://localhost:5000/api/conceptos/${clave_concepto}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Error al eliminar concepto');
+      alert('Concepto eliminado exitosamente');
+      cargarConceptos();
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error: ' + error.message);
     }
-});
+  }
+
+  // Función para abrir modal de eliminación con verificación de subconceptos
+  //   window.openDeleteModal = function(clave_concepto) {
+  //     // Primero verificar si tiene subconceptos
+  //     fetch(`http://localhost:5000/api/conceptos/${clave_concepto}/has_subconceptos`)
+  //         .then(response => response.json())
+  //         .then(data => {
+  //             if (data.hasSubconceptos) {
+  //                 alert('Este concepto no puede eliminarse porque tiene subconceptos asociados.\n\nPor favor, elimina primero todos los subconceptos antes de intentar eliminar este concepto.');
+  //                 return;
+  //             }
+
+  //             // Si no tiene subconceptos, mostrar el modal de eliminación
+  //             document.getElementById('deleteConceptId').value = clave_concepto;
+  //             document.getElementById('deleteModal').style.display = 'block';
+  //         })
+  //         .catch(error => {
+  //             console.error('Error:', error);
+  //             alert('Ocurrió un error al verificar los subconceptos asociados');
+  //         });
+  // };
+
+  //   // Manejar el envío del formulario de eliminación
+  //   document.getElementById('deleteConceptForm').addEventListener('submit', async (e) => {
+  //     e.preventDefault();
+
+  //     const clave_concepto = document.getElementById('deleteConceptId').value;
+  //     const password = document.getElementById('deletePassword').value;
+
+  //     try {
+  //         const response = await fetch(`http://localhost:5000/api/conceptos/${clave_concepto}`, {
+  //             method: 'DELETE',
+  //             headers: { 'Content-Type': 'application/json' },
+  //             body: JSON.stringify({ password })
+  //         });
+
+  //         const result = await response.json();
+  //         if (!response.ok) throw new Error(result.error || 'Error al eliminar concepto');
+
+  //         alert('Concepto eliminado exitosamente');
+  //         document.getElementById('deleteModal').style.display = 'none';
+  //         document.getElementById('deletePassword').value = '';
+  //         cargarConceptos();
+  //     } catch (error) {
+  //         console.error('Error:', error);
+  //         alert('Error: ' + error.message);
+  //     }
+  // });
 
   // Formulario para agregar
   document.getElementById('agregarConceptForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const conceptoData = {
-        clave_concepto: document.getElementById('clave_concepto').value,
-        clave_seccion: document.getElementById('clave_seccion').value,
-        descripcion: document.getElementById('descripcion').value,
-        tipo_servicio: document.getElementById('tipo_servicio').value,
-        cuota: parseFloat(document.getElementById('cuota').value),
-        periodicidad: document.getElementById('periodicidad').value
+      clave_concepto: document.getElementById('clave_concepto').value,
+      clave_seccion: document.getElementById('clave_seccion').value,
+      descripcion: document.getElementById('descripcion').value,
+      tipo_servicio: document.getElementById('tipo_servicio').value,
+      cuota: parseFloat(document.getElementById('cuota').value),
+      periodicidad: document.getElementById('periodicidad').value
     };
 
     try {
-        const response = await fetch('http://localhost:5000/api/conceptos', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(conceptoData)
-        });
+      const response = await fetch('http://localhost:5000/api/conceptos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(conceptoData)
+      });
 
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || 'Error al crear concepto');
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Error al crear concepto');
 
-        alert('Concepto creado exitosamente');
-        document.getElementById('modalAgregarConcepto').style.display = 'none';
-        cargarConceptos();
+      alert('Concepto creado exitosamente');
+      document.getElementById('modalAgregarConcepto').style.display = 'none';
+      cargarConceptos();
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error: ' + error.message);
+      console.error('Error:', error);
+      alert('Error: ' + error.message);
     }
-});
+  });
 
   // Actualizar el formulario de edición para manejar cambios de clave
   document.getElementById('editarConceptForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const oldClave = document.getElementById('edit_clave_concepto').getAttribute('data-original-value');
     const newClave = document.getElementById('edit_clave_concepto').value;
     const claveChanged = oldClave !== newClave;
 
     const conceptoData = {
-        clave_concepto: newClave,
-        clave_seccion: document.getElementById('edit_clave_seccion').value,
-        descripcion: document.getElementById('edit_descripcion').value,
-        tipo_servicio: document.getElementById('edit_tipo_servicio').value,
-        cuota: parseFloat(document.getElementById('edit_cuota').value),
-        periodicidad: document.getElementById('edit_periodicidad').value
+      clave_concepto: newClave,
+      clave_seccion: document.getElementById('edit_clave_seccion').value,
+      descripcion: document.getElementById('edit_descripcion').value,
+      tipo_servicio: document.getElementById('edit_tipo_servicio').value,
+      cuota: parseFloat(document.getElementById('edit_cuota').value),
+      periodicidad: document.getElementById('edit_periodicidad').value
     };
 
     try {
-        let response;
-        if (claveChanged) {
-            // Verificar si hay subconceptos primero
-            const checkResponse = await fetch(`http://localhost:5000/api/conceptos/${oldClave}/has_subconceptos`);
-            const checkResult = await checkResponse.json();
-            
-            if (!checkResponse.ok) throw new Error(checkResult.error);
-            if (checkResult.hasSubconceptos) {
-                throw new Error('No se puede cambiar la clave concepto porque tiene subconceptos asociados');
-            }
+      let response;
+      if (claveChanged) {
+        // Verificar si hay subconceptos primero
+        const checkResponse = await fetch(`http://localhost:5000/api/conceptos/${oldClave}/has_subconceptos`);
+        const checkResult = await checkResponse.json();
 
-            response = await fetch(`http://localhost:5000/api/conceptos/${oldClave}/update-key`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    new_clave_concepto: newClave,
-                    clave_seccion: conceptoData.clave_seccion,
-                    descripcion: conceptoData.descripcion,
-                    tipo_servicio: conceptoData.tipo_servicio,
-                    cuota: conceptoData.cuota,
-                    periodicidad: conceptoData.periodicidad
-                })
-            });
-        } else {
-            response = await fetch(`http://localhost:5000/api/conceptos/${newClave}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    clave_seccion: conceptoData.clave_seccion,
-                    descripcion: conceptoData.descripcion,
-                    tipo_servicio: conceptoData.tipo_servicio,
-                    cuota: conceptoData.cuota,
-                    periodicidad: conceptoData.periodicidad
-                })
-            });
+        if (!checkResponse.ok) throw new Error(checkResult.error);
+        if (checkResult.hasSubconceptos) {
+          throw new Error('No se puede cambiar la clave concepto porque tiene subconceptos asociados');
         }
 
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || 'Error al actualizar concepto');
+        response = await fetch(`http://localhost:5000/api/conceptos/${oldClave}/update-key`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            new_clave_concepto: newClave,
+            clave_seccion: conceptoData.clave_seccion,
+            descripcion: conceptoData.descripcion,
+            tipo_servicio: conceptoData.tipo_servicio,
+            cuota: conceptoData.cuota,
+            periodicidad: conceptoData.periodicidad
+          })
+        });
+      } else {
+        response = await fetch(`http://localhost:5000/api/conceptos/${newClave}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            clave_seccion: conceptoData.clave_seccion,
+            descripcion: conceptoData.descripcion,
+            tipo_servicio: conceptoData.tipo_servicio,
+            cuota: conceptoData.cuota,
+            periodicidad: conceptoData.periodicidad
+          })
+        });
+      }
 
-        alert('Concepto actualizado exitosamente');
-        document.getElementById('modalEditarConcepto').style.display = 'none';
-        cargarConceptos();
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Error al actualizar concepto');
+
+      alert('Concepto actualizado exitosamente');
+      document.getElementById('modalEditarConcepto').style.display = 'none';
+      cargarConceptos();
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error: ' + error.message);
+      console.error('Error:', error);
+      alert('Error: ' + error.message);
     }
-});
+  });
 
   // Llenar select de clave_seccion desde la base de datos
   async function cargarSecciones() {
@@ -311,3 +362,7 @@ document.getElementById('btnAgregarConcepto').addEventListener('click', () => {
   cargarSecciones();
   cargarConceptos();
 });
+
+// document.querySelector('.cancel-btn-delete').addEventListener('click', () => {
+//   document.getElementById('deleteModal').style.display = 'none';
+// });

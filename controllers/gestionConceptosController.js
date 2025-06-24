@@ -129,7 +129,7 @@ exports.deleteConcepto = async (req, res) => {
         if (tieneSubconceptos) {
             return res.status(400).json({ 
                 success: false,
-                error: 'No se puede eliminar el concepto porque tiene subconceptos asociados' 
+                error: 'No se puede eliminar el concepto porque tiene subconceptos asociados. Por favor, elimine primero los subconceptos.'
             });
         }
 

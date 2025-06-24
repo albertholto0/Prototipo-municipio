@@ -1,19 +1,26 @@
 const express = require("express");
+const session = require('express-session');
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const baseCatastralRoutes = require('./routes/gestionBaseCatastralRoute');
 const contribuyenteRoutes = require("./routes/gestionContribuyenteRoute");
-const EstablecimientoRouter = require("./routes/gestionEstablecimientosRoute");
+const establecimientoRoutes = require("./routes/gestionEstablecimientosRoute");
 const seccionesRoutes = require("./routes/gestionSeccionRoutes");
-const cuentaContableRoutes = require('./routes/gestionCuentasContablesRoute');
-const conexionRouter = require("./routes/gestionConexionRoute");
+const cuentaContableRoutes = require("./routes/gestionCuentasContablesRoute");
+const conexionRoutes = require("./routes/gestionConexionRoute");
 const usuariosRoutes = require("./routes/gestionUsuariosRoute");
 const conceptoRoutes = require("./routes/gestionConceptoRoute");
+const configuracionRoutes = require("./routes/gestionConfiguracionRoute");
 const estimuloFiscalRoutes = require("./routes/gestionEstimuloFiscalRoute");
-const cobrar = require("./routes/cobrarRoute");
-const subcuentas = require("./routes/gestionSubcuentasContablesRoute");
-const subconceptos = require("./routes/gestionSubconceptoRoute");
-const corteCajaRouter = require("./routes/gestionCorteCajaRoute");
-const gestionEjercicioFiscalRoute = require('./routes/gestionEjercicioFiscalRoute');
+const corteCajaRoutes = require("./routes/gestionCorteCajaRoute");
+const cobrarRoutes = require("./routes/cobrarRoute");
+const subconceptoRoutes = require("./routes/gestionSubconceptoRoute");
+const alquilerRoutes = require("./routes/gestionAlquilerRoute");
+const ejercicioFiscalRoutes = require("./routes/gestionEjercicioFiscalRoute");
+const inicioSesionRoutes = require("./routes/inicioSesionRoute");
+const historialAccesosRoutes = require("./routes/gestionHistorialAccesosRoute");
+const subcuentasContablesRoutes = require("./routes/gestionSubcuentasContablesRoute");
+
 const app = express();
 
 
@@ -25,17 +32,36 @@ const gestionRecibo = require("./routes/gestionReciboRoute");
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname + '/public'));
-
+app.use(session({
+  secret: 'abc',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 // Rutas
+app.use('/api/baseCatastral', baseCatastralRoutes);
 app.use("/api/contribuyentes", contribuyenteRoutes);
-app.use("/api/establecimientos", EstablecimientoRouter);
+app.use("/api/establecimientos", establecimientoRoutes);
 app.use("/api/secciones", seccionesRoutes);
 app.use("/api/cuentasContables", cuentaContableRoutes);
-app.use("/api/conexion", conexionRouter);
+app.use("/api/conexiones", conexionRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/conceptos", conceptoRoutes);
+app.use("/api/estimuloFiscal", estimuloFiscalRoutes);
+app.use("/api/configuracion", configuracionRoutes);
+app.use("/api/corteCaja", corteCajaRoutes);
+app.use("/api/cobrar", cobrarRoutes);
+app.use("/api/subconceptos", subconceptoRoutes);
+app.use("/api/alquileres", alquilerRoutes);
+app.use("/api/EjercicioFiscal", ejercicioFiscalRoutes);
+app.use("/api/inicioSesion", inicioSesionRoutes);
+app.use("/api/historialAccesos", historialAccesosRoutes);
+app.use("/api/subcuentasContables", subcuentasContablesRoutes);
+
+app.get("/", (req, res) => {
+  res.send("API funcionando correctamente");
+});
 app.use("/api/cobrar", cobrar);
 app.use("/api/EjercicioFiscal", gestionEjercicioFiscalRoute);
 // Agregar más rutas para otros módulos

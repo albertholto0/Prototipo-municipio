@@ -1,7 +1,7 @@
-/*// Datos de ejemplo para movimientos de caja (simulando una base de datos)
+// Datos de ejemplo para movimientos de caja (simulando una base de datos)
 const cortesDeCaja = {
     // Corte de caja de hoy
-    '2025-05-26': {
+    '2025-06-19': {
         encargado: "Eden Mendoza",
         movimientos: [
             { fp: '006', clave: 'CLAVE-547', concepto: 'Agua potable', tipoPago: 'Efectivo', cantidad: 2, importe: 128.00 },
@@ -74,7 +74,7 @@ const cortesDeCaja = {
         horaCierre: '19:15 PM'
     }
 };
-*/
+
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos del DOM
     const tablaMovimientos = document.querySelector('#movementsTable tbody');

@@ -150,6 +150,17 @@ body {
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
 }
 
+#btnGuardarDatos {
+  background-color: #2ecc71;
+  color: white;
+}
+
+#btnGuardarDatos:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
 .btn-cancel {
   background-color: #e74c3c;
   color: white;
@@ -163,7 +174,8 @@ body {
 
 /* Inicio del Día (cuanto hay en caja) */
 .modal-overlay {
-  display: none; /* Oculto por defecto */
+  display: none;
+  /* Oculto por defecto */
   position: fixed;
   top: 0;
   left: 0;
@@ -219,7 +231,8 @@ body {
 #selects-anidados {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px; /* Espacio entre selects */
+  gap: 16px;
+  /* Espacio entre selects */
   margin-bottom: 10px;
   align-items: flex-end;
 }
@@ -237,6 +250,84 @@ body {
   background-color: #34495e;
   color: white;
   font-size: 0.9rem;
+}
+
+.input-alerta:placeholder-shown {
+  border: 1px solid red;
+  color: #b30000;
+  box-shadow: 0 0 0 3px rgba(129, 5, 5, 0.2);
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1100;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 2% auto;
+  padding: 20px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  max-width: 600px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* IE 10+ */
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Ajustes para el formulario dentro del modal */
+.modal-content .form-container {
+  margin-top: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.modal-close-custom {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  color: #8b8b8b;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 10;
+}
+
+.modal-close-custom:hover {
+  color: #e74c3c;
+  transform: scale(1.2);
+}
+
+.form-inline {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.form-inline .form-group {
+  flex: 1 1 50%;
+  width: 50%;
 }
 
 /* ===== RESPONSIVE ===== */

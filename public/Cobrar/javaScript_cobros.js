@@ -1,3 +1,9 @@
+// Variables globales para conexion y base catastral
+let idConexionActual = null;
+let idBaseActual = null;
+let cuentaConexionActual = '';
+let cuentaBaseCatastral = '';
+
 // Utilidad: Capitalizar la primera letra de cada palabra
 function capitalizarTodasPalabras(str) {
     return str.split(' ').map(word =>
@@ -74,6 +80,37 @@ if (otroMotivo) {
     otroMotivo.addEventListener('focus', limpiarSelectsAnidadosYResetear);
 }
 
+const btnCancelar = document.getElementById('btnCancelarRecibo');
+if (btnCancelar) {
+    btnCancelar.addEventListener('click', function () {
+        const form = document.getElementById('receiptForm');
+        // Guarda los valores actuales
+        const fechaInput = document.getElementById('fecha');
+        const ejercicioFiscalInput = document.getElementById('ejercicioFiscal');
+        const fechaValue = fechaInput ? fechaInput.value : '';
+        const ejercicioFiscalValue = ejercicioFiscalInput ? ejercicioFiscalInput.value : '';
+
+        if (form) {
+            form.reset();
+        }
+
+        limpiarSelectsAnidadosYResetear();
+
+        const cantidadLetraInput = document.getElementById('cantidadLetra');
+        if (cantidadLetraInput) cantidadLetraInput.value = '';
+
+        // Restaura los valores guardados
+        if (fechaInput) fechaInput.value = fechaValue;
+        if (ejercicioFiscalInput) ejercicioFiscalInput.value = ejercicioFiscalValue;
+    });
+}
+
+// Limpiar idConexionActual al seleccionar cualquier cuenta contable anidada
+function limpiarIdConexionSiSelectAnidado() {
+    idConexionActual = null;
+    idBaseActual = null;
+}
+
 // Cargar selects anidados dinámicamente
 async function cargarSelect(url, label, nivel, onChange) {
     try {
@@ -94,11 +131,30 @@ async function cargarSelect(url, label, nivel, onChange) {
         select.className = 'select-anidado';
         select.innerHTML = `<option value="">Seleccione ${label}</option>`;
         datos.forEach(d => {
-            const value = d.clave_cuenta_contable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
-            const text = d.nombre_cuentaContable || d.nombre_subcuentas || d.descripcion || d.nombre || d.descripcion || d.nombre;
-            select.innerHTML += `<option value="${value}">${value} - ${text}</option>`;
+            const value = d.id_cuentaContable || d.clave_cuentaContable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
+            const clave = d.clave_cuentaContable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
+            const text = clave;
+            const label = d.nombre_cuentaContable || d.nombre || d.descripcion || '';
+            select.innerHTML += `<option value="${value}" data-clave="${clave}">${text} - ${label}</option>`;
         });
         div.appendChild(select);
+
+        // Limpiar el select "otroMotivo" al seleccionar cualquier cuenta contable anidada
+        const cuenta = document.getElementById('clave');
+        if (cuenta) {
+            select.addEventListener('change', function () {
+                if (this.value) {
+                    cuenta.value = '';
+                }
+            });
+        }
+
+        // Limpiar idConexionActual al seleccionar cualquier cuenta contable anidada
+        select.addEventListener('change', function () {
+            if (this.value) {
+                limpiarIdConexionSiSelectAnidado();
+            }
+        });
 
         if (onChange) select.addEventListener('change', onChange);
     } catch (error) {
@@ -106,8 +162,30 @@ async function cargarSelect(url, label, nivel, onChange) {
     }
 }
 
+// Función para obtener el folio
+async function obtenerFolio() {
+    try {
+        const res = await fetch('http://localhost:5000/api/cobrar/ultimoRecibo');
+        const data = await res.json();
+        const siguienteId = data?.ultimo_id ? data.ultimo_id + 1 : 1;
+        return `FOL-${siguienteId}`;
+    } catch (e) {
+        return 'FOL-error';
+    }
+}
+
 // Inicialización principal
 document.addEventListener('DOMContentLoaded', async () => {
+    const btnCancel = document.getElementById("btnCancel");
+    btnCancel.addEventListener("click", () => {
+        modalOverlay.style.display = 'none';
+    });
+    // Obtener el folio
+    const folioInput = document.getElementById('folio');
+    if (folioInput) {
+        folioInput.value = await obtenerFolio();
+    }
+
     // Configurar fecha y ejercicio fiscal
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -138,15 +216,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Desactivar selects mutuamente excluyentes
-    const cuentaContable = document.getElementById('cuentaContable');
-    const otroMotivo = document.getElementById('otroMotivo');
-    if (cuentaContable && otroMotivo) {
-        cuentaContable.addEventListener('focus', () => { otroMotivo.value = 'NO DISPONIBLE'; });
-        otroMotivo.addEventListener('focus', () => { cuentaContable.value = 'NO DISPONIBLE'; });
-        otroMotivo.addEventListener('change', desactivarInput);
-    }
-
     // Descuentos adicionales solo disponibles en enero y febrero
     const selectDescuento = document.getElementById("descuentoAdicional");
     const fechaActual = new Date();
@@ -162,49 +231,90 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cargar contribuyentes y descuentos
     try {
-        const [contribuyentes, cuentasContables, estimulosFiscales] = await Promise.all([
-            fetch('http://localhost:5000/api/contribuyentes').then(r => r.json()),
-            fetch('http://localhost:5000/api/cuentasContables').then(r => r.json()),
-            fetch('http://localhost:5000/api/estimuloFiscal').then(r => r.json())
+        const [contribuyentes, estimulosFiscales] = await Promise.all([
+            fetch('http://localhost:5000/api/contribuyentes', { cache: "no-store" }).then(r => r.json()),
+            fetch('http://localhost:5000/api/estimuloFiscal', { cache: "no-store" }).then(r => r.json()),
         ]);
 
         // Contribuyentes
         const contribuyenteSelect = document.getElementById('contribuyente');
         const domicilioInput = document.getElementById('domicilio');
-        const otroMotivoSelect = document.getElementById('otroMotivo'); // <-- Agrega esto aquí
+        const otroMotivoSelect = document.getElementById('otroMotivo');
+        const modalOverlay = document.getElementById('modalOverlay');
         const claveInput = document.getElementById('clave');
         const contribuyenteMap = new Map();
+
+        // Abrir el modal de alquiler si se selecciona "Alquiler" en el select "otroMotivo"
+        if (otroMotivoSelect && modalOverlay) {
+            otroMotivoSelect.addEventListener('change', function () {
+                if (this.value === 'alquiler') {
+                    modalOverlay.style.display = 'flex'; // O 'block', según tu CSS
+                }
+            });
+        }
+
         if (contribuyenteSelect && domicilioInput) {
             contribuyentes.forEach(contribuyente => {
                 const option = document.createElement('option');
                 option.value = contribuyente.id_contribuyente;
-                option.textContent = contribuyente.nombre_completo;
+                option.textContent = `${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}`;
                 contribuyenteMap.set(contribuyente.id_contribuyente, contribuyente.direccion);
                 contribuyenteSelect.appendChild(option);
             });
 
-            let cuentaConexionActual = '';
+            if (otroMotivoSelect) {
+                otroMotivoSelect.value = 'cuentaConexion'; // Asigna primero el motivo por defecto
+            }
+
+            if (contribuyenteSelect.options.length > 0) {
+                contribuyenteSelect.selectedIndex = 0; // Selecciona el primero
+                contribuyenteSelect.dispatchEvent(new Event('change')); // Dispara el evento para llenar "clave"
+            }
 
             contribuyenteSelect.addEventListener('change', async () => {
                 const selectedId = contribuyenteSelect.value;
                 domicilioInput.value = contribuyenteMap.get(Number(selectedId)) || ''; // Convierte el ID a número
+
+                let existeConexion = false;
+                let existeBase = false;
 
                 // MOSTRAR LA CUENTA EN EL INPUT "clave"
                 // Solo busca si hay un ID válido
                 if (selectedId && selectedId !== "undefined") {
                     try {
                         const res = await fetch(`http://localhost:5000/api/cobrar/conexiones/${selectedId}`);
+                        const resBase = await fetch(`http://localhost:5000/api/cobrar/bases/${selectedId}`);
                         const data = await res.json();
+                        const dataBase = await resBase.json();
+                        idConexionActual = data.length > 0 ? data[0].id_conexion : null;
                         cuentaConexionActual = data.length > 0 ? data[0].cuenta : '';
+                        idBaseActual = data.length > 0 ? data[0].id_base_catastral : null;
+                        cuentaBaseCatastral = dataBase.length > 0 ? dataBase[0].cuenta : '';
                     } catch (e) {
+                        idConexionActual = null;
                         cuentaConexionActual = '';
+                        idBaseActual = null;
+                        cuentaBaseCatastral = '';
                     }
-                } else {
-                    cuentaConexionActual = '';
                 }
+
+                // Mostrar alerta si no existe ni conexión ni base catastral
+                if (!existeConexion && !existeBase) {
+                    claveInput.classList.add('input-alerta');
+                    claveInput.value = '';
+                    claveInput.placeholder = '¡Este contribuyente no tiene cuenta!';
+                    // Opcional: mostrar un mensaje flotante
+                    // alert('El contribuyente no tiene conexión ni base catastral');
+                } else {
+                    claveInput.classList.remove('input-alerta');
+                    claveInput.placeholder = '';
+                }
+
                 // Actualiza el input según el motivo seleccionado
                 if (otroMotivoSelect.value === 'cuentaConexion') {
                     claveInput.value = cuentaConexionActual;
+                } else if (otroMotivoSelect.value === 'cuentaBaseCatastral') {
+                    claveInput.value = cuentaBaseCatastral;
                 } else {
                     claveInput.value = '';
                 }
@@ -214,6 +324,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             otroMotivoSelect.addEventListener('change', () => {
                 if (otroMotivoSelect.value === 'cuentaConexion') {
                     claveInput.value = cuentaConexionActual;
+                } else if (otroMotivoSelect.value === 'cuentaBaseCatastral') {
+                    claveInput.value = cuentaBaseCatastral;
                 } else {
                     claveInput.value = '';
                 }
@@ -228,8 +340,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const estimulosAdicionales = estimulosFiscales.filter(e => e.tipo_descuento === "adicional");
             estimulosNormales.forEach(estimulo => {
                 const option = document.createElement('option');
-                option.value = `${estimulo.porcentaje_descuento}% - ${estimulo.resumen_caracteristicas}`;
-                option.textContent = option.value;
+                option.value = estimulo.id_estimulo_fiscal;
+                option.textContent = `${estimulo.porcentaje_descuento}% - ${estimulo.resumen_caracteristicas}`;
                 estimuloSelect.appendChild(option);
             });
             estimulosAdicionales.forEach(estimulo => {
@@ -238,7 +350,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 option.textContent = option.value;
                 estimuloAdicionalSelect.appendChild(option);
             });
+            if (estimuloSelect && estimuloAdicionalSelect) {
+                estimuloSelect.addEventListener('change', calcularTotal);
+                document.getElementById('subtotal').addEventListener('input', calcularTotal);
+                calcularTotal(); // Para que se calcule el total al inicio si ya hay valores
+            }
         }
+
     } catch (error) {
         console.error('Error al cargar datos iniciales:', error);
     }
@@ -274,6 +392,102 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
+document.getElementById('receiptForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Obtén los valores de los selects anidados (pueden no existir)
+    const selectCuenta = document.getElementById('select-nivel-1');
+    let claveCuentaContable = null;
+    if (selectCuenta) {
+        const selectedOption = selectCuenta.options[selectCuenta.selectedIndex];
+        claveCuentaContable = selectedOption ? selectedOption.getAttribute('data-clave') : null;
+    }
+    const subcuenta = document.getElementById('select-nivel-2')?.value || null;
+    const seccion = document.getElementById('select-nivel-3')?.value || null;
+    const concepto = document.getElementById('select-nivel-4')?.value || null;
+    const subconcepto = document.getElementById('select-nivel-5')?.value || null;
+
+    // Otros campos del formulario
+    const folio = document.getElementById('folio').value;
+    const fecha = document.getElementById('fecha').value;
+    const ejercicioFiscal = document.getElementById('ejercicioFiscal').value;
+    const periodo = document.getElementById('ejercicioPeriodo').value;
+    const subtotal = document.getElementById('subtotal').value;
+    const monto_total = document.getElementById('total').value;
+    const monto_total_letras = document.getElementById('cantidadLetra').value;
+    const forma_de_pago = document.getElementById('formaPago').value;
+    const id_contribuyente = document.getElementById('contribuyente').value;
+    const id_estimulo_fiscal = document.getElementById('descuento').value;
+    console.log('id_estimulo_fiscal seleccionado:', id_estimulo_fiscal);
+    const descripcion = document.getElementById('descripcion').value;
+
+    // id_conexion (si aplica)
+    const id_conexion = idConexionActual || null; // Si tienes el campo, asígnalo aquí
+
+    // id_base (si no esta seleccionado conexion)
+    const id_base = idBaseActual || null;
+
+    // id_usuario siempre 1 (lo puedes poner en el backend, pero si lo quieres enviar, hazlo aquí)
+    const id_usuario = 1;
+
+    // Validación: al menos uno debe tener valor
+    const claveInput = document.getElementById('clave');
+    if ((!claveInput.value || claveInput.value.trim() === '') && (!claveCuentaContable || claveCuentaContable.trim() === '')) {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Atención!',
+            text: 'Debes llenar la cuenta o seleccionar una cuenta contable.',
+            confirmButtonColor: '#3085d6'
+        });
+        return;
+    }
+
+    // Construye el objeto de datos
+    const data = {
+        folio,
+        fecha,
+        ejercicioFiscal,
+        periodo,
+        subtotal,
+        monto: monto_total,
+        monto_total_letras,
+        forma_de_pago,
+        id_contribuyente,
+        descripcion,
+        clave_cuentaContable: claveCuentaContable,
+        clave_subcuenta: subcuenta,
+        clave_seccion: seccion,
+        clave_concepto: concepto,
+        clave_subconcepto: subconcepto,
+        id_estimulo_fiscal,
+        id_conexion,
+        id_base,
+        id_usuario
+    };
+
+    console.log('Datos enviados:', data);
+    console.log('Clave cuenta contable:', claveCuentaContable);
+
+    try {
+        const response = await fetch('http://localhost:5000/api/cobrar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
+        wal.fire({
+                icon: 'success',
+                title: '¡Guardado!',
+                text: 'Recibo Guardado exitosamente'
+            });
+        // Opcional: limpiar el formulario o redirigir
+    } catch (error) {
+        console.error('Error al guardar el recibo:', error);
+        alert('Error al guardar el recibo');
+    }
+});
+// ...existing code...
+
 function calcularTotal() {
     const subtotalInput = document.getElementById('subtotal');
     const descuentoSelect = document.getElementById('descuento');
@@ -285,11 +499,11 @@ function calcularTotal() {
     // Obtén el subtotal como número
     const subtotal = parseFloat(subtotalInput.value.replace(/,/g, '')) || 0;
 
-    // Obtén el porcentaje del descuento seleccionado (asumiendo formato "10% - ...")
+    // Obtén el porcentaje del descuento seleccionado del texto del option
     let porcentaje = 0;
-    const selected = descuentoSelect.value;
-    if (selected) {
-        const match = selected.match(/^(\d+(?:\.\d+)?)%/);
+    const selectedOption = descuentoSelect.options[descuentoSelect.selectedIndex];
+    if (selectedOption) {
+        const match = selectedOption.textContent.match(/^(\d+(?:\.\d+)?)%/);
         if (match) porcentaje = parseFloat(match[1]);
     }
 
@@ -300,7 +514,3 @@ function calcularTotal() {
     // Convierte el total a letras y lo muestra
     cantidadLetraInput.value = capitalizarTodasPalabras(numeroALetras(total));
 }
-
-// Escucha cambios en subtotal y descuento
-document.getElementById('subtotal').addEventListener('input', calcularTotal);
-document.getElementById('descuento').addEventListener('change', calcularTotal);

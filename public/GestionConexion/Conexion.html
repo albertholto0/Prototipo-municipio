@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Conexión</title>
+    <title>Gestión de Conexiones</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
 </head>
@@ -15,7 +16,7 @@
     <!-- Contenido principal -->
     <main class="main-container">
         <div class="title-section">
-            <h2>Gestion de Conexión</h2>
+            <h2>Gestión de Conexiones</h2>
             <hr class="title-line">
         </div>
 
@@ -30,12 +31,14 @@
             <table id="accountsTable">
                 <thead>
                     <tr>
-                        <th>Fecha de Conexion</th>
+                        <th>Fecha de Conexión</th>
                         <th>Contribuyente</th>
                         <th>Cuenta</th>
-                        <th>Tipo de Conexion</th>
+                        <th>Tipo</th>
+                        <th>Uso</th>
+                        <th>Ubicación</th>
+                        <th>Barrio</th>
                         <th>Acciones</th>
-                        
                     </tr>
                 </thead>
                 <tbody>
@@ -47,61 +50,89 @@
             <div class="pagination"></div>
         </div>
     </main>
-    <!-- Modal para el formulario -->
     <div class="modal-overlay" id="modalOverlay">
-            <div class="modal-content">
-                <span class="btn-close" id="btnCloseModal">&times;</span>
-                <div class="form-container" id="formContainer">
-                    <h3 class="text-center" id="formTitle">Agregar Conexión</h3>
-                    <form id="accountForm">
-                        <div class="form-group">
-                            <label for="fechaInicio">Fecha de Conexion:</label>
-                            <input type="date" id="fechaInicio" name="fechaInicio" required>
-                        </div>
-                    cuenta, tipo, uso, ubicacion, barrio
-                        <div class="form-group">
-                            <label for="montoFinal">Monto Base:</label>
-                            <input type="number" id="montoFinal" name="montoFinal" placeholder="Ej. 5000.00" step="0.01"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label for="añoPagado">Año pagado:</label>
-                            <input type="date" id="fechaInicio" name="fechaInicio" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="estadoAlquiler">Tipo Conexion:</label>
-                            <select id="tipoconexion" name="tipoconexion" required>
-                                <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="Domestico">Domestico</option>
-                                <option value="Comercial">Comercial</option>
-                                <option value="Industrial">Industrial</option>
-                                <option value="General">General</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="idContribuyente">Id del Contribuyente:</label>
-                            <input type="text" id="idContribuyente" name="idContribuyente" placeholder="Ej. 123456"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label for="conceptoContribuyente">Concepto del Contribuyente:</label>
-                            <input type="text" id="conceptoContribuyente" name="conceptoContribuyente"
-                                placeholder="Ej. Pago de renta" required>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
-                            <button type="submit" id="btnAddOrUpdate">Agregar</button>
-                        </div>
-                    </form>
+        <div class="modal-content">
+            <div class="form-container" id="formContainer">
+                <!-- <button id="btnCloseModal" class="modal-close-custom">×</button> -->
+                <h3 class="text-center" id="formTitle">Agregar Conexión</h3>
+                <form id="connectionForm">
+                    <div class="form-group">
+                        <label for="fecha_conexion">Fecha de Conexión:</label>
+                        <input type="date" id="fecha_conexion" name="fecha_conexion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_contribuyente">Contribuyente:</label>
+                        <select id="id_contribuyente" name="id_contribuyente" required>
+                            <option value="">Selecciona un contribuyente</option>
+                            <!-- Opciones se llenan con JS -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cuenta">Cuenta:</label>
+                        <input type="text" id="cuenta" name="cuenta" maxlength="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo:</label>
+                        <select id="tipo" name="tipo" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="agua potable">Agua Potable</option>
+                            <option value="drenaje">Drenaje</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="uso">Uso:</label>
+                        <select id="uso" name="uso" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="comercial">Comercial</option>
+                            <option value="residencial">Residencial</option>
+                            <option value="industrial">Industrial</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ubicacion">Ubicación:</label>
+                        <input type="text" id="ubicacion" name="ubicacion" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="barrio">Barrio:</label>
+                        <select id="barrio" name="barrio" required>
+                            <option value="">Selecciona un barrio</option>
+                            <option value="San Pedro">San Pedro</option>
+                            <option value="San Francisco">San Francisco</option>
+                            <option value="La Asuncion">La Asuncion</option>
+                            <option value="La Soledad">La Soledad</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>
+                        <button type="submit" id="btnAddOrUpdate">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ver Información -->
+    <div class="modal-overlay" id="viewModalOverlay" style="display:none;">
+        <div class="modal-content">
+            <!-- <button id="btnCloseViewModal" class="modal-close-custom">×</button> -->
+            <div class="form-container" id="viewContainer">
+                <h3 class="text-center">Información de la Conexión</h3>
+                <div id="infoContent"></div>
+                <div class="form-actions">
+                    <button type="button" id="btnCloseViewModal2" class="btn-cancel">Cerrar</button>
                 </div>
             </div>
         </div>
+    </div>
 
     <footer class="footer">
-        <p>© 2025 Ixtlán - Módulo 5: Gestión de Cuentas Contables</p>
+        <p>© 2025 Ixtlán - Módulo 5: Gestión de Conexiones</p>
     </footer>
-    <script src="/public/Componentes/Nav.js"></script>
-    <script src="/public/GestionConexion/java_gestionConexion.js"></script>
+
+    <script src="java_gestionConexion.js" defer></script>
+    <script src="/public/Componentes/Nav.js" defer></script>
 </body>
 
 </html>

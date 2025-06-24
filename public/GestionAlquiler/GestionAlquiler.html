@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de Alquiler</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/public/BaseCatastral/Styles.css">
     <link rel="stylesheet" href="/public/Componentes/Nav.css">
 
@@ -24,7 +25,7 @@
         <!-- Sección de búsqueda -->
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Buscar" />
-            <button class="btn-agregar" id="btnOpenModal">Agregar</button>
+            <!-- <button class="btn-agregar" id="btnOpenModal">Agregar</button> -->
         </div>
 
         <!-- Tabla -->
@@ -88,7 +89,11 @@
                     </div>
                     <div class="form-group">
                         <label for="tipo_trabajo">Tipo de Trabajo:</label>
-                        <input type="text" id="tipo_trabajo" name="tipo_trabajo" required>
+                        <select id="tipo_trabajo" name="tipo_trabajo" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="municipal">Municipal</option>
+                            <option value="particular">Particular</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="concepto">Concepto:</label>

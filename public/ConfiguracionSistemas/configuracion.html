@@ -3,15 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <link rel="stylesheet" href="/public/Componentes/Nav.css" />
     <link rel="stylesheet" href="/public/Cobrar/estilos_cobro.css" />
+    <title>Configuración del Sistema</title>
   </head>
 
   <body>
-    <div id="nav-placeholder"></div> <!--NavBar-->
+    <div id="nav-placeholder"></div>
 
-    <!--Contenido principal-->
     <main class="main-container">
       <div class="title-section">
         <h2>Configuración del Sistema</h2>
@@ -19,91 +18,39 @@
       </div>
 
       <div class="form-container">
-        <form id="receiptForm">
+        <form id="configForm" enctype="multipart/form-data" method="post">
           <div class="form-grid">
             <!--DEPENDENCIA-->
             <div class="form-group">
-              <label for="dependencia">Dependencia:</label>
+              <label for="dependencia">Dependencia:*</label>
               <input type="text" id="dependencia" name="dependencia" required />
             </div>
 
             <!--LEMA-->
             <div class="form-group">
-              <label for="lema">Lema:</label>
+              <label for="lema">Lema:*</label>
               <input type="text" id="lema" name="lema" required />
             </div>
 
             <!--LOGO-->
             <div class="form-group">
-              <label for="logo">Logo:</label>
-              <input type="file" id="logo" name="logo" accept="image/*" />
-            </div>
-
-            <!--PERIODO-->
-            <div class="form-group">
-              <label for="periodo">Periodo:</label>
-              <input type="text" id="periodo" name="periodo" required />
-            </div>
-
-            <!--RFC-->
-            <div class="form-group">
-              <label for="rfc">RFC:</label>
-              <input type="text" id="rfc" name="rfc" required />
-            </div>
-
-            <!--IDCIF-->
-            <div class="form-group">
-              <label for="idCif">ID CIF:</label>
-              <input type="text" id="idCif" name="idCif" required />
-            </div>
-
-            <!--QR-->
-            <div class="form-group">
-              <label for="codigoQR">Código QR:</label>
+              <label for="logo">Logo:*</label>
               <input
                 type="file"
-                id="codigoQR"
-                name="codigoQR"
+                id="logo"
+                name="logo"
                 accept="image/*"
+                required
               />
+              <small>Formatos aceptados: .png, .jpg (Tamaño máximo: 2MB)</small>
             </div>
           </div>
 
-          <!--Vista previa del logotipo y QR-->
-          <div class="preview-container">
-            <!--<div class="image-previews">
-              <div>
-                <label>Vista previa del logo:</label>
-                <img
-                  id="logoPreview"
-                  src=""
-                  alt="Vista previa del logo"
-                  style="max-width: 200px; display: block; margin-top: 10px"
-                />
-              </div>
-              <div>
-                <label>Vista previa del QR:</label>
-                <img
-                  id="qrPreview"
-                  src=""
-                  alt="Vista previa del código QR"
-                  style="max-width: 200px; display: block; margin-top: 10px"
-                />
-              </div>
-            </div>-->
-            <!--
-            NOTA: Para que ambos botones adopten el color se modifico
-            class -> restablecer
-            id -> guardar 
-            -->
-            <div class="form-actions">
-              <button type="button" id="resetButton" class="btn-cancel">
-                Restablecer Cambios
-              </button>
-              <button type="submit" id="btnGuardarRecibo">
-                Guardar Configuración
-              </button>
-            </div>
+          <!-- En la sección de form-actions -->
+          <div class="form-actions">
+            <button type="submit" id="btnGuardarRecibo">
+              Guardar Configuración
+            </button>
           </div>
         </form>
       </div>
@@ -114,6 +61,6 @@
     </footer>
 
     <script src="/public/Componentes/Nav.js"></script>
-    <script src="/public/ConfiguracionSistemas/S.js"></script>
+    <script src="/public/ConfiguracionSistemas/ScriptConfiguraciones.js"></script>
   </body>
 </html>

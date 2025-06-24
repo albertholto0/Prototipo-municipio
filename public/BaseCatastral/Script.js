@@ -1,339 +1,304 @@
-// Datos iniciales de ejemplo para Bases Catastrales
-let basesCatastrales = [
-  {
-    claveCatastral: "CLAVE-123",
-    nombrePropietario: "Juan Pérez",
-    ubicacion: "Calle Falsa 123",
-    baseCatastral: "1500 m²",
-    valorTerreno: 50000,
-    valorConstruccion: 75000,
-    impuestoCalculado: 1250,
-    fechaAvaluo: "2023-05-10",
-    historialAvaluos: "2021,2022",
-    usoSuelo: "habitacional"
-  },
-  {
-    claveCatastral: "CLAVE-456",
-    nombrePropietario: "María López",
-    ubicacion: "Av. Siempre Viva 742",
-    baseCatastral: "2000 m²",
-    valorTerreno: 60000,
-    valorConstruccion: 90000,
-    impuestoCalculado: 1500,
-    fechaAvaluo: "2023-06-15",
-    historialAvaluos: "2022",
-    usoSuelo: "comercial"
-  }
-];
+const API_BASE = 'http://localhost:5000/api/baseCatastral';
+const API_CONTRIB = 'http://localhost:5000/api/contribuyentes';
 
-// Variables de estado globales
-let isEditing = false;        // Bandera para modo edición
-let currentIndex = null;      // Índice del elemento siendo editado
-let currentPage = 1;          // Página actual
-const rowsPerPage = 10;       // Filas por página
+// Estado global
+defaults = {
+  bases: [],
+  contribuyentes: [],
+  isEditing: false,
+  editingId: null,
+  currentPage: 1,
+  rowsPerPage: 10
+};
+
+// — Función global para mostrar un Bootstrap Toast —
+function showToast(message, type = 'success') {
+  const icons = {
+    success: '<i class="bi bi-check-circle-fill me-2"></i>',
+    danger: '<i class="bi bi-x-circle-fill me-2"></i>',
+    warning: '<i class="bi bi-exclamation-triangle-fill me-2"></i>',
+    info: '<i class="bi bi-info-circle-fill me-2"></i>'
+  };
+  const toastId = `toast${Date.now()}`;
+  const html = `
+    <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          ${icons[type] || ''}${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
+  const toastEl = document.getElementById(toastId);
+  const bsToast = new bootstrap.Toast(toastEl, { delay: 3000 });
+  bsToast.show();
+  toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+}
 
 // Mapeo de elementos del DOM
-const elements = {
-  tableBody: document.querySelector("#accountsTable tbody"),
-  searchInput: document.getElementById("searchInput"),
-  form: document.getElementById("accountForm"),
-  claveCatastral: document.getElementById("claveCatastral"),
-  nombrePropietario: document.getElementById("nombrePropietario"),
-  ubicacion: document.getElementById("ubicacion"),
-  baseCatastral: document.getElementById("baseCatastral"),
-  valorTerreno: document.getElementById("valorTerreno"),
-  valorConstruccion: document.getElementById("valorConstruccion"),
-  impuestoCalculado: document.getElementById("impuestoCalculado"),
-  fechaAvaluo: document.getElementById("fechaAvaluo"),
-  historialAvaluos: document.getElementById("historialAvaluos"),
-  usoSuelo: document.getElementById("usoSuelo"),
-  btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
-  btnCancel: document.getElementById("btnCancel"),
-  formTitle: document.getElementById("formTitle"),
-  paginationContainer: document.querySelector(".pagination")
-};
-
-/* === FUNCIONES PRINCIPALES === */
-
-/**
-* Renderiza la tabla con los datos proporcionados.
-* @param {Array} data - Datos a mostrar en la tabla.
-*/
-function renderTable(data) {
-  elements.tableBody.innerHTML = "";
-  const start = (currentPage - 1) * rowsPerPage;
-  const end = start + rowsPerPage;
-  const paginatedData = data.slice(start, end);
-
-  // Genera las filas de la tabla con paginación
-  paginatedData.forEach((base, index) => {
-    const row = `
-      <tr>
-          <td>${base.claveCatastral}</td>
-          <td>${base.nombrePropietario}</td>
-          <td>${base.ubicacion}</td>
-          <td>${base.baseCatastral}</td>
-          <td>${base.usoSuelo}</td>
-          <td>
-              <button class="action-btn edit" onclick="editAccount(${start + index})" title="Editar">
-                  <img src="/Assets/editor.png" class="action-icon">
-              </button>
-              <button class="action-btn delete" onclick="deleteAccount(${start + index})" title="Eliminar">
-                  <img src="/Assets/eliminar.png" class="action-icon">
-              </button>
-              <button class="action-btn view" onclick="viewAccount(${start + index})" title="Ver información">
-                <img src="/Assets/visualizar.png" class="action-icon">
-              </button>
-          </td>
-      </tr>
-  `;
-    elements.tableBody.insertAdjacentHTML("beforeend", row);  
-  });
-
-  renderPagination(data.length);
-}
-
-/**
-* Renderiza los controles de paginación.
-* @param {number} totalItems - Total de elementos a paginar.
-*/
-function renderPagination(totalItems) {
-  const totalPages = Math.ceil(totalItems / rowsPerPage);
-  let paginationHTML = `
-      <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-          « Anterior
-      </button>
-  `;
-
-  const startPage = Math.max(1, currentPage - 2);
-  const endPage = Math.min(totalPages, currentPage + 2);
-
-  if (startPage > 1) {
-    paginationHTML += `
-          <button class="pagination-btn" onclick="changePage(1)">1</button>
-          ${startPage > 2 ? '<span>...</span>' : ''}
-      `;
-  }
-
-  for (let i = startPage; i <= endPage; i++) {
-    paginationHTML += `
-          <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
-              ${i}
-          </button>
-      `;
-  }
-
-  if (endPage < totalPages) {
-    paginationHTML += `
-          ${endPage < totalPages - 1 ? '<span>...</span>' : ''}
-          <button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>
-      `;
-  }
-
-  paginationHTML += `
-      <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-          Siguiente »
-      </button>
-  `;
-  elements.paginationContainer.innerHTML = paginationHTML;
-}
-
-/* === MANEJADORES DE EVENTOS === */
-
-// Envío del formulario
-elements.form.addEventListener("submit", handleSubmit);
-
-// Botón cancelar
-elements.btnCancel.addEventListener("click", closeModal);
-
-// Búsqueda en tiempo real
-elements.searchInput.addEventListener("input", () => {
-  currentPage = 1;
-  renderTable(filteredBases());
-});
-
-/* === FUNCIONES AUXILIARES === */
-
-/**
-* Filtra las bases según el término de búsqueda.
-* @returns {Array} Datos filtrados.
-*/
-function filteredBases() {
-  const term = elements.searchInput.value.toLowerCase();
-  return basesCatastrales.filter(base =>
-    base.claveCatastral.toLowerCase().includes(term) ||
-    base.nombrePropietario.toLowerCase().includes(term)
-  );
-}
-
-/**
-* Maneja el envío del formulario (crear/actualizar).
-* @param {Event} e - Evento del formulario.
-*/
-function handleSubmit(e) {
-  e.preventDefault();
-  const base = {
-    claveCatastral: elements.claveCatastral.value,
-    nombrePropietario: elements.nombrePropietario.value,
-    ubicacion: elements.ubicacion.value,
-    baseCatastral: elements.baseCatastral.value,
-    valorTerreno: elements.valorTerreno.value,
-    valorConstruccion: elements.valorConstruccion.value,
-    impuestoCalculado: elements.impuestoCalculado.value,
-    fechaAvaluo: elements.fechaAvaluo.value,
-    historialAvaluos: elements.historialAvaluos.value,
-    usoSuelo: elements.usoSuelo.value
-  };
-
-  if (isEditing) {
-    basesCatastrales[currentIndex] = base;
-  } else {
-    basesCatastrales.push(base);
-  }
-
-  closeModal();
-  renderTable(filteredBases());
-}
-
-/**
-* Cambia a una página específica.
-* @param {number} page - Número de página a mostrar.
-*/
-window.changePage = function (page) {
-  currentPage = page;
-  renderTable(filteredBases());
-};
-
-/**
-* Inicia el modo edición para una base catastral.
-* @param {number} index - Índice de la base a editar.
-*/
-window.editAccount = function (index) {
-  const base = basesCatastrales[index];
-  elements.claveCatastral.value = base.claveCatastral;
-  elements.nombrePropietario.value = base.nombrePropietario;
-  elements.ubicacion.value = base.ubicacion;
-  elements.baseCatastral.value = base.baseCatastral;
-  elements.valorTerreno.value = base.valorTerreno;
-  elements.valorConstruccion.value = base.valorConstruccion;
-  elements.impuestoCalculado.value = base.impuestoCalculado;
-  elements.fechaAvaluo.value = base.fechaAvaluo;
-  elements.historialAvaluos.value = base.historialAvaluos;
-  elements.usoSuelo.value = base.usoSuelo;
-  isEditing = true;
-  currentIndex = index;
-  elements.formTitle.textContent = "Editar Base Catastral";
-  elements.btnAddOrUpdate.textContent = "Actualizar";
-  openModal();
-};
-
-/**
-* Elimina una base catastral después de confirmación.
-* @param {number} index - Índice de la base a eliminar.
-*/
-window.deleteAccount = function (index) {
-  if (confirm("¿Confirmar eliminación?")) {
-    basesCatastrales.splice(index, 1);
-    const totalPages = Math.ceil(filteredBases().length / rowsPerPage);
-    if (currentPage > totalPages && totalPages > 0) {
-      currentPage = totalPages;
-    }
-    renderTable(filteredBases());
-  }
-};
-
-/**
-* Reinicia el formulario a su estado inicial.
-*/
-function resetForm() {
-  elements.form.reset();
-  isEditing = false;
-  currentIndex = null;
-  elements.formTitle.textContent = "Registrar Base Catastral";
-  elements.btnAddOrUpdate.textContent = "Agregar";
-}
-
-/* === INICIALIZACIÓN === */
-document.addEventListener("DOMContentLoaded", () => {
-  renderTable(basesCatastrales);
-});
-
-// Elementos del modal
-const modalElements = {
+elems = {
+  tableBody: document.querySelector('#accountsTable tbody'),
+  searchInput: document.getElementById('searchInput'),
+  form: document.getElementById('accountForm'),
+  contribSelect: document.getElementById('contribuyenteSelect'),
+  claveCatastral: document.getElementById('claveCatastral'),
+  baseCatastral: document.getElementById('baseCatastral'),
+  ubicacion: document.getElementById('ubicacion'),
+  barrio: document.getElementById('barrio'),
+  impuestoCalculado: document.getElementById('impuestoCalculado'),
+  fechaAvaluo: document.getElementById('fechaAvaluo'),
+  historialAvaluos: document.getElementById('historialAvaluos'),
+  btnAddOrUpdate: document.getElementById('btnAddOrUpdate'),
+  btnCancel: document.getElementById('btnCancel'),
+  pagination: document.querySelector('.pagination'),
   modalOverlay: document.getElementById('modalOverlay'),
   btnOpenModal: document.getElementById('btnOpenModal'),
-  btnCloseModal: document.getElementById('btnCloseModal')
+  btnCloseModal: document.getElementById('btnCloseModal'),
+  viewModalOverlay: document.getElementById('viewModalOverlay'),
+  btnCloseViewModal: document.getElementById('btnCloseViewModal'),
+  infoContent: document.getElementById('infoContent'),
+  formTitle: document.getElementById('formTitle')
 };
 
-/* === FUNCIONES DEL MODAL === */
-function openModal() {
-  modalElements.modalOverlay.style.display = 'block';
+// Funciones de formato de fechas
+
+// Convierte fecha para input type="date" (YYYY-MM-DD)
+function formatDateToInput(dateInput) {
+  if (!dateInput) return '';
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
-function closeModal() {
-  modalElements.modalOverlay.style.display = 'none';
-  resetForm();
+// Convierte fecha ISO o Date a formato dd/mm/yyyy para mostrar
+function formatDateToDMY(dateInput) {
+  if (!dateInput) return '';
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
-// Abrir modal para nueva base catastral
-modalElements.btnOpenModal.addEventListener('click', () => {
-  resetForm();
-  openModal();
+// — FUNCIONES API —
+async function fetchBases() {
+  try {
+    const res = await fetch(API_BASE);
+    if (!res.ok) throw new Error(res.statusText);
+    defaults.bases = await res.json();
+  } catch (err) {
+    console.error(err);
+    showToast('Error al cargar las bases catastrales', 'danger');
+  }
+}
+async function fetchContribuyentes() {
+  const res = await fetch(API_CONTRIB);
+  defaults.contribuyentes = await res.json();
+  populateContribSelect();
+}
+async function createBase(data) {
+  const res = await fetch(API_BASE, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Error al crear base');
+  return result;
+}
+
+async function updateBase(id, data) {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  return res.json();
+}
+
+async function deleteBase(id) {
+  await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+}
+
+// — RENDERIZADO —
+function renderTable(data) {
+  elems.tableBody.innerHTML = '';
+  const start = (defaults.currentPage - 1) * defaults.rowsPerPage;
+  const slice = data.slice(start, start + defaults.rowsPerPage);
+  slice.forEach((b, i) => {
+    const prop = defaults.contribuyentes.find(c => c.id_contribuyente === b.id_contribuyente)?.nombre || '-';
+    elems.tableBody.insertAdjacentHTML('beforeend', `
+      <tr>
+        <td>${b.cuenta}</td>
+        <td>${prop}</td>
+        <td>${b.ubicacion}</td>
+        <td>${b.base_catastral}</td>
+        <td>
+          <button class="action-btn edit" onclick="editAccount(${start + i})" title="Editar">
+            <img src="/public/Assets/editor.png" class="action-icon">
+          </button>
+          <button class="action-btn delete" onclick="deleteAccount(${start + i})" title="Eliminar">
+            <img src="/public/Assets/eliminar.png" class="action-icon">
+          </button>
+          <button class="action-btn view" onclick="viewAccount(${start + i})" title="Ver información">
+            <img src="/public/Assets/visualizar.png" class="action-icon">
+          </button>
+        </td>
+      </tr>
+    `);
+  });
+  renderPagination(data.length);
+}
+function renderPagination(total) {
+  const pages = Math.ceil(total / defaults.rowsPerPage);
+  let html = `<button class="pagination-btn" onclick="changePage(${defaults.currentPage - 1})" ${defaults.currentPage === 1 ? 'disabled' : ''}>« Anterior</button>`;
+  const startPage = Math.max(1, defaults.currentPage - 2);
+  const endPage = Math.min(pages, defaults.currentPage + 2);
+  if (startPage > 1) html += `<button class="pagination-btn" onclick="changePage(1)">1</button>${startPage > 2 ? '<span>...</span>' : ''}`;
+  for (let p = startPage; p <= endPage; p++) {
+    html += `<button class="pagination-btn ${p === defaults.currentPage ? 'active' : ''}" onclick="changePage(${p})">${p}</button>`;
+  }
+  if (endPage < pages) html += `${endPage < pages - 1 ? '<span>...</span>' : ''}<button class="pagination-btn" onclick="changePage(${pages})">${pages}</button>`;
+  html += `<button class="pagination-btn" onclick="changePage(${defaults.currentPage + 1})" ${defaults.currentPage === pages ? 'disabled' : ''}>Siguiente »</button>`;
+  elems.pagination.innerHTML = html;
+}
+
+// — FILTRADO y PAGINACIÓN —
+function filtered() {
+  const term = elems.searchInput.value.toLowerCase();
+  return defaults.bases.filter(b => {
+    const prop = defaults.contribuyentes.find(c => c.id_contribuyente === b.id_contribuyente)?.nombre.toLowerCase() || '';
+    return b.cuenta.toLowerCase().includes(term) || prop.includes(term);
+  });
+}
+function changePage(p) {
+  const maxPage = Math.ceil(filtered().length / defaults.rowsPerPage);
+  defaults.currentPage = Math.max(1, Math.min(p, maxPage));
+  renderTable(filtered());
+}
+
+// — CRUD HANDLERS —
+async function handleSubmit(e) {
+  e.preventDefault();
+  const payload = {
+    cuenta: elems.claveCatastral.value,
+    id_contribuyente: +elems.contribSelect.value,
+    base_catastral: parseFloat(elems.baseCatastral.value),
+    ubicacion: elems.ubicacion.value,
+    barrio: elems.barrio.value,
+    impuesto_calculado: parseFloat(elems.impuestoCalculado.value),
+    fecha_avaluo: elems.fechaAvaluo.value,
+    historial_avaluos: elems.historialAvaluos.value
+  };
+
+  try {
+    if (defaults.isEditing) {
+      await updateBase(defaults.editingId, payload);
+      showToast('Base catastral actualizada exitosamente', 'success');
+    } else {
+      await createBase(payload);
+      showToast('Base catastral agregada exitosamente', 'success');
+    }
+    await refresh();
+    closeModal();
+  } catch (err) {
+    console.error(err);
+    showToast(err.message || 'Error inesperado al guardar', 'danger');
+  }
+}
+
+elems.form.addEventListener('submit', handleSubmit);
+elems.btnCancel.addEventListener('click', closeModal);
+elems.searchInput.addEventListener('input', () => {
+  defaults.currentPage = 1;
+  renderTable(filtered());
 });
 
-// Cerrar modal con botón X
-modalElements.btnCloseModal.addEventListener('click', closeModal);
+// — FUNCIONES GLOBALES —
+window.deleteAccount = async idx => {
+  if (confirm('¿Confirmar eliminación?')) {
+    try {
+      await deleteBase(filtered()[idx].id_base_catastral);
+      await refresh();
+      showToast('Base catastral eliminada', 'warning');
+    } catch (err) {
+      console.error(err);
+      showToast('Error al eliminar la base catastral', 'danger');
+    }
+  }
+};
 
-// Función para ver la información completa de una base catastral y abrir el modal de "Ver información"
-window.viewAccount = function(index) {
-  const base = basesCatastrales[index];
-  const infoContent = document.getElementById("infoContent");
-  infoContent.innerHTML = `
-    <p><strong>Clave Catastral:</strong> ${base.claveCatastral}</p>
-    <p><strong>Nombre Propietario:</strong> ${base.nombrePropietario}</p>
-    <p><strong>Ubicación:</strong> ${base.ubicacion}</p>
-    <p><strong>Base Catastral:</strong> ${base.baseCatastral}</p>
-    <p><strong>Valor Terreno:</strong> ${base.valorTerreno}</p>
-    <p><strong>Valor Construcción:</strong> ${base.valorConstruccion}</p>
-    <p><strong>Impuesto Calculado:</strong> ${base.impuestoCalculado}</p>
-    <p><strong>Fecha Avalúo:</strong> ${base.fechaAvaluo}</p>
-    <p><strong>Historial Avalúos:</strong> ${base.historialAvaluos}</p>
-    <p><strong>Uso de Suelo:</strong> ${base.usoSuelo}</p>
+window.editAccount = idx => {
+  const b = filtered()[idx];
+  defaults.isEditing = true;
+  defaults.editingId = b.id_base_catastral;
+  elems.claveCatastral.value = b.cuenta;
+  elems.contribSelect.value = b.id_contribuyente;
+  elems.baseCatastral.value = b.base_catastral;
+  elems.ubicacion.value = b.ubicacion;
+  elems.barrio.value = b.barrio;
+  elems.impuestoCalculado.value = b.impuesto_calculado;
+  elems.fechaAvaluo.value = formatDateToInput(b.fecha_avaluo); // Formato para input date
+  elems.historialAvaluos.value = b.historial_avaluos;
+  elems.formTitle.textContent = 'Editar Base Catastral';
+  elems.btnAddOrUpdate.textContent = 'Actualizar';
+  openModal();
+};
+
+window.viewAccount = idx => {
+  const b = filtered()[idx];
+  elems.infoContent.innerHTML = `
+    <p><strong>Clave Catastral:</strong> ${b.cuenta}</p>
+    <p><strong>Propietario:</strong> ${defaults.contribuyentes.find(c => c.id_contribuyente === b.id_contribuyente)?.nombre}</p>
+    <p><strong>Ubicación:</strong> ${b.ubicacion}</p>
+    <p><strong>Barrio:</strong> ${b.barrio}</p>
+    <p><strong>Base Catastral:</strong> ${b.base_catastral}</p>
+    <p><strong>Impuesto Calculado:</strong> ${b.impuesto_calculado}</p>
+    <p><strong>Fecha de Avalúo:</strong> ${formatDateToDMY(b.fecha_avaluo) || 'N/A'}</p>
+    <p><strong>Historial de Avalúos:</strong> ${b.historial_avaluos || 'N/A'}</p>
   `;
   openViewModal();
 };
 
-// Manejo del modal de "Ver información"
-const viewModalElements = {
-  viewModalOverlay: document.getElementById('viewModalOverlay'),
-  btnCloseViewModal: document.getElementById('btnCloseViewModal')
-};
+elems.btnCloseViewModal.addEventListener('click', () => elems.viewModalOverlay.style.display = 'none');
 
+// — MODALES —
+function openModal() {
+  elems.modalOverlay.style.display = 'block';
+}
+function closeModal() {
+  elems.modalOverlay.style.display = 'none';
+  defaults.isEditing = false;
+  defaults.editingId = null;
+  elems.form.reset();
+  elems.formTitle.textContent = 'Agregar Base Catastral';
+  elems.btnAddOrUpdate.textContent = 'Agregar';
+}
 function openViewModal() {
-  viewModalElements.viewModalOverlay.style.display = 'block';
+  elems.viewModalOverlay.style.display = 'block';
 }
 
-function closeViewModal() {
-  viewModalElements.viewModalOverlay.style.display = 'none';
+// — CONSTRUIR SELECT —
+function populateContribSelect() {
+  elems.contribSelect.innerHTML = '<option value="">-- selecciona propietario --</option>';
+  defaults.contribuyentes.forEach(c =>
+    elems.contribSelect.insertAdjacentHTML('beforeend', `<option value="${c.id_contribuyente}">${c.nombre}</option>`)
+  );
 }
 
-viewModalElements.btnCloseViewModal.addEventListener('click', closeViewModal);
-
-// Inicialización: renderiza la tabla al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-  renderTable(basesCatastrales);
-});
-
-elements.form.addEventListener("submit", handleSubmit);
-
-document.querySelectorAll('#infoContent p').forEach(item => {
-  item.addEventListener('click', function(e) {
-    let ripple = document.createElement('div');
-    ripple.className = 'ripple-effect';
-    const rect = this.getBoundingClientRect();
-    ripple.style.left = (e.clientX - rect.left - 5) + 'px';
-    ripple.style.top = (e.clientY - rect.top - 5) + 'px';
-    this.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
-  });
+// — INICIALIZACIÓN —
+async function refresh() {
+  await Promise.all([fetchContribuyentes(), fetchBases()]);
+  renderTable(filtered());
+}
+document.addEventListener('DOMContentLoaded', () => {
+  elems.btnOpenModal.addEventListener('click', () => { elems.form.reset(); openModal(); });
+  elems.btnCloseModal.addEventListener('click', closeModal);
+  refresh();
 });
