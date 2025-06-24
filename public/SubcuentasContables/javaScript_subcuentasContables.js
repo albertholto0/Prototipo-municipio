@@ -1,4 +1,31 @@
-let allSubcuentas = []; // Array para almacenar todas las subcuentas contables
+// javaScript_subcuentasContables.js
+
+// — Función global para mostrar un Bootstrap Toast —
+function showToast(message, type = 'success') {
+  const icons = {
+    success: '<i class="bi bi-check-circle-fill me-2"></i>',
+    danger:  '<i class="bi bi-x-circle-fill me-2"></i>',
+    warning: '<i class="bi bi-exclamation-triangle-fill me-2"></i>',
+    info:    '<i class="bi bi-info-circle-fill me-2"></i>'
+  };
+  const toastId = `toast${Date.now()}`;
+  const html = `
+    <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          ${icons[type] || ''}${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  `;
+  document.getElementById('liveToastContainer').insertAdjacentHTML('beforeend', html);
+  const toastEl = document.getElementById(toastId);
+  new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+  toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+}
+
+let allSubcuentas = []; // Guardamos todas las subcuentas contables
 
 // Mapeo de elementos del DOM
 const elements = {
@@ -12,204 +39,181 @@ const elements = {
   modalOverlay: document.getElementById('modalOverlay'),
   btnOpenModal: document.getElementById('btnOpenModal'),
 };
+
+// ID de la subcuenta en edición (clave_subcuenta)
 let editId = null;
-// Cargar subcuentas contables y renderizar tabla
+
+// — Carga y render inicial —
 async function cargarSubcuentasContables() {
   try {
-    const response = await fetch('http://localhost:5000/api/subcuentasContables');
-    if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
-    allSubcuentas = await response.json(); // Guardar todas las subcuentas contables
-
-    // Filtrar solo las activas
-    const subcuentasActivas = allSubcuentas.filter(cuenta => cuenta.estado == 1);
-
-    // Renderizar subcuentas activas
-    renderizarSubcuentas(subcuentasActivas);
-
-  } catch (error) {
-    console.error('Error al cargar subcuentas contables:', error);
-    elements.tableBody.innerHTML = '<tr><td colspan="4">Error al cargar los datos :( </td></tr>';
+    const res = await fetch('http://localhost:5000/api/subcuentasContables');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    allSubcuentas = await res.json();
+    renderizarSubcuentas(allSubcuentas);
+  } catch (err) {
+    console.error(err);
+    elements.tableBody.innerHTML = '<tr><td colspan="5">Error al cargar datos</td></tr>';
+    showToast('Error al cargar subcuentas', 'danger');
   }
 }
 
+// — Render de la tabla con BOTONES de toggle estado —
 function renderizarSubcuentas(lista) {
   elements.tableBody.innerHTML = '';
   if (lista.length === 0) {
-    elements.tableBody.innerHTML = '<tr><td colspan="4">No hay subcuentas contables registradas</td></tr>';
+    elements.tableBody.innerHTML = '<tr><td colspan="5">No hay subcuentas</td></tr>';
     return;
   }
+
   lista.forEach(cuenta => {
-    const fila = document.createElement('tr');
-    if (cuenta.estado == 1) {
-      cuenta.estado = 'Activo';
-    }
-    else if (cuenta.estado == 0) {
-      cuenta.estado = 'Inactivo';
-    }
+    const activo = cuenta.estado === 1;
+    const estadoText = activo ? 'Activo' : 'Inactivo';
 
-    fila.innerHTML = `
-            <td>${cuenta.clave_cuentaContable}</td>
-            <td>${cuenta.clave_subcuenta}</td>
-            <td>${cuenta.nombre}</td>
-            <td>${cuenta.estado}</td>
-            <td>
-              <button class="action-btn edit" data-id="${cuenta.clave_subcuenta}" title="Editar">
-                  <img src="/public/Assets/editor.png" class="action-icon">
-              </button>
-              <button class="action-btn delete" data-id="${cuenta.clave_subcuenta}" title="Eliminar">
-                  <img src="/public/Assets/eliminar.png" class="action-icon">
-              </button>
-            </td>
-        `;
-    elements.tableBody.appendChild(fila);
+    elements.tableBody.insertAdjacentHTML('beforeend', `
+      <tr>
+        <td>${cuenta.clave_cuentaContable}</td>
+        <td>${cuenta.clave_subcuenta}</td>
+        <td>${cuenta.nombre}</td>
+        <td class="cell-estado">${estadoText}</td>
+        <td>
+          <!-- Editar -->
+          <button class="action-btn edit" data-id="${cuenta.clave_subcuenta}" title="Editar">
+            <img src="/public/Assets/editor.png" class="action-icon">
+          </button>
+          <!-- Toggle estado -->
+          ${
+            activo
+              ? `<button class="action-btn down" onclick="openToggleSubcuenta('${cuenta.clave_subcuenta}')" title="Desactivar">
+                   <img src="/public/Assets/apagar.png" class="action-icon">
+                 </button>`
+              : `<button class="action-btn up" onclick="openToggleSubcuenta('${cuenta.clave_subcuenta}')" title="Activar">
+                   <img src="/public/Assets/alta.png" class="action-icon">
+                 </button>`
+          }
+        </td>
+      </tr>
+    `);
   });
-  // Listeners del boton de editar
-  document.querySelectorAll('.action-btn.edit').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      editId = btn.getAttribute('data-id');
-      // Obtener datos de la subcuenta
-      const response = await fetch(`http://localhost:5000/api/subcuentasContables/${editId}`);
-      const data = await response.json();
 
-      // Llenar el select y luego asignar el valor
+  // Listeners EDIT
+  document.querySelectorAll('.action-btn.edit').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      editId = btn.dataset.id;
+      const res = await fetch(`http://localhost:5000/api/subcuentasContables/${editId}`);
+      const data = await res.json();
       await llenarSelectCuentasContables();
       document.getElementById('id_cuentaContable').value = data.id_cuentaContable;
-
-      // Llena el resto del formulario
       document.getElementById('clave_subcuenta').value = data.clave_subcuenta;
-      document.getElementById('clave_subcuenta').disabled = true; // Deshabilita el campo al editar
+      document.getElementById('clave_subcuenta').disabled = true;
       document.getElementById('nombre_subcuentas').value = data.nombre;
-      elements.formTitle.textContent = "Editar Subcuenta Contable";
-      elements.btnAddOrUpdate.textContent = "Actualizar";
-      // Abre el modal
+      elements.formTitle.textContent = 'Editar Subcuenta Contable';
+      elements.btnAddOrUpdate.textContent = 'Actualizar';
       elements.modalOverlay.style.display = 'flex';
-    });
-  });
-
-  // Listeners del boton de eliminar
-  document.querySelectorAll('.action-btn.delete').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const claveSubcuenta = btn.getAttribute('data-id');
-      if (confirm("¿Estás seguro de que deseas eliminar esta subcuenta contable?")) {
-        try {
-          const response = await fetch(`http://localhost:5000/api/subcuentasContables/${claveSubcuenta}`, {
-            method: 'DELETE' // No elimina, solo cambia el estado
-          });
-          if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
-          // Recargar subcuentas contables
-          await cargarSubcuentasContables();
-        } catch (error) {
-          console.error('Error al eliminar la subcuenta:', error);
-          alert('Error al eliminar la subcuenta contable');
-        }
-      }
     });
   });
 }
 
-// Funciones del modal
+// — Función de toggle estado —
+async function openToggleSubcuenta(clave) {
+  if (!confirm('¿Estás seguro de cambiar el estado de esta subcuenta?')) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/subcuentasContables/${clave}`, {
+      method: 'DELETE'  // DELETE invoca toggleEstado en el backend
+    });
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt || `HTTP ${res.status}`);
+    }
+    const { message } = await res.json();
+    showToast(message, 'success');
+    await cargarSubcuentasContables();
+  } catch (err) {
+    console.error(err);
+    showToast('Error al cambiar estado', 'danger');
+  }
+}
+
+// — Modal CRUD —
 function openModal() {
   elements.modalOverlay.style.display = 'flex';
-  llenarSelectCuentasContables(); // Llenar el select cada vez que se abre el modal
-  document.getElementById('clave_subcuenta').disabled = false; // Habilita el campo al crear
+  llenarSelectCuentasContables();
+  document.getElementById('clave_subcuenta').disabled = false;
 }
 
 function closeModal() {
   elements.modalOverlay.style.display = 'none';
-  resetForm();
-  editId = null; // Limpia el editId al cerrar el modal
-}
-
-// Limpiar formulario
-function resetForm() {
   elements.form.reset();
+  editId = null;
 }
 
-function normalizar(texto) {
-  return (texto || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // Quita acentos
-    .trim();
-}
-
+// — Llenar select de cuentas contables —
 async function llenarSelectCuentasContables() {
-  const select = document.getElementById('id_cuentaContable');
-  select.innerHTML = '<option value="">Seleccione una cuenta</option>';
+  const sel = document.getElementById('id_cuentaContable');
+  sel.innerHTML = '<option value="">Seleccione...</option>';
   try {
-    const response = await fetch('http://localhost:5000/api/cuentasContables');
-    if (!response.ok) throw new Error('No se pudieron cargar las cuentas contables');
-    const cuentas = await response.json();
-    cuentas.forEach(cuenta => {
-      const option = document.createElement('option');
-      option.value = cuenta.id_cuentaContable; // Cambia a id_cuentaContable
-      option.textContent = `${cuenta.clave_cuentaContable} - ${cuenta.nombre_cuentaContable}`;
-      select.appendChild(option);
+    const res = await fetch('http://localhost:5000/api/cuentasContables');
+    const cuentas = await res.json();
+    cuentas.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id_cuentaContable;
+      opt.text = `${c.clave_cuentaContable} – ${c.nombre_cuentaContable}`;
+      sel.append(opt);
     });
-  } catch (error) {
-    console.error('Error al cargar cuentas contables:', error);
+  } catch (err) {
+    console.error('Error al cargar cuentas contables:', err);
   }
 }
 
-/* === INICIALIZACIÓN === */
-document.addEventListener("DOMContentLoaded", () => {
-  cargarSubcuentasContables();
+// — Submit de formulario (create/update) —
+elements.form.addEventListener('submit', async e => {
+  e.preventDefault();
 
-  elements.btnOpenModal.addEventListener('click', openModal);
-  elements.btnCancel.addEventListener('click', closeModal);
-  elements.searchInput.addEventListener('input', () => {
-    const texto = normalizar(elements.searchInput.value);
-    const subcuentasFiltradas = allSubcuentas.filter(cuenta => {
-      // Normaliza y convierte a string todas las propiedades relevantes
-      const claveCuenta = normalizar(String(cuenta.clave_cuenta_contable));
-      const claveSubcuenta = normalizar(String(cuenta.clave_subcuenta));
-      const nombreSubcuenta = normalizar(cuenta.nombre);
-      const estadoSubcuenta = normalizar(String(cuenta.estado));
-      // Busca en todas las propiedades
-      return (
-        claveCuenta.includes(texto) ||
-        claveSubcuenta.includes(texto) ||
-        nombreSubcuenta.includes(texto) ||
-        estadoSubcuenta.includes(texto)
-      );
+  const payload = {
+    id_cuentaContable: document.getElementById('id_cuentaContable').value,
+    clave_subcuenta:   document.getElementById('clave_subcuenta').value,
+    nombre:            document.getElementById('nombre_subcuentas').value
+  };
+
+  let url = 'http://localhost:5000/api/subcuentasContables';
+  let method = 'POST';
+  if (editId) {
+    url += `/${editId}`;
+    method = 'PUT';
+  }
+
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
     });
-    renderizarSubcuentas(subcuentasFiltradas);
-  });
-
-  elements.form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const data = {
-      id_cuentaContable: document.getElementById('id_cuentaContable').value,
-      clave_subcuenta: document.getElementById('clave_subcuenta').value,
-      nombre: document.getElementById('nombre_subcuentas').value
-    };
-    try {
-      let response;
-      if (editId) {
-        // Actualizar subcuenta existente
-        response = await fetch(`http://localhost:5000/api/subcuentasContables/${editId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-      } else {
-        // Crear nueva subcuenta
-        response = await fetch('http://localhost:5000/api/subcuentasContables', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-      }
-
-      if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
-
-      // Recargar subcuentas contables
-      await cargarSubcuentasContables();
-      closeModal();
-    } catch (error) {
-      console.error('Error al guardar la subcuenta:', error);
-      alert('Error al guardar la subcuenta contable');
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.error || err?.message || `HTTP ${res.status}`);
     }
-  });
+    closeModal();
+    showToast(editId ? 'Subcuenta actualizada exitosamente' : 'Subcuenta creada exitosamente', 'success');
+    await cargarSubcuentasContables();
+  } catch (err) {
+    console.error(err);
+    showToast(err.message, 'danger');
+  }
 });
+
+// — Eventos de botones y búsqueda —
+elements.btnOpenModal.addEventListener('click', openModal);
+elements.btnCancel.addEventListener('click', closeModal);
+elements.searchInput.addEventListener('input', () => {
+  const term = elements.searchInput.value.toLowerCase();
+  const fil = allSubcuentas.filter(c => {
+    return c.clave_subcuenta.toLowerCase().includes(term) ||
+           c.nombre.toLowerCase().includes(term) ||
+           (c.estado === 1 ? 'activo' : 'inactivo').includes(term) ||
+           c.clave_cuentaContable.toLowerCase().includes(term);
+  });
+  renderizarSubcuentas(fil);
+});
+
+// — Iniciar —
+document.addEventListener('DOMContentLoaded', cargarSubcuentasContables);

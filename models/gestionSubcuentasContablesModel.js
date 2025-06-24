@@ -21,13 +21,14 @@ class SubcuentasContables {
       `);
       return rows;
     } catch (err) {
-      console.error('Error en la consulta getAll():', err);
+      console.error('Error en getAll():', err);
       throw new Error('Error al obtener subcuentas contables');
     }
   }
 
   /**
    * Crea una nueva subcuenta contable y la marca como activa (estado = 1).
+   * Captura errores de duplicado y de FK para devolver código específico.
    */
   static async setSucuenta(id_cuentaContable, clave_subcuenta, nombre) {
     try {
@@ -40,7 +41,19 @@ class SubcuentasContables {
       return result.insertId;
     } catch (err) {
       console.error('Error en setSucuenta():', err);
-      throw new Error('Error al crear la subcuenta');
+      // clave_subcuenta duplicada
+      if (err.code === 'ER_DUP_ENTRY') {
+        const e = new Error('Ya existe una subcuenta con esa clave');
+        e.code = 'DUPLICATE_SUBCUENTA';
+        throw e;
+      }
+      // FK falla: id_cuentaContable no existe
+      if (err.code === 'ER_NO_REFERENCED_ROW_2' || err.code === 'ER_NO_REFERENCED_ROW') {
+        const e = new Error('La cuenta principal indicada no existe');
+        e.code = 'FK_CONSTRAINT';
+        throw e;
+      }
+      throw err;
     }
   }
 

@@ -30,6 +30,12 @@ exports.setSubcuentas = async (req, res) => {
     });
   } catch (error) {
     console.error('Error al ingresar la subcuenta:', error);
+    if (error.code === 'DUPLICATE_SUBCUENTA') {
+      return res.status(409).json({ error: error.message });
+    }
+    if (error.code === 'FK_CONSTRAINT') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ success: false, error: 'Error interno del servidor' });
   }
 };
@@ -44,6 +50,9 @@ exports.getSubcuentaById = async (req, res) => {
     res.json(subcuenta);
   } catch (error) {
     console.error('Error al obtener la subcuenta:', error);
+    if (error.message === 'Subcuenta no encontrada') {
+      return res.status(404).json({ error: error.message });
+    }
     res.status(500).json({ message: 'Error al obtener la subcuenta' });
   }
 };
@@ -64,8 +73,8 @@ exports.putSubcuenta = async (req, res) => {
 };
 
 /**
- * En lugar de eliminar físicamente, alterna estado 0/1.
- * Usamos la ruta DELETE para este toggle.
+ * Alterna el estado activo/inactivo de la subcuenta.
+ * Usamos DELETE para este toggle, sin eliminar físicamente.
  */
 exports.deleteSubcuenta = async (req, res) => {
   try {
@@ -76,12 +85,13 @@ exports.deleteSubcuenta = async (req, res) => {
     const nuevoEstado = await SubcuentasContables.toggleEstado(clave_subcuenta);
     res.json({
       success: true,
-      message: `Subcuenta ${
-        nuevoEstado === 1 ? 'activada' : 'desactivada'
-      } correctamente`
+      message: nuevoEstado === 1
+        ? 'Subcuenta activada exitosamente'
+        : 'Subcuenta desactivada exitosamente'
     });
   } catch (error) {
     console.error('Error al alternar estado de la subcuenta:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
