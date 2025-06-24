@@ -16,11 +16,13 @@ let recibosData = [];
 
 // URL base de la API (corregida para que coincida con tu backend)
 const API_BASE_URL = "http://localhost:5000/api/gestionRecibos";
+
 /**
  * Carga los recibos desde la API y los renderiza en la tabla
  */
 async function cargarRecibosDesdeAPI() {
   try {
+    console.log('Obteniendo recibos desde API...');
     const response = await fetch(API_BASE_URL);
     
     if (!response.ok) {
@@ -28,6 +30,7 @@ async function cargarRecibosDesdeAPI() {
     }
     
     recibosData = await response.json();
+    console.log(`Recibos obtenidos: ${recibosData.length}`);
     renderizarTablaRecibos(recibosData);
   } catch (error) {
     console.error("Error al cargar recibos:", error);
@@ -56,6 +59,7 @@ function renderizarTablaRecibos(listaRecibos) {
       <td>${recibo.ejercicio_fiscal}</td>
       <td>${recibo.ejercicio_periodo}</td>
       <td>${recibo.concepto || '—'}</td>
+      <td>${recibo.descripcion || '—'}</td>
       <td>$${formatearMonto(recibo.monto_total)}</td>
       <td>${recibo.forma_de_pago}</td>
       <td>
@@ -98,9 +102,10 @@ async function manejarEliminarRecibo(event) {
       
       // Recarga la lista actualizada
       cargarRecibosDesdeAPI();
+      alert('Recibo eliminado correctamente');
     } catch (error) {
       console.error("Error al eliminar recibo:", error);
-      alert('No se pudo eliminar el recibo');
+      alert('No se pudo eliminar el recibo: ' + error.message);
     }
   }
 }
@@ -116,7 +121,8 @@ function aplicarFiltrosRecibos() {
   const recibosFiltrados = recibosData.filter(recibo => {
     const coincideTexto =
       normalizarTexto(recibo.folio).includes(textoBusqueda) ||
-      normalizarTexto(recibo.contribuyente).includes(textoBusqueda);
+      normalizarTexto(recibo.contribuyente).includes(textoBusqueda) ||
+      normalizarTexto(recibo.descripcion || '').includes(textoBusqueda);
 
     // Las fechas están en formato 'YYYY-MM-DD' (formateadas)
     const fechaRecibo = formatearFecha(recibo.fecha_recibo);
@@ -168,7 +174,7 @@ function formatearMonto(monto) {
 function mostrarMensajeTablaVacia() {
   gestionRecibosElements.tableBody.innerHTML = `
     <tr>
-      <td colspan="9">No hay recibos registrados</td>
+      <td colspan="10">No hay recibos registrados</td>
     </tr>
   `;
 }
@@ -180,7 +186,7 @@ function mostrarMensajeTablaVacia() {
 function mostrarErrorEnTabla(mensaje) {
   gestionRecibosElements.tableBody.innerHTML = `
     <tr>
-      <td colspan="9">${mensaje}</td>
+      <td colspan="10">${mensaje}</td>
     </tr>
   `;
 }
@@ -193,8 +199,14 @@ function inicializarGestionRecibos() {
 
   // Configurar event listeners
   gestionRecibosElements.searchInput.addEventListener("input", aplicarFiltrosRecibos);
-  gestionRecibosElements.fechaInicio.addEventListener("change", aplicarFiltrosRecibos);
-  gestionRecibosElements.fechaFin.addEventListener("change", aplicarFiltrosRecibos);
+  
+  if (gestionRecibosElements.fechaInicio) {
+    gestionRecibosElements.fechaInicio.addEventListener("change", aplicarFiltrosRecibos);
+  }
+  
+  if (gestionRecibosElements.fechaFin) {
+    gestionRecibosElements.fechaFin.addEventListener("change", aplicarFiltrosRecibos);
+  }
 }
 
 // Inicializar el módulo cuando el DOM esté listo
