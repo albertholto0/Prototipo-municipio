@@ -17,5 +17,7 @@ router.put('/:id', ctrl.updateCuenta);
 // Eliminar una cuenta contable
 router.delete('/:id', ctrl.deleteCuenta);
 
+// Toggle de estado (activo/inactivo)
+router.post('/toggle-estado', ctrl.toggleEstado);
+
 module.exports = router;
-// Este archivo define las rutas para la gestión de cuentas contables.

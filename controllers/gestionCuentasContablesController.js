@@ -1,3 +1,5 @@
+// controllers/gestionCuentasContablesController.js
+
 const CuentasContables = require('../models/gestionCuentasContablesModel');
 
 // Obtener todas las cuentas contables
@@ -15,7 +17,7 @@ exports.getAllCuentas = async (req, res) => {
 exports.getCuentaById = async (req, res) => {
   const { id } = req.params;
   try {
-    const cuentas = await CuentasContables.getAll(); 
+    const cuentas = await CuentasContables.getAll();
     const cuenta = cuentas.find(c => c.id_cuentaContable == id);
     if (cuenta) {
       res.json(cuenta);
@@ -60,5 +62,23 @@ exports.deleteCuenta = async (req, res) => {
   } catch (err) {
     console.error('Error al eliminar cuenta:', err);
     res.status(500).json({ error: 'Error al eliminar cuenta contable' });
+  }
+};
+
+// === Nuevo método para alternar estado ===
+exports.toggleEstado = async (req, res) => {
+  try {
+    const { id_cuentaContable } = req.body;
+    if (!id_cuentaContable) {
+      return res.status(400).json({ error: 'Falta el ID de la cuenta contable' });
+    }
+    const nuevoEstado = await CuentasContables.toggleEstado(id_cuentaContable);
+    res.json({
+      success: true,
+      message: `Cuenta ${nuevoEstado === 1 ? 'activada' : 'desactivada'} correctamente`
+    });
+  } catch (err) {
+    console.error('Error al togglear estado de cuenta:', err);
+    res.status(500).json({ error: err.message });
   }
 };

@@ -1,17 +1,17 @@
-// filepath: /routes/gestionConfiguracionRoute.js
 const express = require("express");
-const Configuracion = require("../models/gestionConfiguracionModel");
 const router = express.Router();
+const multer = require("multer");
+const configuracionController = require("../controllers/gestionConfiguracionController");
 
-// Ruta para obtener todos los configuraciones
-router.get("/", async (req, res) => {
-  try {
-    const configuracion = await Configuracion.getAll();
-    res.json(configuracion);
-  } catch (err) {
-    console.error("Error al obtener establecimientos:", err);
-    res.status(500).json({ error: "Error   al obtener establecimientos" });
-  }
-});
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+router.get("/", configuracionController.getAllConfiguracion);
+router.post(
+  "/",
+  upload.single("logo"),
+  configuracionController.createConfiguracion
+);
+router.delete("/", configuracionController.resetConfiguracion);
 
 module.exports = router;

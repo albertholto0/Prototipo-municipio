@@ -17,8 +17,7 @@ class CuentasContables {
 
   static async create(cuenta) {
     try {
-      // Aquí extraemos correctamente clave_cuentaContable
-      const { clave_cuentaContable, nombre_cuentaContable, estado = true } = cuenta;
+      const { clave_cuentaContable, nombre_cuentaContable, estado = 1 } = cuenta;
       const [result] = await db.query(
         `INSERT INTO cuentas_contables (clave_cuentaContable, nombre_cuentaContable, estado)
          VALUES (?, ?, ?)`,
@@ -36,26 +35,38 @@ class CuentasContables {
     }
   }
 
-  static async update(id, cuenta) {
-    try {
-      const { clave_cuentaContable, nombre_cuentaContable, estado } = cuenta;
-      await db.query(
-        `UPDATE cuentas_contables
-         SET clave_cuentaContable = ?, nombre_cuentaContable = ?, estado = ?
-         WHERE id_cuentaContable = ?`,
-        [clave_cuentaContable, nombre_cuentaContable, estado, id]
+static async update(id, cuenta) {
+  try {
+    const { clave_cuentaContable, nombre_cuentaContable } = cuenta;
+    let { estado } = cuenta;
+    if (estado === undefined) {
+      const [rows] = await db.query(
+        'SELECT estado FROM cuentas_contables WHERE id_cuentaContable = ?',
+        [id]
       );
-      return {
-        id_cuentaContable: Number(id),
-        clave_cuentaContable,
-        nombre_cuentaContable,
-        estado
-      };
-    } catch (err) {
-      console.error('Error al actualizar cuenta contable:', err);
-      throw new Error('Error al actualizar cuenta contable');
+      if (rows.length === 0) {
+        throw new Error('Cuenta no encontrada');
+      }
+      estado = rows[0].estado;
     }
+
+    await db.query(
+      `UPDATE cuentas_contables
+       SET clave_cuentaContable = ?, nombre_cuentaContable = ?, estado = ?
+       WHERE id_cuentaContable = ?`,
+      [clave_cuentaContable, nombre_cuentaContable, estado, id]
+    );
+    return {
+      id_cuentaContable: Number(id),
+      clave_cuentaContable,
+      nombre_cuentaContable,
+      estado,
+    };
+  } catch (err) {
+    console.error('Error al actualizar cuenta contable:', err);
+    throw new Error('Error al actualizar cuenta contable');
   }
+}
 
   static async delete(id) {
     try {
@@ -67,6 +78,34 @@ class CuentasContables {
     } catch (err) {
       console.error('Error al eliminar cuenta contable:', err);
       throw new Error('Error al eliminar cuenta contable');
+    }
+  }
+
+  static async toggleEstado(id) {
+    try {
+      // 1) Obtiene el estado actual
+      const [rows] = await db.query(
+        'SELECT estado FROM cuentas_contables WHERE id_cuentaContable = ?',
+        [id]
+      );
+      if (rows.length === 0) {
+        throw new Error('Cuenta contable no encontrada');
+      }
+
+      // 2) Invierte el valor (1->0, 0->1)
+      const nuevo = rows[0].estado === 1 ? 0 : 1;
+
+      // 3) Actualiza la tabla
+      await db.query(
+        'UPDATE cuentas_contables SET estado = ? WHERE id_cuentaContable = ?',
+        [nuevo, id]
+      );
+
+      // 4) Devuelve el nuevo estado
+      return nuevo;
+    } catch (err) {
+      console.error('Error al togglear estado de cuenta contable:', err);
+      throw err;
     }
   }
 }

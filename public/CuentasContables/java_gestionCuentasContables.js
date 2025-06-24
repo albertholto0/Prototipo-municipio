@@ -39,7 +39,6 @@ const elements = {
   form: document.getElementById("accountForm"),
   numeroCuenta: document.getElementById("numeroCuenta"),     
   nombreCuenta: document.getElementById("nombreCuenta"),
-  estado: document.getElementById("estado"),
   btnAddOrUpdate: document.getElementById("btnAddOrUpdate"),
   btnCancel: document.getElementById("btnCancel"),
   formTitle: document.getElementById("formTitle"),
@@ -49,8 +48,7 @@ const elements = {
   btnCloseModal: document.getElementById("btnCloseModal")
 };
 
-/* === FUNCIONES DE RENDER === */
-
+/* === RENDER === */
 function renderTable(data) {
   elements.tableBody.innerHTML = "";
   const start = (currentPage - 1) * rowsPerPage;
@@ -58,14 +56,14 @@ function renderTable(data) {
 
   paginated.forEach((cuenta, idx) => {
     const i = start + idx;
-    const estadoText = cuenta.estado ? "Activo" : "Inactivo";
+    const activo = cuenta.estado === 1;
     elements.tableBody.insertAdjacentHTML(
       "beforeend",
       `
       <tr>
         <td>${cuenta.clave_cuentaContable}</td>
         <td>${cuenta.nombre_cuentaContable}</td>
-        <td>${estadoText}</td>
+        <td class="cell-estado">${activo ? 'Activo' : 'Inactivo'}</td>
         <td>
           <button class="action-btn edit" onclick="editAccount(${i})" title="Editar">
             <img src="/public/Assets/editor.png" class="action-icon">
@@ -73,6 +71,15 @@ function renderTable(data) {
           <button class="action-btn delete" onclick="deleteAccount(${i})" title="Eliminar">
             <img src="/public/Assets/eliminar.png" class="action-icon">
           </button>
+          ${
+            activo
+            ? `<button class="action-btn down" onclick="openToggleModal(${cuenta.id_cuentaContable}, false)" title="Desactivar cuenta">
+                 <img src="/public/Assets/alta.png" class="action-icon">
+               </button>`
+            : `<button class="action-btn up" onclick="openToggleModal(${cuenta.id_cuentaContable}, true)" title="Activar cuenta">
+                 <img src="/public/Assets/apagar.png" class="action-icon">
+               </button>`
+          }
         </td>
       </tr>`
     );
@@ -135,7 +142,6 @@ async function handleSubmit(e) {
   const payload = {
     clave_cuentaContable: Number(elements.numeroCuenta.value),
     nombre_cuentaContable: elements.nombreCuenta.value,
-    estado: elements.estado.value === "true"
   };
   const opts = {
     method: isEditing ? "PUT" : "POST",
@@ -178,6 +184,31 @@ window.deleteAccount = async function(index) {
   }
 };
 
+
+/* === TOGGLE ESTADO === */
+async function openToggleModal(id, activar) {
+  const msg = activar
+    ? '¿Estás seguro de activar esta cuenta?'
+    : '¿Estás seguro de desactivar esta cuenta?';
+  if (!confirm(msg)) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/toggle-estado`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ id_cuentaContable: id })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error cambiando estado');
+
+    showToast(data.message,'success');
+    await cargarCuentasContables();
+  } catch (err) {
+    console.error(err);
+    showToast(err.message,'danger');
+  }
+}
+
 /* === MODAL Y EVENTOS === */
 
 function openModal() {
@@ -185,8 +216,6 @@ function openModal() {
     elements.form.reset();
     elements.formTitle.textContent = "Agregar Cuenta Contable";
     elements.btnAddOrUpdate.textContent = "Agregar";
-    elements.estado.value = "true";
-    elements.estado.disabled = true;
   }
   elements.modalOverlay.style.display = "block";
 }
@@ -195,13 +224,11 @@ function closeModal() {
   elements.modalOverlay.style.display = "none";
   isEditing = false;
   editingId = null;
-  elements.estado.disabled = false;
 }
 
 window.editAccount = function(index) {
   const cuenta = cuentasContables[index];
   isEditing = true;
-  // ** guardamos aquí el id_cuentaContable **
   editingId = cuenta.id_cuentaContable;
 
   openModal();
@@ -209,9 +236,6 @@ window.editAccount = function(index) {
   // cargamos el formulario con los datos existentes:
   elements.numeroCuenta.value = cuenta.clave_cuentaContable;
   elements.nombreCuenta.value = cuenta.nombre_cuentaContable;
-  elements.estado.disabled = false;
-  elements.estado.value = cuenta.estado ? "true" : "false";
-
   elements.formTitle.textContent = "Editar Cuenta Contable";
   elements.btnAddOrUpdate.textContent = "Actualizar";
 };

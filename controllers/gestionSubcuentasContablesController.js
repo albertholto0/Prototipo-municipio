@@ -12,13 +12,13 @@ exports.getAllSubcuentas = async (req, res) => {
 
 exports.setSubcuentas = async (req, res) => {
     try {
-        const { clave_cuenta_contable, clave_subcuenta, nombre_subcuentas } = req.body;
+        const { id_cuentaContable, clave_subcuenta, nombre } = req.body;
 
-        if (!clave_cuenta_contable || !clave_subcuenta || !nombre_subcuentas) {
+        if (!id_cuentaContable || !clave_subcuenta || !nombre) {
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
         }
 
-        const subcuenta = await SubcuentasContables.setSucuenta(clave_cuenta_contable, clave_subcuenta, nombre_subcuentas);
+        const subcuenta = await SubcuentasContables.setSucuenta(id_cuentaContable, clave_subcuenta, nombre);
         res.status(201).json({
             success: true,
             message: 'Subcuenta registrada exitosamente',
@@ -26,7 +26,7 @@ exports.setSubcuentas = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error al registrar subcuenta:', error);
+        console.error('Error al ingresar la subcuenta:', error);
         res.status(500).json({
             success: false,
             error: 'Error interno del servidor'
@@ -74,23 +74,19 @@ exports.getSubcuentaById = async (req, res) => {
 exports.putSubcuenta = async (req, res) => {
     try {
         const { clave_subcuenta } = req.params;
-        const { clave_cuenta_contable, nombre_subcuentas } = req.body;
+        const { id_cuentaContable, nombre } = req.body;
 
-        if (!clave_cuenta_contable || !nombre_subcuentas) {
+        if (!id_cuentaContable || !nombre) {
             return res.status(400).json({ error: 'Faltan campos obligatorios' });
         }
 
-        await SubcuentasContables.putSubcuenta(clave_subcuenta, clave_cuenta_contable, nombre_subcuentas);
+        await SubcuentasContables.putSubcuenta(clave_subcuenta, id_cuentaContable, nombre);
         res.status(200).json({
             success: true,
             message: 'Subcuenta actualizada exitosamente'
         });
 
     } catch (error) {
-        console.error('Error al actualizar la subcuenta:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Error interno del servidor'
-        });
+        // ...existing code...
     }
 }

@@ -107,8 +107,12 @@ async function createBase(data) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
-  return res.json();
+
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || 'Error al crear base');
+  return result;
 }
+
 async function updateBase(id, data) {
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
@@ -117,6 +121,7 @@ async function updateBase(id, data) {
   });
   return res.json();
 }
+
 async function deleteBase(id) {
   await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
 }
@@ -188,19 +193,24 @@ async function handleSubmit(e) {
     ubicacion: elems.ubicacion.value,
     barrio: elems.barrio.value,
     impuesto_calculado: parseFloat(elems.impuestoCalculado.value),
-    fecha_avaluo: elems.fechaAvaluo.value, // Ya en formato ISO (YYYY-MM-DD)
+    fecha_avaluo: elems.fechaAvaluo.value,
     historial_avaluos: elems.historialAvaluos.value
   };
 
-  if (defaults.isEditing) {
-    await updateBase(defaults.editingId, payload);
-    showToast('Base catastral actualizada exitosamente', 'success');
-  } else {
-    await createBase(payload);
-    showToast('Base catastral agregada exitosamente', 'success');
+  try {
+    if (defaults.isEditing) {
+      await updateBase(defaults.editingId, payload);
+      showToast('Base catastral actualizada exitosamente', 'success');
+    } else {
+      await createBase(payload);
+      showToast('Base catastral agregada exitosamente', 'success');
+    }
+    await refresh();
+    closeModal();
+  } catch (err) {
+    console.error(err);
+    showToast(err.message || 'Error inesperado al guardar', 'danger');
   }
-  await refresh();
-  closeModal();
 }
 
 elems.form.addEventListener('submit', handleSubmit);

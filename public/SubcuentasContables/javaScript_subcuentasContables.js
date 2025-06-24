@@ -22,7 +22,7 @@ async function cargarSubcuentasContables() {
 
     // Filtrar solo las activas
     const subcuentasActivas = allSubcuentas.filter(cuenta => cuenta.estado == 1);
-    
+
     // Renderizar subcuentas activas
     renderizarSubcuentas(subcuentasActivas);
 
@@ -48,9 +48,9 @@ function renderizarSubcuentas(lista) {
     }
 
     fila.innerHTML = `
-            <td>${cuenta.clave_cuenta_contable}</td>
+            <td>${cuenta.clave_cuentaContable}</td>
             <td>${cuenta.clave_subcuenta}</td>
-            <td>${cuenta.nombre_subcuentas}</td>
+            <td>${cuenta.nombre}</td>
             <td>${cuenta.estado}</td>
             <td>
               <button class="action-btn edit" data-id="${cuenta.clave_subcuenta}" title="Editar">
@@ -73,12 +73,12 @@ function renderizarSubcuentas(lista) {
 
       // Llenar el select y luego asignar el valor
       await llenarSelectCuentasContables();
-      document.getElementById('clave_cuenta_contable').value = data.clave_cuenta_contable;
+      document.getElementById('id_cuentaContable').value = data.id_cuentaContable;
 
       // Llena el resto del formulario
       document.getElementById('clave_subcuenta').value = data.clave_subcuenta;
       document.getElementById('clave_subcuenta').disabled = true; // Deshabilita el campo al editar
-      document.getElementById('nombre_subcuentas').value = data.nombre_subcuentas;
+      document.getElementById('nombre_subcuentas').value = data.nombre;
       elements.formTitle.textContent = "Editar Subcuenta Contable";
       elements.btnAddOrUpdate.textContent = "Actualizar";
       // Abre el modal
@@ -134,16 +134,16 @@ function normalizar(texto) {
 }
 
 async function llenarSelectCuentasContables() {
-  const select = document.getElementById('clave_cuenta_contable');
-  select.innerHTML = '<option value="">Seleccione una cuenta</option>'; // Limpia el select
+  const select = document.getElementById('id_cuentaContable');
+  select.innerHTML = '<option value="">Seleccione una cuenta</option>';
   try {
     const response = await fetch('http://localhost:5000/api/cuentasContables');
     if (!response.ok) throw new Error('No se pudieron cargar las cuentas contables');
     const cuentas = await response.json();
     cuentas.forEach(cuenta => {
       const option = document.createElement('option');
-      option.value = cuenta.clave_cuenta_contable; // SOLO el id
-      option.textContent = `${cuenta.clave_cuenta_contable} - ${cuenta.nombre_cuentaContable}`;
+      option.value = cuenta.id_cuentaContable; // Cambia a id_cuentaContable
+      option.textContent = `${cuenta.clave_cuentaContable} - ${cuenta.nombre_cuentaContable}`;
       select.appendChild(option);
     });
   } catch (error) {
@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Normaliza y convierte a string todas las propiedades relevantes
       const claveCuenta = normalizar(String(cuenta.clave_cuenta_contable));
       const claveSubcuenta = normalizar(String(cuenta.clave_subcuenta));
-      const nombreSubcuenta = normalizar(cuenta.nombre_subcuentas);
+      const nombreSubcuenta = normalizar(cuenta.nombre);
       const estadoSubcuenta = normalizar(String(cuenta.estado));
       // Busca en todas las propiedades
       return (
@@ -180,9 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     const data = {
-      clave_cuenta_contable: document.getElementById('clave_cuenta_contable').value,
+      id_cuentaContable: document.getElementById('id_cuentaContable').value,
       clave_subcuenta: document.getElementById('clave_subcuenta').value,
-      nombre_subcuentas: document.getElementById('nombre_subcuentas').value
+      nombre: document.getElementById('nombre_subcuentas').value
     };
     try {
       let response;
