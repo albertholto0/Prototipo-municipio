@@ -1,7 +1,7 @@
 const db = require('../config/database');
 
 class Recibo {
-  // Obtener todos los recibos con JOINs
+  // Obtener todos los recibos con JOINs corregidos
   static async getAll() {
     try {
       const query = `
@@ -13,18 +13,19 @@ class Recibo {
           r.ejercicio_fiscal,
           r.ejercicio_periodo,
           co.descripcion AS concepto,
+          r.descripcion,
           r.monto_total,
-          r.forma_de_pago,
-          r.descripcion
+          r.forma_de_pago
         FROM recibos r
-        LEFT JOIN contribuyentes c ON r.id_contribuyente = c.id_contribuyente
+        LEFT JOIN contribuyente c ON r.id_contribuyente = c.id_contribuyente
         LEFT JOIN conceptos co ON r.id_concepto = co.clave_concepto
         ORDER BY r.fecha_recibo DESC
       `;
       const [rows] = await db.query(query);
+      console.log('Recibos obtenidos:', rows); // Log para depuración
       return rows;
     } catch (err) {
-      console.error('Error al obtener todos los recibos:', err);
+      console.error('Error en getAll:', err);
       throw new Error('Error al obtener recibos');
     }
   }
@@ -43,19 +44,20 @@ class Recibo {
           r.ejercicio_periodo,
           r.id_concepto,
           co.descripcion AS concepto,
+          r.descripcion,
           r.monto_total,
           r.forma_de_pago,
-          r.descripcion
+          r.detalles
         FROM recibos r
-        LEFT JOIN contribuyentes c ON r.id_contribuyente = c.id_contribuyente
+        LEFT JOIN contribuyente c ON r.id_contribuyente = c.id_contribuyente
         LEFT JOIN conceptos co ON r.id_concepto = co.clave_concepto
         WHERE r.id_recibo = ?
       `;
       const [rows] = await db.query(query, [id]);
       return rows[0];
     } catch (err) {
-      console.error('Error al obtener recibo por ID:', err);
-      throw new Error('Error al obtener recibo');
+      console.error('Error en getById:', err);
+      throw new Error('Error al obtener recibo por ID');
     }
   }
 
@@ -74,11 +76,13 @@ class Recibo {
         descripcion: reciboData.detalles || null
       };
 
+      console.log('Datos a insertar:', dataToInsert); // Log para depuración
+      
       const [result] = await db.query('INSERT INTO recibos SET ?', dataToInsert);
       return this.getById(result.insertId);
     } catch (err) {
-      console.error('Error al crear recibo:', err);
-      throw new Error('Error al crear recibo');
+      console.error('Error en create:', err);
+      throw err; // Re-lanzamos el error para manejo específico en el controller
     }
   }
 
@@ -100,7 +104,7 @@ class Recibo {
       await db.query('UPDATE recibos SET ? WHERE id_recibo = ?', [dataToUpdate, id]);
       return this.getById(id);
     } catch (err) {
-      console.error('Error al actualizar recibo:', err);
+      console.error('Error en update:', err);
       throw new Error('Error al actualizar recibo');
     }
   }
@@ -111,7 +115,7 @@ class Recibo {
       const [result] = await db.query('DELETE FROM recibos WHERE id_recibo = ?', [id]);
       return result.affectedRows > 0;
     } catch (err) {
-      console.error('Error al eliminar recibo:', err);
+      console.error('Error en delete:', err);
       throw new Error('Error al eliminar recibo');
     }
   }
@@ -128,10 +132,11 @@ class Recibo {
           r.ejercicio_fiscal,
           r.ejercicio_periodo,
           co.descripcion AS concepto,
+          r.descripcion,
           r.monto_total,
           r.forma_de_pago
         FROM recibos r
-        LEFT JOIN contribuyentes c ON r.id_contribuyente = c.id_contribuyente
+        LEFT JOIN contribuyente c ON r.id_contribuyente = c.id_contribuyente
         LEFT JOIN conceptos co ON r.id_concepto = co.clave_concepto
         WHERE 1=1
       `;
@@ -159,10 +164,13 @@ class Recibo {
 
       query += ' ORDER BY r.fecha_recibo DESC';
 
+      console.log('Query con filtros:', query); // Log para depuración
+      console.log('Parámetros:', params); // Log para depuración
+
       const [rows] = await db.query(query, params);
       return rows;
     } catch (err) {
-      console.error('Error al filtrar recibos:', err);
+      console.error('Error en getByFilters:', err);
       throw new Error('Error al filtrar recibos');
     }
   }
