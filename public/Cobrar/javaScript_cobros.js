@@ -475,15 +475,19 @@ document.getElementById('receiptForm').addEventListener('submit', async (e) => {
             body: JSON.stringify(data)
         });
         if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
-        wal.fire({
-                icon: 'success',
-                title: '¡Guardado!',
-                text: 'Recibo Guardado exitosamente'
-            });
+        Swal.fire({
+            icon: 'success',
+            title: '¡Guardado!',
+            text: 'Recibo Guardado exitosamente'
+        });
         // Opcional: limpiar el formulario o redirigir
     } catch (error) {
         console.error('Error al guardar el recibo:', error);
-        alert('Error al guardar el recibo');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al guardar el recibo. Por favor, inténtalo de nuevo.',
+        });
     }
 });
 // ...existing code...
