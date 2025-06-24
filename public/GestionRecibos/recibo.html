@@ -26,13 +26,8 @@
       <div class="filters-container">
         <input type="text" id="searchInput" placeholder="Buscar por folio, nombre">
       </div>
-      <div class="busqueda-container">
-        <input type="date" id="filterFechaInicio" placeholder="Fecha inicio">
-        <input type="date" id="filterFechaFin" placeholder="Fecha fin">
-      </div>
     </div>
     
-
     <!-- Tabla de recibos -->
     <table id="accountsTable">
       <thead>
@@ -43,6 +38,7 @@
           <th>Ejercicio</th>
           <th>Periodo</th>
           <th>Concepto</th>
+          <th>Descripción</th>
           <th>Total</th>
           <th>Forma de Pago</th>
           <th>Acciones</th>
@@ -58,6 +54,18 @@
     <p>© 2025 Ixtlán - Módulo 3: Generación de Recibos</p>
   </footer>
 
+  <!-- Script para cargar el Nav -->
+  <script>
+    fetch('/public/Componentes/Nav.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('nav-placeholder').innerHTML = data;
+      })
+      .catch(error => console.error('Error al cargar el nav:', error));
+  </script>
+</body>
+
+</html>
   
 
 </body>
