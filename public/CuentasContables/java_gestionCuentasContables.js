@@ -74,10 +74,10 @@ function renderTable(data) {
           ${
             activo
             ? `<button class="action-btn down" onclick="openToggleModal(${cuenta.id_cuentaContable}, false)" title="Desactivar cuenta">
-                 <img src="/public/Assets/alta.png" class="action-icon">
+                 <img src="/public/Assets/apagar.png" class="action-icon">
                </button>`
             : `<button class="action-btn up" onclick="openToggleModal(${cuenta.id_cuentaContable}, true)" title="Activar cuenta">
-                 <img src="/public/Assets/apagar.png" class="action-icon">
+                 <img src="/public/Assets/alta.png" class="action-icon">
                </button>`
           }
         </td>
