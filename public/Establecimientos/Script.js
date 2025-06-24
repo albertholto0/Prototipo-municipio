@@ -26,11 +26,9 @@ async function cargarContribuyentes() {
     contribuyentes.forEach((c) => {
       const option = document.createElement("option");
       option.value = c.id_contribuyente;
-      option.textContent =
-        c.nombre_completo ||
-        `${c.nombre} ${c.apellido_paterno || ""} ${
-          c.apellido_materno || ""
-        }`.trim();
+      option.textContent = `${c.nombre} ${c.apellido_paterno || ""} ${
+        c.apellido_materno || ""
+      }`.trim();
       elements.contribuyenteSelect.appendChild(option);
     });
   } catch (error) {
@@ -63,23 +61,39 @@ function renderizarEstablecimientos(lista) {
   }
 
   lista.forEach((est) => {
+    // Formatear la fecha de apertura si existe
+    let fechaApertura = "N/A";
+    if (est.fecha_apertura) {
+      const fecha = new Date(est.fecha_apertura);
+      fechaApertura = fecha.toLocaleString("es-MX", {
+        timeZone: "America/Mexico_City",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+
     const fila = document.createElement("tr");
     fila.innerHTML = `
-      <td>${est.nombre_establecimiento || ""}</td>
-      <td>${est.direccion || ""}, ${est.barrio || ""}, ${
-      est.localidad || ""
-    }</td>
-      <td>${est.codigo_postal || ""}</td>
-      <td>${est.fecha_apertura ? est.fecha_apertura.split("T")[0] : ""}</td>
-      <td>${est.giro_negocio || ""}</td>
-      <td>${est.nombre_contribuyente || "Sin asignar"}</td>
+      <td>${est.nombre_establecimiento || "N/A"}</td>
+      <td>${est.direccion || ""} ${est.barrio || ""} ${est.localidad || ""}</td>
+      <td>${est.codigo_postal || "N/A"}</td>
+      <td>${fechaApertura}</td>
+      <td>${est.giro_negocio || "N/A"}</td>
+      <td>${est.nombre_contribuyente || "N/A"}</td>
       <td>
         <button class="action-btn edit" data-id="${
           est.id_establecimiento
-        }" title="Editar">Editar</button>
+        }" title="Editar">
+            <img src="/public/Assets/editor.png" class="action-icon">
+        </button>
         <button class="action-btn delete" data-id="${
           est.id_establecimiento
-        }" title="Eliminar">Eliminar</button>
+        }" title="Eliminar">
+            <img src="/public/Assets/eliminar.png" class="action-icon">
+        </button>
       </td>
     `;
     elements.tableBody.appendChild(fila);

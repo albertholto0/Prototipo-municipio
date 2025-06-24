@@ -117,11 +117,11 @@ router.put('/:clave_concepto/update-key', async (req, res) => {
 router.delete('/:clave_concepto', async (req, res) => {
     try {
         const { clave_concepto } = req.params;
-        const { password } = req.body;
+        //const { password } = req.body;
 
-        if (!password) {
-            return res.status(400).json({ error: 'Se requiere contraseña de administrador' });
-        }
+        // if (!password) {
+        //     return res.status(400).json({ error: 'Se requiere contraseña de administrador' });
+        // }
 
         await Conceptos.delete(clave_concepto);
         
