@@ -4,17 +4,17 @@ class Establecimiento {
   static async getAll(req, res) {
     try {
       const [rows] = await db.query(`
-        SELECT 
-          e.id_establecimiento,
-          e.nombre_establecimiento,
-          e.direccion,
-          e.codigo_postal,
-          e.fecha_apertura,
-          e.giro_negocio,
-          CONCAT(c.nombre, ' ', c.apellido_paterno, ' ', c.apellido_materno) AS contribuyente
-        FROM establecimientos e
-        JOIN contribuyente c ON e.id_contribuyente = c.id_contribuyente
-      `);
+      SELECT 
+        e.id_establecimiento,
+        e.nombre_establecimiento,
+        e.direccion,
+        e.codigo_postal,
+        e.fecha_apertura,
+        e.giro_negocio,
+        CONCAT(c.nombre, ' ', c.apellido_paterno, ' ', c.apellido_materno) AS nombre_contribuyente
+      FROM establecimientos e
+      JOIN contribuyentes c ON e.id_contribuyente = c.id_contribuyente
+    `);
       res.json(rows);
     } catch (err) {
       console.error("Error al obtener establecimientos:", err);

@@ -77,7 +77,7 @@ function renderTable(data) {
                  <img src="/public/Assets/alta.png" class="action-icon">
                </button>`
             : `<button class="action-btn up" onclick="openToggleModal(${cuenta.id_cuentaContable}, true)" title="Activar cuenta">
-                 <img src="/public/Assets/baja.png" class="action-icon">
+                 <img src="/public/Assets/apagar.png" class="action-icon">
                </button>`
           }
         </td>

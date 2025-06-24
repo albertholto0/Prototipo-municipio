@@ -35,26 +35,38 @@ class CuentasContables {
     }
   }
 
-  static async update(id, cuenta) {
-    try {
-      const { clave_cuentaContable, nombre_cuentaContable, estado } = cuenta;
-      await db.query(
-        `UPDATE cuentas_contables
-         SET clave_cuentaContable = ?, nombre_cuentaContable = ?, estado = ?
-         WHERE id_cuentaContable = ?`,
-        [clave_cuentaContable, nombre_cuentaContable, estado, id]
+static async update(id, cuenta) {
+  try {
+    const { clave_cuentaContable, nombre_cuentaContable } = cuenta;
+    let { estado } = cuenta;
+    if (estado === undefined) {
+      const [rows] = await db.query(
+        'SELECT estado FROM cuentas_contables WHERE id_cuentaContable = ?',
+        [id]
       );
-      return {
-        id_cuentaContable: Number(id),
-        clave_cuentaContable,
-        nombre_cuentaContable,
-        estado,
-      };
-    } catch (err) {
-      console.error('Error al actualizar cuenta contable:', err);
-      throw new Error('Error al actualizar cuenta contable');
+      if (rows.length === 0) {
+        throw new Error('Cuenta no encontrada');
+      }
+      estado = rows[0].estado;
     }
+
+    await db.query(
+      `UPDATE cuentas_contables
+       SET clave_cuentaContable = ?, nombre_cuentaContable = ?, estado = ?
+       WHERE id_cuentaContable = ?`,
+      [clave_cuentaContable, nombre_cuentaContable, estado, id]
+    );
+    return {
+      id_cuentaContable: Number(id),
+      clave_cuentaContable,
+      nombre_cuentaContable,
+      estado,
+    };
+  } catch (err) {
+    console.error('Error al actualizar cuenta contable:', err);
+    throw new Error('Error al actualizar cuenta contable');
   }
+}
 
   static async delete(id) {
     try {
@@ -69,7 +81,6 @@ class CuentasContables {
     }
   }
 
-  // === NUEVO: Método para alternar (toggle) el estado 0/1 ===
   static async toggleEstado(id) {
     try {
       // 1) Obtiene el estado actual

@@ -1,37 +1,31 @@
-// filepath: /models/configuracionSistemaModel.js
 const db = require("../config/database");
 
-class ConfiguracionSistema {
+class Configuracion {
   static async getAll() {
-    try {
-      const [rows] = await db.query(`
-        SELECT  
-          id_configuracion,
-          dependencia,
-          lema,
-          rfc,
-          id_cif
-        FROM configuraciones_sistema
-      `);
-      return rows;
-    } catch (err) {
-      console.error("Error en la consulta:", err);
-      throw new Error("Error al obtener configuraciones del sistema");
-    }
+    const [rows] = await db.query("SELECT * FROM configuraciones_sistema");
+    return rows;
   }
 
-  static async getById(id) {
-    try {
-      const [rows] = await db.query(
-        "SELECT * FROM configuraciones_sistema WHERE id_configuracion = ?",
-        [id]
-      );
-      return rows[0];
-    } catch (err) {
-      console.error("Error en la consulta:", err);
-      throw new Error("Error al obtener la configuración");
-    }
+  static async create(config) {
+    // Eliminar configuración previa
+    await db.query("DELETE FROM configuraciones_sistema");
+
+    // Insertar la nueva
+    const { dependencia, logotipo, lema } = config;
+    await db.query(
+      "INSERT INTO configuraciones_sistema (dependencia, logotipo, lema) VALUES (?, ?, ?)",
+      [dependencia, logotipo, lema]
+    );
+  }
+
+  static async reset() {
+    await db.query("DELETE FROM configuraciones_sistema");
+
+    await db.query(
+      `INSERT INTO configuraciones_sistema (dependencia, logotipo, lema)
+       VALUES ('IXTLÁN DE JUÁREZ', '/Assets/logo_ixtlan.png', '"INNOVACIÓN Y TRANSFORMACIÓN EN COMUNIDAD"')`
+    );
   }
 }
 
-module.exports = ConfiguracionSistema;
+module.exports = Configuracion;
