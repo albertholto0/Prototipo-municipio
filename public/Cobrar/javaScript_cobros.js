@@ -123,9 +123,11 @@ async function cargarSelect(url, label, nivel, onChange) {
         select.className = 'select-anidado';
         select.innerHTML = `<option value="">Seleccione ${label}</option>`;
         datos.forEach(d => {
-            const value = d.clave_cuenta_contable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
-            const text = d.nombre_cuentaContable || d.nombre_subcuentas || d.descripcion || d.nombre || d.descripcion || d.nombre;
-            select.innerHTML += `<option value="${value}">${value} - ${text}</option>`;
+            const value = d.id_cuentaContable || d.clave_cuentaContable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
+            const clave = d.clave_cuentaContable || d.clave_subcuenta || d.clave_seccion || d.clave_concepto || d.clave_subconcepto || d.id;
+            const text = clave;
+            const label = d.nombre_cuentaContable || d.nombre || d.descripcion || '';
+            select.innerHTML += `<option value="${value}" data-clave="${clave}">${text} - ${label}</option>`;
         });
         div.appendChild(select);
 
@@ -177,15 +179,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Desactivar selects mutuamente excluyentes
-    const cuentaContable = document.getElementById('cuentaContable');
-    const otroMotivo = document.getElementById('otroMotivo');
-    if (cuentaContable && otroMotivo) {
-        cuentaContable.addEventListener('focus', () => { otroMotivo.value = 'NO DISPONIBLE'; });
-        otroMotivo.addEventListener('focus', () => { cuentaContable.value = 'NO DISPONIBLE'; });
-        otroMotivo.addEventListener('change', desactivarInput);
-    }
-
     // Descuentos adicionales solo disponibles en enero y febrero
     const selectDescuento = document.getElementById("descuentoAdicional");
     const fechaActual = new Date();
@@ -201,9 +194,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cargar contribuyentes y descuentos
     try {
-        const [contribuyentes, cuentasContables, estimulosFiscales] = await Promise.all([
+        const [contribuyentes, estimulosFiscales] = await Promise.all([
             fetch('http://localhost:5000/api/contribuyentes', { cache: "no-store" }).then(r => r.json()),
-            fetch('http://localhost:5000/api/cuentasContables', { cache: "no-store" }).then(r => r.json()),
             fetch('http://localhost:5000/api/estimuloFiscal', { cache: "no-store" }).then(r => r.json()),
         ]);
 
@@ -334,12 +326,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
-// ...existing code...
 document.getElementById('receiptForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Obtén los valores de los selects anidados (pueden no existir)
-    const cuentaContable = document.getElementById('select-nivel-1')?.value || null;
+    const selectCuenta = document.getElementById('select-nivel-1');
+    let claveCuentaContable = null;
+    if (selectCuenta) {
+        const selectedOption = selectCuenta.options[selectCuenta.selectedIndex];
+        claveCuentaContable = selectedOption ? selectedOption.getAttribute('data-clave') : null;
+    }
     const subcuenta = document.getElementById('select-nivel-2')?.value || null;
     const seccion = document.getElementById('select-nivel-3')?.value || null;
     const concepto = document.getElementById('select-nivel-4')?.value || null;
@@ -380,7 +376,7 @@ document.getElementById('receiptForm').addEventListener('submit', async (e) => {
         forma_de_pago,
         id_contribuyente,
         descripcion,
-        clave_cuenta_contable: cuentaContable,
+        clave_cuentaContable: claveCuentaContable,
         clave_subcuenta: subcuenta,
         clave_seccion: seccion,
         clave_concepto: concepto,
@@ -392,6 +388,7 @@ document.getElementById('receiptForm').addEventListener('submit', async (e) => {
     };
 
     console.log('Datos enviados:', data);
+    console.log('Clave cuenta contable:', claveCuentaContable);
 
     try {
         const response = await fetch('http://localhost:5000/api/cobrar', {

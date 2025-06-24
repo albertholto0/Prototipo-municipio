@@ -3,7 +3,17 @@ const db = require('../config/database');
 class SubcuentasContables {
     static async getAll() {
         try {
-            const [rows] = await db.query('SELECT clave_subcuenta, clave_cuenta_contable, nombre_subcuentas, estado FROM subcuentas_contables');
+            // JOIN para obtener la clave_cuentaContable desde cuentas_contables
+            const [rows] = await db.query(`
+                SELECT 
+                    subcuentas_contables.clave_subcuenta, 
+                    cuentas_contables.clave_cuentaContable, 
+                    subcuentas_contables.nombre, 
+                    subcuentas_contables.estado 
+                FROM subcuentas_contables 
+                JOIN cuentas_contables 
+                ON subcuentas_contables.id_cuentaContable = cuentas_contables.id_cuentaContable
+            `);
             return rows;
         } catch (err) {
             console.error('Error en la consulta:', err);
@@ -20,11 +30,11 @@ class SubcuentasContables {
         }
     }
 
-    static async setSucuenta(clave_cuenta_contable, clave_subcuenta, nombre_subcuentas) {
+    static async setSucuenta(id_cuentaContable, clave_subcuenta, nombre) {
         try {
             const [result] = await db.query(
-                'INSERT INTO subcuentas_contables (clave_cuenta_contable, clave_subcuenta, nombre_subcuentas, estado) VALUES (?, ?, ?, 1)',
-                [clave_cuenta_contable, clave_subcuenta, nombre_subcuentas]
+                'INSERT INTO subcuentas_contables (id_cuentaContable, clave_subcuenta, nombre, estado) VALUES (?, ?, ?, 1)',
+                [id_cuentaContable, clave_subcuenta, nombre]
             );
             return result.insertId;
         } catch (err) {
@@ -35,7 +45,18 @@ class SubcuentasContables {
 
     static async getSubcuentaById(clave_subcuenta) {
         try {
-            const [rows] = await db.query('SELECT * FROM subcuentas_contables WHERE clave_subcuenta = ?', [clave_subcuenta]);
+            // JOIN para obtener la clave_cuentaContable
+            const [rows] = await db.query(`
+                SELECT 
+                    subcuentas_contables.clave_subcuenta, 
+                    cuentas_contables.clave_cuentaContable, 
+                    subcuentas_contables.nombre, 
+                    subcuentas_contables.estado,
+                    subcuentas_contables.id_cuentaContable
+                FROM subcuentas_contables
+                JOIN cuentas_contables ON subcuentas_contables.id_cuentaContable = cuentas_contables.id_cuentaContable
+                WHERE subcuentas_contables.clave_subcuenta = ?
+            `, [clave_subcuenta]);
             if (rows.length === 0) {
                 throw new Error('Subcuenta no encontrada');
             }
@@ -45,11 +66,12 @@ class SubcuentasContables {
             throw new Error('Error al obtener la subcuenta');
         }
     }
-    static async putSubcuenta(clave_subcuenta, clave_cuenta_contable, nombre_subcuentas) {
+
+    static async putSubcuenta(clave_subcuenta, id_cuentaContable, nombre) {
         try {
             await db.query(
-                'UPDATE subcuentas_contables SET clave_cuenta_contable = ?, nombre_subcuentas = ? WHERE clave_subcuenta = ?',
-                [clave_cuenta_contable, nombre_subcuentas, clave_subcuenta]
+                'UPDATE subcuentas_contables SET id_cuentaContable = ?, nombre = ? WHERE clave_subcuenta = ?',
+                [id_cuentaContable, nombre, clave_subcuenta]
             );
         } catch (err) {
             console.error('Error al actualizar la subcuenta:', err);

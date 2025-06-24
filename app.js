@@ -19,6 +19,7 @@ const alquilerRoutes = require("./routes/gestionAlquilerRoute");
 const ejercicioFiscalRoutes = require("./routes/gestionEjercicioFiscalRoute");
 const inicioSesionRoutes = require("./routes/inicioSesionRoute");
 const historialAccesosRoutes = require("./routes/gestionHistorialAccesosRoute");
+const subcuentasContablesRoutes = require("./routes/gestionSubcuentasContablesRoute");
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use("/api/alquileres", alquilerRoutes);
 app.use("/api/EjercicioFiscal", ejercicioFiscalRoutes);
 app.use("/api/inicioSesion", inicioSesionRoutes);
 app.use("/api/historialAccesos", historialAccesosRoutes);
+app.use("/api/subcuentasContables", subcuentasContablesRoutes);
 
 app.get("/", (req, res) => {
   res.send("API funcionando correctamente");

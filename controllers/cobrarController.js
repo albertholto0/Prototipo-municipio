@@ -29,11 +29,14 @@ module.exports = {
     const result = await Cobrar.getBaseCatastrales(req.params.contribuyenteId);
     res.json(result);
   },
-  setRecibo: async (req, res) => {
-    try {
-      const { folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuenta_contable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion } = req.body;
 
-      const recibo = await Cobrar.setRecibo(folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuenta_contable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion);
+  setRecibo: async (req, res) => {
+    console.log('Datos recibidos:', req.body);
+    try {
+      const { folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuentaContable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion } = req.body;
+
+
+      const recibo = await Cobrar.setRecibo(folio, fecha, ejercicioFiscal, periodo, id_contribuyente, clave_cuentaContable, clave_subcuenta, clave_seccion, clave_concepto, clave_subconcepto, id_estimulo_fiscal, monto, monto_total_letras, descripcion, subtotal, forma_de_pago, id_base_catastral, id_establecimiento, id_conexion);
       res.status(201).json({
         success: true,
         message: 'Recibo registrado exitosamente',
