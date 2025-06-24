@@ -210,6 +210,13 @@ async function guardarEstablecimiento(e) {
       throw new Error(errorText || "Error desconocido al guardar");
     }
 
+    // Notificación de éxito
+    if (!editId) {
+      alert("Establecimiento agregado con éxito");
+    } else {
+      alert("Establecimiento actualizado con éxito");
+    }
+
     closeModal();
     cargarEstablecimientos();
     editId = null;
