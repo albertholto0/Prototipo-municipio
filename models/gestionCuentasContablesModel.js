@@ -1,5 +1,4 @@
 // models/gestionCuentasContablesModel.js
-
 const db = require('../config/database');
 
 class CuentasContables {
