@@ -1,6 +1,8 @@
 // Variables globales para conexion y base catastral
 let idConexionActual = null;
 let idBaseActual = null;
+let cuentaConexionActual = '';
+let cuentaBaseCatastral = '';
 
 // Utilidad: Capitalizar la primera letra de cada palabra
 function capitalizarTodasPalabras(str) {
@@ -103,6 +105,12 @@ if (btnCancelar) {
     });
 }
 
+// Limpiar idConexionActual al seleccionar cualquier cuenta contable anidada
+function limpiarIdConexionSiSelectAnidado() {
+    idConexionActual = null;
+    idBaseActual = null;
+}
+
 // Cargar selects anidados dinámicamente
 async function cargarSelect(url, label, nivel, onChange) {
     try {
@@ -141,14 +149,43 @@ async function cargarSelect(url, label, nivel, onChange) {
             });
         }
 
+        // Limpiar idConexionActual al seleccionar cualquier cuenta contable anidada
+        select.addEventListener('change', function () {
+            if (this.value) {
+                limpiarIdConexionSiSelectAnidado();
+            }
+        });
+
         if (onChange) select.addEventListener('change', onChange);
     } catch (error) {
         console.error(`Error al cargar ${label}:`, error);
     }
 }
 
+// Función para obtener el folio
+async function obtenerFolio() {
+    try {
+        const res = await fetch('http://localhost:5000/api/cobrar/ultimoRecibo');
+        const data = await res.json();
+        const siguienteId = data?.ultimo_id ? data.ultimo_id + 1 : 1;
+        return `FOL-${siguienteId}`;
+    } catch (e) {
+        return 'FOL-error';
+    }
+}
+
 // Inicialización principal
 document.addEventListener('DOMContentLoaded', async () => {
+    const btnCancel = document.getElementById("btnCancel");
+    btnCancel.addEventListener("click", () => {
+        modalOverlay.style.display = 'none';
+    });
+    // Obtener el folio
+    const folioInput = document.getElementById('folio');
+    if (folioInput) {
+        folioInput.value = await obtenerFolio();
+    }
+
     // Configurar fecha y ejercicio fiscal
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -203,8 +240,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const contribuyenteSelect = document.getElementById('contribuyente');
         const domicilioInput = document.getElementById('domicilio');
         const otroMotivoSelect = document.getElementById('otroMotivo');
+        const modalOverlay = document.getElementById('modalOverlay');
         const claveInput = document.getElementById('clave');
         const contribuyenteMap = new Map();
+
+        // Abrir el modal de alquiler si se selecciona "Alquiler" en el select "otroMotivo"
+        if (otroMotivoSelect && modalOverlay) {
+            otroMotivoSelect.addEventListener('change', function () {
+                if (this.value === 'alquiler') {
+                    modalOverlay.style.display = 'flex'; // O 'block', según tu CSS
+                }
+            });
+        }
+
         if (contribuyenteSelect && domicilioInput) {
             contribuyentes.forEach(contribuyente => {
                 const option = document.createElement('option');
@@ -214,12 +262,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 contribuyenteSelect.appendChild(option);
             });
 
-            let cuentaConexionActual = '';
-            let cuentaBaseCatastral = '';
+            if (otroMotivoSelect) {
+                otroMotivoSelect.value = 'cuentaConexion'; // Asigna primero el motivo por defecto
+            }
+
+            if (contribuyenteSelect.options.length > 0) {
+                contribuyenteSelect.selectedIndex = 0; // Selecciona el primero
+                contribuyenteSelect.dispatchEvent(new Event('change')); // Dispara el evento para llenar "clave"
+            }
 
             contribuyenteSelect.addEventListener('change', async () => {
                 const selectedId = contribuyenteSelect.value;
                 domicilioInput.value = contribuyenteMap.get(Number(selectedId)) || ''; // Convierte el ID a número
+
+                let existeConexion = false;
+                let existeBase = false;
 
                 // MOSTRAR LA CUENTA EN EL INPUT "clave"
                 // Solo busca si hay un ID válido
@@ -239,10 +296,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                         idBaseActual = null;
                         cuentaBaseCatastral = '';
                     }
-                } else {
-                    cuentaConexionActual = '';
-                    cuentaBaseCatastral = '';
                 }
+
+                // Mostrar alerta si no existe ni conexión ni base catastral
+                if (!existeConexion && !existeBase) {
+                    claveInput.classList.add('input-alerta');
+                    claveInput.value = '';
+                    claveInput.placeholder = '¡Este contribuyente no tiene cuenta!';
+                    // Opcional: mostrar un mensaje flotante
+                    // alert('El contribuyente no tiene conexión ni base catastral');
+                } else {
+                    claveInput.classList.remove('input-alerta');
+                    claveInput.placeholder = '';
+                }
+
                 // Actualiza el input según el motivo seleccionado
                 if (otroMotivoSelect.value === 'cuentaConexion') {
                     claveInput.value = cuentaConexionActual;
@@ -284,7 +351,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 estimuloAdicionalSelect.appendChild(option);
             });
             if (estimuloSelect && estimuloAdicionalSelect) {
-                // ...llenado de opciones...
                 estimuloSelect.addEventListener('change', calcularTotal);
                 document.getElementById('subtotal').addEventListener('input', calcularTotal);
                 calcularTotal(); // Para que se calcule el total al inicio si ya hay valores
@@ -364,6 +430,18 @@ document.getElementById('receiptForm').addEventListener('submit', async (e) => {
     // id_usuario siempre 1 (lo puedes poner en el backend, pero si lo quieres enviar, hazlo aquí)
     const id_usuario = 1;
 
+    // Validación: al menos uno debe tener valor
+    const claveInput = document.getElementById('clave');
+    if ((!claveInput.value || claveInput.value.trim() === '') && (!claveCuentaContable || claveCuentaContable.trim() === '')) {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Atención!',
+            text: 'Debes llenar la cuenta o seleccionar una cuenta contable.',
+            confirmButtonColor: '#3085d6'
+        });
+        return;
+    }
+
     // Construye el objeto de datos
     const data = {
         folio,
@@ -397,11 +475,19 @@ document.getElementById('receiptForm').addEventListener('submit', async (e) => {
             body: JSON.stringify(data)
         });
         if (!response.ok) throw new Error(`Error HTTP! estado: ${response.status}`);
-        alert('Recibo guardado correctamente');
+        Swal.fire({
+            icon: 'success',
+            title: '¡Guardado!',
+            text: 'Recibo Guardado exitosamente'
+        });
         // Opcional: limpiar el formulario o redirigir
     } catch (error) {
         console.error('Error al guardar el recibo:', error);
-        alert('Error al guardar el recibo');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al guardar el recibo. Por favor, inténtalo de nuevo.',
+        });
     }
 });
 // ...existing code...
