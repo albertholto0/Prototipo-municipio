@@ -196,7 +196,7 @@ function addRowListeners() {
       const id = btn.getAttribute('data-id');
       if (confirm('¿Estás seguro de eliminar esta conexión?')) {
         try {
-          const response = await fetch(`/api/conexiones/${id}`, {
+          const response = await fetch(`http://localhost:5000/api/conexiones/${id}`, {
             method: 'DELETE'
           });
           if (!response.ok) throw new Error('Error al eliminar');
