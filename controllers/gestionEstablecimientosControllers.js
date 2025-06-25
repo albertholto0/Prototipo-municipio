@@ -13,7 +13,7 @@ class Establecimiento {
         e.giro_negocio,
         CONCAT(c.nombre, ' ', c.apellido_paterno, ' ', c.apellido_materno) AS nombre_contribuyente
       FROM establecimientos e
-      JOIN contribuyentes c ON e.id_contribuyente = c.id_contribuyente
+      JOIN contribuyente c ON e.id_contribuyente = c.id_contribuyente
     `);
       res.json(rows);
     } catch (err) {

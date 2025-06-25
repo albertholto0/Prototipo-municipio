@@ -149,7 +149,7 @@ async function llenarSelectSubcuentasContables() {
         subcuentas.forEach(subcuenta => {
             const option = document.createElement('option');
             option.value = subcuenta.clave_subcuenta; // SOLO el id
-            option.textContent = `${subcuenta.clave_subcuenta} - ${subcuenta.nombre_subcuentas}`;
+            option.textContent = `${subcuenta.clave_subcuenta} - ${subcuenta.nombre}`;
             select.appendChild(option);
         });
     } catch (error) {
