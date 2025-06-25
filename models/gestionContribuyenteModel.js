@@ -17,7 +17,7 @@ class Contribuyente {
           barrio,
           localidad,
           telefono
-        FROM contribuyentes
+        FROM contribuyente
       `);
       return rows;
     } catch (err) {

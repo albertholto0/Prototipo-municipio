@@ -248,14 +248,25 @@ document.addEventListener("DOMContentLoaded", () => {
     renderizarAlquileres(filteredAlquileres());
   });
 
-  elements.btnOpenModal.addEventListener('click', () => {
-    resetForm();
-    openModal();
-  });
+  // Solo agrega el listener si el botón existe
+  if (elements.btnOpenModal) {
+    elements.btnOpenModal.addEventListener('click', () => {
+      resetForm();
+      openModal();
+    });
+  }
 
-  elements.btnCancel.addEventListener("click", closeModal);
-  elements.btnCloseModal?.addEventListener("click", closeModal);
-  viewModalElements.btnCloseViewModal?.addEventListener("click", closeViewModal);
+  if (elements.btnCancel) {
+    elements.btnCancel.addEventListener("click", closeModal);
+  }
+
+  if (elements.btnCloseModal) {
+    elements.btnCloseModal.addEventListener("click", closeModal);
+  }
+
+  if (viewModalElements.btnCloseViewModal) {
+    viewModalElements.btnCloseViewModal.addEventListener("click", closeViewModal);
+  }
 
   elements.form.addEventListener("submit", async function (e) {
     e.preventDefault();
