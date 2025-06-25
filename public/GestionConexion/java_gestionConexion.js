@@ -63,9 +63,6 @@ function renderizarConexiones(lista) {
       <td>${nombreContribuyente}</td>
       <td>${conexion.cuenta || ''}</td>
       <td>${conexion.tipo || ''}</td>
-      <td>${conexion.uso || ''}</td>
-      <td>${conexion.ubicacion || ''}</td>
-      <td>${conexion.barrio || ''}</td>
       <td>
         <button class="action-btn edit" data-id="${conexion.id_conexion}" title="Editar">
             <img src="/public/Assets/editor.png" class="action-icon">
@@ -117,16 +114,26 @@ window.changePage = function (page) {
   currentPage = page;
   renderizarConexiones(filteredConexiones());
 };
+// fecha
+// nombre_contribuyente
+// tipo
+// cuenta
 
+// =======================
+// Filtrar conexiones
+// =======================
 function filteredConexiones() {
   const term = elements.searchInput.value.toLowerCase();
   return allConexiones.filter(conexion =>
+    (conexion.fecha_conexion ? conexion.fecha_conexion.slice(0, 10) : '').toLowerCase().includes(term) ||
     (conexion.cuenta || '').toLowerCase().includes(term) ||
     (conexion.tipo || '').toLowerCase().includes(term) ||
     (conexion.uso || '').toLowerCase().includes(term) ||
     (conexion.ubicacion || '').toLowerCase().includes(term) ||
     (conexion.barrio || '').toLowerCase().includes(term) ||
-    (conexion.id_contribuyente && conexion.id_contribuyente.toString().includes(term))
+    (conexion.id_contribuyente && conexion.id_contribuyente.toString().includes(term)) ||
+    (contribuyentesMap[conexion.id_contribuyente] || '').toLowerCase().includes(term)
+
   );
 }
 
@@ -196,7 +203,7 @@ function addRowListeners() {
       const id = btn.getAttribute('data-id');
       if (confirm('¿Estás seguro de eliminar esta conexión?')) {
         try {
-          const response = await fetch(`/api/conexiones/${id}`, {
+          const response = await fetch(`http://localhost:5000/api/conexiones/${id}`, {
             method: 'DELETE'
           });
           if (!response.ok) throw new Error('Error al eliminar');
