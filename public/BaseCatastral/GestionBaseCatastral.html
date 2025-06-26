@@ -68,7 +68,7 @@
           <div class="form-inline">
             <div class="form-group">
               <label for="claveCatastral">Clave catastral:</label>
-              <input type="text" id="claveCatastral" name="claveCatastral" placeholder="Ej. CLAVE-123" required>
+              <input type="text" id="claveCatastral" name="claveCatastral" value="CAT-" placeholder="Ej. CLAVE-123" required>
             </div>
             <div class="form-group">
               <label for="contribuyenteSelect">Propietario:</label>
@@ -86,7 +86,8 @@
             </div>
             <div class="form-group">
               <label for="impuestoCalculado">Impuesto calculado:</label>
-              <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" required>
+              <!-- Ahora solo lectura -->
+              <input type="number" id="impuestoCalculado" name="impuestoCalculado" placeholder="Ej. 1250" readonly>
             </div>
           </div>
 
@@ -96,21 +97,7 @@
             <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej. Calle Falsa 123" required>
           </div>
 
-
-          <!-- Fila 4: Valor terreno y Valor construcción 
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="valorTerreno">Valor terreno:</label>
-              <input type="number" id="valorTerreno" name="valorTerreno" placeholder="Ej. 50000" required>
-            </div>
-            <div class="form-group">
-              <label for="valorConstruccion">Valor construcción:</label>
-              <input type="number" id="valorConstruccion" name="valorConstruccion" placeholder="Ej. 75000" required>
-            </div>
-          </div>
-          -->
-
-          <!--  Impuesto calculado y Uso de suelo -->
+          <!-- Barrio y Fecha avalúo -->
           <div class="form-inline">
             <div class="form-group">
               <label for="barrio">Barrio:</label>
@@ -121,21 +108,8 @@
               <input type="date" id="fechaAvaluo" name="fechaAvaluo" required>
             </div>
           </div>
-          <!-- 
-            <div class="form-group">
-              <label for="usoSuelo">Uso de suelo:</label>
-              <select id="usoSuelo" name="usoSuelo" required>
-                <option value="">Selecciona un uso</option>
-                <option value="habitacional">Habitacional</option>
-                <option value="comercial">Comercial</option>
-                <option value="industrial">Industrial</option>
-                <option value="mixto">Mixto</option>
-                <option value="otro">Otro</option>
-              </select>
-            </div>
-            -->
 
-          <!-- Fila 6: Fecha avalúo y Historial avalúos -->
+          <!-- Historial avalúos -->
           <div class="form-inline">
             <div class="form-group">
               <label for="historialAvaluos">Historial avalúos:</label>
@@ -165,7 +139,6 @@
       </div>
     </div>
   </div>
-
 
   <footer class="footer">
     <p>© 2025 Ixtlán - Módulo 5: Gestión de Base Catastral</p>
