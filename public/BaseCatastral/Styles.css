@@ -651,7 +651,7 @@
 
 /* Asegura que el z-index no se sobreponga al modal (z-index del modal: 1000+) */
 .toast-container {
-  z-index: 900; /* Puedes ajustar si usas modales con z-index más alto */
+  z-index: 1200; /* Puedes ajustar si usas modales con z-index más alto */
 }
 
 /* Estilo para el botón de agregar y cancelar en gestión de subconceptos y conceptos
