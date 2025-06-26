@@ -2,7 +2,7 @@ const API_BASE = 'http://localhost:5000/api/baseCatastral';
 const API_CONTRIB = 'http://localhost:5000/api/contribuyentes';
 
 // Estado global
-defaults = {
+const defaults = {
   bases: [],
   contribuyentes: [],
   isEditing: false,
@@ -39,7 +39,7 @@ function showToast(message, type = 'success') {
 }
 
 // Mapeo de elementos del DOM
-elems = {
+const elems = {
   tableBody: document.querySelector('#accountsTable tbody'),
   searchInput: document.getElementById('searchInput'),
   form: document.getElementById('accountForm'),
@@ -63,8 +63,27 @@ elems = {
   formTitle: document.getElementById('formTitle')
 };
 
-// Funciones de formato de fechas
+// ─── PREFIJO CAT- EN CLAVE ───
+function enforceClavePrefix() {
+  const prefix = 'CAT-';
+  const el = elems.claveCatastral;
+  if (!el.value.startsWith(prefix)) el.value = prefix;
+  // pone cursor al final
+  const pos = el.value.length;
+  el.setSelectionRange(pos, pos);
+}
+elems.claveCatastral.addEventListener('focus', enforceClavePrefix);
+elems.claveCatastral.addEventListener('keydown', e => {
+  const prefixLen = 4; // longitud de "CAT-"
+  const el = elems.claveCatastral;
+  if ((e.key === 'Backspace' || e.key === 'Delete' || e.key === 'ArrowLeft')
+      && el.selectionStart <= prefixLen - 1) {
+    e.preventDefault();
+    enforceClavePrefix();
+  }
+});
 
+// — Funciones de formato de fechas —
 // Convierte fecha para input type="date" (YYYY-MM-DD)
 function formatDateToInput(dateInput) {
   if (!dateInput) return '';
@@ -85,6 +104,17 @@ function formatDateToDMY(dateInput) {
   return `${day}/${month}/${year}`;
 }
 
+// ──────────────── CÁLCULO AUTOMÁTICO DE IMPUESTO ────────────────
+function updateImpuestoCalculado() {
+  const base = parseFloat(elems.baseCatastral.value);
+  if (!isNaN(base)) {
+    elems.impuestoCalculado.value = (base * 0.15).toFixed(2);
+  } else {
+    elems.impuestoCalculado.value = '';
+  }
+}
+// ───────────────────────────────────────────────────────────────
+
 // — FUNCIONES API —
 async function fetchBases() {
   try {
@@ -96,18 +126,25 @@ async function fetchBases() {
     showToast('Error al cargar las bases catastrales', 'danger');
   }
 }
+
 async function fetchContribuyentes() {
-  const res = await fetch(API_CONTRIB);
-  defaults.contribuyentes = await res.json();
-  populateContribSelect();
+  try {
+    const res = await fetch(API_CONTRIB);
+    if (!res.ok) throw new Error(res.statusText);
+    defaults.contribuyentes = await res.json();
+    populateContribSelect();
+  } catch (err) {
+    console.error(err);
+    showToast('Error al cargar los contribuyentes', 'danger');
+  }
 }
+
 async function createBase(data) {
   const res = await fetch(API_BASE, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
-
   const result = await res.json();
   if (!res.ok) throw new Error(result.message || 'Error al crear base');
   return result;
@@ -119,7 +156,12 @@ async function updateBase(id, data) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   });
-  return res.json();
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result.message || 'Error al actualizar la base catastral');
+  }
+  return result;
 }
 
 async function deleteBase(id) {
@@ -155,6 +197,7 @@ function renderTable(data) {
   });
   renderPagination(data.length);
 }
+
 function renderPagination(total) {
   const pages = Math.ceil(total / defaults.rowsPerPage);
   let html = `<button class="pagination-btn" onclick="changePage(${defaults.currentPage - 1})" ${defaults.currentPage === 1 ? 'disabled' : ''}>« Anterior</button>`;
@@ -177,6 +220,7 @@ function filtered() {
     return b.cuenta.toLowerCase().includes(term) || prop.includes(term);
   });
 }
+
 function changePage(p) {
   const maxPage = Math.ceil(filtered().length / defaults.rowsPerPage);
   defaults.currentPage = Math.max(1, Math.min(p, maxPage));
@@ -197,20 +241,20 @@ async function handleSubmit(e) {
     historial_avaluos: elems.historialAvaluos.value
   };
 
-  try {
-    if (defaults.isEditing) {
-      await updateBase(defaults.editingId, payload);
-      showToast('Base catastral actualizada exitosamente', 'success');
-    } else {
-      await createBase(payload);
-      showToast('Base catastral agregada exitosamente', 'success');
-    }
-    await refresh();
-    closeModal();
-  } catch (err) {
-    console.error(err);
-    showToast(err.message || 'Error inesperado al guardar', 'danger');
+try {
+  if (defaults.isEditing) {
+    await updateBase(defaults.editingId, payload);
+    showToast('Base catastral actualizada exitosamente', 'success');
+  } else {
+    await createBase(payload);
+    showToast('Base catastral agregada exitosamente', 'success');
   }
+  await refresh();
+  closeModal();
+} catch (err) {
+  console.error(err);
+  showToast(err.message || 'Error inesperado al guardar', 'danger');
+}
 }
 
 elems.form.addEventListener('submit', handleSubmit);
@@ -244,7 +288,7 @@ window.editAccount = idx => {
   elems.ubicacion.value = b.ubicacion;
   elems.barrio.value = b.barrio;
   elems.impuestoCalculado.value = b.impuesto_calculado;
-  elems.fechaAvaluo.value = formatDateToInput(b.fecha_avaluo); // Formato para input date
+  elems.fechaAvaluo.value = formatDateToInput(b.fecha_avaluo);
   elems.historialAvaluos.value = b.historial_avaluos;
   elems.formTitle.textContent = 'Editar Base Catastral';
   elems.btnAddOrUpdate.textContent = 'Actualizar';
@@ -297,8 +341,18 @@ async function refresh() {
   await Promise.all([fetchContribuyentes(), fetchBases()]);
   renderTable(filtered());
 }
+
 document.addEventListener('DOMContentLoaded', () => {
-  elems.btnOpenModal.addEventListener('click', () => { elems.form.reset(); openModal(); });
+  // Recalcular impuesto en tiempo real
+  elems.baseCatastral.addEventListener('input', updateImpuestoCalculado);
+
+  // Al abrir el modal, resetear impuestos también
+  elems.btnOpenModal.addEventListener('click', () => {
+    elems.form.reset();
+    elems.impuestoCalculado.value = '';
+    openModal();
+  });
   elems.btnCloseModal.addEventListener('click', closeModal);
+
   refresh();
 });
