@@ -36,7 +36,20 @@ const createBase = async (req, res) => {
 
 const updateBase = async (req, res) => {
   try {
-    const actualizado = await BaseCatastral.update(req.params.id, req.body);
+    const { cuenta } = req.body;
+    const id = parseInt(req.params.id);
+
+    // Obtener todas las bases (puedes optimizar si tienes método getByCuenta)
+    const todas = await BaseCatastral.getAll();
+
+    // Buscar si hay otra base con la misma cuenta, distinto ID
+    const duplicada = todas.find(b => b.cuenta === cuenta && b.id_base_catastral !== id);
+
+    if (duplicada) {
+      return res.status(400).json({ message: 'Ya existe otra base con la misma clave catastral.' });
+    }
+
+    const actualizado = await BaseCatastral.update(id, req.body);
     res.json(actualizado);
   } catch (err) {
     console.error(err);
