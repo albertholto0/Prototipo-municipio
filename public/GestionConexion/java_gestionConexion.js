@@ -67,9 +67,6 @@ function renderizarConexiones(lista) {
         <button class="action-btn edit" data-id="${conexion.id_conexion}" title="Editar">
             <img src="/public/Assets/editor.png" class="action-icon">
         </button>
-        <button class="action-btn delete" data-id="${conexion.id_conexion}" title="Eliminar">
-            <img src="/public/Assets/eliminar.png" class="action-icon">
-        </button>
         <button class="action-btn view" data-id="${conexion.id_conexion}" title="Ver información">
             <img src="/public/Assets/visualizar.png" class="action-icon">
         </button>
@@ -153,6 +150,7 @@ function resetForm() {
   editId = null;
   elements.formTitle.textContent = "Agregar Conexión";
   elements.btnAddOrUpdate.textContent = "Agregar";
+  setFechaActual();
 }
 
 // =======================
@@ -187,7 +185,7 @@ function addRowListeners() {
 
       document.getElementById('fecha_conexion').value = conexion.fecha_conexion ? conexion.fecha_conexion.slice(0, 10) : '';
       document.getElementById('id_contribuyente').value = conexion.id_contribuyente || '';
-      document.getElementById('cuenta').value = conexion.cuenta || '';
+      document.getElementById('cuenta').value = generarCuentaPorTipo(conexion.tipo || '');
       document.getElementById('tipo').value = conexion.tipo || '';
       document.getElementById('uso').value = conexion.uso || '';
       document.getElementById('ubicacion').value = conexion.ubicacion || '';
@@ -195,23 +193,6 @@ function addRowListeners() {
       elements.formTitle.textContent = "Editar Conexión";
       elements.btnAddOrUpdate.textContent = "Actualizar";
       openModal();
-    });
-  });
-
-  document.querySelectorAll('.action-btn.delete').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const id = btn.getAttribute('data-id');
-      if (confirm('¿Estás seguro de eliminar esta conexión?')) {
-        try {
-          const response = await fetch(`http://localhost:5000/api/conexiones/${id}`, {
-            method: 'DELETE'
-          });
-          if (!response.ok) throw new Error('Error al eliminar');
-          cargarConexiones();
-        } catch (error) {
-          alert('No se pudo eliminar la conexión');
-        }
-      }
     });
   });
 
@@ -251,9 +232,9 @@ async function cargarContribuyentes() {
       const nombreCompleto = `${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}`;
       contribuyentesMap[contribuyente.id_contribuyente] = nombreCompleto;
     });
-    // También llenar el select de contribuyentes en el formulario
+    // Llenar el select de contribuyentes en el formulario, dejando la opción vacía por defecto
     const selectContribuyentes = document.getElementById('id_contribuyente');
-    selectContribuyentes.innerHTML = '';
+    selectContribuyentes.innerHTML = '<option value="">Selecciona un contribuyente</option>';
     allContribuyentes.forEach(contribuyente => {
       const nombreCompleto = `${contribuyente.nombre} ${contribuyente.apellido_paterno} ${contribuyente.apellido_materno}`;
       const option = document.createElement('option');
@@ -267,11 +248,79 @@ async function cargarContribuyentes() {
 }
 
 // =======================
+// Generar cuenta automáticamente al seleccionar tipo
+// =======================
+function generarCuentaPorTipo(tipoSeleccionado) {
+  // Filtrar conexiones del tipo seleccionado
+  const conexionesTipo = allConexiones.filter(c => (c.tipo || '').toLowerCase() === tipoSeleccionado.toLowerCase());
+  // Obtener el siguiente número consecutivo
+  const siguienteNumero = conexionesTipo.length + 1;
+  // Formatear el número a 3 dígitos
+  const numeroFormateado = siguienteNumero.toString().padStart(3, '0');
+  // Formatear el tipo para mostrarlo en la cuenta
+  let tipoFormateado = tipoSeleccionado.charAt(0).toUpperCase() + tipoSeleccionado.slice(1);
+  return `${tipoFormateado}-${numeroFormateado}`;
+}
+
+// =======================
+// Autollenado de campos al seleccionar contribuyente
+// =======================
+const selectContribuyentes = document.getElementById('id_contribuyente');
+if (selectContribuyentes) {
+  selectContribuyentes.addEventListener('change', function () {
+    const id = this.value;
+    const contribuyente = allContribuyentes.find(c => c.id_contribuyente == id);
+    if (contribuyente) {
+      // Construir ubicación completa
+      let ubicacion = '';
+      if (contribuyente.direccion) ubicacion += contribuyente.direccion;
+      if (contribuyente.numero_calle) ubicacion += (ubicacion ? ' ' : '') + contribuyente.numero_calle;
+      //if (contribuyente.barrio) ubicacion += (ubicacion ? ', ' : '') + contribuyente.barrio;
+      if (contribuyente.localidad) ubicacion += (ubicacion ? ', ' : '') + contribuyente.localidad;
+      if (contribuyente.codigo_postal) ubicacion += (ubicacion ? ', CP ' : 'CP ') + contribuyente.codigo_postal;
+      document.getElementById('ubicacion').value = ubicacion;
+      if (contribuyente.barrio) document.getElementById('barrio').value = contribuyente.barrio;
+    } else {
+      document.getElementById('ubicacion').value = '';
+      document.getElementById('barrio').value = '';
+    }
+  });
+}
+
+// =======================
+// Fecha por defecto actual
+// =======================
+function setFechaActual() {
+  const fechaInput = document.getElementById('fecha_conexion');
+  if (fechaInput) {
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    fechaInput.value = `${yyyy}-${mm}-${dd}`;
+  }
+}
+
+// =======================
 // Inicialización
 // =======================
 document.addEventListener("DOMContentLoaded", async () => {
-  await cargarContribuyentes(); // Espera a que termine de cargar los contribuyentes
-  cargarConexiones();           // Luego carga las conexiones
+  await cargarContribuyentes();
+  await cargarConexiones();
+  setFechaActual();
+
+  // Evento para actualizar la cuenta al cargar conexiones y al cambiar tipo
+  const tipoSelect = document.getElementById('tipo');
+  if (tipoSelect) {
+    tipoSelect.addEventListener('change', function () {
+      const tipoSeleccionado = this.value;
+      if (tipoSeleccionado) {
+        document.getElementById('cuenta').value = generarCuentaPorTipo(tipoSeleccionado);
+      } else {
+        document.getElementById('cuenta').value = '';
+      }
+    });
+  }
 
   elements.searchInput.addEventListener("input", () => {
     currentPage = 1;

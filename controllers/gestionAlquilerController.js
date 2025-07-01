@@ -26,14 +26,15 @@ exports.setAlquiler = async (req, res) => {
       concepto,
       tarifa_base,
       monto_total,
-      id_recibo
+      id_recibo,
+      estado
     } = req.body;
 
     // Validación básica
     if (
       !fecha_inicio || !fecha_fin || !numero_viajes || !kilometros_recorridos ||
       !horometro_inicio || !horometro_fin || !tipo_trabajo || !concepto ||
-      !tarifa_base || !monto_total || !id_recibo
+      !tarifa_base || !monto_total || !id_recibo || !estado
     ) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
@@ -49,7 +50,8 @@ exports.setAlquiler = async (req, res) => {
       concepto,
       tarifa_base,
       monto_total,
-      id_recibo
+      id_recibo,
+      estado
     );
 
     res.status(201).json({
@@ -82,14 +84,15 @@ exports.putAlquiler = async (req, res) => {
       concepto,
       tarifa_base,
       monto_total,
-      id_recibo
+      id_recibo,
+      estado
     } = req.body;
 
     // Validación básica
     if (
       !fecha_inicio || !fecha_fin || !numero_viajes || !kilometros_recorridos ||
       !horometro_inicio || !horometro_fin || !tipo_trabajo || !concepto ||
-      !tarifa_base || !monto_total || !id_recibo
+      !tarifa_base || !monto_total || !id_recibo || !estado
     ) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
@@ -106,7 +109,8 @@ exports.putAlquiler = async (req, res) => {
       concepto,
       tarifa_base,
       monto_total,
-      id_recibo
+      id_recibo,
+      estado
     );
 
     res.status(201).json({

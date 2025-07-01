@@ -66,12 +66,10 @@ function renderizarAlquileres(lista) {
       <td>${alquiler.tipo_trabajo || ''}</td>
       <td>${alquiler.concepto || ''}</td>
       <td>${alquiler.monto_total || ''}</td>
+      <td>${alquiler.estado || ''}</td>
       <td>
         <button class="action-btn edit" data-id="${alquiler.id_alquiler}" title="Editar">
             <img src="/public/Assets/editor.png" class="action-icon">
-        </button>
-        <button class="action-btn delete" data-id="${alquiler.id_alquiler}" title="Eliminar">
-            <img src="/public/Assets/eliminar.png" class="action-icon">
         </button>
         <button class="action-btn view" data-id="${alquiler.id_alquiler}" title="Ver información">
             <img src="/public/Assets/visualizar.png" class="action-icon">
@@ -133,6 +131,27 @@ function filteredAlquileres() {
 // =======================
 function openModal() {
   elements.modalOverlay.style.display = 'block';
+  // Si estamos editando, ocultar el campo ID Recibo
+  if (editId) {
+    const idReciboGroup = document.querySelector('.form-group[id*="id_recibo"], .form-group #id_recibo');
+    if (idReciboGroup) {
+      if (idReciboGroup.closest('.form-group')) {
+        idReciboGroup.closest('.form-group').style.display = 'none';
+      } else {
+        idReciboGroup.style.display = 'none';
+      }
+    }
+  } else {
+    // Si es alta, mostrar el campo
+    const idReciboGroup = document.querySelector('.form-group[id*="id_recibo"], .form-group #id_recibo');
+    if (idReciboGroup) {
+      if (idReciboGroup.closest('.form-group')) {
+        idReciboGroup.closest('.form-group').style.display = '';
+      } else {
+        idReciboGroup.style.display = '';
+      }
+    }
+  }
 }
 function closeModal() {
   elements.modalOverlay.style.display = 'none';
@@ -186,27 +205,11 @@ function addRowListeners() {
       document.getElementById('concepto').value = alquiler.concepto || '';
       document.getElementById('tarifa_base').value = alquiler.tarifa_base || '';
       document.getElementById('monto_total').value = alquiler.monto_total || '';
-      document.getElementById('id_recibo').value = alquiler.id_recibo || '';
+      // document.getElementById('id_recibo').value = alquiler.id_recibo || ''; // Oculto en edición
+      document.getElementById('estado').value = alquiler.estado || 'Pendiente';
       elements.formTitle.textContent = "Editar Alquiler";
       elements.btnAddOrUpdate.textContent = "Actualizar";
       openModal();
-    });
-  });
-
-  document.querySelectorAll('.action-btn.delete').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const id = btn.getAttribute('data-id');
-      if (confirm('¿Estás seguro de eliminar este alquiler?')) {
-        try {
-          const response = await fetch(`http://localhost:5000/api/alquileres/${id}`, {
-            method: 'DELETE'
-          });
-          if (!response.ok) throw new Error('Error al eliminar');
-          cargarAlquileres();
-        } catch (error) {
-          alert('No se pudo eliminar el alquiler');
-        }
-      }
     });
   });
 
@@ -230,6 +233,7 @@ function addRowListeners() {
         <p><strong>Concepto:</strong> ${alquiler.concepto || ''}</p>
         <p><strong>Tarifa Base:</strong> ${alquiler.tarifa_base || ''}</p>
         <p><strong>Monto Total:</strong> ${alquiler.monto_total || ''}</p>
+        <p><strong>Estado:</strong> ${alquiler.estado || ''}</p>
         <p><strong>ID Recibo:</strong> ${alquiler.id_recibo || ''}</p>
       `;
       openViewModal();
@@ -282,7 +286,8 @@ document.addEventListener("DOMContentLoaded", () => {
       concepto: document.getElementById('concepto').value,
       tarifa_base: Number(document.getElementById('tarifa_base').value),
       monto_total: Number(document.getElementById('monto_total').value),
-      id_recibo: document.getElementById('id_recibo').value
+      id_recibo: document.getElementById('id_recibo').value,
+      estado: document.getElementById('estado').value || 'Pendiente'
     };
 
     try {

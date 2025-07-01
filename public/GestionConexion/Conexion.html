@@ -22,7 +22,7 @@
 
         <!-- Sección de búsqueda -->
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Buscar" />
+            <input type="text" id="searchInput" placeholder="Buscar por nombre del contribuyente" />
             <button class="btn-agregar" id="btnOpenModal">Agregar</button>
         </div>
 
@@ -66,16 +66,16 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="cuenta">Cuenta:</label>
-                        <input type="text" id="cuenta" name="cuenta" maxlength="20">
-                    </div>
-                    <div class="form-group">
                         <label for="tipo">Tipo:</label>
                         <select id="tipo" name="tipo" required>
                             <option value="">Selecciona una opción</option>
                             <option value="agua potable">Agua Potable</option>
                             <option value="drenaje">Drenaje</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cuenta">Cuenta:</label>
+                        <input type="text" id="cuenta" name="cuenta" maxlength="20" readonly>
                     </div>
                     <div class="form-group">
                         <label for="uso">Uso:</label>

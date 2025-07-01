@@ -24,7 +24,7 @@
 
         <!-- Sección de búsqueda -->
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Buscar" />
+            <input type="text" id="searchInput" placeholder="Buscar por concepto" />
             <!-- <button class="btn-agregar" id="btnOpenModal">Agregar</button> -->
         </div>
 
@@ -39,6 +39,7 @@
                         <th>Tipo de Trabajo</th>
                         <th>Concepto</th>
                         <th>Monto Total</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -111,7 +112,16 @@
                     </div>
                     <div class="form-group">
                         <label for="id_recibo">ID Recibo:</label>
-                        <input type="text" id="id_recibo" name="id_recibo" required>
+                        <input type="text" id="id_recibo" name="id_recibo" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select id="estado" name="estado" required>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Finalizado">Finalizado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
                     </div>
                     <div class="form-actions">
                         <button type="button" id="btnCancel" class="btn-cancel">Cancelar</button>

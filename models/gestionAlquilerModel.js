@@ -18,7 +18,8 @@ class Alquiler {
           concepto,
           tarifa_base,
           monto_total,
-          id_recibo
+          id_recibo,
+          estado
         FROM alquiler
       `);
       return rows;
@@ -39,7 +40,8 @@ class Alquiler {
     concepto,
     tarifa_base,
     monto_total,
-    id_recibo
+    id_recibo,
+    estado
   ) {
     try {
       const [result] = await db.query(
@@ -54,8 +56,9 @@ class Alquiler {
           concepto,
           tarifa_base,
           monto_total,
-          id_recibo
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          id_recibo,
+          estado
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           fecha_inicio,
           fecha_fin,
@@ -67,7 +70,8 @@ class Alquiler {
           concepto,
           tarifa_base,
           monto_total,
-          id_recibo
+          id_recibo,
+          estado
         ]
       );
       return { id_alquiler: result.insertId };
@@ -89,7 +93,8 @@ class Alquiler {
     concepto,
     tarifa_base,
     monto_total,
-    id_recibo
+    id_recibo,
+    estado
   ) {
     try {
       const [result] = await db.query(
@@ -104,7 +109,8 @@ class Alquiler {
           concepto = ?,
           tarifa_base = ?,
           monto_total = ?,
-          id_recibo = ?
+          id_recibo = ?,
+          estado = ?
         WHERE id_alquiler = ?`,
         [
           fecha_inicio,
@@ -118,6 +124,7 @@ class Alquiler {
           tarifa_base,
           monto_total, 
           id_recibo,
+          estado,
           id
         ]
       );
