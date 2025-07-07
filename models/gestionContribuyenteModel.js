@@ -17,7 +17,7 @@ class Contribuyente {
           barrio,
           localidad,
           telefono
-        FROM contribuyente
+        FROM contribuyentes
       `);
       return rows;
     } catch (err) {
@@ -28,7 +28,7 @@ class Contribuyente {
 
   static async deleteContribuyente(id) {
     try {
-      await db.query("DELETE FROM contribuyente WHERE id_contribuyente = ?", [
+      await db.query("DELETE FROM contribuyentes WHERE id_contribuyente = ?", [
         id,
       ]);
     } catch (err) {
@@ -51,7 +51,7 @@ class Contribuyente {
   ) {
     try {
       const [result] = await db.query(
-        'INSERT INTO contribuyente (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, telefono, direccion, numero_calle, barrio, localidad, codigo_postal, rfc, copia_credencial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO contribuyentes (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, telefono, direccion, numero_calle, barrio, localidad, codigo_postal, rfc, copia_credencial) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [nombre, apellido_paterno, apellido_materno, fecha_nacimiento, telefono, calle, num_calle, barrio, localidad, codigo_postal, rfc, "/home/imagenes/contribuyentes_ine"]
       );
       return result.insertId;
@@ -63,7 +63,7 @@ class Contribuyente {
   static async getContribuyenteById(id) {
     try {
       const [rows] = await db.query(
-        "SELECT * FROM contribuyente WHERE id_contribuyente = ?",
+        "SELECT * FROM contribuyentes WHERE id_contribuyente = ?",
         [id]
       );
       if (rows.length === 0) {
@@ -92,7 +92,7 @@ class Contribuyente {
   ) {
     try {
       const [result] = await db.query(
-        "UPDATE contribuyente SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, fecha_nacimiento = ?, telefono = ?, direccion = ?, numero_calle = ?, barrio = ?, localidad = ?, codigo_postal = ?, rfc = ? WHERE id_contribuyente = ?",
+        "UPDATE contribuyentes SET nombre = ?, apellido_paterno = ?, apellido_materno = ?, fecha_nacimiento = ?, telefono = ?, direccion = ?, numero_calle = ?, barrio = ?, localidad = ?, codigo_postal = ?, rfc = ? WHERE id_contribuyente = ?",
         [
           nombre,
           apellido_paterno,

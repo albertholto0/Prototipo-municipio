@@ -83,15 +83,44 @@ function renderizarContribuyentes(lista) {
   document.querySelectorAll('.action-btn.delete').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       const id = btn.getAttribute('data-id');
-      if (confirm('¿Estás seguro de eliminar este contribuyente?')) {
+
+      // Mostrar confirmación con SweetAlert
+      const result = await Swal.fire({
+        title: '¿Estás seguro de eliminar este contribuyente?',
+        text: "Esta acción no se puede deshacer",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (result.isConfirmed) {
         try {
           const response = await fetch(`http://localhost:5000/api/contribuyentes/${id}`, {
             method: 'DELETE'
           });
+
           if (!response.ok) throw new Error('Error al eliminar');
+
+          // Mensaje de éxito
+          await Swal.fire(
+            '¡Eliminado!',
+            'El contribuyente ha sido eliminado correctamente.',
+            'success'
+          );
+
+          // Recargar la lista de contribuyentes
           cargarContribuyentes();
+
         } catch (error) {
-          alert('No se pudo eliminar el contribuyente ya que tiene datos asociados en otras tablas');
+          // Mensaje de error personalizado
+          await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo eliminar el contribuyente ya que tiene datos asociados en otras tablas',
+          });
         }
       }
     });

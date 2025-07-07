@@ -58,7 +58,7 @@ class Cobrar {
             const [rows] = await db.query(`
                 SELECT c.cuenta, c.id_conexion
                 FROM conexiones c
-                JOIN contribuyente cc ON c.id_contribuyente = cc.id_contribuyente
+                JOIN contribuyentes cc ON c.id_contribuyente = cc.id_contribuyente
                 WHERE cc.id_contribuyente = ?
             `, [contribuyenteId]);
             return rows;
@@ -73,7 +73,7 @@ class Cobrar {
             const [rows] = await db.query(`
                 SELECT bc.cuenta, bc.id_base_catastral
                 FROM bases_catastrales bc
-                JOIN contribuyente c ON bc.id_contribuyente = c.id_contribuyente
+                JOIN contribuyentes c ON bc.id_contribuyente = c.id_contribuyente
                 WHERE c.id_contribuyente = ?
             `, [contribuyenteId]);
             return rows;
